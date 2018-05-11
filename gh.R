@@ -1,3 +1,4 @@
+## FIXME: allow for download of individual file by name, not just all files
 #' download_data("cboettig/ghdata")
 ghdata_download <- function(repo, dest = ".", tag = "latest",  ...){
   
@@ -16,16 +17,17 @@ ghdata_download <- function(repo, dest = ".", tag = "latest",  ...){
 
 #' @importFrom httr GET add_headers write_disk
 ## gh() fails on this, so we do with httr. See https://github.com/r-lib/gh/issues/57 
-gh_download_asset <- function(owner, repo, id, file, 
-                              token = Sys.getenv("GITHUB_PAT", Sys.getenv("GITHUB_TOKEN")), 
-                              overwrite=TRUE){
+gh_download_asset <- function(owner, repo, id, file, overwrite=TRUE,
+                              .token = get_token() 
+                              ){
   httr::GET(paste0("https://api.github.com/repos/", owner,"/",
                    repo, "/", "releases/assets/", id, 
-                   "?access_token=", token),
+                   "?access_token=", .token),
             add_headers(Accept = "application/octet-stream"),
             write_disk(file, overwrite = overwrite))
 }
 
+##################### Generic helpers ##################
 #' @importFrom gh gh
 release_info <- function(repo, tag="latest"){
   r <- strsplit(repo, "/")[[1]]
@@ -37,6 +39,10 @@ release_info <- function(repo, tag="latest"){
        owner = r[[1]], repo = r[[2]], tag = tag)
   }
 }
+get_token <- function(){
+  Sys.getenv("GITHUB_PAT", Sys.getenv("GITHUB_TOKEN"))
+}
+#####################################################
 
 
 
@@ -45,8 +51,7 @@ gh_tag_release <- function(repo, tag,
                            commit = "master", name = tag, 
                            body = "Data release", draft = FALSE,
                            prerelease = FALSE,
-                           .token = Sys.getenv("GITHUB_PAT",
-                                     Sys.getenv("GITHUB_TOKEN"))){
+                           .token = get_token()){
   r <- strsplit(repo, "/")[[1]]
   
   payload <- list(
@@ -70,27 +75,26 @@ gh_tag_release <- function(repo, tag,
   release <- content(resp)
 }
 
+
+
 ## upload data to an existing release
 #' readr::write_tsv(mtcars,"mtcars.tsv.xz") 
 #' ghdata_upload("cboettig/ghdata", "v0.0.3", "mtcars.tsv.xz")
-ghdata_upload <- function(repo, tag, file){
+ghdata_upload <- function(repo, tag, file, name = NULL, 
+                          .token = get_token()){
+  
+  if(is.null(name)){
+    name <- basename(file)
+  }
   
   x <- release_info(repo, tag)
-  r <- httr::POST(sub("\\{.+$", "", x$upload_url), query = list(name = file), 
+  r <- httr::POST(sub("\\{.+$", "", x$upload_url), query = list(name = name), 
                   body = httr::upload_file(file), httr::progress("up"), 
-                  httr::authenticate(token, "x-oauth-basic", "basic"))
+                  httr::authenticate(.token, "x-oauth-basic", "basic"))
   cat("\n")
   httr::stop_for_status(r)
   invisible(r)
-
 }
 
-
-
-## List assets for release
-#GET /repos/:owner/:repo/releases/:id/assets
-
-#DELETE /repos/:owner/:repo/releases/:id
-
-## Edit
-#PATCH /repos/:owner/:repo/releases/:id
+## consider overwrite option for upload?  (delete and re-upload asset)
+## consider plain delete function for upload
