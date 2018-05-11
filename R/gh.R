@@ -127,7 +127,8 @@ gh_new_release <- function(repo,
 #' `file` (i.e. filename without directory)
 #' @param overwrite overwrite any existing file with the same name already
 #'  attached to the on release?
-#' @param .token GitHub authentication token
+#' @param .token GitHub authentication token. Usually set as an environmental
+#'  variable rather than passed explicitly.
 #' @examples
 #' \dontrun{
 #' # Needs your real token to run
@@ -152,9 +153,16 @@ pb_upload <- function(repo,
   x <- release_info(repo, tag)
 
   if(overwrite){
-    ## Check if file exists
+    ## Get id for file
+    filenames <- vapply(x$assets, `[[`, character(1), "name")
+    ids <- vapply(x$assets, `[[`, integer(1), "id")
 
-    ## Delete file from release
+    if(file %in% filenames){
+      i <- which(filenames == file)
+      ## If we find matching id, Delete file from release.
+      gh("DELETE /repos/:owner/:repo/releases/assets/:id",
+         owner = x$owner, repo = x$repo, id = ids[i], .token = .token)
+    }
   }
 
 
