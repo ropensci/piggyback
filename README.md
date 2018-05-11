@@ -18,13 +18,13 @@ works with both public and private repositories.
 
 `piggyback` is inspired by
 [datastorr](https://github.com/ropenscilabs/datastorr) from
-\[@richfitz\](<http://github.com/richfitz>). While `datastorr` provides
-your data in the R “data package” model of `storr` (your data lives
-inside an R package that you install and is automatically loaded into
-memory), `piggyback` tries to immitate the LFS model where your data
-files are simply stored as part of your repository. This impementation
-uses R wrappers to the GitHub API, but an identical client could be
-implemented in any language with bindings to the GitHub API.
+[@richfitz](http://github.com/richfitz). While `datastorr` provides your
+data in the R “data package” model of `storr` (your data lives inside an
+R package that you install and is automatically loaded into memory),
+`piggyback` tries to immitate the LFS model where your data files are
+simply stored as part of your repository. This impementation uses R
+wrappers to the GitHub API, but an identical client could be implemented
+in any language with bindings to the GitHub API.
 
 `piggyback` is designed around two possible workflows: (1) A high-level
 workflow that parallels `git lfs`, and (2) a simple interface for
