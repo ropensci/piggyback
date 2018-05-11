@@ -73,7 +73,7 @@ gh_tag_release <- function(repo, tag,
 ## upload data to an existing release
 #' readr::write_tsv(mtcars,"mtcars.tsv.xz") 
 #' ghdata_upload("cboettig/ghdata", "v0.0.3", "mtcars.tsv.xz")
-ghdata_upload(repo, tag, file){
+ghdata_upload <- function(repo, tag, file){
   
   x <- release_info(repo, tag)
   r <- httr::POST(sub("\\{.+$", "", x$upload_url), query = list(name = file), 
