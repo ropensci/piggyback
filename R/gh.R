@@ -1,32 +1,59 @@
+## FIXME consider supporting tag as part of repo string: user/repo@tag
+
+
 ## FIXME: allow for download of individual file by name, not just all files
 #' download_data("cboettig/ghdata")
+#' @param repo
+#' @param file name or vector of names of files to be downloaded. If `NULL`,
+#' all assets attached to the release will be downloaded.
+#' @param dest name of vector of names of where file should be downloaded.
+#' Should be a directory or a list of filenames the same length as `file` vector.
+#' Can include paths to files, but any directories in that path must already exist.
+#' @param tag
 #' @importFrom httr GET add_headers write_disk
 #' @importFrom gh gh
 #' @export
-pb_download <- function(repo, file = NULL, dest = ".", tag = "latest"){
+pb_download <- function(repo, file = NULL, dest = ".",
+                        tag = "latest", overwrite = TRUE){
 
   r <- strsplit(repo, "/")[[1]]
   x <- release_info(repo, tag)
-  id <- vapply(x$assets, `[[`, character(1), "id")
-  file <- file.path(dest, vapply(x$assets, `[[`, character(1), "name"))
+  id <- vapply(x$assets, `[[`, integer(1), "id")
+  file_names <-  vapply(x$assets, `[[`, character(1), "name")
 
-  for(i in seq_along(id)){
-    resp <- gh_download_asset(r[[1]], r[[2]], id=id[i], file=file[i])
-    httr::stop_for_status(resp)
+
+  if(!is.null(file)){
+    i <- which(file_names %in% file)
+    id <- id[i]
+  }
+  ## if dest not provided, we will write
+  if(length(dest) <= 1){
+    i <- which(file_names %in% file)
+    dest <- file.path(dest, file_names[i])
   }
 
+  for(i in seq_along(id)){
+    resp <- gh_download_asset(x$owner,
+                              x$repo,
+                              id=id[i],
+                              destfile = dest[i],
+                              overwrite = overwrite)
+
+    httr::stop_for_status(resp)
+  }
   invisible(resp)
 }
 
 ## gh() fails on this, so we do with httr. See https://github.com/r-lib/gh/issues/57
-gh_download_asset <- function(owner, repo, id, file, overwrite=TRUE,
+gh_download_asset <- function(owner, repo, id, destfile, overwrite=TRUE,
                               .token = get_token()
                               ){
   resp <- httr::GET(paste0("https://api.github.com/repos/", owner,"/",
-                   repo, "/", "releases/assets/", id,
-                   "?access_token=", .token),
-            add_headers(Accept = "application/octet-stream"),
-            write_disk(file, overwrite = overwrite))
+                    repo, "/", "releases/assets/", id,
+                    "?access_token=", .token),
+                    httr::add_headers(Accept = "application/octet-stream"),
+                    httr::write_disk(destfile, overwrite = overwrite),
+                    httr::progress("down"))
   httr::stop_for_status(resp)
   invisible(resp)
 }
@@ -35,12 +62,16 @@ gh_download_asset <- function(owner, repo, id, file, overwrite=TRUE,
 release_info <- function(repo, tag="latest"){
   r <- strsplit(repo, "/")[[1]]
   if(tag == "latest"){
-    gh("/repos/:owner/:repo/releases/latest",
+    out <- gh("/repos/:owner/:repo/releases/latest",
        owner = r[[1]], repo = r[[2]])
   } else {
-    gh("/repos/:owner/:repo/releases/tags/:tag",
+    out <- gh("/repos/:owner/:repo/releases/tags/:tag",
        owner = r[[1]], repo = r[[2]], tag = tag)
   }
+  out$owner <- r[[1]]
+  out$repo <-  r[[2]]
+  out$tag <- tag
+  out
 }
 get_token <- function(){
   Sys.getenv("GITHUB_PAT", Sys.getenv("GITHUB_TOKEN"))
@@ -108,8 +139,8 @@ gh_new_release <- function(repo,
 #' @importFrom httr progress upload_file POST stop_for_status
 #' @export
 pb_upload <- function(repo,
-                      tag,
                       file,
+                      tag = "latest",
                       name = NULL,
                       overwrite = FALSE,
                       .token = get_token()){
