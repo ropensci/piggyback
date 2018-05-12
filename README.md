@@ -27,8 +27,8 @@ works with both public and private repositories.
 [@richfitz](http://github.com/richfitz). While `datastorr` provides your
 data in the R “data package” model of `storr` (your data lives inside an
 R package that you install and is automatically loaded into memory),
-`piggyback` tries to immitate the LFS model where your data files are
-simply stored as part of your repository. This impementation uses R
+`piggyback` tries to imitate the LFS model where your data files are
+simply stored as part of your repository. This implementation uses R
 wrappers to the GitHub API, but an identical client could be implemented
 in any language with bindings to the GitHub API.
 
@@ -47,16 +47,56 @@ You can install the development version from
 devtools::install_github("cboettig/piggyback")
 ```
 
-## Upload and download data
+## Authentication
 
-Alternatively, files can be uploaded and downloaded a la carte from the
-attachements to the release of any GitHub repository.
+No authentication is required to download data from *public* GitHub
+repositories using `piggyback`. To upload data to any repository, or to
+download data from *private* repositories, you will need to authenticate
+first. To do so, add your [GitHub Token]() to an environmental variable,
+e.g. in a `~/.Renviron` file in your home directory (or some place
+private you won’t upload), or simply set it in the R console using:
 
-Create a new release and upload data:
+``` r
+Sys.setenv(GITHUB_TOKEN="xxxxxx")
+```
+
+Try to avoid writing `Sys.setenv()` in scripts – remember, the goal here
+is to avoid writing your private token in any file that might be shared,
+even privately.
+
+## Downloading data
+
+Download the latest version or a specific version of the data:
 
 ``` r
 library(piggyback)
+pb_download("cboettig/piggyback", "mtcars.tsv.gz")
+```
 
+Or a specific version:
+
+``` r
+pb_download("cboettig/piggyback", "mtcars.tsv.gz", tag = "v0.0.4")
+```
+
+Or simply omit the file name to download all assets connected with a
+given release. you can also always specify a destination directory to
+download.
+
+``` r
+dir.create("data")
+pb_download("cboettig/piggyback", dest="data/")
+```
+
+## Uploading data
+
+If your GitHub repository doesn’t have any
+[releases](https://help.github.com/articles/creating-releases/) yet,
+`piggyback` will help you quickly create one. Create new releases to
+manage multiple versions of a given data file.
+
+``` r
+## Some test data to upload
 readr::write_tsv(mtcars, "mtcars.tsv.gz")
 
 gh_new_release("cboettig/piggyback", "v0.0.4")
@@ -72,35 +112,12 @@ pb_upload("cboettig/piggyback", "mtcars.tsv.gz")
 ```
 
 This is useful in scripts that may automatically upload their results,
-or whenever a previous version of a data file is diposable.
+or whenever a previous version of a data file is disposable.
 
-Download the latest version or a specific version of the data:
+## git-style
 
-``` r
-pb_download("cboettig/piggyback", "mtcars.tsv.gz")
-```
-
-Or a specific version:
-
-``` r
-pb_download("cboettig/piggyback", "mtcars.tsv.gz", tag = "v0.0.4")
-```
-
-Or simply omit the file name to download all assets connected with a
-given release. you can alos always specify a destination directory to
-download.
-
-``` r
-dir.create("data")
-pb_download("cboettig/piggyback", dest="data/")
-```
-
-## LFS-style
-
-A higher-level interface
-
-If we assume we can detect the relevant repo from the current working
-directory `push` or `pull` all data files to/from GitHub:
+For an even simpler way to sync data files to GitHub, `piggyback`
+provides LFS-like `push` and `pull` methods.
 
 ``` r
 # Not implemented yet
@@ -108,16 +125,19 @@ pb_pull("data/")
 pb_push("data/")
 ```
 
-By default this uses the latest available release of the currently
-active GitHub repository. Specify a particular data release tag with the
-optional argument, `tag`. Data files can be specified by giving a path
-to a directory where data files are stored on the repo. Alternately,
-file paths or types can be specified in a configuration file, see
-`pb_watch()`. Identical files will not be transfered.
+This assumes we are working in a directory that is part of the relevant
+GitHub repository (i.e. the `repo` field is detected based on the `git`
+remote address for the current working directory.) By default this uses
+the latest available release of the currently active GitHub repository.
+Specify a particular data release tag with the optional argument, `tag`.
+Data files can be specified by giving a path to a directory where data
+files are stored on the repo. Alternately, file paths or types can be
+specified in a configuration file, see `pb_watch()`. Identical files
+will not be transferred.
 
-*Developer note*: GitHub API does not report hashes for files. We may
+*Developer note*: GitHub API does not report hashes for files. We will
 have to upload a metadata file to the release that provides these
-hashes.
+hashes. Also could consider using git commit hook with these?
 
 ## Data archiving
 
