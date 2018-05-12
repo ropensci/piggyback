@@ -8,6 +8,37 @@ gh_new_release(repo, tag, commit = "master", name = tag,
   body = "Data release", draft = FALSE, prerelease = FALSE,
   .token = get_token())
 }
+\arguments{
+\item{repo}{Repository name in format "owner/repo".}
+
+\item{tag}{tag to create for this release}
+
+\item{commit}{Specifies the commitish value that
+determines where the Git tag is created from.
+Can be any branch or commit SHA. Unused if the
+Git tag already exists. Default: the repository's
+default branch (usually `master`).}
+
+\item{name}{The name of the release. Defaults to tag.}
+
+\item{body}{Text describing the contents of the tag.
+default text is "Data release".}
+
+\item{draft}{default `FALSE`. Set to `TRUE` to create
+a draft (unpublished) release.}
+
+\item{prerelease}{default `FALSE`. Set to `TRUE` to
+identify the release as a prerelease.}
+
+\item{.token}{GitHub authentication token. Typically set from an environmental
+variable, e.g. `Sys.setenv(GITHUB_TOKEN = "xxxxx")`, which helps prevent
+accidental disclosure of a secret token when sharing scripts.}
+}
 \description{
 Create a new release on GitHub repo
+}
+\examples{
+\dontrun{
+gh_new_release("cboettig/piggyback", "v0.0.5")
+}
 }

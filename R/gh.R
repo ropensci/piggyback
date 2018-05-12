@@ -1,22 +1,21 @@
 ## FIXME consider supporting tag as part of repo string: user/repo@tag
 
 
-## FIXME: allow for download of individual file by name, not just all files
 #' download_data("cboettig/ghdata")
-#' @param repo
+#' @param repo Repository name in format "owner/repo".
 #' @param file name or vector of names of files to be downloaded. If `NULL`,
 #' all assets attached to the release will be downloaded.
 #' @param dest name of vector of names of where file should be downloaded.
 #' Should be a directory or a list of filenames the same length as `file` vector.
 #' Can include paths to files, but any directories in that path must already exist.
-#' @param tag
+#' @param tag tag for the GitHub release to which this data is attached
+#' @param overwrite default `TRUE`, should any local files of the same name be overwritten?
 #' @importFrom httr GET add_headers write_disk
 #' @importFrom gh gh
 #' @export
 pb_download <- function(repo, file = NULL, dest = ".",
                         tag = "latest", overwrite = TRUE){
 
-  r <- strsplit(repo, "/")[[1]]
   x <- release_info(repo, tag)
   id <- vapply(x$assets, `[[`, integer(1), "id")
   file_names <-  vapply(x$assets, `[[`, character(1), "name")
@@ -25,10 +24,13 @@ pb_download <- function(repo, file = NULL, dest = ".",
   if(!is.null(file)){
     i <- which(file_names %in% file)
     id <- id[i]
+  } else {
+    file <- file_names
   }
   ## if dest not provided, we will write
   if(length(dest) <= 1){
     i <- which(file_names %in% file)
+    ## FIXME make sure dest dir exists!
     dest <- file.path(dest, file_names[i])
   }
 
@@ -82,8 +84,27 @@ get_token <- function(){
 
 #' Create a new release on GitHub repo
 #'
+#' @param repo Repository name in format "owner/repo".
+#' @param tag tag to create for this release
+#' @param commit Specifies the commitish value that
+#'  determines where the Git tag is created from.
+#'  Can be any branch or commit SHA. Unused if the
+#'  Git tag already exists. Default: the repository's
+#'  default branch (usually `master`).
+#' @param name The name of the release. Defaults to tag.
+#' @param body Text describing the contents of the tag.
+#'  default text is "Data release".
+#' @param draft default `FALSE`. Set to `TRUE` to create
+#' a draft (unpublished) release.
+#' @param prerelease default `FALSE`. Set to `TRUE` to
+#' identify the release as a prerelease.
+#' @inheritParams pb_upload
+#' @export
 #' @importFrom jsonlite toJSON
 #' @importFrom httr content GET POST stop_for_status
+#' @examples \dontrun{
+#' gh_new_release("cboettig/piggyback", "v0.0.5")
+#' }
 gh_new_release <- function(repo,
                            tag,
                            commit = "master",
@@ -121,14 +142,15 @@ gh_new_release <- function(repo,
 #'
 #' NOTE: you must first create a release if one does not already exists.
 #' @param repo Repository name in format "owner/repo".
-#' @param tag  tag for the release to which this data should be attached.
+#' @param tag  tag for the GitHub release to which this data should be attached.
 #' @param file path to file to be uploaded
 #' @param name name for uploaded file. If not provided will use the basename of
 #' `file` (i.e. filename without directory)
 #' @param overwrite overwrite any existing file with the same name already
 #'  attached to the on release?
-#' @param .token GitHub authentication token. Usually set as an environmental
-#'  variable rather than passed explicitly.
+#' @param .token GitHub authentication token. Typically set from an environmental
+#' variable, e.g. `Sys.setenv(GITHUB_TOKEN = "xxxxx")`, which helps prevent
+#' accidental disclosure of a secret token when sharing scripts.
 #' @examples
 #' \dontrun{
 #' # Needs your real token to run

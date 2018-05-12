@@ -4,7 +4,22 @@
 \alias{pb_download}
 \title{download_data("cboettig/ghdata")}
 \usage{
-pb_download(repo, file = NULL, dest = ".", tag = "latest")
+pb_download(repo, file = NULL, dest = ".", tag = "latest",
+  overwrite = TRUE)
+}
+\arguments{
+\item{repo}{Repository name in format "owner/repo".}
+
+\item{file}{name or vector of names of files to be downloaded. If `NULL`,
+all assets attached to the release will be downloaded.}
+
+\item{dest}{name of vector of names of where file should be downloaded.
+Should be a directory or a list of filenames the same length as `file` vector.
+Can include paths to files, but any directories in that path must already exist.}
+
+\item{tag}{tag for the GitHub release to which this data is attached}
+
+\item{overwrite}{default `TRUE`, should any local files of the same name be overwritten?}
 }
 \description{
 download_data("cboettig/ghdata")

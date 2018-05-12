@@ -16,6 +16,7 @@ push <- function(datadir, tag = "latest"){
 }
 
 ## Alternately:: use updated_at date instead?
+## Not as robust though
 
 ## A manifest is a small metadata file providing hashes
 ## This helps us avoid uploading or downloading possibly

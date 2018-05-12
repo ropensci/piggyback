@@ -1,6 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![Travis-CI Build
+Status](https://travis-ci.org/cboettig/piggyback.svg?branch=master)](https://travis-ci.org/cboettig/piggyback)
+[![Coverage
+status](https://codecov.io/gh/cboettig/piggyback/branch/master/graph/badge.svg)](https://codecov.io/github/cboettig/piggyback?branch=master)
+
 # piggyback
 
 `piggyback` is basically a poor soul’s [git
@@ -41,27 +47,6 @@ You can install the development version from
 devtools::install_github("cboettig/piggyback")
 ```
 
-## LFS-style
-
-`push` or `pull` all data files to/from GitHub:
-
-``` r
-# Not implemented yet
-pb_pull("data/")
-pb_push("data/")
-```
-
-By default this uses the latest available release of the currently
-active GitHub repository. Specify a particular data release tag with the
-optional argument, `tag`. Data files can be specified by giving a path
-to a directory where data files are stored on the repo. Alternately,
-file paths or types can be specified in a configuration file, see
-`pb_watch()`. Identical files will not be transfered.
-
-*Developer note*: GitHub API does not report hashes for files. We may
-have to upload a metadata file to the release that provides these
-hashes.
-
 ## Upload and download data
 
 Alternatively, files can be uploaded and downloaded a la carte from the
@@ -100,6 +85,39 @@ Or a specific version:
 ``` r
 pb_download("cboettig/piggyback", "mtcars.tsv.gz", tag = "v0.0.4")
 ```
+
+Or simply omit the file name to download all assets connected with a
+given release. you can alos always specify a destination directory to
+download.
+
+``` r
+dir.create("data")
+pb_download("cboettig/piggyback", dest="data/")
+```
+
+## LFS-style
+
+A higher-level interface
+
+If we assume we can detect the relevant repo from the current working
+directory `push` or `pull` all data files to/from GitHub:
+
+``` r
+# Not implemented yet
+pb_pull("data/")
+pb_push("data/")
+```
+
+By default this uses the latest available release of the currently
+active GitHub repository. Specify a particular data release tag with the
+optional argument, `tag`. Data files can be specified by giving a path
+to a directory where data files are stored on the repo. Alternately,
+file paths or types can be specified in a configuration file, see
+`pb_watch()`. Identical files will not be transfered.
+
+*Developer note*: GitHub API does not report hashes for files. We may
+have to upload a metadata file to the release that provides these
+hashes.
 
 ## Data archiving
 
