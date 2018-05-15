@@ -23,7 +23,9 @@ RoxygenNote: 6.0.1.9000
 Imports:
     gh,
     httr,
-    jsonlite
+    jsonlite,
+    git2r,
+    fs
 Suggests:
     readr,
     covr,

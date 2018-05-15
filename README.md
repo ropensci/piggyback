@@ -93,19 +93,29 @@ pb_download("cboettig/piggyback", dest="data/")
 If your GitHub repository doesn’t have any
 [releases](https://help.github.com/articles/creating-releases/) yet,
 `piggyback` will help you quickly create one. Create new releases to
-manage multiple versions of a given data file.
+manage multiple versions of a given data file. While you can create
+releases as often as you like, making a new release is by no means
+necessary each time you upload a file. If maintaining old versions of
+the data is not useful, you can stick with a single release and upload
+all of your data there.
 
 ``` r
-## Some test data to upload
+gh_new_release("cboettig/piggyback", "v0.0.1")
+```
+
+Once we have at least one release available, we are ready to upload. By
+default, `pb_upload` will attach data to the latest release.
+
+``` r
+## We'll need some example data first.
+## Pro tip: compress your tabular data to save space & speed upload/downloads
 readr::write_tsv(mtcars, "mtcars.tsv.gz")
 
-gh_new_release("cboettig/piggyback", "v0.0.4")
 pb_upload("cboettig/piggyback", "mtcars.tsv.gz")
 ```
 
-Note that you can also simply overwrite the a previous version of the
-file on an existing release, rather than creating a new release every
-time:
+You can also simply overwrite the a previous version of the file on an
+existing release, rather than creating a new release every time:
 
 ``` r
 pb_upload("cboettig/piggyback", "mtcars.tsv.gz")
@@ -121,8 +131,10 @@ provides LFS-like `push` and `pull` methods.
 
 ``` r
 # Not implemented yet
-pb_pull("data/")
-pb_push("data/")
+pb_track("*.tsv.gz")
+
+pb_pull()
+pb_push()
 ```
 
 This assumes we are working in a directory that is part of the relevant
@@ -139,9 +151,25 @@ will not be transferred.
 have to upload a metadata file to the release that provides these
 hashes. Also could consider using git commit hook with these?
 
-## Data archiving
+## A Note on GitHub Releases vs Data Archiving
 
-`piggyback` is not intended as a data archiving solution. Permanent,
-published data should be archived in a proper data repository with a
-DOI. `piggyback` is meant only to lower the friction of working with
-data during the research process.
+`piggyback` is not intended as a data archiving solution. Importantly,
+bare in mind that there is nothing special about multiple “versions” in
+releases, as far as data assets uploaded by `piggyback` are concerned.
+The data files `piggyback` attaches to a Release can be deleted or
+modified at any time – creating a new release to store data assets is
+the functional equivalent of just creating new directories `v0.1`,
+`v0.2` to store your data. (GitHub Releases are always pinned to a
+particular `git` tag, so the code/git-managed contents associated with
+repo are more immutable, but remember our data assets just piggyback on
+top of the repo).
+
+Permanent, published data should always be archived in a proper data
+repository with a DOI, such as [zenodo.org](https://zenodo.org). Zenodo
+can freely archive public research data files up to 50 GB in size, and
+data is strictly versioned (once released, a DOI always refers to the
+same version of the data, new releases are given new DOIs). `piggyback`
+is meant only to lower the friction of working with data during the
+research process. (e.g. provide data accessible to collaborators or
+continuus integration systems during research process, including for
+private repositories.)

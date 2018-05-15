@@ -45,3 +45,14 @@ testthat::test_that(
     testthat::expect_equivalent(cars, mtcars)
     unlink("mtcars.tsv.gz")
   })
+
+testthat::test_that(
+  "we can download a requested file to requested subdirectory", {
+    dir.create("test_data/")
+    pb_download("cboettig/piggyback", "mtcars.tsv.gz", tag = "v0.0.1", dest = "test_data/")
+
+    testthat::expect_true(file.exists("test_data/mtcars.tsv.gz"))
+    cars <- readr::read_tsv("test_data/mtcars.tsv.gz")
+    testthat::expect_equivalent(cars, mtcars)
+    unlink("test_data", TRUE)
+  })
