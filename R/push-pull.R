@@ -47,7 +47,7 @@ pb_track <- function(glob, path = ".", all = TRUE, recursive = TRUE,
                       recursive = recursive, type = type,
                       regexp = regexp, invert = invert, ...)
 
-  usethis::use_build_ignore(manifest)
+  #usethis::use_build_ignore(manifest) might not want to create Rbuildignore if none exists
   usethis::use_git_ignore(manifest)
   usethis::use_git_ignore(files)
 
