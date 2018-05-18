@@ -4,3 +4,4 @@
 .Ruserdata
 data/iris.tsv.gz
 data/mtcars.tsv.gz
+.piggyback_manifest.json

@@ -4,3 +4,4 @@
 ^README\.Rmd$
 ^\.travis\.yml$
 ^codecov\.yml$
+^\.piggyback_manifest\.json$

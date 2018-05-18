@@ -38,22 +38,26 @@ pb_push <- function(..., tag = "latest",  .repo = guess_repo()){
 #' @importFrom usetthis use_git_ignore
 #' @importFrom jsonlite write_json
 pb_track <- function(glob, path = ".", all = TRUE, recursive = TRUE,
-                     type = "any", invert = FALSE, regexp = NULL, ...){
+                     type = "any", invert = FALSE, regexp = NULL,
+                     manifest = ".piggyback_manifest.json",
+                     ...){
 
   ## Update .gitignore list
   files <- fs::dir_ls(path = path, glob = glob, all = all,
                       recursive = recursive, type = type,
                       regexp = regexp, invert = invert, ...)
 
+  usethis::use_build_ignore(manifest)
+  usethis::use_git_ignore(manifest)
   usethis::use_git_ignore(files)
 
   hashes <- lapply(files, tools::md5sum)
 
   ## Append to any existing manifest.  Update existing keys (files)
   ## using new hashes.
-  current <- jsonlite::read_json(".piggyback_manifest.json", simplifyVector = FALSE)
+  current <- jsonlite::read_json(manifest, simplifyVector = FALSE)
 
-  json <- jsonlite::write_json(hashes, ".piggyback_manifest.json", auto_unbox = TRUE)
+  json <- jsonlite::write_json(hashes, manifest, auto_unbox = TRUE)
   invisible(hashes)
 }
 
