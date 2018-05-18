@@ -64,7 +64,15 @@ Try to avoid writing `Sys.setenv()` in scripts – remember, the goal here
 is to avoid writing your private token in any file that might be shared,
 even privately.
 
-## Downloading data
+## Basic Interface
+
+`piggyback` provides two interfaces: a basic, more low-level interface
+for uploading and downloading individual files, and a `git-lfs` type
+interface to `pull` or `push` a list of tracked files. The basic
+interface is often suitable for working with single files and gives more
+flexibility.
+
+### Downloading data
 
 Download the latest version or a specific version of the data:
 
@@ -88,7 +96,7 @@ dir.create("data")
 pb_download("cboettig/piggyback", dest="data/")
 ```
 
-## Uploading data
+### Uploading data
 
 If your GitHub repository doesn’t have any
 [releases](https://help.github.com/articles/creating-releases/) yet,
@@ -127,29 +135,47 @@ or whenever a previous version of a data file is disposable.
 ## git-style
 
 For an even simpler way to sync data files to GitHub, `piggyback`
-provides LFS-like `push` and `pull` methods.
+provides LFS-like `push` and `pull` methods. These methods are simple
+wrappers around the basic upload and download interface that streamline
+the process of managing a potentially large number of data files of a
+given type or location.
+
+By default, specify a `glob` pattern of files to track. `pb_track` can
+also track all files at a given path.
 
 ``` r
-# Not implemented yet
 pb_track("*.tsv.gz")
+pb_track(path = "data/")
+```
 
-pb_pull()
+Upload all tracked data to GitHub. By default, will attach data to the
+`latest` release of the current project:
+
+``` r
 pb_push()
 ```
 
-This assumes we are working in a directory that is part of the relevant
-GitHub repository (i.e. the `repo` field is detected based on the `git`
-remote address for the current working directory.) By default this uses
-the latest available release of the currently active GitHub repository.
-Specify a particular data release tag with the optional argument, `tag`.
-Data files can be specified by giving a path to a directory where data
-files are stored on the repo. Alternately, file paths or types can be
-specified in a configuration file, see `pb_watch()`. Identical files
-will not be transferred.
+Download all tracked data:
 
-*Developer note*: GitHub API does not report hashes for files. We will
-have to upload a metadata file to the release that provides these
-hashes. Also could consider using git commit hook with these?
+``` r
+pb_download()
+```
+
+Or download all tracked data from a particular previous release. Will
+overwrite local data files by the same name, allowing you to quickly
+switch between versions of the data:
+
+``` r
+pb_download(tag = "v0.0.1")
+```
+
+To save bandwidth / transfer times, files which are identical on both
+GitHub and local filesystem are not transferred:
+
+``` r
+pb_push() 
+pb_push() 
+```
 
 ## A Note on GitHub Releases vs Data Archiving
 

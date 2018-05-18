@@ -47,6 +47,7 @@ pb_download <- function(repo, file = NULL, dest = ".",
 }
 
 ## gh() fails on this, so we do with httr. See https://github.com/r-lib/gh/issues/57
+## Consider option to supress progress bar?
 gh_download_asset <- function(owner, repo, id, destfile, overwrite=TRUE,
                               .token = get_token()
                               ){
