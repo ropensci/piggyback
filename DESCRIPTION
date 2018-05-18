@@ -25,7 +25,8 @@ Imports:
     httr,
     jsonlite,
     git2r,
-    fs
+    fs,
+    usethis
 Suggests:
     readr,
     covr,

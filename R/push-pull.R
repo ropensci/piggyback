@@ -16,8 +16,8 @@ pb_push <- function(..., tag = "latest",  .repo = guess_repo()){
   # hashes <- pb_track(...)
   ## Fixme needs to handle nicely if manifest doesn't yet exist
 
-  ## Download to a tmp dir
-  tmp <- tmpdir()
+  ## Download online manifest to a tmp dir
+  tmp <- tempdir()
   pb_download(repo = .repo, file = ".piggyback_manifest.json",
               dest = tmp, tag = tag)
   jsonlite::read_json(file.path(tmp, ".piggyback_manifest.json"))
@@ -25,9 +25,9 @@ pb_push <- function(..., tag = "latest",  .repo = guess_repo()){
   ## Compare hashes
 
 
-  lapply(files, function(f){
-    pb_upload(.repo, file = f, tag = tag, overwrite = TRUE)
-  })
+  #lapply(files, function(f){
+  #  pb_upload(.repo, file = f, tag = tag, overwrite = TRUE)
+  #})
   ## write manifest of datadir
   ## upload data
   ## upload manifest
