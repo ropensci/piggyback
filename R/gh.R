@@ -179,8 +179,8 @@ pb_upload <- function(repo,
     filenames <- vapply(x$assets, `[[`, character(1), "name")
     ids <- vapply(x$assets, `[[`, integer(1), "id")
 
-    if(file %in% filenames){
-      i <- which(filenames == file)
+    if(name %in% filenames){
+      i <- which(filenames == name)
       ## If we find matching id, Delete file from release.
       gh("DELETE /repos/:owner/:repo/releases/assets/:id",
          owner = x$owner, repo = x$repo, id = ids[i], .token = .token)

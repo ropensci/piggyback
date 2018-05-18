@@ -2,3 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
+data/iris.tsv.gz
+data/mtcars.tsv.gz

@@ -10,12 +10,21 @@ pb_pull <- function(datadir, tag = "latest", .repo = guess_repo()){
 }
 
 
-pb_push <- function(datadir = ".", pattern = NULL, tag = "latest",  .repo = guess_repo()){
-  files <- list.files(datadir,
-                      pattern = pattern,
-                      all.files = TRUE,
-                      full.names = TRUE,
-                      recursive = TRUE)
+pb_push <- function(..., tag = "latest",  .repo = guess_repo()){
+
+  ## nope, don't call unless `...` length > 0.
+  # hashes <- pb_track(...)
+  ## Fixme needs to handle nicely if manifest doesn't yet exist
+
+  ## Download to a tmp dir
+  tmp <- tmpdir()
+  pb_download(repo = .repo, file = ".piggyback_manifest.json",
+              dest = tmp, tag = tag)
+  jsonlite::read_json(file.path(tmp, ".piggyback_manifest.json"))
+
+  ## Compare hashes
+
+
   lapply(files, function(f){
     pb_upload(.repo, file = f, tag = tag, overwrite = TRUE)
   })
@@ -26,12 +35,28 @@ pb_push <- function(datadir = ".", pattern = NULL, tag = "latest",  .repo = gues
 }
 
 #' @importFrom fs dir_ls
-pb_track <- function(grob, path, all = TRUE, recursive = TRUE,
+#' @importFrom usetthis use_git_ignore
+#' @importFrom jsonlite write_json
+pb_track <- function(glob, path = ".", all = TRUE, recursive = TRUE,
                      type = "any", invert = FALSE, regexp = NULL, ...){
 
   ## Update .gitignore list
-  fs::dir_ls()
+  files <- fs::dir_ls(path = path, glob = glob, all = all,
+                      recursive = recursive, type = type,
+                      regexp = regexp, invert = invert, ...)
+
+  usethis::use_git_ignore(files)
+
+  hashes <- lapply(files, tools::md5sum)
+
+  ## Append to any existing manifest.  Update existing keys (files)
+  ## using new hashes.
+  current <- jsonlite::read_json(".piggyback_manifest.json", simplifyVector = FALSE)
+
+  json <- jsonlite::write_json(hashes, ".piggyback_manifest.json", auto_unbox = TRUE)
+  invisible(hashes)
 }
+
 
 
 #' @importFrom git2r remote_url repository discover_repository
