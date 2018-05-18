@@ -1,6 +1,14 @@
 
-pb_pull <- function(datadir, tag = "latest", .repo = guess_repo()){
-  pb_download(.repo, tag = tag, dest = datadir, overwrite = TRUE)
+
+
+pb_pull <- function(tag = "latest",  manifest = ".manifest.json",
+                    .repo = guess_repo()){
+
+  # Make sure hashes reflect current files
+  update_hashes(manifest)
+
+  files <- new_data("pull", tag = tag, manifest = manifest, .repo = .repo)
+  pb_download(.repo, tag = tag, file = basename(files), dest = files, overwrite = TRUE)
 
   ## Download the manifest.
   ## Check hashes against `datadir` hashes
@@ -10,36 +18,83 @@ pb_pull <- function(datadir, tag = "latest", .repo = guess_repo()){
 }
 
 
-pb_push <- function(..., tag = "latest",  .repo = guess_repo()){
+pb_push <- function(tag = "latest",  manifest = ".manifest.json",
+                    .repo = guess_repo()){
 
-  ## nope, don't call unless `...` length > 0.
-  # hashes <- pb_track(...)
-  ## Fixme needs to handle nicely if manifest doesn't yet exist
+  update_hashes(manifest)
 
-  ## Download online manifest to a tmp dir
-  tmp <- tempdir()
-  pb_download(repo = .repo, file = ".piggyback_manifest.json",
-              dest = tmp, tag = tag)
-  jsonlite::read_json(file.path(tmp, ".piggyback_manifest.json"))
+  files <- new_data("push", tag = tag, manifest = manifest, .repo = .repo)
+  lapply(files, function(f){
+    pb_upload(.repo, file = f, tag = tag, overwrite = TRUE)
+  })
 
-  ## Compare hashes
-
-
-  #lapply(files, function(f){
-  #  pb_upload(.repo, file = f, tag = tag, overwrite = TRUE)
-  #})
-  ## write manifest of datadir
-  ## upload data
-  ## upload manifest
-  ## delete manifest
+  ## manifest name cannot start with . in upload
+  pb_upload(.repo, file = gsub("^\\.", "", manifest),
+            tag = tag, overwrite = TRUE)
 }
 
+
+## Re-compute hashes for all files in manifest
+update_hashes <- function(manifest = ".manifest.json"){
+
+  if(!file.exists(manifest)){
+    stop("No tracked files found. use pb_track() to indicate what data to piggyback")
+  }
+
+  local <- names(jsonlite::read_json(manifest))
+  ## drop any files that no longer exist from the local manifest
+  exists <- vapply(local, file.exists, logical(1))
+  hashes <- lapply(local[exists], tools::md5sum)
+  jsonlite::write_json(hashes, manifest, auto_unbox = TRUE)
+
+}
+
+
+## Identify data that we do not need to sync because it has not changed.
+new_data <- function(mode = c("push", "pull"), tag = "latest",
+                     manifest = ".manifest.json",
+                     .repo = guess_repo()){
+  ## github name for files (i.e. manifest) cannot start with `.`
+  mode <- match.arg(mode)
+  id <- gh_file_id(repo = .repo,
+                   file = gsub("^\\.", "", manifest),
+                   tag = tag)
+
+  ## If no manifest yet on GitHub, then nothing to exclude
+  if(is.na(id)){
+    github_manifest <- NULL
+  } else {
+    ## Read in the online manifest
+    tmp <- tempdir()
+    pb_download(repo = .repo,
+                file = gsub("^\\.", "", manifest),
+                dest = tmp, tag = tag)
+    github_manifest <- jsonlite::read_json(
+      file.path(tmp, gsub("^\\.", "", manifest)))
+    unlink(tmp)
+  }
+  ## Read in local manifest
+  local_manifest <- jsonlite::read_json(manifest)
+
+  ## Return filenames of anything in local whose hash is not on github
+  upload <- names(local_manifest[ !c(local_manifest %in% github_manifest) ])
+
+  ## Return filenames of anything on github whose hash is not in local
+  download <- names(github_manifest[!c(github_manifest %in% local_manifest)])
+
+  switch(mode,
+         "push" = upload,
+         "pull" = download)
+
+}
+
+
 #' @importFrom fs dir_ls
-#' @importFrom usetthis use_git_ignore
+#' @importFrom usethis use_git_ignore
 #' @importFrom jsonlite write_json
 pb_track <- function(glob, path = ".", all = TRUE, recursive = TRUE,
                      type = "any", invert = FALSE, regexp = NULL,
-                     manifest = ".piggyback_manifest.json",
+                     manifest = ".manifest.json",
                      ...){
 
   ## Update .gitignore list
@@ -54,14 +109,25 @@ pb_track <- function(glob, path = ".", all = TRUE, recursive = TRUE,
   hashes <- lapply(files, tools::md5sum)
 
   ## Append to any existing manifest.  Update existing keys (files)
-  ## using new hashes.
-  current <- jsonlite::read_json(manifest, simplifyVector = FALSE)
+  previous <- NULL
+  if(file.exists(manifest)){
+    previous <- jsonlite::read_json(manifest, simplifyVector = FALSE)
+  }
 
+  hashes <- merge_hashes(hashes, previous)
   json <- jsonlite::write_json(hashes, manifest, auto_unbox = TRUE)
   invisible(hashes)
 }
 
 
+
+
+merge_hashes <- function(new, old){
+  new_files <- names(new)
+  old_files <- names(old)
+  ## keep only old files not in new file list.
+  c(new, old[!(old_files %in% new_files)])
+}
 
 #' @importFrom git2r remote_url repository discover_repository
 guess_repo <- function(path = "."){

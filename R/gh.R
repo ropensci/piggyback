@@ -196,5 +196,27 @@ pb_upload <- function(repo,
   invisible(r)
 }
 
-## consider overwrite option for upload?  (delete and re-upload asset)
+
+
+## Helper routine:
+## get the id of a file, or NA if file is not found in release assets
+gh_file_id <- function(repo, file, tag = "latest", name = NULL){
+  if(is.null(name)){
+    name <- basename(file)
+  }
+
+  x <- release_info(repo, tag)
+
+  filenames <- vapply(x$assets, `[[`, character(1), "name")
+  ids <- vapply(x$assets, `[[`, integer(1), "id")
+  if(name %in% filenames){
+    i <- which(filenames == name)
+    ids[i]
+  } else {
+    NA
+  }
+
+}
+
+
 ## consider plain delete function for upload
