@@ -14,19 +14,36 @@ testthat::test_that("We can upload data",{
 testthat::test_that("We can push and pull data",{
   testthat::skip_if(piggyback:::get_token() == "")
 
+  ##  Setup
   cur <- getwd()
-  tmp <- tempdir()
-  proj_dir <- file.path(tmp, "piggyback-test")
-  suppressMessages(usethis::create_project(proj_dir,
-                                           open=FALSE))
-  setwd(proj_dir)
+  tmp <- fs::path_temp("piggyback-test")
+  fs::dir_create(tmp)
+  setwd(tmp)
+  if(packageVersion("git2r") <= "0.21.0"){
+    testthat::skip_on_os("mac")
+  }
+
+  suppressMessages(
+  usethis::create_from_github("cboettig/piggyback",
+                              destdir = ".",
+                              open = FALSE,
+                              protocol = "https"))
+  setwd("piggyback")
+
 
   pb_track("*.tsv")
-  out <- pb_pull(.repo = "cboettig/piggyback")
-  testthat::expect_true(out)
 
-  pb_push(.repo = "cboettig/piggyback")
+  testthat::expect_true(pb_pull(.repo = "cboettig/piggyback"))
+  testthat::expect_true(pb_push(.repo = "cboettig/piggyback"))
+  testthat::expect_true(pb_pull())
+  testthat::expect_true(pb_push())
+
+  testthat::expect_true(pb_pull(tag="v0.0.1"))
+  testthat::expect_true(pb_push(tag="v0.0.1"))
+
+   ## tare down
   setwd(cur)
+  fs::dir_delete(tmp)
 
   })
 ## Create and delete a new test repository?

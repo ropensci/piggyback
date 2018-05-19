@@ -245,14 +245,3 @@ guess_repo <- function(path = "."){
   gsub(".*[:|/](\\w+/\\w+)(?:\\.git$)?", "\\1", addr)
 }
 
-
-## Alternately:: use updated_at date instead?
-## Not as robust though
-
-## A manifest is a small metadata file providing hashes
-## This helps us avoid uploading or downloading possibly
-## large files that have not changed.
-write_manifest <- function(datadir){
-
-
-}
