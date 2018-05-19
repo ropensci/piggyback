@@ -35,10 +35,11 @@ pb_track <- function(glob, path = ".", all = TRUE, recursive = TRUE,
                       recursive = recursive, type = type,
                       regexp = regexp, invert = invert, ...)
 
-  #usethis::use_build_ignore(manifest) might not want to create Rbuildignore if none exists
-  usethis::use_git_ignore(manifest)
-  usethis::use_git_ignore(files)
 
+  if(!is.null(git2r::discover_repository("."))){
+    usethis::use_git_ignore(manifest)
+    usethis::use_git_ignore(files)
+  }
   hashes <- lapply(files, tools::md5sum)
 
   ## Append to any existing manifest.  Update existing keys (files)

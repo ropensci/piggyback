@@ -1,3 +1,4 @@
+.Renviron
 .Rproj.user
 .Rhistory
 .RData
@@ -7,3 +8,4 @@ data/mtcars.tsv.gz
 .piggyback_manifest.json
 piggyback_manifest.json
 .manifest.json
+

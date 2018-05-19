@@ -56,3 +56,23 @@ testthat::test_that(
     testthat::expect_equivalent(cars, mtcars)
     unlink("test_data", TRUE)
   })
+
+
+#######  We need to be in an active project to track something
+
+testthat::test_that("we can track data with manifest", {
+  cur <- getwd()
+  tmp <- tempdir()
+  proj_dir <- file.path(tmp, "piggyback-test")
+  suppressMessages(usethis::create_project(proj_dir,
+                          open=FALSE))
+  setwd(proj_dir)
+
+  pb_track("*.tsv")
+  out <- pb_pull(.repo = "cboettig/piggyback")
+  testthat::expect_true(out)
+
+  setwd(cur)
+})
+
+
