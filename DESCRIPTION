@@ -30,4 +30,5 @@ Imports:
 Suggests:
     readr,
     covr,
-    testthat
+    testthat,
+    datasets
