@@ -94,7 +94,8 @@ pb_pull <- function(tag = "latest",
   update_hashes(manifest)
   files <- new_data("pull", tag = tag, manifest = manifest, .repo = .repo)
   if(!is.null(files))
-    pb_download(.repo, tag = tag, file = basename(files), dest = files, overwrite = overwrite)
+    pb_download(.repo, tag = tag, file = basename(files),
+                dest = files, overwrite = overwrite)
 
   invisible(TRUE)
 }
@@ -103,12 +104,13 @@ pb_pull <- function(tag = "latest",
 #'
 #' Push all currently tracked data files to GitHub.  Only files identical
 #' to those already on GitHub (by md5sum hash) will not be transferred.
-#' Otherwise, **assumes local version should overwrite existing GitHub version.**
-#' Create a new release if you do not want to overwrite previous GitHub versions when pushing.
+#' Otherwise, **assumes local version should overwrite existing GitHub
+#' version.** Create a new release if you do not want to overwrite previous
+#' GitHub versions when pushing.
 #'
 #' @inheritParams pb_pull
-#' @details Will only upload tracked files, as identified by the local manifest.
-#' Add files to tracking with \code{\link{pb_track}} first.
+#' @details Will only upload tracked files, as identified by the local
+#' manifest.  Add files to tracking with \code{\link{pb_track}} first.
 #'
 #' @export
 #'
@@ -116,7 +118,9 @@ pb_pull <- function(tag = "latest",
 #' \dontrun{
 #' pb_push()
 #' }
-pb_push <- function(tag = "latest",  overwrite = TRUE, manifest = ".manifest.json",
+pb_push <- function(tag = "latest",
+                    overwrite = TRUE,
+                    manifest = ".manifest.json",
                     .repo = guess_repo()){
 
 
@@ -160,7 +164,8 @@ update_hashes <- function(manifest = ".manifest.json"){
   m <- file.path(usethis::proj_get(), basename(manifest))
 
   if(!file.exists(m)){
-    stop("No tracked files found. use pb_track() to indicate what data to piggyback")
+    stop("No tracked files found. use pb_track()
+         to indicate what data to piggyback")
   }
 
   local <- names(jsonlite::read_json(m))

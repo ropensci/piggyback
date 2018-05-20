@@ -22,12 +22,13 @@ By default will guess the current repository's GitHub `origin`.}
 \description{
 Push all currently tracked data files to GitHub.  Only files identical
 to those already on GitHub (by md5sum hash) will not be transferred.
-Otherwise, **assumes local version should overwrite existing GitHub version.**
-Create a new release if you do not want to overwrite previous GitHub versions when pushing.
+Otherwise, **assumes local version should overwrite existing GitHub
+version.** Create a new release if you do not want to overwrite previous
+GitHub versions when pushing.
 }
 \details{
-Will only upload tracked files, as identified by the local manifest.
-Add files to tracking with \code{\link{pb_track}} first.
+Will only upload tracked files, as identified by the local
+manifest.  Add files to tracking with \code{\link{pb_track}} first.
 }
 \examples{
 \dontrun{

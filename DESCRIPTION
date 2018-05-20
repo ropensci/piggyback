@@ -15,11 +15,12 @@ Authors@R: person("Carl", "Boettiger",
                   email = "cboettig@gmail.com", 
                   role = c("aut", "cre", "cph"),
                   comment=c(ORCID = "0000-0002-1642-628X"))
+URL: https://github.com/cboettig/piggyback
+BugReports: https://github.com/cboettig/piggyback/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 ByteCompile: true
-RoxygenNote: 6.0.1.9000
 Imports:
     gh,
     httr,
@@ -32,3 +33,4 @@ Suggests:
     covr,
     testthat,
     datasets
+RoxygenNote: 6.0.1
