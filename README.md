@@ -155,14 +155,10 @@ pb_track(path = "data/")
 ```
 
 Upload all tracked data to GitHub. By default, will attach data to the
-`latest` release of the current project:
+`latest` release of the current project.
 
 ``` r
 pb_push()
-```
-
-``` r
-pb_push() 
 ```
 
 To save bandwidth / transfer times, files which are identical on both

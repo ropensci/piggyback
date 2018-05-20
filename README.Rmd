@@ -113,17 +113,12 @@ pb_track(path = "data/")
 ```
 
 
-Upload all tracked data to GitHub.  By default, will attach data to the `latest` release of the current project:
+Upload all tracked data to GitHub.  By default, will attach data to the `latest` release of the current project.  
 
 ```{r}
 pb_push()
 ```
 
-
-
-```{r}
-pb_push() 
-```
 
 To save bandwidth / transfer times, files which are identical on both GitHub and local filesystem are not transferred by either `pb_push()` or `pb_pull()`.  Note also that push and pull do not create either `git` commits in your repo or new releases, (though you are welcome to create a new GitHub release at any time, or push & pull to older releases.)
 
