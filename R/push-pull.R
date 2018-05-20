@@ -168,11 +168,11 @@ update_hashes <- function(manifest = ".manifest.json"){
          to indicate what data to piggyback")
   }
 
-  local <- names(jsonlite::read_json(m))
+  local_files <-names(jsonlite::read_json(m))
   ## drop any files that no longer exist from the local manifest
-  exists <- vapply(local, file.exists, logical(1))
-  hashes <- lapply(local[exists], tools::md5sum)
-
+  exists <- vapply(local_files, file.exists, logical(1))
+  hashes <- lapply(local_files[exists], tools::md5sum)
+  names(hashes) <- local_files[exists]
 
   jsonlite::write_json(hashes,
                        m,
