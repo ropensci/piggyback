@@ -31,4 +31,7 @@ Suggests:
     readr,
     covr,
     testthat,
-    datasets
+    datasets,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

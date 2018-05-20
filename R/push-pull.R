@@ -242,6 +242,7 @@ guess_repo <- function(path = "."){
     git2r::remote_url(
       git2r::repository(
         git2r::discover_repository(path)))
-  gsub(".*[:|/](\\w+/\\w+)(?:\\.git$)?", "\\1", addr)
+  out <- gsub(".*[:|/]([^/]+/[^/]+)(?:\\.git$)?", "\\1", addr)
+  gsub("\\.git$", "", out)
 }
 
