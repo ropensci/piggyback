@@ -4,8 +4,9 @@
 \alias{pb_track}
 \title{Track data files of a given pattern or location}
 \usage{
-pb_track(glob, path = ".", all = TRUE, recursive = TRUE, type = "any",
-  invert = FALSE, regexp = NULL, manifest = ".manifest.json", ...)
+pb_track(glob = NULL, path = ".", all = TRUE, recursive = TRUE,
+  type = "any", invert = FALSE, regexp = NULL,
+  manifest = ".manifest.json", ...)
 }
 \arguments{
 \item{glob}{A wildcard aka globbing pattern (e.g. \code{*.csv}) passed on to \code{\link[=grep]{grep()}} to filter paths.}

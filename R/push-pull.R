@@ -25,7 +25,7 @@
 #' ## Track all .csv files
 #' pb_track("*.csv")
 #' }
-pb_track <- function(glob, path = ".", all = TRUE, recursive = TRUE,
+pb_track <- function(glob = NULL, path = ".", all = TRUE, recursive = TRUE,
                      type = "any", invert = FALSE, regexp = NULL,
                      manifest = ".manifest.json",
                      ...){
