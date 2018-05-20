@@ -98,11 +98,14 @@ pb_pull <- function(tag = "latest",
 
   ## List files that will be newly pulled
   files <- new_data("pull", tag = tag, manifest = manifest, .repo = .repo)
-  if(is.null(files))
-    return(message("Already up to date"))
-  if(length(files)==0)
-    return(message("Already up to date"))
-
+  if(is.null(files)){
+    message("Already up to date")
+    return(invisible(TRUE))
+  }
+  if(length(files)==0){
+    message("Already up to date")
+    return(invisible(TRUE))
+  }
   pb_download(.repo, tag = tag, file = basename(files),
               dest = files, overwrite = overwrite)
 
