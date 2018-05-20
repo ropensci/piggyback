@@ -26,6 +26,14 @@ It has two main modes or workflows:
    file types and sync all tracked files with `pull` and `push` commands.  Convenient
    for projects working with many piggybacked data files.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/cboettig/piggyback}
+  \item Report bugs at \url{https://github.com/cboettig/piggyback/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Carl Boettiger \email{cboettig@gmail.com} (0000-0002-1642-628X) [copyright holder]
 

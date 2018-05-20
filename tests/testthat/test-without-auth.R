@@ -74,7 +74,8 @@ testthat::test_that(
 
 
     dir.create("test_data/")
-    pb_download("cboettig/piggyback", "mtcars.tsv.gz", tag = "v0.0.1", dest = "test_data/")
+    pb_download("cboettig/piggyback", "mtcars.tsv.gz",
+                tag = "v0.0.1", dest = "test_data/")
 
     testthat::expect_true(file.exists("test_data/mtcars.tsv.gz"))
     cars <- readr::read_tsv("test_data/mtcars.tsv.gz")
@@ -100,7 +101,9 @@ testthat::test_that("we can track data with manifest", {
   out <- pb_pull(.repo = "cboettig/piggyback")
   testthat::expect_true(out)
 
-  setwd(cur)
+    setwd(cur)
+    unlink(tmp)
+
 })
 
 
