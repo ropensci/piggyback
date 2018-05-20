@@ -1,7 +1,17 @@
 testthat::context("Without Authentication")
 
+## Even though authentication is not required for these tests,
+## they do call the GH API and are subject to tight rate-limiting
+## when no Token is available.  It is preferable / advisable to have
+## set GITHUB_TOKEN env var for any testing, as we do on Appveyor
+## and Travis
+
 testthat::test_that(
   "we can download all files from the latest release", {
+
+  testthat::skip_on_cran()
+
+
   pb_download("cboettig/piggyback")
 
   ## v0.0.4 has 1 file
@@ -15,6 +25,10 @@ testthat::test_that(
 
 testthat::test_that(
   "we can download all files from the requested release", {
+
+    testthat::skip_on_cran()
+
+
     pb_download("cboettig/piggyback", tag="v0.0.1")
 
     ## v0.0.1 has 2 files
@@ -27,6 +41,9 @@ testthat::test_that(
 
 testthat::test_that(
   "we can download a requested file from the latest release", {
+
+    testthat::skip_on_cran()
+
     pb_download("cboettig/piggyback", "mtcars.tsv.gz")
 
     testthat::expect_true(file.exists("mtcars.tsv.gz"))
@@ -38,6 +55,10 @@ testthat::test_that(
 
 testthat::test_that(
   "we can download a requested file from the requested release", {
+
+    testthat::skip_on_cran()
+
+
     pb_download("cboettig/piggyback", "mtcars.tsv.gz", tag = "v0.0.1")
 
     testthat::expect_true(file.exists("mtcars.tsv.gz"))
@@ -48,6 +69,10 @@ testthat::test_that(
 
 testthat::test_that(
   "we can download a requested file to requested subdirectory", {
+
+    testthat::skip_on_cran()
+
+
     dir.create("test_data/")
     pb_download("cboettig/piggyback", "mtcars.tsv.gz", tag = "v0.0.1", dest = "test_data/")
 
@@ -61,6 +86,9 @@ testthat::test_that(
 #######  We need to be in an active project to track something
 
 testthat::test_that("we can track data with manifest", {
+
+  testthat::skip_on_cran()
+
   cur <- getwd()
   tmp <- tempdir()
   proj_dir <- file.path(tmp, "piggyback-test")
