@@ -7,7 +7,8 @@ testthat::context("Requiring Authentication")
 testthat::test_that("We can upload data",{
   testthat::skip_if(piggyback:::get_token() == "")
   data <- readr::write_tsv(datasets::iris, "iris.tsv.gz")
-  pb_upload("cboettig/piggyback", file = "iris.tsv.gz", tag = "v0.0.1", overwrite = TRUE)
+  pb_upload("cboettig/piggyback", file = "iris.tsv.gz",
+            tag = "v0.0.1", overwrite = TRUE)
 })
 
 
@@ -42,8 +43,8 @@ testthat::test_that("We can push and pull data",{
   testthat::expect_true(pb_push(tag="v0.0.1"))
 
   ## Should error if tag already exists
-  testthat::expect_error(x = piggyback::gh_new_release(
-    "cboettig/piggyback", tag = "v0.0.1"))
+  testthat::expect_error(
+    gh_new_release("cboettig/piggyback", tag = "v0.0.1"))
 
    ## tare down
   setwd(cur)
