@@ -25,8 +25,9 @@ the filenames.}
 
 \item{regexp}{A regular expression (e.g. \code{[.]csv$}) passed on to \code{\link[=grep]{grep()}} to filter paths.}
 
-\item{manifest}{name of the local manifest file. Note: A leading dot (i.e. indicating a hidden file)
-in the manifest name will be removed from the name used on the GitHub asset list.}
+\item{manifest}{name of the local manifest file. Note: A leading dot
+(i.e. indicating a hidden file) in the manifest name will be removed
+from the name used on the GitHub asset list.}
 
 \item{...}{Additional arguments passed to \link{grep}.}
 }

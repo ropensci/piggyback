@@ -52,7 +52,8 @@ pb_track <- function(glob = NULL, path = ".", all = TRUE, recursive = TRUE,
   hashes <- merge_hashes(hashes, previous)
   json <- jsonlite::write_json(hashes,
                                file.path(m),
-                               auto_unbox = TRUE)
+                               auto_unbox = TRUE,
+                               pretty=TRUE)
   invisible(hashes)
 }
 
@@ -93,10 +94,17 @@ pb_pull <- function(tag = "latest",
 
   # Make sure hashes reflect current files
   update_hashes(manifest)
+  # update manifest with github manifest
+
+  ## List files that will be newly pulled
   files <- new_data("pull", tag = tag, manifest = manifest, .repo = .repo)
-  if(!is.null(files))
-    pb_download(.repo, tag = tag, file = basename(files),
-                dest = files, overwrite = overwrite)
+  if(is.null(files))
+    return(message("Already up to date"))
+  if(length(files)==0)
+    return(message("Already up to date"))
+
+  pb_download(.repo, tag = tag, file = basename(files),
+              dest = files, overwrite = overwrite)
 
   invisible(TRUE)
 }
@@ -177,7 +185,8 @@ update_hashes <- function(manifest = ".manifest.json"){
 
   jsonlite::write_json(hashes,
                        m,
-                       auto_unbox = TRUE)
+                       auto_unbox = TRUE,
+                       pretty=TRUE)
 
 }
 

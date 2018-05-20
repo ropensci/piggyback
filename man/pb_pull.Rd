@@ -8,26 +8,29 @@ pb_pull(tag = "latest", overwrite = TRUE, .repo = guess_repo(),
   manifest = ".manifest.json")
 }
 \arguments{
-\item{tag}{name of release/tag on GitHub to which data assets will be attached.
-Default is to use the latest available release.}
+\item{tag}{name of release/tag on GitHub to which data assets will be
+attached. Default is to use the latest available release.}
 
-\item{overwrite}{should existing files be overwritten when hashes do not match? default `TRUE`}
+\item{overwrite}{should existing files be overwritten when hashes do
+not match? default `TRUE`.}
 
-\item{.repo}{Name of the repo on GitHub (`owner/repo`, i.e. `cboettig/piggyback`).
-By default will guess the current repository's GitHub `origin`.}
+\item{.repo}{Name of the repo on GitHub (`owner/repo`, i.e.
+`cboettig/piggyback`). By default will guess the current repository's
+ GitHub `origin`.}
 
-\item{manifest}{name of the local manifest file. Note: A leading dot (i.e. indicating a hidden file)
-in the manifest name will be removed from the name used on the GitHub asset list.}
+\item{manifest}{name of the local manifest file. Note: A leading dot
+(i.e. indicating a hidden file) in the manifest name will be removed
+from the name used on the GitHub asset list.}
 }
 \description{
-Download any tracked datasets piggybacking on GitHub. Files identical on local
-and remote versions will not be transfered.  Otherwise, **assumes
+Download any tracked datasets piggybacking on GitHub. Files identical on
+local and remote versions will not be transfered.  Otherwise, **assumes
 GitHub version should overwrite local versions.**
 }
 \details{
-Will only download tracked files, as identified by the manifest attached to the
-requested release on GitHub. Add files to tracking with \code{\link{pb_track}} first and
-push to GitHub with \code{\link{pb_push}}.
+Will only download tracked files, as identified by the manifest
+ attached to the requested release on GitHub. Add files to tracking with
+ \code{\link{pb_track}} first and push to GitHub with \code{\link{pb_push}}.
 }
 \examples{
 \dontrun{

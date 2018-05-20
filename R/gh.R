@@ -12,6 +12,7 @@
 #' @param overwrite default `TRUE`, should any local files of the same name be overwritten?
 #' @importFrom httr GET add_headers write_disk
 #' @importFrom gh gh
+#' @importFrom fs dir_create
 #' @export
 pb_download <- function(repo, file = NULL, dest = ".",
                         tag = "latest", overwrite = TRUE){
@@ -30,7 +31,8 @@ pb_download <- function(repo, file = NULL, dest = ".",
   ## if dest not provided, we will write
   if(length(dest) <= 1){
     i <- which(file_names %in% file)
-    ## FIXME make sure dest dir exists!
+    ## Make sure dest dir exists!
+    fs::dir_create(dest)
     dest <- file.path(dest, file_names[i])
   }
 

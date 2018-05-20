@@ -8,16 +8,19 @@ pb_push(tag = "latest", overwrite = TRUE, manifest = ".manifest.json",
   .repo = guess_repo())
 }
 \arguments{
-\item{tag}{name of release/tag on GitHub to which data assets will be attached.
-Default is to use the latest available release.}
+\item{tag}{name of release/tag on GitHub to which data assets will be
+attached. Default is to use the latest available release.}
 
-\item{overwrite}{should existing files be overwritten when hashes do not match? default `TRUE`}
+\item{overwrite}{should existing files be overwritten when hashes do
+not match? default `TRUE`.}
 
-\item{manifest}{name of the local manifest file. Note: A leading dot (i.e. indicating a hidden file)
-in the manifest name will be removed from the name used on the GitHub asset list.}
+\item{manifest}{name of the local manifest file. Note: A leading dot
+(i.e. indicating a hidden file) in the manifest name will be removed
+from the name used on the GitHub asset list.}
 
-\item{.repo}{Name of the repo on GitHub (`owner/repo`, i.e. `cboettig/piggyback`).
-By default will guess the current repository's GitHub `origin`.}
+\item{.repo}{Name of the repo on GitHub (`owner/repo`, i.e.
+`cboettig/piggyback`). By default will guess the current repository's
+ GitHub `origin`.}
 }
 \description{
 Push all currently tracked data files to GitHub.  Only files identical
