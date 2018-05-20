@@ -21,12 +21,11 @@ knitr::opts_chunk$set(
 
 # piggyback
 
-`piggyback` is basically a poor soul's [git LFS](https://git-lfs.github.com/).  GitHub rejects commits containing files larger than 50 Mb.  `git LFS` is not only expensive, it also [breaks GitHub's collaborative model](https://medium.com/@megastep/github-s-large-file-storage-is-no-panacea-for-open-source-quite-the-opposite-12c0e16a9a91). (Someone wants to submit a PR with a simple edit to your docs, they cannot fork)
-Unlike git LFS, `piggyback` doesn't take over your standard `git` client, it just perches comfortably on the shoulders of your existing GitHub API.  Data can be versioned by `piggyback`, but relative to `git LFS` versioning is less strict: uploads can be set as a new version or allowed to overwrite previously uploaded data.  `piggyback` works with both public and private repositories.  
+`piggyback` is basically a poor soul's [Git LFS](https://git-lfs.github.com/).  GitHub rejects commits containing files larger than 50 Mb.  Git LFS is not only expensive, it also [breaks GitHub's collaborative model](https://medium.com/@megastep/github-s-large-file-storage-is-no-panacea-for-open-source-quite-the-opposite-12c0e16a9a91). (Someone wants to submit a PR with a simple edit to your docs, they cannot fork)  Unlike Git LFS, `piggyback` doesn't take over your standard `git` client, it just perches comfortably on the shoulders of your existing GitHub API.  Data can be versioned by `piggyback`, but relative to `git LFS` versioning is less strict: uploads can be set as a new version or allowed to overwrite previously uploaded data.  `piggyback` works with both public and private repositories.  
 
 `piggyback` is inspired by [datastorr](https://github.com/ropenscilabs/datastorr) from [\@richfitz](http://github.com/richfitz). While `datastorr` provides your data in the R "data package" model of `storr` (your data lives inside an R package that you install and is automatically loaded into memory), `piggyback` tries to imitate the LFS model where your data files are simply stored as part of your repository.  This implementation uses R wrappers to the GitHub API, but an identical client could be implemented in any language with bindings to the GitHub API. 
 
-`piggyback` is designed around two possible workflows: (1) A high-level workflow that parallels `git lfs`, and (2) a simple interface for directly uploading and downloading individual data files to a GitHub release.
+`piggyback` is designed around two possible workflows: (1) A high-level workflow that parallels `git lfs` (best when working with many files) and (2) a simple interface for directly uploading and downloading individual data files to a GitHub release.
 
 ## Installation
 
@@ -39,15 +38,13 @@ devtools::install_github("cboettig/piggyback")
 
 ## Authentication
 
-No authentication is required to download data from *public* GitHub repositories using `piggyback`. To upload data to any repository, or to download data from *private* repositories, you will need to authenticate first.  To do so, add your [GitHub Token]() to an environmental variable, e.g. in a `~/.Renviron` file in your home directory (or some place private you won't upload), or simply set
-it in the R console using:
+No authentication is required to download data from *public* GitHub repositories using `piggyback`. Nevertheless, `piggyback` recommends setting a token when possible to avoid rate limits. To upload data to any repository, or to download data from *private* repositories, you will need to authenticate first.  To do so, add your [GitHub Token](https://github.com/settings/tokens/new?scopes=repo,gist&description=R:GITHUB_PAT) to an environmental variable, e.g. in a `~/.Renviron` file in your home directory (or some place private you won't upload), or simply set it in the R console using:
 
 ```r
 Sys.setenv(GITHUB_TOKEN="xxxxxx")
 ```
 
-Try to avoid writing `Sys.setenv()` in scripts -- remember, the goal here is to avoid writing your private token in any file that might be shared, even privately.  
-
+Try to avoid writing `Sys.setenv()` in scripts -- remember, the goal here is to avoid writing your private token in any file that might be shared, even privately.  For help setting up your token, try `usethis::browse_github_pat()`.
 
 
 ## Basic Interface
@@ -106,7 +103,7 @@ This is useful in scripts that may automatically upload their results, or whenev
 
 ## git-style
 
-For an even simpler way to sync data files to GitHub, `piggyback` provides LFS-like `push` and `pull` methods.  These methods are simple wrappers around the basic upload and download interface that streamline the process of managing a potentially large number of data files of a given type or location.  
+For an even simpler way to sync many data files to GitHub, `piggyback` provides Git-LFS-like `push` and `pull` methods.  These methods are simple wrappers around the basic upload and download interface that streamline the process of managing a potentially large number of data files of a given type or location.  
 
 By default, specify a `glob` pattern of files to track.  `pb_track` can also track all files at a given path.  
 
@@ -122,27 +119,13 @@ Upload all tracked data to GitHub.  By default, will attach data to the `latest`
 pb_push()
 ```
 
-Download all tracked data:
 
-```{r}
-pb_download()
-```
-
-Or download all tracked data from a particular previous release. Will overwrite local data files by the same name, allowing you to quickly switch between versions of the data:
-
-```{r}
-pb_download(tag = "v0.0.1")
-```
-
-
-To save bandwidth / transfer times, files which are identical on both GitHub and local filesystem are not transferred:
 
 ```{r}
 pb_push() 
-pb_push() 
 ```
 
-
+To save bandwidth / transfer times, files which are identical on both GitHub and local filesystem are not transferred by either `pb_push()` or `pb_pull()`.  Note also that push and pull do not create either `git` commits in your repo or new releases, (though you are welcome to create a new GitHub release at any time, or push & pull to older releases.)
 
 ## A Note on GitHub Releases vs Data Archiving
 
