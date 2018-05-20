@@ -7,8 +7,13 @@ testthat::context("Requiring Authentication")
 testthat::test_that("We can upload data",{
   testthat::skip_if(piggyback:::get_token() == "")
   data <- readr::write_tsv(datasets::iris, "iris.tsv.gz")
-  pb_upload("cboettig/piggyback", file = "iris.tsv.gz",
+  out <- pb_upload("cboettig/piggyback", file = "iris.tsv.gz",
             tag = "v0.0.1", overwrite = TRUE)
+  testthat::expect_is(out, "response")
+
+  unlink("iris.tsv.gz")
+  unlink("manifest.json")
+
 })
 
 

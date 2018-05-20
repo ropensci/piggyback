@@ -101,7 +101,9 @@ testthat::test_that("we can track data with manifest", {
   out <- pb_pull(.repo = "cboettig/piggyback")
   testthat::expect_true(out)
 
-  setwd(cur)
+    setwd(cur)
+    unlink(tmp)
+
 })
 
 
