@@ -8,3 +8,4 @@
 ^data/.*$
 ^\.Renviron$
 ^appveyor\.yml$
+^CODE_OF_CONDUCT\.md$

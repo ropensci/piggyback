@@ -8,6 +8,8 @@ Status](https://travis-ci.org/cboettig/piggyback.svg?branch=master)](https://tra
 status](https://codecov.io/gh/cboettig/piggyback/branch/master/graph/badge.svg)](https://codecov.io/github/cboettig/piggyback?branch=master)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/cboettig/piggyback?branch=master&svg=true)](https://ci.appveyor.com/project/cboettig/piggyback)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/piggyback)](https://cran.r-project.org/package=piggyback)
 
 # piggyback
 
@@ -189,3 +191,9 @@ is meant only to lower the friction of working with data during the
 research process. (e.g. provide data accessible to collaborators or
 continuus integration systems during research process, including for
 private repositories.)
+
+-----
+
+Please note that this project is released with a [Contributor Code of
+Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree
+to abide by its terms.

@@ -8,6 +8,8 @@ output: github_document
 [![Travis-CI Build Status](https://travis-ci.org/cboettig/piggyback.svg?branch=master)](https://travis-ci.org/cboettig/piggyback)
 [![Coverage status](https://codecov.io/gh/cboettig/piggyback/branch/master/graph/badge.svg)](https://codecov.io/github/cboettig/piggyback?branch=master)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/cboettig/piggyback?branch=master&svg=true)](https://ci.appveyor.com/project/cboettig/piggyback)
+ [![CRAN status](https://www.r-pkg.org/badges/version/piggyback)](https://cran.r-project.org/package=piggyback)
+ 
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
@@ -127,4 +129,9 @@ To save bandwidth / transfer times, files which are identical on both GitHub and
 `piggyback` is not intended as a data archiving solution.  Importantly, bare in mind that there is nothing special about multiple "versions" in releases, as far as data assets uploaded by `piggyback` are concerned.  The data files `piggyback` attaches to a Release can be deleted or modified at any time -- creating a new release to store data assets is the functional equivalent of just creating new directories `v0.1`, `v0.2` to store your data.  (GitHub Releases are always pinned to a particular `git` tag, so the code/git-managed contents associated with repo are more immutable, but remember our data assets just piggyback on top of the repo).  
 
 Permanent, published data should always be archived in a proper data repository with a DOI, such as [zenodo.org](https://zenodo.org). Zenodo can freely archive public research data files up to 50 GB in size, and data is strictly versioned (once released, a DOI always refers to the same version of the data, new releases are given new DOIs). `piggyback` is meant only to lower the friction of working with data during the research process.  (e.g. provide data accessible to collaborators or continuus integration systems during research process, including for private repositories.)
+
+----
+
+Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md).
+By participating in this project you agree to abide by its terms.
 
