@@ -12,21 +12,21 @@ pb_push(tag = "latest", overwrite = TRUE, manifest = ".manifest.json",
 attached. Default is to use the latest available release.}
 
 \item{overwrite}{should existing files be overwritten when hashes do
-not match? default `TRUE`.}
+not match? default \code{TRUE}.}
 
 \item{manifest}{name of the local manifest file. Note: A leading dot
 (i.e. indicating a hidden file) in the manifest name will be removed
 from the name used on the GitHub asset list.}
 
-\item{.repo}{Name of the repo on GitHub (`owner/repo`, i.e.
-`cboettig/piggyback`). By default will guess the current repository's
- GitHub `origin`.}
+\item{.repo}{Name of the repo on GitHub (\code{owner/repo}, i.e.
+\code{cboettig/piggyback}). By default will guess the current repository's
+GitHub \code{origin}.}
 }
 \description{
 Push all currently tracked data files to GitHub.  Only files identical
 to those already on GitHub (by md5sum hash) will not be transferred.
-Otherwise, **assumes local version should overwrite existing GitHub
-version.** Create a new release if you do not want to overwrite previous
+Otherwise, \strong{assumes local version should overwrite existing GitHub
+version.} Create a new release if you do not want to overwrite previous
 GitHub versions when pushing.
 }
 \details{

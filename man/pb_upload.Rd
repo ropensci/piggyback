@@ -15,13 +15,13 @@ pb_upload(repo, file, tag = "latest", name = NULL, overwrite = FALSE,
 \item{tag}{tag for the GitHub release to which this data should be attached.}
 
 \item{name}{name for uploaded file. If not provided will use the basename of
-`file` (i.e. filename without directory)}
+\code{file} (i.e. filename without directory)}
 
 \item{overwrite}{overwrite any existing file with the same name already
 attached to the on release?}
 
 \item{.token}{GitHub authentication token. Typically set from an environmental
-variable, e.g. `Sys.setenv(GITHUB_TOKEN = "xxxxx")`, which helps prevent
+variable, e.g. \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")}, which helps prevent
 accidental disclosure of a secret token when sharing scripts.}
 }
 \description{

@@ -17,21 +17,21 @@ gh_new_release(repo, tag, commit = "master", name = tag,
 determines where the Git tag is created from.
 Can be any branch or commit SHA. Unused if the
 Git tag already exists. Default: the repository's
-default branch (usually `master`).}
+default branch (usually \code{master}).}
 
 \item{name}{The name of the release. Defaults to tag.}
 
 \item{body}{Text describing the contents of the tag.
 default text is "Data release".}
 
-\item{draft}{default `FALSE`. Set to `TRUE` to create
+\item{draft}{default \code{FALSE}. Set to \code{TRUE} to create
 a draft (unpublished) release.}
 
-\item{prerelease}{default `FALSE`. Set to `TRUE` to
+\item{prerelease}{default \code{FALSE}. Set to \code{TRUE} to
 identify the release as a prerelease.}
 
 \item{.token}{GitHub authentication token. Typically set from an environmental
-variable, e.g. `Sys.setenv(GITHUB_TOKEN = "xxxxx")`, which helps prevent
+variable, e.g. \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")}, which helps prevent
 accidental disclosure of a secret token when sharing scripts.}
 }
 \description{

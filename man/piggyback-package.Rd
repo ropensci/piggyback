@@ -19,12 +19,13 @@ download data from public repositories.
 }
 \details{
 It has two main modes or workflows:
-
-- `pb_upload()` / `pb_download()`:  Upload and download individual files to/from
-  the desired release of the specified repository
-- `pb_track()` + `pb_pull()` / `pb_push()`: Use a `git-lfs` style tracking of specific
-   file types and sync all tracked files with `pull` and `push` commands.  Convenient
-   for projects working with many piggybacked data files.
+\itemize{
+\item \code{pb_upload()} / \code{pb_download()}:  Upload and download individual files to/from
+the desired release of the specified repository
+\item \code{pb_track()} + \code{pb_pull()} / \code{pb_push()}: Use a \code{git-lfs} style tracking of specific
+file types and sync all tracked files with \code{pull} and \code{push} commands.  Convenient
+for projects working with many piggybacked data files.
+}
 }
 \seealso{
 Useful links:
