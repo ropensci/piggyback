@@ -5,7 +5,7 @@
 \title{download_data("cboettig/ghdata")}
 \usage{
 pb_download(repo, file = NULL, dest = ".", tag = "latest",
-  overwrite = TRUE)
+  overwrite = TRUE, ignore = "manifest.json")
 }
 \arguments{
 \item{repo}{Repository name in format "owner/repo".}
@@ -20,6 +20,8 @@ Can include paths to files, but any directories in that path must already exist.
 \item{tag}{tag for the GitHub release to which this data is attached}
 
 \item{overwrite}{default \code{TRUE}, should any local files of the same name be overwritten?}
+
+\item{ignore}{a list of files to ignore (if downloading "all" because \code{file=NULL})}
 }
 \description{
 download_data("cboettig/ghdata")

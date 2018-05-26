@@ -4,45 +4,28 @@
 \alias{pb_track}
 \title{Track data files of a given pattern or location}
 \usage{
-pb_track(glob = NULL, path = ".", all = TRUE, recursive = TRUE,
-  type = "any", invert = FALSE, regexp = NULL,
-  manifest = ".manifest.json", ...)
+pb_track(glob)
 }
 \arguments{
-\item{glob}{A wildcard aka globbing pattern (e.g. \code{*.csv}) passed on to \code{\link[=grep]{grep()}} to filter paths.}
-
-\item{path}{A character vector of one or more paths.}
-
-\item{all}{If \code{TRUE} hidden files are also returned.}
-
-\item{recursive}{Should directories be listed recursively?
-the filenames.}
-
-\item{type}{File type(s) to return, one or more of "any", "file", "directory",
-"symlink", "FIFO", "socket", "character_device" or "block_device".}
-
-\item{invert}{If \code{TRUE} return files which do \emph{not} match}
-
-\item{regexp}{A regular expression (e.g. \code{[.]csv$}) passed on to \code{\link[=grep]{grep()}} to filter paths.}
-
-\item{manifest}{name of the local manifest file. Note: A leading dot
-(i.e. indicating a hidden file) in the manifest name will be removed
-from the name used on the GitHub asset list.}
-
-\item{...}{Additional arguments passed to \link{grep}.}
+\item{globpath}{vector of file names and/or glob pattern (e.g. \code{*.csv})
+which will be tracked by piggyback.}
 }
 \value{
-hashes list (invisibly)
+input \code{globpath} (invisibly)
 }
 \description{
 Track data files of a given pattern or location
 }
 \details{
-Tracked files will be added to .gitignore
+Note: tracked patterns are simply written to \code{.pbattributes}
+(analogous to \code{.gitattributes} in \code{git-lfs}.)  You can also edit this
+file manually.  You will probably want to check in \code{.psattributes} to
+as to version control., with \code{git add .psattributes}.  Note that
+tracked file patterns will also be added to \code{.gitignore}.
 }
 \examples{
 \donttest{
-## Track all .csv files
-pb_track("*.csv")
+## Track all .csv and .tsv files
+pb_track(c("*.tsv", "*.tsv.gz"))
 }
 }

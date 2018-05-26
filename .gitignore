@@ -3,10 +3,8 @@
 .Rhistory
 .RData
 .Ruserdata
-data/iris.tsv.gz
-data/mtcars.tsv.gz
-.piggyback_manifest.json
-piggyback_manifest.json
-.manifest.json
-
 inst/doc
+*.csv
+*.RData
+*.tsv
+*.tsv.gz

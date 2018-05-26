@@ -10,12 +10,14 @@
 #' Can include paths to files, but any directories in that path must already exist.
 #' @param tag tag for the GitHub release to which this data is attached
 #' @param overwrite default `TRUE`, should any local files of the same name be overwritten?
+#' @param ignore a list of files to ignore (if downloading "all" because `file=NULL`)
 #' @importFrom httr GET add_headers write_disk
 #' @importFrom gh gh
 #' @importFrom fs dir_create
 #' @export
 pb_download <- function(repo, file = NULL, dest = ".",
-                        tag = "latest", overwrite = TRUE){
+                        tag = "latest", overwrite = TRUE,
+                        ignore = "manifest.json"){
 
   x <- release_info(repo, tag)
   id <- vapply(x$assets, `[[`, integer(1), "id")
@@ -26,7 +28,8 @@ pb_download <- function(repo, file = NULL, dest = ".",
     i <- which(file_names %in% file)
     id <- id[i]
   } else {
-    file <- file_names
+    i <- which(file_names %in% ignore)
+    file <- file_names[-i]
   }
   ## if dest not provided, we will write
   if(length(dest) <= 1){

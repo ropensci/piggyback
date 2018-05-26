@@ -14,7 +14,6 @@ testthat::test_that(
 
   pb_download("cboettig/piggyback")
 
-  ## v0.0.4 has 1 file
 
   testthat::expect_true(file.exists("mtcars.tsv.gz"))
   cars <- readr::read_tsv("mtcars.tsv.gz")

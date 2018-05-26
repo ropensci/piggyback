@@ -17,7 +17,7 @@ Authors@R: person("Carl", "Boettiger",
                   comment=c(ORCID = "0000-0002-1642-628X"))
 URL: https://github.com/cboettig/piggyback
 BugReports: https://github.com/cboettig/piggyback/issues
-License: MIT + file LICENSE
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 ByteCompile: true
@@ -27,7 +27,9 @@ Imports:
     jsonlite,
     git2r,
     fs,
-    usethis
+    usethis,
+    crayon,
+    clisymbols
 Suggests:
     readr,
     covr,
@@ -38,5 +40,3 @@ Suggests:
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1.9000
 Roxygen: list(markdown = TRUE)
-
-

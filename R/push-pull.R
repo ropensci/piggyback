@@ -12,48 +12,55 @@
 
 #' Track data files of a given pattern or location
 #'
-#' @details Tracked files will be added to .gitignore
-#' @inheritParams fs::dir_ls
-#' @inheritParams pb_pull
-#' @importFrom fs dir_ls
+#' @details Note: tracked patterns are simply written to `.pbattributes`
+#' (analogous to `.gitattributes` in `git-lfs`.)  You can also edit this
+#' file manually.  You will probably want to check in `.psattributes` to
+#' as to version control., with `git add .psattributes`.  Note that
+#' tracked file patterns will also be added to `.gitignore`.
+#' @param globpath vector of file names and/or glob pattern (e.g. `*.csv`)
+#' which will be tracked by piggyback.
+#' @importFrom readr write_lines
 #' @importFrom usethis use_git_ignore proj_get
-#' @importFrom jsonlite write_json
-#' @return hashes list (invisibly)
+#' @importFrom fs path_join
+#' @return input `globpath` (invisibly)
 #' @export
 #' @examples
 #' \donttest{
-#' ## Track all .csv files
-#' pb_track("*.csv")
+#' ## Track all .csv and .tsv files
+#' pb_track(c("*.tsv", "*.tsv.gz"))
 #' }
-pb_track <- function(glob = NULL, path = ".", all = TRUE, recursive = TRUE,
-                     type = "any", invert = FALSE, regexp = NULL,
-                     manifest = ".manifest.json",
-                     ...){
+pb_track <- function(glob){
 
-  ## Update .gitignore list
-  files <- fs::dir_ls(path = path, glob = glob, all = all,
-                      recursive = recursive, type = type,
-                      regexp = regexp, invert = invert, ...)
-
-
+  write_union(usethis::proj_get(),
+              ".pbattributes",
+              glob)
   if(!is.null(git2r::discover_repository("."))){
-    usethis::use_git_ignore(manifest)
-    usethis::use_git_ignore(files)
+    usethis::use_git_ignore(glob)
   }
+  invisible(glob)
+}
+
+#' @importFrom fs dir_ls
+#' @importFrom jsonlite write_json
+create_manifest <- function(manifest = ".manifest.json"){
+
+  proj_dir <- usethis::proj_get()
+  full_path <- file.path(proj_dir, ".pbattributes")
+  if (file.exists(full_path)) {
+    glob <- readLines(full_path, warn = FALSE)
+  } else {
+    glob <- character()
+  }
+
+  files <- unname(unlist(lapply(glob, function(g)
+    fs::dir_ls(path = proj_dir, glob = g, all = TRUE,
+               recursive = TRUE, type = "file"))))
+
   hashes <- lapply(files, tools::md5sum)
-
-  ## Append to any existing manifest.  Update existing keys (files)
-  previous <- NULL
-  m <- file.path(usethis::proj_get(), basename(manifest))
-  if(file.exists(m)){
-    previous <- jsonlite::read_json(m, simplifyVector = FALSE)
-  }
-
-  hashes <- merge_hashes(hashes, previous)
   json <- jsonlite::write_json(hashes,
-                               file.path(m),
+                               file.path(proj_dir, manifest),
                                auto_unbox = TRUE,
-                               pretty=TRUE)
+                               pretty = TRUE)
   invisible(hashes)
 }
 
@@ -92,9 +99,8 @@ pb_pull <- function(tag = "latest",
                     manifest = ".manifest.json")
                     {
 
-  # Make sure hashes reflect current files
-  update_hashes(manifest)
-  # update manifest with github manifest
+  # Get hashes of all tracked files
+  create_manifest(manifest)
 
   ## List files that will be newly pulled
   files <- new_data("pull", tag = tag, manifest = manifest, .repo = .repo)
@@ -108,6 +114,8 @@ pb_pull <- function(tag = "latest",
   }
   pb_download(.repo, tag = tag, file = basename(files),
               dest = files, overwrite = overwrite)
+
+  unlink(manifest)
 
   invisible(TRUE)
 }
@@ -136,7 +144,7 @@ pb_push <- function(tag = "latest",
                     .repo = guess_repo()){
 
 
-  update_hashes(manifest)
+  create_manifest(manifest)
 
   files <- new_data("push", tag = tag, manifest = manifest, .repo = .repo)
   lapply(files, function(f){
@@ -162,36 +170,6 @@ pb_push <- function(tag = "latest",
   invisible(TRUE)
 }
 
-
-
-
-
-
-
-
-
-## Re-compute hashes for all files in manifest
-update_hashes <- function(manifest = ".manifest.json"){
-
-  m <- file.path(usethis::proj_get(), basename(manifest))
-
-  if(!file.exists(m)){
-    stop("No tracked files found. use pb_track()
-         to indicate what data to piggyback")
-  }
-
-  local_files <-names(jsonlite::read_json(m))
-  ## drop any files that no longer exist from the local manifest
-  exists <- vapply(local_files, file.exists, logical(1))
-  hashes <- lapply(local_files[exists], tools::md5sum)
-  names(hashes) <- local_files[exists]
-
-  jsonlite::write_json(hashes,
-                       m,
-                       auto_unbox = TRUE,
-                       pretty=TRUE)
-
-}
 
 
 ## Identify data that we do not need to sync because it has not changed.
@@ -246,13 +224,6 @@ new_data <- function(mode = c("push", "pull"), tag = "latest",
 
 
 
-
-merge_hashes <- function(new, old){
-  new_files <- names(new)
-  old_files <- names(old)
-  ## keep only old files not in new file list.
-  c(new, old[!(old_files %in% new_files)])
-}
 
 #' @importFrom git2r remote_url repository discover_repository
 guess_repo <- function(path = "."){
