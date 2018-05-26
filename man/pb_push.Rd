@@ -5,7 +5,7 @@
 \title{Push data to GitHub}
 \usage{
 pb_push(tag = "latest", overwrite = TRUE, manifest = ".manifest.json",
-  .repo = guess_repo())
+  repo = guess_repo())
 }
 \arguments{
 \item{tag}{name of release/tag on GitHub to which data assets will be
@@ -18,7 +18,7 @@ not match? default \code{TRUE}.}
 (i.e. indicating a hidden file) in the manifest name will be removed
 from the name used on the GitHub asset list.}
 
-\item{.repo}{Name of the repo on GitHub (\code{owner/repo}, i.e.
+\item{repo}{Name of the repo on GitHub (\code{owner/repo}, i.e.
 \code{cboettig/piggyback}). By default will guess the current repository's
 GitHub \code{origin}.}
 }

@@ -21,28 +21,31 @@ pb_download <- function(repo, file = NULL, dest = ".",
                         tag = "latest", overwrite = TRUE,
                         ignore = "manifest.json"){
 
+  ## FIXME revisit using path escape logic!!
+
   x <- release_info(repo, tag)
   id <- vapply(x$assets, `[[`, integer(1), "id")
-  file_names <-  vapply(x$assets, `[[`, character(1), "name")
-
+  gh_file_names <- vapply(x$assets, `[[`, character(1), "name")
+  file_names <- local_filename(gh_file_names)
 
   if(!is.null(file)){
-    ## developer note: "file" can include paths for local files
-    ## file_names are bare file names, because no path is included
     i <- which(file_names %in% file)
     id <- id[i]
   } else {
     i <- which(file_names %in% ignore)
-    file_names <- file_names[-i]
-    id <- id[-i]
+    if(length(i) > 1){
+      file_names <- file_names[-i]
+      id <- id[-i]
+    }
     file <- file_names
   }
   ## if dest not provided, we will write
   if(length(dest) <= 1){
     i <- which(file_names %in% file)
     ## Make sure dest dir exists!
-    fs::dir_create(dest)
-    dest <- file.path(dest, file_names[i])
+    dest <- fs::path_rel(file.path(dest, file_names[i]))
+    fs::dir_create(fs::path_dir(dest))
+
   }
 
   for(i in seq_along(id)){

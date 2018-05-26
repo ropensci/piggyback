@@ -4,7 +4,7 @@
 \alias{pb_pull}
 \title{Pull data from GitHub}
 \usage{
-pb_pull(tag = "latest", overwrite = TRUE, .repo = guess_repo(),
+pb_pull(tag = "latest", overwrite = TRUE, repo = guess_repo(),
   manifest = ".manifest.json")
 }
 \arguments{
@@ -14,7 +14,7 @@ attached. Default is to use the latest available release.}
 \item{overwrite}{should existing files be overwritten when hashes do
 not match? default \code{TRUE}.}
 
-\item{.repo}{Name of the repo on GitHub (\code{owner/repo}, i.e.
+\item{repo}{Name of the repo on GitHub (\code{owner/repo}, i.e.
 \code{cboettig/piggyback}). By default will guess the current repository's
 GitHub \code{origin}.}
 

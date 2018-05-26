@@ -46,16 +46,16 @@ pb_track <- function(glob){
 create_manifest <- function(manifest = ".manifest.json"){
 
   proj_dir <- usethis::proj_get()
-  full_path <- file.path(proj_dir, ".pbattributes")
+  full_path <- fs::path_rel(file.path(proj_dir, ".pbattributes"))
   if (file.exists(full_path)) {
     glob <- readLines(full_path, warn = FALSE)
   } else {
     glob <- character()
   }
 
-  files <- unname(unlist(lapply(glob, function(g)
+  files <- fs::path_rel(unname(unlist(lapply(glob, function(g)
     fs::dir_ls(path = proj_dir, glob = g, all = TRUE,
-               recursive = TRUE, type = "file"))))
+               recursive = TRUE, type = "file")))))
 
   hashes <- lapply(files, tools::md5sum)
   names(hashes) <- files
@@ -80,7 +80,7 @@ create_manifest <- function(manifest = ".manifest.json"){
 #' attached. Default is to use the latest available release.
 #' @param overwrite should existing files be overwritten when hashes do
 #'  not match? default `TRUE`.
-#' @param .repo Name of the repo on GitHub (`owner/repo`, i.e.
+#' @param repo Name of the repo on GitHub (`owner/repo`, i.e.
 #' `cboettig/piggyback`). By default will guess the current repository's
 #'  GitHub `origin`.
 #' @param manifest name of the local manifest file. Note: A leading dot
@@ -98,15 +98,16 @@ create_manifest <- function(manifest = ".manifest.json"){
 #' }
 pb_pull <- function(tag = "latest",
                     overwrite = TRUE,
-                    .repo = guess_repo(),
+                    repo = guess_repo(),
                     manifest = ".manifest.json")
                     {
 
   # Get hashes of all tracked files
   create_manifest(manifest)
+  proj_dir <- usethis::proj_get()
 
   ## List files that will be newly pulled
-  files <- new_data("pull", tag = tag, manifest = manifest, .repo = .repo)
+  files <- new_data("pull", tag = tag, manifest = manifest, repo = repo)
   if(is.null(files)){
     message("Already up to date")
     return(invisible(TRUE))
@@ -115,8 +116,8 @@ pb_pull <- function(tag = "latest",
     message("Already up to date")
     return(invisible(TRUE))
   }
-  pb_download(.repo, tag = tag, file = basename(files),
-              dest = files, overwrite = overwrite)
+  pb_download(repo, tag = tag, file = files,
+              dest = proj_dir, overwrite = overwrite)
 
   unlink(manifest)
 
@@ -144,16 +145,16 @@ pb_pull <- function(tag = "latest",
 pb_push <- function(tag = "latest",
                     overwrite = TRUE,
                     manifest = ".manifest.json",
-                    .repo = guess_repo()){
+                    repo = guess_repo()){
 
 
   create_manifest(manifest)
 
-  files <- new_data("push", tag = tag, manifest = manifest, .repo = .repo)
+  files <- new_data("push", tag = tag, manifest = manifest, repo = repo)
   lapply(files, function(f){
     ## print file name being uploaded?
     message(paste(f))
-    pb_upload(.repo, file = f, tag = tag, overwrite = overwrite)
+    pb_upload(repo, file = f, tag = tag, overwrite = overwrite)
   })
 
   ## Upload the manifest, quietly
@@ -162,7 +163,7 @@ pb_push <- function(tag = "latest",
   sink(s)
   ## manifest name cannot start with . in upload
   m <- file.path(usethis::proj_get(), basename(manifest))
-  pb_upload(.repo, file = m,
+  pb_upload(repo, file = m,
             name = gsub("^\\.", "", manifest),
             tag = tag, overwrite = TRUE)
 
@@ -179,10 +180,10 @@ pb_push <- function(tag = "latest",
 ## Identify data that we do not need to sync because it has not changed.
 new_data <- function(mode = c("push", "pull"), tag = "latest",
                      manifest = ".manifest.json",
-                     .repo = guess_repo()){
+                     repo = guess_repo()){
   ## github name for files (i.e. manifest) cannot start with `.`
   mode <- match.arg(mode)
-  id <- gh_file_id(repo = .repo,
+  id <- gh_file_id(repo = repo,
                    file = gsub("^\\.", "", manifest),
                    tag = tag)
 
@@ -190,14 +191,12 @@ new_data <- function(mode = c("push", "pull"), tag = "latest",
   if(is.na(id)){
     github_manifest <- NULL
   } else {
-    ## Read in the online manifest
+    ## Read in the online manifest, silently and cleanly!
     tmp <- tempdir()
-    ## do so silently!
     s <- tempfile()
     sink(s)
-
     ## here we go
-    pb_download(repo = .repo,
+    pb_download(repo = repo,
                 file = gsub("^\\.", "", manifest),
                 dest = tmp, tag = tag)
     github_manifest <- jsonlite::read_json(
@@ -205,12 +204,11 @@ new_data <- function(mode = c("push", "pull"), tag = "latest",
 
     ## Tidy up
     unlink(tmp)
-
     sink()
     unlink(s)
   }
   ## Read in local manifest
-  m <- file.path(usethis::proj_get(), basename(manifest))
+  m <- file.path(usethis::proj_get(), manifest)
 
   local_manifest <- jsonlite::read_json(m)
 
