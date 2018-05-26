@@ -2,7 +2,8 @@
 
 
 #' download_data("cboettig/ghdata")
-#' @param repo Repository name in format "owner/repo".
+#' @param repo Repository name in format "owner/repo". Will guess
+#' the current repo if not specified.
 #' @param file name or vector of names of files to be downloaded. If `NULL`,
 #' all assets attached to the release will be downloaded.
 #' @param dest name of vector of names of where file should be downloaded.
@@ -17,7 +18,7 @@
 #' @importFrom gh gh
 #' @importFrom fs dir_create
 #' @export
-pb_download <- function(repo, file = NULL, dest = ".",
+pb_download <- function(repo = guess_repo(), file = NULL, dest = ".",
                         tag = "latest", overwrite = TRUE,
                         ignore = "manifest.json"){
 
@@ -79,7 +80,8 @@ gh_download_asset <- function(owner, repo, id, destfile, overwrite=TRUE,
 #' Upload data to an existing release
 #'
 #' NOTE: you must first create a release if one does not already exists.
-#' @param repo Repository name in format "owner/repo".
+#' @param repo Repository name in format "owner/repo". Will gess the current
+#' repo if not specified.
 #' @param tag  tag for the GitHub release to which this data should be attached.
 #' @param file path to file to be uploaded
 #' @param name name for uploaded file. If not provided will use the basename of
@@ -99,7 +101,7 @@ gh_download_asset <- function(owner, repo, id, destfile, overwrite=TRUE,
 #' }
 #' @importFrom httr progress upload_file POST stop_for_status
 #' @export
-pb_upload <- function(repo,
+pb_upload <- function(repo = guess_repo(),
                       file,
                       tag = "latest",
                       name = NULL,
@@ -175,7 +177,7 @@ gh_file_id <- function(repo, file, tag = "latest", name = NULL){
 #' with asset names converting the `.2f` escape code back to the system delimiter.
 #'
 #' @export
-pb_list <- function(repo, tag="latest", ignore = "manifest.json"){
+pb_list <- function(repo = guess_repo(), tag="latest", ignore = "manifest.json"){
   x <- release_info(repo, tag)
   file_names <- vapply(x$assets, `[[`, character(1), "name")
 
@@ -191,7 +193,7 @@ pb_list <- function(repo, tag="latest", ignore = "manifest.json"){
 #' @inheritParams pb_upload
 #' @return `TRUE` (invisibly) if a file is found and deleted.
 #' Otherwise, returns `NULL` (invisibly) if no file matching the name was found.
-pb_delete <- function(repo, tag="latest", file){
+pb_delete <- function(repo = guess_repo(), tag="latest", file, .token = get_token()){
   x <- release_info(repo, tag)
 
   name <- asset_filename(file)
@@ -218,7 +220,7 @@ pb_delete <- function(repo, tag="latest", file){
 
 
 ##################### Generic helpers ##################
-release_info <- function(repo, tag="latest"){
+release_info <- function(repo = guess_repo(), tag="latest"){
   r <- strsplit(repo, "/")[[1]]
   if(tag == "latest"){
     out <- gh("/repos/:owner/:repo/releases/latest",
@@ -243,7 +245,8 @@ get_token <- function(){
 
 #' Create a new release on GitHub repo
 #'
-#' @param repo Repository name in format "owner/repo".
+#' @param repo Repository name in format "owner/repo". Will guess
+#' the current repo if not specified.
 #' @param tag tag to create for this release
 #' @param commit Specifies the commitish value that
 #'  determines where the Git tag is created from.
@@ -264,7 +267,7 @@ get_token <- function(){
 #' @examples \dontrun{
 #' pb_new_release("cboettig/piggyback", "v0.0.5")
 #' }
-pb_new_release <- function(repo,
+pb_new_release <- function(repo = guess_repo(),
                            tag,
                            commit = "master",
                            name = tag,

@@ -15,12 +15,12 @@ testthat::test_that(
   pb_download("cboettig/piggyback")
 
 
-  testthat::expect_true(file.exists("mtcars.tsv.gz"))
-  cars <- readr::read_tsv("mtcars.tsv.gz")
+  testthat::expect_true(file.exists("data/mtcars.tsv.gz"))
+  cars <- readr::read_tsv("data/mtcars.tsv.gz")
   testthat::expect_equivalent(cars, mtcars)
-  unlink("mtcars.tsv.gz")
-  unlink("iris.tsv.gz")
-
+  unlink("data/mtcars.tsv.gz")
+  unlink("data/iris.tsv.gz")
+  unlink("data")
 })
 
 
@@ -38,6 +38,8 @@ testthat::test_that(
 
     unlink("mtcars.tsv.gz")
     unlink("iris.tsv.xz")
+    unlink("iris.tsv.gz")
+
   })
 
 testthat::test_that(
@@ -99,7 +101,7 @@ testthat::test_that("we can track data with manifest", {
   setwd(proj_dir)
 
   pb_track("*.tsv")
-  out <- pb_pull(.repo = "cboettig/piggyback")
+  out <- pb_pull(repo = "cboettig/piggyback")
   testthat::expect_true(out)
 
     setwd(cur)

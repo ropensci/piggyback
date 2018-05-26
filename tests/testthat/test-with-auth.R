@@ -39,8 +39,8 @@ testthat::test_that("We can push and pull data",{
 
   pb_track("*.tsv")
 
-  testthat::expect_true(pb_pull(.repo = "cboettig/piggyback"))
-  testthat::expect_true(pb_push(.repo = "cboettig/piggyback"))
+  testthat::expect_true(pb_pull(repo = "cboettig/piggyback"))
+  testthat::expect_true(pb_push(repo = "cboettig/piggyback"))
   testthat::expect_true(pb_pull())
   testthat::expect_true(pb_push())
 
