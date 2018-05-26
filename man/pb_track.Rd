@@ -7,7 +7,7 @@
 pb_track(glob)
 }
 \arguments{
-\item{globpath}{vector of file names and/or glob pattern (e.g. \code{*.csv})
+\item{glob}{vector of file names and/or glob pattern (e.g. \code{*.csv}, \code{data/*.csv})
 which will be tracked by piggyback.}
 }
 \value{
