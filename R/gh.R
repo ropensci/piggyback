@@ -10,7 +10,9 @@
 #' Can include paths to files, but any directories in that path must already exist.
 #' @param tag tag for the GitHub release to which this data is attached
 #' @param overwrite default `TRUE`, should any local files of the same name be overwritten?
-#' @param ignore a list of files to ignore (if downloading "all" because `file=NULL`)
+#' @param ignore a list of files to ignore (if downloading "all" because `file=NULL`).
+#' by default, "manifest.json" is ignored as this file is created and used only for
+#' avoiding redundant file transfer by `pb_push` and `pb_pull`
 #' @importFrom httr GET add_headers write_disk
 #' @importFrom gh gh
 #' @importFrom fs dir_create
@@ -70,21 +72,165 @@ gh_download_asset <- function(owner, repo, id, destfile, overwrite=TRUE,
   invisible(resp)
 }
 
+
+#' Upload data to an existing release
+#'
+#' NOTE: you must first create a release if one does not already exists.
+#' @param repo Repository name in format "owner/repo".
+#' @param tag  tag for the GitHub release to which this data should be attached.
+#' @param file path to file to be uploaded
+#' @param name name for uploaded file. If not provided will use the basename of
+#' `file` (i.e. filename without directory)
+#' @param overwrite overwrite any existing file with the same name already
+#'  attached to the on release?
+#' @param .token GitHub authentication token. Typically set from an environmental
+#' variable, e.g. `Sys.setenv(GITHUB_TOKEN = "xxxxx")`, which helps prevent
+#' accidental disclosure of a secret token when sharing scripts.
+#' @examples
+#' \dontrun{
+#' # Needs your real token to run
+#' Sys.setenv(GITHUB_TOKEN = "xxxxx")
+#'
+#' readr::write_tsv(mtcars,"mtcars.tsv.xz")
+#' ghdata_upload("cboettig/piggyback", "v0.0.3", "mtcars.tsv.xz")
+#' }
+#' @importFrom httr progress upload_file POST stop_for_status
+#' @export
+pb_upload <- function(repo,
+                      file,
+                      tag = "latest",
+                      name = NULL,
+                      overwrite = FALSE,
+                      .token = get_token()){
+
+  if(is.null(name)){
+    name <- asset_filename(file)
+  }
+
+  x <- release_info(repo, tag)
+
+  if(overwrite){
+    ## Get id for file
+    filenames <- vapply(x$assets, `[[`, character(1), "name")
+    ids <- vapply(x$assets, `[[`, integer(1), "id")
+
+    if(name %in% filenames){
+      i <- which(filenames == name)
+      ## If we find matching id, Delete file from release.
+      gh("DELETE /repos/:owner/:repo/releases/assets/:id",
+         owner = x$owner, repo = x$repo, id = ids[i], .token = .token)
+    }
+  }
+
+
+  r <- httr::POST(sub("\\{.+$", "", x$upload_url), query = list(name = name),
+                  body = httr::upload_file(file), httr::progress("up"),
+                  httr::authenticate(.token, "x-oauth-basic", "basic"))
+  cat("\n")
+  httr::stop_for_status(r)
+  invisible(r)
+}
+
+## Map local paths to valid names for GitHub assets
+asset_filename <- function(x, start = "."){
+  # name relative to repo
+  x <- fs::path_rel(x, start)
+  ## Cannot use %2f as html escape for slash
+  gsub(.Platform$file.sep, "\\.2f", x)
+}
+
+local_filename <- function(x){
+  gsub("\\.2f", .Platform$file.sep, x)
+}
+
+## Helper routine:
+## get the id of a file, or NA if file is not found in release assets
+gh_file_id <- function(repo, file, tag = "latest", name = NULL){
+  if(is.null(name)){
+    name <- asset_filename(file)
+  }
+
+  x <- release_info(repo, tag)
+
+  filenames <- vapply(x$assets, `[[`, character(1), "name")
+  ids <- vapply(x$assets, `[[`, integer(1), "id")
+  if(name %in% filenames){
+    i <- which(filenames == name)
+    ids[i]
+  } else {
+    NA
+  }
+
+}
+
+
+#' List all assets attached to a release
+#' @inheritParams pb_download
+#' @return a character vector of release asset names, (normalized to local paths)
+#' @details To preserve path information, local path delimeters are converted to `.2f`
+#' when files are uploaded as assets.  Listing will display the local filename,
+#' with asset names converting the `.2f` escape code back to the system delimiter.
+#'
+#' @export
+pb_list <- function(repo, tag="latest", ignore = "manifest.json"){
+  x <- release_info(repo, tag)
+  file_names <- vapply(x$assets, `[[`, character(1), "name")
+
+  i <- which(file_names %in% ignore)
+  file_names <- file_names[-i]
+
+  ## Should we report the tag name too? x$tag_name?
+  local_filename(file_names)
+
+}
+
+#' Delete an asset attached to a release
+#' @inheritParams pb_upload
+#' @return `TRUE` (invisibly) if a file is found and deleted.
+#' Otherwise, returns `NULL` (invisibly) if no file matching the name was found.
+pb_delete <- function(repo, tag="latest", file){
+  x <- release_info(repo, tag)
+
+  name <- asset_filename(file)
+
+  filenames <- vapply(x$assets, `[[`, character(1), "name")
+  ids <- vapply(x$assets, `[[`, integer(1), "id")
+
+  out <- NULL
+  if(name %in% filenames){
+    i <- which(filenames == name)
+    ## If we find matching id, Delete file from release.
+    gh::gh("DELETE /repos/:owner/:repo/releases/assets/:id",
+       owner = x$owner, repo = x$repo, id = ids[i], .token = .token)
+    out <- TRUE
+  }
+
+  invisible(out)
+}
+
+
+
+
+
+
+
 ##################### Generic helpers ##################
 release_info <- function(repo, tag="latest"){
   r <- strsplit(repo, "/")[[1]]
   if(tag == "latest"){
     out <- gh("/repos/:owner/:repo/releases/latest",
-       owner = r[[1]], repo = r[[2]])
+              owner = r[[1]], repo = r[[2]])
   } else {
     out <- gh("/repos/:owner/:repo/releases/tags/:tag",
-       owner = r[[1]], repo = r[[2]], tag = tag)
+              owner = r[[1]], repo = r[[2]], tag = tag)
   }
   out$owner <- r[[1]]
   out$repo <-  r[[2]]
   out$tag <- tag
   out
 }
+
+
 get_token <- function(){
   Sys.getenv("GITHUB_PAT", Sys.getenv("GITHUB_TOKEN"))
 }
@@ -139,94 +285,10 @@ pb_new_release <- function(repo,
 
   token <- .token
   resp <- httr::POST(paste0("https://api.github.com/repos/", r[[1]],"/",
-                     r[[2]], "/", "releases?access_token=", token),
+                            r[[2]], "/", "releases?access_token=", token),
                      body = jsonlite::toJSON(payload,auto_unbox = TRUE))
 
   httr::stop_for_status(resp)
   release <- httr::content(resp)
 }
 
-
-
-#' Upload data to an existing release
-#'
-#' NOTE: you must first create a release if one does not already exists.
-#' @param repo Repository name in format "owner/repo".
-#' @param tag  tag for the GitHub release to which this data should be attached.
-#' @param file path to file to be uploaded
-#' @param name name for uploaded file. If not provided will use the basename of
-#' `file` (i.e. filename without directory)
-#' @param overwrite overwrite any existing file with the same name already
-#'  attached to the on release?
-#' @param .token GitHub authentication token. Typically set from an environmental
-#' variable, e.g. `Sys.setenv(GITHUB_TOKEN = "xxxxx")`, which helps prevent
-#' accidental disclosure of a secret token when sharing scripts.
-#' @examples
-#' \dontrun{
-#' # Needs your real token to run
-#' Sys.setenv(GITHUB_TOKEN = "xxxxx")
-#'
-#' readr::write_tsv(mtcars,"mtcars.tsv.xz")
-#' ghdata_upload("cboettig/piggyback", "v0.0.3", "mtcars.tsv.xz")
-#' }
-#' @importFrom httr progress upload_file POST stop_for_status
-#' @export
-pb_upload <- function(repo,
-                      file,
-                      tag = "latest",
-                      name = NULL,
-                      overwrite = FALSE,
-                      .token = get_token()){
-
-  if(is.null(name)){
-    name <- basename(file)
-  }
-
-  x <- release_info(repo, tag)
-
-  if(overwrite){
-    ## Get id for file
-    filenames <- vapply(x$assets, `[[`, character(1), "name")
-    ids <- vapply(x$assets, `[[`, integer(1), "id")
-
-    if(name %in% filenames){
-      i <- which(filenames == name)
-      ## If we find matching id, Delete file from release.
-      gh("DELETE /repos/:owner/:repo/releases/assets/:id",
-         owner = x$owner, repo = x$repo, id = ids[i], .token = .token)
-    }
-  }
-
-
-  r <- httr::POST(sub("\\{.+$", "", x$upload_url), query = list(name = name),
-                  body = httr::upload_file(file), httr::progress("up"),
-                  httr::authenticate(.token, "x-oauth-basic", "basic"))
-  cat("\n")
-  httr::stop_for_status(r)
-  invisible(r)
-}
-
-
-
-## Helper routine:
-## get the id of a file, or NA if file is not found in release assets
-gh_file_id <- function(repo, file, tag = "latest", name = NULL){
-  if(is.null(name)){
-    name <- basename(file)
-  }
-
-  x <- release_info(repo, tag)
-
-  filenames <- vapply(x$assets, `[[`, character(1), "name")
-  ids <- vapply(x$assets, `[[`, integer(1), "id")
-  if(name %in% filenames){
-    i <- which(filenames == name)
-    ids[i]
-  } else {
-    NA
-  }
-
-}
-
-
-## consider plain delete function for upload

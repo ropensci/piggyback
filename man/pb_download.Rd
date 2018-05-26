@@ -21,7 +21,9 @@ Can include paths to files, but any directories in that path must already exist.
 
 \item{overwrite}{default \code{TRUE}, should any local files of the same name be overwritten?}
 
-\item{ignore}{a list of files to ignore (if downloading "all" because \code{file=NULL})}
+\item{ignore}{a list of files to ignore (if downloading "all" because \code{file=NULL}).
+by default, "manifest.json" is ignored as this file is created and used only for
+avoiding redundant file transfer by \code{pb_push} and \code{pb_pull}}
 }
 \description{
 download_data("cboettig/ghdata")
