@@ -25,11 +25,15 @@ pb_download <- function(repo, file = NULL, dest = ".",
 
 
   if(!is.null(file)){
+    ## developer note: "file" can include paths for local files
+    ## file_names are bare file names, because no path is included
     i <- which(file_names %in% file)
     id <- id[i]
   } else {
     i <- which(file_names %in% ignore)
-    file <- file_names[-i]
+    file_names <- file_names[-i]
+    id <- id[-i]
+    file <- file_names
   }
   ## if dest not provided, we will write
   if(length(dest) <= 1){
@@ -109,9 +113,9 @@ get_token <- function(){
 #' @importFrom jsonlite toJSON
 #' @importFrom httr content GET POST stop_for_status
 #' @examples \dontrun{
-#' gh_new_release("cboettig/piggyback", "v0.0.5")
+#' pb_new_release("cboettig/piggyback", "v0.0.5")
 #' }
-gh_new_release <- function(repo,
+pb_new_release <- function(repo,
                            tag,
                            commit = "master",
                            name = tag,

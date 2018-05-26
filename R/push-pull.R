@@ -17,9 +17,8 @@
 #' file manually.  You will probably want to check in `.psattributes` to
 #' as to version control., with `git add .psattributes`.  Note that
 #' tracked file patterns will also be added to `.gitignore`.
-#' @param globpath vector of file names and/or glob pattern (e.g. `*.csv`)
+#' @param glob vector of file names and/or glob pattern (e.g. `*.csv`, `data/*.csv`)
 #' which will be tracked by piggyback.
-#' @importFrom readr write_lines
 #' @importFrom usethis use_git_ignore proj_get
 #' @importFrom fs path_join
 #' @return input `globpath` (invisibly)
@@ -34,7 +33,9 @@ pb_track <- function(glob){
   write_union(usethis::proj_get(),
               ".pbattributes",
               glob)
+  usethis::use_build_ignore(c(".pbattributes", ".manifest.json"))
   if(!is.null(git2r::discover_repository("."))){
+    usethis::use_git_ignore(".manifest.json")
     usethis::use_git_ignore(glob)
   }
   invisible(glob)
@@ -57,6 +58,8 @@ create_manifest <- function(manifest = ".manifest.json"){
                recursive = TRUE, type = "file"))))
 
   hashes <- lapply(files, tools::md5sum)
+  names(hashes) <- files
+
   json <- jsonlite::write_json(hashes,
                                file.path(proj_dir, manifest),
                                auto_unbox = TRUE,
@@ -167,6 +170,7 @@ pb_push <- function(tag = "latest",
   unlink(s)
   sink()
 
+  unlink(manifest)
   invisible(TRUE)
 }
 

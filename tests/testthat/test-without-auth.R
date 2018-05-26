@@ -19,6 +19,8 @@ testthat::test_that(
   cars <- readr::read_tsv("mtcars.tsv.gz")
   testthat::expect_equivalent(cars, mtcars)
   unlink("mtcars.tsv.gz")
+  unlink("iris.tsv.gz")
+
 })
 
 
