@@ -4,10 +4,11 @@
 \alias{pb_list}
 \title{List all assets attached to a release}
 \usage{
-pb_list(repo, tag = "latest", ignore = "manifest.json")
+pb_list(repo = guess_repo(), tag = "latest", ignore = "manifest.json")
 }
 \arguments{
-\item{repo}{Repository name in format "owner/repo".}
+\item{repo}{Repository name in format "owner/repo". Will guess
+the current repo if not specified.}
 
 \item{tag}{tag for the GitHub release to which this data is attached}
 

@@ -4,11 +4,12 @@
 \alias{pb_download}
 \title{download_data("cboettig/ghdata")}
 \usage{
-pb_download(repo, file = NULL, dest = ".", tag = "latest",
-  overwrite = TRUE, ignore = "manifest.json")
+pb_download(repo = guess_repo(), file = NULL, dest = ".",
+  tag = "latest", overwrite = TRUE, ignore = "manifest.json")
 }
 \arguments{
-\item{repo}{Repository name in format "owner/repo".}
+\item{repo}{Repository name in format "owner/repo". Will guess
+the current repo if not specified.}
 
 \item{file}{name or vector of names of files to be downloaded. If \code{NULL},
 all assets attached to the release will be downloaded.}

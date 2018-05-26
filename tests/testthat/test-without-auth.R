@@ -10,8 +10,6 @@ testthat::test_that(
   "we can download all files from the latest release", {
 
   testthat::skip_on_cran()
-
-
   pb_download("cboettig/piggyback")
 
 
@@ -47,10 +45,10 @@ testthat::test_that(
 
     testthat::skip_on_cran()
 
-    pb_download("cboettig/piggyback", "mtcars.tsv.gz")
+    pb_download("cboettig/piggyback", "data/mtcars.tsv.gz")
 
-    testthat::expect_true(file.exists("mtcars.tsv.gz"))
-    cars <- readr::read_tsv("mtcars.tsv.gz")
+    testthat::expect_true(file.exists("data/mtcars.tsv.gz"))
+    cars <- readr::read_tsv("data/mtcars.tsv.gz")
     testthat::expect_equivalent(cars, mtcars)
     unlink("mtcars.tsv.gz")
 })

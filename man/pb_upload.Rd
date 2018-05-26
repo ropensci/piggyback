@@ -4,11 +4,12 @@
 \alias{pb_upload}
 \title{Upload data to an existing release}
 \usage{
-pb_upload(repo, file, tag = "latest", name = NULL, overwrite = FALSE,
-  .token = get_token())
+pb_upload(repo = guess_repo(), file, tag = "latest", name = NULL,
+  overwrite = FALSE, .token = get_token())
 }
 \arguments{
-\item{repo}{Repository name in format "owner/repo".}
+\item{repo}{Repository name in format "owner/repo". Will gess the current
+repo if not specified.}
 
 \item{file}{path to file to be uploaded}
 

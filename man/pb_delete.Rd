@@ -4,14 +4,19 @@
 \alias{pb_delete}
 \title{Delete an asset attached to a release}
 \usage{
-pb_delete(repo, tag = "latest", file)
+pb_delete(repo = guess_repo(), tag = "latest", file, .token = get_token())
 }
 \arguments{
-\item{repo}{Repository name in format "owner/repo".}
+\item{repo}{Repository name in format "owner/repo". Will gess the current
+repo if not specified.}
 
 \item{tag}{tag for the GitHub release to which this data should be attached.}
 
 \item{file}{path to file to be uploaded}
+
+\item{.token}{GitHub authentication token. Typically set from an environmental
+variable, e.g. \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")}, which helps prevent
+accidental disclosure of a secret token when sharing scripts.}
 }
 \value{
 \code{TRUE} (invisibly) if a file is found and deleted.
