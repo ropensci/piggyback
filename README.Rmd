@@ -81,7 +81,7 @@ pb_download("cboettig/piggyback", dest="data/")
 If your GitHub repository doesn't have any [releases](https://help.github.com/articles/creating-releases/) yet, `piggyback` will help you quickly create one.  Create new releases to manage multiple versions of a given data file. While you can create releases as often as you like, making a new release is by no means necessary each time you upload a file.  If maintaining old versions of the data is not useful, you can stick with a single release and upload all of your data there.  
 
 ```{r}
-gh_new_release("cboettig/piggyback", "v0.0.1")
+pb_new_release("cboettig/piggyback", "v0.0.1")
 ```
 
 Once we have at least one release available, we are ready to upload.  By default, `pb_upload` will attach data to the latest release.  
@@ -102,27 +102,56 @@ pb_upload("cboettig/piggyback", "mtcars.tsv.gz")
 
 This is useful in scripts that may automatically upload their results, or whenever a previous version of a data file is disposable.  
 
+### Additional convenience functions
+
+List all files currently piggybacking on a given release (as always, defaults to `latest` if no `tag` is given):
+
+
+```{r}
+pb_list("cboettig/piggyback", tag = "data")
+```
+
+Delete a file from a release:
+
+```{r eval = FALSE}
+pb_delete("cboettig/piggyback", file = "data/mtcars.tsv.gz")
+```
+
+Note that this is irreversible unless you have a copy of the data elsewhere.  You can also simply set `overwrite=TRUE` in `pb_upload()` to overwrite an existing file.  
 
 ## git-style
 
 For an even simpler way to sync many data files to GitHub, `piggyback` provides Git-LFS-like `push` and `pull` methods.  These methods are simple wrappers around the basic upload and download interface that streamline the process of managing a potentially large number of data files of a given type or location.  
 
-By default, specify a `glob` pattern of files to track.  `pb_track` can also track all files at a given path.  
+By default, specify a `glob` pattern of files to track.  `pb_track` can also track all files at a given path.  These patterns are simply written into a hidden config file, `.pbattributes` (just like `.gitattributes` in Git LFS), which you can also edit manually.  
 
 ```{r}
-pb_track("*.tsv.gz")
-pb_track(path = "data/")
+pb_track(c("*.tsv.gz", "*.tif", "*.zip"))
+pb_track("data/*")
 ```
 
+Adding a pattern with `pb_track()` will also automatically add that pattern to `.gitignore`, since these data files will be piggybacking on top of the repo rather than being version managed by `git`.  You probably will want to check in the `.pbattributes` file to version control, just as you would a `.gitattributes` or `.gitignore`. 
 
-Upload all tracked data to GitHub.  By default, will attach data to the `latest` release of the current project.  
+
+Upload all tracked data to GitHub.  By default, `pb_push()` will attach data to the `latest` release of the current project.  
 
 ```{r}
 pb_push()
 ```
 
+Similarly, you can pull all current data assets of a given release:
+
+```{r}
+pb_pull()
+```
+
 
 To save bandwidth / transfer times, files which are identical on both GitHub and local filesystem are not transferred by either `pb_push()` or `pb_pull()`.  Note also that push and pull do not create either `git` commits in your repo or new releases, (though you are welcome to create a new GitHub release at any time, or push & pull to older releases.)
+
+## Path names
+
+GitHb assets attached to a release do not support file paths, and will convert most special characters (`#`, `%`, etc) to `.` or throw an error (e.g. for filenames containing `$`, `@`, `/`).  To preserve path information on uploading data, `piggyback` uses relative paths (relative to the working directory, or for `pb_push()` and `pb_pull`, relative to the project directory, see `here::here()`) in data file names, and encodes the system path delimiter as `.2f` (`%2f` is the HTML encoding of a literal `/`, but `%` cannot be used in asset names).  `piggyback` functions will always show and use the decoded file names, e.g. `data/mtcars.csv`, but you'll see `data.2fmtcars.csv` if you look at the release attachment on GitHub.
+
 
 ## A Note on GitHub Releases vs Data Archiving
 
