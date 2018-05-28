@@ -43,6 +43,8 @@ testthat::test_that("We can push and pull data",{
   testthat::expect_true(pb_push(repo = "cboettig/piggyback"))
   testthat::expect_true(pb_pull())
   testthat::expect_true(pb_push())
+  pb_push()
+  pb_pull()
 
   testthat::expect_true(pb_pull(tag="v0.0.1"))
   testthat::expect_true(pb_push(tag="v0.0.1"))
