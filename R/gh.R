@@ -177,7 +177,9 @@ gh_file_id <- function(repo, file, tag = "latest", name = NULL){
 #' with asset names converting the `.2f` escape code back to the system delimiter.
 #'
 #' @export
-pb_list <- function(repo = guess_repo(), tag="latest", ignore = "manifest.json"){
+pb_list <- function(repo = guess_repo(),
+                    tag="latest",
+                    ignore = "manifest.json"){
   x <- release_info(repo, tag)
   file_names <- vapply(x$assets, `[[`, character(1), "name")
 
@@ -193,7 +195,10 @@ pb_list <- function(repo = guess_repo(), tag="latest", ignore = "manifest.json")
 #' @inheritParams pb_upload
 #' @return `TRUE` (invisibly) if a file is found and deleted.
 #' Otherwise, returns `NULL` (invisibly) if no file matching the name was found.
-pb_delete <- function(repo = guess_repo(), tag="latest", file, .token = get_token()){
+pb_delete <- function(repo = guess_repo(),
+                      tag="latest",
+                      file,
+                      .token = get_token()){
   x <- release_info(repo, tag)
 
   name <- asset_filename(file)
