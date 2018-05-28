@@ -23,6 +23,20 @@ testthat::test_that(
 
 
 testthat::test_that(
+  "we can list files", {
+    testthat::skip_on_cran()
+    pb_list("cboettig/piggyback")
+  })
+
+
+
+testthat::test_that(
+  "we can list multiple ignore files, including non-existent ones", {
+    testthat::skip_on_cran()
+    pb_download("cboettig/piggyback", ignore = c("manifest.json", "big_data_file.csv") )
+  })
+
+testthat::test_that(
   "we can download all files from the requested release", {
 
     testthat::skip_on_cran()

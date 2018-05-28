@@ -175,7 +175,10 @@ gh_file_id <- function(repo, file, tag = "latest", name = NULL){
 #' @details To preserve path information, local path delimeters are converted to `.2f`
 #' when files are uploaded as assets.  Listing will display the local filename,
 #' with asset names converting the `.2f` escape code back to the system delimiter.
-#'
+#' @examples
+#' \dontrun{
+#' pb_list("cboettig/piggyback")
+#' }
 #' @export
 pb_list <- function(repo = guess_repo(),
                     tag="latest",
@@ -192,9 +195,11 @@ pb_list <- function(repo = guess_repo(),
 }
 
 #' Delete an asset attached to a release
+#'
 #' @inheritParams pb_upload
 #' @return `TRUE` (invisibly) if a file is found and deleted.
 #' Otherwise, returns `NULL` (invisibly) if no file matching the name was found.
+#' @export
 pb_delete <- function(repo = guess_repo(),
                       tag="latest",
                       file,
