@@ -47,7 +47,6 @@ testthat::test_that("We can push and pull data",{
   pb_pull()
 
   testthat::expect_true(pb_pull(tag="v0.0.1"))
-  testthat::expect_true(pb_push(tag="v0.0.1"))
 
   ## Should error if tag already exists
   testthat::expect_error(

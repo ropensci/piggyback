@@ -25,7 +25,7 @@ testthat::test_that(
 testthat::test_that(
   "we can list files", {
     testthat::skip_on_cran()
-    pb_list("cboettig/piggyback")
+    testthat::expect_output(cat(pb_list("cboettig/piggyback")), "iris.tsv.gz")
   })
 
 
@@ -33,7 +33,9 @@ testthat::test_that(
 testthat::test_that(
   "we can list multiple ignore files, including non-existent ones", {
     testthat::skip_on_cran()
-    pb_download("cboettig/piggyback", ignore = c("manifest.json", "big_data_file.csv") )
+    resp <- pb_download("cboettig/piggyback",
+                        ignore = c("manifest.json", "big_data_file.csv") )
+    testthat::expect_is(resp, "response")
   })
 
 testthat::test_that(
