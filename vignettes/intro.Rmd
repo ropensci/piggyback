@@ -1,0 +1,63 @@
+---
+title: "Piggyback Data atop your GitHub Repository!"
+author: "Carl Boettiger"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Piggyback Data atop your GitHub Repository!}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+# Why `piggyback`?
+
+`piggyback` grew out of the needs of students both in my classroom and in my research group, who frequently need to work with data files somewhat larger than one can conveniently manage by committing directly to GitHub.  
+
+## Alternatives
+
+There are many alternatives to `piggyback`, and after considerable experience I haven't found any that ticked all the boxes for me:
+
+- [ ] Free storage
+- [ ] Can be integrated into private code / private workflows
+- [ ] Simple and practical to deploy on continuous integration
+- [ ] Works well with private data
+- [ ] Minimal configuration
+
+
+### Git LFS 
+
+Git LFS provides the closest user experience to what I was going for. It stands out above all other alternatives for providing both the *best authentication* experience (relying directly on any of the standard `git` authentication mechanisms such as https, ssh keys, app integration), and it provides the most legitimate version control of the data.  However, there are many show-stoppers to using Git LFS for me.  
+
+- GitHub pricing & resulting problems for GitHub's fork /  PR model.  [Described eleqouently here](https://medium.com/@megastep/github-s-large-file-storage-is-no-panacea-for-open-source-quite-the-opposite-12c0e16a9a91).  Basically, despite generous rates and free data options everwhere else, GitHub's LFS storage and bandwidth not only cost a lot, but also make it impossible to have public forks and pull request for your repository.  Technically this is a problem only for GitHub's LFS (since it stems from the pricing rules); and can be avoided by using LFS on GitLab or other platform, as [Jim Hester has described](https://github.com/jimhester/test-glfs/).  Still, this proved [unsuccessful for me](https://github.com/jimhester/test-glfs/issues/2), and still faces the other big issue with `git-lfs`:
+
+- Overwrites `git` itself.  Git LFS is just *too* integrated into `git` -- it replaces your authentic `git` engine with `git-lfs`, such that the identical `git` command can have different behaviors on a machine with `git-lfs` installed vs just plain `git`.  Maybe fine for a professional team that is "all in" on `git-lfs`, but is a constant source of pitfalls when working with students and moving between machines that all have only authentic `git` installed.  The difficulties with supporting pull requests etc are also related to this -- in some sense, once you have a `git-lfs` repository, you're really using an entirely new version control system that isn't going to be 100% compatible with the nearly-ubiquitious authentic `git`.
+
+### Amazon S3
+
+Amazon S3 is perhaps the most universal and most obvious go-to place for online-available public and private data storage.  The 5 GB/mo free tier is nice and the pricing is very reasonable and only very incremental after that.  It is easily the most industry-standard solution, and still probably the best way to go in many cases.  It is probably the most scalable solution for very large data, and the only such that has built in support/integration to larger query services like Apache Spark / `sparklyr`.  It falls short of my own use case though in the authentication area. I require students create a GitHub account for my courses and my lab group.  I don't like requiring such third-party accounts, but this one is fundamental to our daily use in classroom and in research, and most of them will continue using the service afterwards.  I particularly don't like having people create complex accounts that they might not even use much in the class or afterwards, just to deal with some pesky minor issue of some data file that is just a little too big for GitHub.  
+
+Amazon's authentication is also much more complex than GitHub's passwords or tokens, as is the process of uploading and downloading data from S3 (though the `aws.s3` R package is rather nice remedy here, it doesn't conform to the same user API as the `aws-cli` (python) tool, leaving some odd quirks and patterns that don't match standard linux commands.)
+
+### Scientific repositories with private storage
+
+
+
+### Sharding on GitHub
+
+Another creative solution (hack), at least for some file types, is to break large files into multiple smaller files, and commit those to one or many GitHub repositories.  While [sharding](https://en.wikipedia.org/wiki/Shard_(database_architecture)) is sometimes a legitimate strategy, it has many obvious practical dissadvantages and limitations.  
+
+
+
+
+
+
+
+
