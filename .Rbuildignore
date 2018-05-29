@@ -10,3 +10,4 @@
 ^appveyor\.yml$
 ^CODE_OF_CONDUCT\.md$
 ^\.pbattributes$
+^onboarding-submission\.md$

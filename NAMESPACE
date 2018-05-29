@@ -2,6 +2,7 @@
 
 export(pb_delete)
 export(pb_download)
+export(pb_download_url)
 export(pb_list)
 export(pb_new_release)
 export(pb_pull)

@@ -61,6 +61,24 @@ pb_download <- function(repo = guess_repo(), file = NULL, dest = ".",
   invisible(resp)
 }
 
+#' Get the download url of a given file
+#'
+#' Returns the URL download for a public file. This can be useful when writing
+#' scripts that may want to download the file directly without introducing any
+#' dependency on `piggyback` or authentication steps.
+#' @inheritParams pb_download
+#' @return the URL to download a file
+#' @export
+pb_download_url <- function(file = NULL,
+                            repo = guess_repo(),
+                            tag = "latest"){
+
+  x <- release_info(repo, tag)
+  vapply(x$assets, `[[`, character(1), "browser_download_url")
+
+}
+
+
 ## gh() fails on this, so we do with httr. See https://github.com/r-lib/gh/issues/57
 ## Consider option to supress progress bar?
 gh_download_asset <- function(owner, repo, id, destfile, overwrite=TRUE,
