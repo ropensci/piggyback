@@ -10,7 +10,7 @@ testthat::test_that(
   "we can download all files from the latest release", {
 
   testthat::skip_on_cran()
-  pb_download("cboettig/piggyback")
+  pb_download(repo = "cboettig/piggyback")
 
 
   testthat::expect_true(file.exists("data/mtcars.tsv.gz"))
@@ -25,7 +25,8 @@ testthat::test_that(
 testthat::test_that(
   "we can list files", {
     testthat::skip_on_cran()
-    testthat::expect_output(cat(pb_list("cboettig/piggyback")), "iris.tsv.gz")
+    testthat::expect_output(cat(
+      pb_list(repo = "cboettig/piggyback")), "iris.tsv.gz")
   })
 
 
@@ -33,8 +34,9 @@ testthat::test_that(
 testthat::test_that(
   "we can list multiple ignore files, including non-existent ones", {
     testthat::skip_on_cran()
-    resp <- pb_download("cboettig/piggyback",
-                        ignore = c("manifest.json", "big_data_file.csv") )
+    resp <- pb_download(
+      repo = "cboettig/piggyback",
+      ignore = c("manifest.json", "big_data_file.csv") )
     testthat::expect_is(resp, "response")
   })
 
@@ -44,7 +46,7 @@ testthat::test_that(
     testthat::skip_on_cran()
 
 
-    pb_download("cboettig/piggyback", tag="v0.0.1")
+    pb_download(repo = "cboettig/piggyback", tag="v0.0.1")
 
     ## v0.0.1 has 2 files
     testthat::expect_true(file.exists("mtcars.tsv.gz"))
@@ -61,7 +63,8 @@ testthat::test_that(
 
     testthat::skip_on_cran()
 
-    pb_download("cboettig/piggyback", "data/mtcars.tsv.gz")
+    pb_download( file = "data/mtcars.tsv.gz",
+                 repo = "cboettig/piggyback")
 
     testthat::expect_true(file.exists("data/mtcars.tsv.gz"))
     cars <- readr::read_tsv("data/mtcars.tsv.gz")
@@ -76,7 +79,9 @@ testthat::test_that(
     testthat::skip_on_cran()
 
 
-    pb_download("cboettig/piggyback", "mtcars.tsv.gz", tag = "v0.0.1")
+    pb_download( file = "mtcars.tsv.gz",
+                 repo = "cboettig/piggyback",
+                 tag = "v0.0.1")
 
     testthat::expect_true(file.exists("mtcars.tsv.gz"))
     cars <- readr::read_tsv("mtcars.tsv.gz")
@@ -91,8 +96,10 @@ testthat::test_that(
 
 
     dir.create("test_data/")
-    pb_download("cboettig/piggyback", "mtcars.tsv.gz",
-                tag = "v0.0.1", dest = "test_data/")
+    pb_download( file = "mtcars.tsv.gz",
+                 dest = "test_data/",
+                 repo = "cboettig/piggyback",
+                 tag = "v0.0.1")
 
     testthat::expect_true(file.exists("test_data/mtcars.tsv.gz"))
     cars <- readr::read_tsv("test_data/mtcars.tsv.gz")

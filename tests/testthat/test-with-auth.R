@@ -7,8 +7,10 @@ testthat::context("Requiring Authentication")
 testthat::test_that("We can upload data",{
   testthat::skip_if(piggyback:::get_token() == "")
   data <- readr::write_tsv(datasets::iris, "iris.tsv.gz")
-  out <- pb_upload("cboettig/piggyback", file = "iris.tsv.gz",
-            tag = "v0.0.1", overwrite = TRUE)
+  out <- pb_upload(repo = "cboettig/piggyback",
+                   file = "iris.tsv.gz",
+                   tag = "v0.0.1",
+                   overwrite = TRUE)
   testthat::expect_is(out, "response")
 
   unlink("iris.tsv.gz")
@@ -30,7 +32,7 @@ testthat::test_that("We can push and pull data",{
   }
 
   suppressMessages(
-  usethis::create_from_github("cboettig/piggyback",
+  usethis::create_from_github(repo = "cboettig/piggyback",
                               destdir = ".",
                               open = FALSE,
                               protocol = "https"))
@@ -50,7 +52,7 @@ testthat::test_that("We can push and pull data",{
 
   ## Should error if tag already exists
   testthat::expect_error(
-    gh_new_release("cboettig/piggyback", tag = "v0.0.1"))
+    gh_new_release(repo = "cboettig/piggyback", tag = "v0.0.1"))
 
    ## tare down
   setwd(cur)
@@ -63,12 +65,14 @@ testthat::test_that("We can push and pull data",{
 testthat::test_that(
   "we error when deleting non-existant files", {
     testthat::skip_on_cran()
-    testthat::expect_error( pb_delete("cboettig/piggyback", "not_a_file"), "404")
+    testthat::expect_error(
+      pb_delete(repo = "cboettig/piggyback", "not_a_file"), "404")
   })
 
 
 testthat::test_that(
   "we error when creating a release on non-existant repo", {
     testthat::skip_on_cran()
-    testthat::expect_error( pb_new_release("cboettig/not_a_file", "v2.0"), "404")
+    testthat::expect_error(
+      pb_new_release("cboettig/not_a_file", "v2.0"), "404")
   })

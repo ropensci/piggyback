@@ -75,14 +75,13 @@ create_manifest <- function(manifest = ".manifest.json"){
 #' local and remote versions will not be transfered.  Otherwise, **assumes
 #' GitHub version should overwrite local versions.**
 #'
-#'
+#' @param repo Name of the repo on GitHub (`owner/repo`, i.e.
+#' `cboettig/piggyback`). By default will guess the current repository's
+#'  GitHub `origin`.
 #' @param tag name of release/tag on GitHub to which data assets will be
 #' attached. Default is to use the latest available release.
 #' @param overwrite should existing files be overwritten when hashes do
 #'  not match? default `TRUE`.
-#' @param repo Name of the repo on GitHub (`owner/repo`, i.e.
-#' `cboettig/piggyback`). By default will guess the current repository's
-#'  GitHub `origin`.
 #' @param manifest name of the local manifest file. Note: A leading dot
 #'  (i.e. indicating a hidden file) in the manifest name will be removed
 #'  from the name used on the GitHub asset list.
@@ -96,9 +95,9 @@ create_manifest <- function(manifest = ".manifest.json"){
 #' \dontrun{
 #' pb_pull()
 #' }
-pb_pull <- function(tag = "latest",
+pb_pull <- function(repo = guess_repo(),
+                    tag = "latest",
                     overwrite = TRUE,
-                    repo = guess_repo(),
                     manifest = ".manifest.json")
                     {
 
@@ -107,7 +106,10 @@ pb_pull <- function(tag = "latest",
   proj_dir <- usethis::proj_get()
 
   ## List files that will be newly pulled
-  files <- new_data("pull", tag = tag, manifest = manifest, repo = repo)
+  files <- new_data(mode = "pull",
+                    tag = tag,
+                    manifest = manifest,
+                    repo = repo)
   if(is.null(files)){
     message("Already up to date")
     return(invisible(TRUE))
@@ -116,8 +118,11 @@ pb_pull <- function(tag = "latest",
     message("Already up to date")
     return(invisible(TRUE))
   }
-  pb_download(repo, tag = tag, file = files,
-              dest = proj_dir, overwrite = overwrite)
+  pb_download(repo = repo,
+              tag = tag,
+              file = files,
+              dest = proj_dir,
+              overwrite = overwrite)
 
   unlink(manifest)
 
@@ -142,19 +147,25 @@ pb_pull <- function(tag = "latest",
 #' \dontrun{
 #' pb_push()
 #' }
-pb_push <- function(tag = "latest",
+pb_push <- function(repo = guess_repo(),
+                    tag = "latest",
                     overwrite = TRUE,
-                    manifest = ".manifest.json",
-                    repo = guess_repo()){
-
+                    manifest = ".manifest.json"){
 
   create_manifest(manifest)
 
-  files <- new_data("push", tag = tag, manifest = manifest, repo = repo)
+  files <- new_data(mode = "push",
+                    tag = tag,
+                    manifest = manifest,
+                    repo = repo)
+
   lapply(files, function(f){
     ## print file name being uploaded?
     message(paste(f))
-    pb_upload(repo, file = f, tag = tag, overwrite = overwrite)
+    pb_upload(repo = repo,
+              file = f,
+              tag = tag,
+              overwrite = overwrite)
   })
 
   ## Upload the manifest, quietly
@@ -163,9 +174,11 @@ pb_push <- function(tag = "latest",
   sink(s)
   ## manifest name cannot start with . in upload
   m <- file.path(usethis::proj_get(), basename(manifest))
-  pb_upload(repo, file = m,
+  pb_upload(repo = repo,
+            file = m,
             name = gsub("^\\.", "", manifest),
-            tag = tag, overwrite = TRUE)
+            tag = tag,
+            overwrite = TRUE)
 
   ## tidy up
   unlink(s)
@@ -178,9 +191,11 @@ pb_push <- function(tag = "latest",
 
 
 ## Identify data that we do not need to sync because it has not changed.
-new_data <- function(mode = c("push", "pull"), tag = "latest",
-                     manifest = ".manifest.json",
-                     repo = guess_repo()){
+new_data <- function(mode = c("push", "pull"),
+                     repo = guess_repo(),
+                     tag = "latest",
+                     manifest = ".manifest.json"){
+
   ## github name for files (i.e. manifest) cannot start with `.`
   mode <- match.arg(mode)
   id <- gh_file_id(repo = repo,
@@ -198,7 +213,8 @@ new_data <- function(mode = c("push", "pull"), tag = "latest",
     ## here we go
     pb_download(repo = repo,
                 file = gsub("^\\.", "", manifest),
-                dest = tmp, tag = tag)
+                dest = tmp,
+                tag = tag)
     github_manifest <- jsonlite::read_json(
       file.path(tmp, gsub("^\\.", "", manifest)))
 

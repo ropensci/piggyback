@@ -4,19 +4,19 @@
 \alias{pb_download}
 \title{download_data("cboettig/ghdata")}
 \usage{
-pb_download(repo = guess_repo(), file = NULL, dest = ".",
+pb_download(file = NULL, dest = ".", repo = guess_repo(),
   tag = "latest", overwrite = TRUE, ignore = "manifest.json")
 }
 \arguments{
-\item{repo}{Repository name in format "owner/repo". Will guess
-the current repo if not specified.}
-
 \item{file}{name or vector of names of files to be downloaded. If \code{NULL},
 all assets attached to the release will be downloaded.}
 
 \item{dest}{name of vector of names of where file should be downloaded.
 Should be a directory or a list of filenames the same length as \code{file} vector.
 Can include paths to files, but any directories in that path must already exist.}
+
+\item{repo}{Repository name in format "owner/repo". Will guess
+the current repo if not specified.}
 
 \item{tag}{tag for the GitHub release to which this data is attached}
 

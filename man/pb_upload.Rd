@@ -4,14 +4,14 @@
 \alias{pb_upload}
 \title{Upload data to an existing release}
 \usage{
-pb_upload(repo = guess_repo(), file, tag = "latest", name = NULL,
+pb_upload(file, repo = guess_repo(), tag = "latest", name = NULL,
   overwrite = FALSE, .token = get_token())
 }
 \arguments{
+\item{file}{path to file to be uploaded}
+
 \item{repo}{Repository name in format "owner/repo". Will gess the current
 repo if not specified.}
-
-\item{file}{path to file to be uploaded}
 
 \item{tag}{tag for the GitHub release to which this data should be attached.}
 

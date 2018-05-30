@@ -4,10 +4,14 @@
 \alias{pb_push}
 \title{Push data to GitHub}
 \usage{
-pb_push(tag = "latest", overwrite = TRUE, manifest = ".manifest.json",
-  repo = guess_repo())
+pb_push(repo = guess_repo(), tag = "latest", overwrite = TRUE,
+  manifest = ".manifest.json")
 }
 \arguments{
+\item{repo}{Name of the repo on GitHub (\code{owner/repo}, i.e.
+\code{cboettig/piggyback}). By default will guess the current repository's
+GitHub \code{origin}.}
+
 \item{tag}{name of release/tag on GitHub to which data assets will be
 attached. Default is to use the latest available release.}
 
@@ -17,10 +21,6 @@ not match? default \code{TRUE}.}
 \item{manifest}{name of the local manifest file. Note: A leading dot
 (i.e. indicating a hidden file) in the manifest name will be removed
 from the name used on the GitHub asset list.}
-
-\item{repo}{Name of the repo on GitHub (\code{owner/repo}, i.e.
-\code{cboettig/piggyback}). By default will guess the current repository's
-GitHub \code{origin}.}
 }
 \description{
 Push all currently tracked data files to GitHub.  Only files identical

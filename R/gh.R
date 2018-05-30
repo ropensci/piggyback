@@ -18,8 +18,11 @@
 #' @importFrom gh gh
 #' @importFrom fs dir_create
 #' @export
-pb_download <- function(repo = guess_repo(), file = NULL, dest = ".",
-                        tag = "latest", overwrite = TRUE,
+pb_download <- function(file = NULL,
+                        dest = ".",
+                        repo = guess_repo(),
+                        tag = "latest",
+                        overwrite = TRUE,
                         ignore = "manifest.json"){
 
   ## FIXME revisit using path escape logic!!
@@ -81,7 +84,11 @@ pb_download_url <- function(file = NULL,
 
 ## gh() fails on this, so we do with httr. See https://github.com/r-lib/gh/issues/57
 ## Consider option to supress progress bar?
-gh_download_asset <- function(owner, repo, id, destfile, overwrite=TRUE,
+gh_download_asset <- function(owner,
+                              repo,
+                              id,
+                              destfile,
+                              overwrite=TRUE,
                               .token = get_token()
                               ){
   resp <- httr::GET(paste0("https://api.github.com/repos/", owner,"/",
@@ -119,8 +126,8 @@ gh_download_asset <- function(owner, repo, id, destfile, overwrite=TRUE,
 #' }
 #' @importFrom httr progress upload_file POST stop_for_status
 #' @export
-pb_upload <- function(repo = guess_repo(),
-                      file,
+pb_upload <- function(file,
+                      repo = guess_repo(),
                       tag = "latest",
                       name = NULL,
                       overwrite = FALSE,

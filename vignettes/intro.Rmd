@@ -19,40 +19,72 @@ knitr::opts_chunk$set(
 
 # Why `piggyback`?
 
-`piggyback` grew out of the needs of students both in my classroom and in my research group, who frequently need to work with data files somewhat larger than one can conveniently manage by committing directly to GitHub.  
+`piggyback` grew out of the needs of students both in my classroom and in my research group, who frequently need to work with data files somewhat larger than one can conveniently manage by committing directly to GitHub.  As we frequently want to share and run code that depends on >50MB data files on each of our own machines, on continuous integration (i.e. [travis](https://travis.org)), and on larger computational servers, data sharing quickly becomes a bottleneck. 
 
-## Alternatives
+
+Piggyback aims to address this using a [Git LFS](https://git-lfs.github.com/) style approach, in which you specify the type of files you wish to track, and then can pull an push data files to GitHub (though not through `git` itself):
+
+```{r eval=FALSE}
+library(piggyback)
+# track csv files, compressed data, and geotiff files:
+pb_track(c("*.csv", "*.gz", "*.tif"))
+pb_push()
+
+
+## pull data onto a new machine:
+pb_pull()
+```
+
+To authenticate, add your `GITHUB_TOKEN` to a secure `.Renviron` file (and `.gitignore` it!).  If you have never created a GitHub token before, use `usethis::browse_github_pat()` to get started.  Note that `piggyback` can also be used more manually  to upload or download individual files to your GitHub repositories:
+
+```{r eval= FALSE}
+pb_upload("my-data.csv", repo = "user/repo")
+pb_download("my-data.csv", repo = "user/repo")
+```
+
+See the README for additional information on basic use. 
+
+
+## `piggyback` vs the alternatives
 
 There are many alternatives to `piggyback`, and after considerable experience I haven't found any that ticked all the boxes for me:
 
-- [ ] Free storage
-- [ ] Can be integrated into private code / private workflows
-- [ ] Simple and practical to deploy on continuous integration
-- [ ] Works well with private data
-- [ ] Minimal configuration
+- [x] Free storage
+- [x] Can be integrated into private code / private workflows
+- [x] Simple and practical to deploy on continuous integration
+- [x] Works well with private data
+- [x] Minimal configuration
+
 
 
 ### Git LFS 
 
 Git LFS provides the closest user experience to what I was going for. It stands out above all other alternatives for providing both the *best authentication* experience (relying directly on any of the standard `git` authentication mechanisms such as https, ssh keys, app integration), and it provides the most legitimate version control of the data.  However, there are many show-stoppers to using Git LFS for me.  
 
-- GitHub pricing & resulting problems for GitHub's fork /  PR model.  [Described eleqouently here](https://medium.com/@megastep/github-s-large-file-storage-is-no-panacea-for-open-source-quite-the-opposite-12c0e16a9a91).  Basically, despite generous rates and free data options everwhere else, GitHub's LFS storage and bandwidth not only cost a lot, but also make it impossible to have public forks and pull request for your repository.  Technically this is a problem only for GitHub's LFS (since it stems from the pricing rules); and can be avoided by using LFS on GitLab or other platform, as [Jim Hester has described](https://github.com/jimhester/test-glfs/).  Still, this proved [unsuccessful for me](https://github.com/jimhester/test-glfs/issues/2), and still faces the other big issue with `git-lfs`:
+- GitHub pricing & resulting problems for GitHub's fork /  PR model.  [Described eleqouently here](https://medium.com/@megastep/github-s-large-file-storage-is-no-panacea-for-open-source-quite-the-opposite-12c0e16a9a91).  Basically, despite generous rates and free data options everywhere else, GitHub's LFS storage and bandwidth not only cost a lot, but also make it impossible to have public forks and pull request for your repository.  Technically this is a problem only for GitHub's LFS (since it stems from the pricing rules); and can be avoided by using LFS on GitLab or other platform, as [Jim Hester has described](https://github.com/jimhester/test-glfs/).  Still, this proved [unsuccessful for me](https://github.com/jimhester/test-glfs/issues/2), and still faces the other big issue with `git-lfs`:
 
-- Overwrites `git` itself.  Git LFS is just *too* integrated into `git` -- it replaces your authentic `git` engine with `git-lfs`, such that the identical `git` command can have different behaviors on a machine with `git-lfs` installed vs just plain `git`.  Maybe fine for a professional team that is "all in" on `git-lfs`, but is a constant source of pitfalls when working with students and moving between machines that all have only authentic `git` installed.  The difficulties with supporting pull requests etc are also related to this -- in some sense, once you have a `git-lfs` repository, you're really using an entirely new version control system that isn't going to be 100% compatible with the nearly-ubiquitious authentic `git`.
+- Overwrites `git` itself.  Git LFS is just *too* integrated into `git` -- it replaces your authentic `git` engine with `git-lfs`, such that the identical `git` command can have different behaviors on a machine with `git-lfs` installed vs just plain `git`.  Maybe fine for a professional team that is "all in" on `git-lfs`, but is a constant source of pitfalls when working with students and moving between machines that all have only authentic `git` installed.  The difficulties with supporting pull requests etc are also related to this -- in some sense, once you have a `git-lfs` repository, you're really using an entirely new version control system that isn't going to be 100% compatible with the nearly-ubiquitous authentic `git`.
 
 ### Amazon S3
 
 Amazon S3 is perhaps the most universal and most obvious go-to place for online-available public and private data storage.  The 5 GB/mo free tier is nice and the pricing is very reasonable and only very incremental after that.  It is easily the most industry-standard solution, and still probably the best way to go in many cases.  It is probably the most scalable solution for very large data, and the only such that has built in support/integration to larger query services like Apache Spark / `sparklyr`.  It falls short of my own use case though in the authentication area. I require students create a GitHub account for my courses and my lab group.  I don't like requiring such third-party accounts, but this one is fundamental to our daily use in classroom and in research, and most of them will continue using the service afterwards.  I particularly don't like having people create complex accounts that they might not even use much in the class or afterwards, just to deal with some pesky minor issue of some data file that is just a little too big for GitHub.  
 
-Amazon's authentication is also much more complex than GitHub's passwords or tokens, as is the process of uploading and downloading data from S3 (though the `aws.s3` R package is rather nice remedy here, it doesn't conform to the same user API as the `aws-cli` (python) tool, leaving some odd quirks and patterns that don't match standard linux commands.)
+Amazon's authentication is also much more complex than GitHub's passwords or tokens, as is the process of uploading and downloading data from S3 (though the `aws.s3` R package is rather nice remedy here, it doesn't conform to the same user API as the `aws-cli` (python) tool, leaving some odd quirks and patterns that don't match standard Linux commands.)  Together, these make it significantly more difficult to deploy as a quick solution for moving private data around with private repositories.  
 
 ### Scientific repositories with private storage
 
+For scientific research purposes, this would be my ideal solution.  Encouraging researchers to submit data to a repository at the time of publication is always a challenge, since doing so inevitably involves time & effort and the immediate benefit to the researcher is relatively minimal.  If uploading the data to a repository served an immediate practical purpose of facilitating collaboration, backing up and possibly versioning data, etc, during the research process itself rather than after all is said and done, it would be much more compelling.  Several repositories permit sharing of private data, at least up to some threshold, including DataONE and figshare.  Unfortunately, at this time, I have found the interfaces and R tooling for these too limited or cumbersome for everyday use.  
+
+### [datastorr](https://github.com/ropenscilabs/datastorr)
+
+The `piggyback` approach is partly inspired by the strategy used in the `datastorr` package, which also uploads data to GitHub releases.  `datastorr` envisions a rather different workflow around this storage strategy, based on the concept of an R "data package" rather than the Git LFS.  I am not a fan of the "data package" approach in general -- I think data should be stored in a platform agnostic way, not as `.Rdata` files, and I often want to first download my data to disk and read it with dedicated functions, not load it "auto-magically" as a package.  This latter issue is particularly important when the data files are larger than what can conveniently fit into working memory, and is better accessed as a database (e.g. SQLite for tabular data, postgis spatial data, etc).  
+
+In terms of practical implementation, `datastorr` also creates a new release every time the data file is updated, rather than letting you overwrite files.  In principle `piggyback` will let you version data this way as well, simply create a new release first using `pb_new_release(tag="v2")` or whatever tag you like.  I have not opted for this workflow since in reality, versioning data with releases this way is technically equivalent to creating a new folder for each new version of the data and storing that -- unlike true git commits, release assets such as `datastorr` creates can be easily deleted or overwritten.  I still believe permanent versioned archives like Zenodo should be used for long-term versioned distribution.  Meanwhile, for day-to-day use I often want to overwrite data files with their most recent versions.  (In my case these 'data' files are most often created from upstream data and/or other possibly-long-running code, and are tracked for convenience.  As such they often change as a result of continued work on the upstream processing code.  Perhaps this is not the case for many users and more attention should be paid to versioning.)
 
 
 ### Sharding on GitHub
 
-Another creative solution (hack), at least for some file types, is to break large files into multiple smaller files, and commit those to one or many GitHub repositories.  While [sharding](https://en.wikipedia.org/wiki/Shard_(database_architecture)) is sometimes a legitimate strategy, it has many obvious practical dissadvantages and limitations.  
+Another creative solution (hack), at least for some file types, is to break large files into multiple smaller files, and commit those to one or many GitHub repositories.  While [sharding](https://en.wikipedia.org/wiki/Shard_(database_architecture)) is sometimes a legitimate strategy, it has many obvious practical disadvantages and limitations.  
 
 
 
