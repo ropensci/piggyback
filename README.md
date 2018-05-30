@@ -86,22 +86,54 @@ Download the latest version or a specific version of the data:
 
 ``` r
 library(piggyback)
-pb_download("cboettig/piggyback", "mtcars.tsv.gz")
+pb_download( "data/mtcars.tsv.gz", repo = "cboettig/piggyback")
 ```
 
-Or a specific version:
+Or a specific
+version:
 
 ``` r
-pb_download("cboettig/piggyback", "mtcars.tsv.gz", tag = "v0.0.4")
+pb_download("mtcars.tsv.gz", repo = "cboettig/piggyback", tag = "v0.0.4")
 ```
 
 Or simply omit the file name to download all assets connected with a
 given release. you can also always specify a destination directory to
-download.
+download. This directory will be created if it does not yet exist.
 
 ``` r
-dir.create("data")
-pb_download("cboettig/piggyback", dest="data/")
+pb_download(repo = "cboettig/piggyback", dest="data/")
+```
+
+Sometimes it is preferable to have a URL from which the data can be read
+in directly, rather than downloading the data to a local file. For
+example, such a URL can be embedded directly into another R script,
+avoiding any dependence on `piggyback` (provided the repository is
+already public.) To get a list of URLs rather than actually downloading
+the files, use `pb_download_url()`:
+
+``` r
+pb_download_url("data/mtcars.tsv.gz") 
+```
+
+Or store and read the URL directly into R:
+
+``` r
+url <- pb_download_url("data/mtcars.tsv.gz") 
+readr::read_tsv(url)
+#> # A tibble: 32 x 11
+#>      mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
+#>    <dbl> <int> <dbl> <int> <dbl> <dbl> <dbl> <int> <int> <int> <int>
+#>  1  21       6  160    110  3.9   2.62  16.5     0     1     4     4
+#>  2  21       6  160    110  3.9   2.88  17.0     0     1     4     4
+#>  3  22.8     4  108     93  3.85  2.32  18.6     1     1     4     1
+#>  4  21.4     6  258    110  3.08  3.22  19.4     1     0     3     1
+#>  5  18.7     8  360    175  3.15  3.44  17.0     0     0     3     2
+#>  6  18.1     6  225    105  2.76  3.46  20.2     1     0     3     1
+#>  7  14.3     8  360    245  3.21  3.57  15.8     0     0     3     4
+#>  8  24.4     4  147.    62  3.69  3.19  20       1     0     4     2
+#>  9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2
+#> 10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4
+#> # ... with 22 more rows
 ```
 
 ### Uploading data
@@ -127,14 +159,15 @@ default, `pb_upload` will attach data to the latest release.
 ## Pro tip: compress your tabular data to save space & speed upload/downloads
 readr::write_tsv(mtcars, "mtcars.tsv.gz")
 
-pb_upload("cboettig/piggyback", "mtcars.tsv.gz")
+pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback")
 ```
 
 You can also simply overwrite the a previous version of the file on an
-existing release, rather than creating a new release every time:
+existing release, rather than creating a new release every
+time:
 
 ``` r
-pb_upload("cboettig/piggyback", "mtcars.tsv.gz")
+pb_upload("data/mtcars.tsv.gz", repo = "cboettig/piggyback", overwrite = TRUE)
 ```
 
 This is useful in scripts that may automatically upload their results,
@@ -146,13 +179,14 @@ List all files currently piggybacking on a given release (as always,
 defaults to `latest` if no `tag` is given):
 
 ``` r
-pb_list("cboettig/piggyback", tag = "data")
+pb_list(repo = "cboettig/piggyback", tag = "data")
+#> [1] "data/iris.tsv.gz"   "data/mtcars.tsv.gz"
 ```
 
 Delete a file from a release:
 
 ``` r
-pb_delete("cboettig/piggyback", file = "data/mtcars.tsv.gz")
+pb_delete(file = "data/mtcars.tsv.gz", repo = "cboettig/piggyback")
 ```
 
 Note that this is irreversible unless you have a copy of the data

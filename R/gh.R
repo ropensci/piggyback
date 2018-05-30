@@ -1,7 +1,8 @@
 ## FIXME consider supporting tag as part of repo string: user/repo@tag
 
 
-#' download_data("cboettig/ghdata")
+#' Download data from an existing release
+#'
 #' @param repo Repository name in format "owner/repo". Will guess
 #' the current repo if not specified.
 #' @param file name or vector of names of files to be downloaded. If `NULL`,
@@ -77,8 +78,14 @@ pb_download_url <- function(file = NULL,
                             tag = "latest"){
 
   x <- release_info(repo, tag)
-  vapply(x$assets, `[[`, character(1), "browser_download_url")
+  gh_file_names <- vapply(x$assets, `[[`, character(1), "name")
+  file_names <- local_filename(gh_file_names)
 
+  if(!is.null(file)){
+    i <- which(file_names %in% file)
+  }
+  urls <- vapply(x$assets, `[[`, character(1), "browser_download_url")
+  urls[i]
 }
 
 

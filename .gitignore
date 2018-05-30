@@ -9,3 +9,6 @@ inst/doc
 *.tsv
 *.tsv.gz
 .manifest.json
+*.tif
+*.zip
+data/*

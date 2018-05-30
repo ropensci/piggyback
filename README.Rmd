@@ -13,8 +13,9 @@ output: github_document
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  eval = FALSE,
+  eval = TRUE,
   collapse = TRUE,
+  message = FALSE,
   comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%"
@@ -53,34 +54,48 @@ Try to avoid writing `Sys.setenv()` in scripts -- remember, the goal here is to 
 
 `piggyback` provides two interfaces: a basic, more low-level interface for uploading and downloading individual files, and a `git-lfs` type interface to `pull` or `push` a list of tracked files.  The basic interface is often suitable for working with single files and gives more flexibility. 
 
+
 ### Downloading data
 
 Download the latest version or a specific version of the data:
 
-```{r}
+```{r results="hide"}
 library(piggyback)
-pb_download("cboettig/piggyback", "mtcars.tsv.gz")
+pb_download( "data/mtcars.tsv.gz", repo = "cboettig/piggyback")
 ```
 
 Or a specific version:
 
-```{r}
-pb_download("cboettig/piggyback", "mtcars.tsv.gz", tag = "v0.0.4")
+```{r results="hide"}
+pb_download("mtcars.tsv.gz", repo = "cboettig/piggyback", tag = "v0.0.4")
 ```
 
-Or simply omit the file name to download all assets connected with a given release.  you can also always specify a destination directory to download. 
+Or simply omit the file name to download all assets connected with a given release.  you can also always specify a destination directory to download. This directory will be created if it does not yet exist.
+
+```{r results="hide"}
+pb_download(repo = "cboettig/piggyback", dest="data/")
+```  
+
+
+Sometimes it is preferable to have a URL from which the data can be read in directly, rather than downloading the data to a local file.  For example, such a URL can be embedded directly into another R script, avoiding any dependence on `piggyback` (provided the repository is already public.)  To get a list of URLs rather than actually downloading the files, use `pb_download_url()`:
+
+```{r  results="hide"}
+pb_download_url("data/mtcars.tsv.gz") 
+```
+
+Or store and read the URL directly into R:
 
 ```{r}
-dir.create("data")
-pb_download("cboettig/piggyback", dest="data/")
-```  
+url <- pb_download_url("data/mtcars.tsv.gz") 
+readr::read_tsv(url)
+```
 
 
 ### Uploading data
 
 If your GitHub repository doesn't have any [releases](https://help.github.com/articles/creating-releases/) yet, `piggyback` will help you quickly create one.  Create new releases to manage multiple versions of a given data file. While you can create releases as often as you like, making a new release is by no means necessary each time you upload a file.  If maintaining old versions of the data is not useful, you can stick with a single release and upload all of your data there.  
 
-```{r}
+```{r eval=FALSE}
 pb_new_release("cboettig/piggyback", "v0.0.1")
 ```
 
@@ -91,13 +106,13 @@ Once we have at least one release available, we are ready to upload.  By default
 ## Pro tip: compress your tabular data to save space & speed upload/downloads
 readr::write_tsv(mtcars, "mtcars.tsv.gz")
 
-pb_upload("cboettig/piggyback", "mtcars.tsv.gz")
+pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback")
 ```
 
 You can also simply overwrite the a previous version of the file on an existing release, rather than creating a new release every time:
 
-```{r}
-pb_upload("cboettig/piggyback", "mtcars.tsv.gz")
+```{r  results="hide"}
+pb_upload("data/mtcars.tsv.gz", repo = "cboettig/piggyback", overwrite = TRUE)
 ```
 
 This is useful in scripts that may automatically upload their results, or whenever a previous version of a data file is disposable.  
@@ -108,13 +123,13 @@ List all files currently piggybacking on a given release (as always, defaults to
 
 
 ```{r}
-pb_list("cboettig/piggyback", tag = "data")
+pb_list(repo = "cboettig/piggyback", tag = "data")
 ```
 
 Delete a file from a release:
 
 ```{r eval = FALSE}
-pb_delete("cboettig/piggyback", file = "data/mtcars.tsv.gz")
+pb_delete(file = "data/mtcars.tsv.gz", repo = "cboettig/piggyback")
 ```
 
 Note that this is irreversible unless you have a copy of the data elsewhere.  You can also simply set `overwrite=TRUE` in `pb_upload()` to overwrite an existing file.  
