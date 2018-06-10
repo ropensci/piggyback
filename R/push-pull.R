@@ -168,6 +168,8 @@ pb_push <- function(repo = guess_repo(),
               overwrite = overwrite)
   })
 
+  ## Merge local manifest with GitHub manifest first.
+
   ## Upload the manifest, quietly
 
   s <- tempfile()
@@ -228,15 +230,27 @@ new_data <- function(mode = c("push", "pull"),
 
   local_manifest <- jsonlite::read_json(m)
 
-  ## Return filenames of anything in local whose hash is not on github
-  upload <- names(local_manifest[ !c(local_manifest %in% github_manifest) ])
+  if(mode == "push"){
 
-  ## Return filenames of anything on github whose hash is not in local
-  download <- names(github_manifest[!c(github_manifest %in% local_manifest)])
+    ## Return filenames of anything in local whose hash is not on github
+    files <- names(local_manifest[ !c(local_manifest %in% github_manifest) ])
 
-  switch(mode,
-         "push" = upload,
-         "pull" = download)
+    ## Now update merge the manifests so the uploaded copy has both:
+    gh_only <- github_manifest[!c(github_manifest %in% local_manifest)]
+    merged <- c(local_manifest, gh_only)
+    proj_dir <- usethis::proj_get()
+    json <- jsonlite::write_json(merged,
+                                 file.path(proj_dir, manifest),
+                                 auto_unbox = TRUE,
+                                 pretty = TRUE)
+
+  } else if (mode == "pull"){
+
+    ## Files whose hashes are on GitHub manifest but local manifest
+    files <- names(github_manifest[!c(github_manifest %in% local_manifest)])
+  }
+
+  files
 
 }
 
