@@ -14,3 +14,4 @@
 ^paper\.md$
 ^paper\.bib$
 ^codemeta\.json$
+^docs$

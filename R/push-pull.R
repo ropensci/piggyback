@@ -72,7 +72,7 @@ create_manifest <- function(manifest = ".manifest.json"){
 #' Pull data from GitHub
 #'
 #' Download any tracked datasets piggybacking on GitHub. Files identical on
-#' local and remote versions will not be transfered.  Otherwise, **assumes
+#' local and remote versions will not be transferred.  Otherwise, **assumes
 #' GitHub version should overwrite local versions.**
 #'
 #' @param repo Name of the repo on GitHub (`owner/repo`, i.e.

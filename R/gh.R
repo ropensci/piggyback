@@ -112,7 +112,7 @@ gh_download_asset <- function(owner,
 #' Upload data to an existing release
 #'
 #' NOTE: you must first create a release if one does not already exists.
-#' @param repo Repository name in format "owner/repo". Will gess the current
+#' @param repo Repository name in format "owner/repo". Will guess the current
 #' repo if not specified.
 #' @param tag  tag for the GitHub release to which this data should be attached.
 #' @param file path to file to be uploaded
@@ -204,7 +204,7 @@ gh_file_id <- function(repo, file, tag = "latest", name = NULL){
 #' List all assets attached to a release
 #' @inheritParams pb_download
 #' @return a character vector of release asset names, (normalized to local paths)
-#' @details To preserve path information, local path delimeters are converted to `.2f`
+#' @details To preserve path information, local path delimiters are converted to `.2f`
 #' when files are uploaded as assets.  Listing will display the local filename,
 #' with asset names converting the `.2f` escape code back to the system delimiter.
 #' @examples
@@ -290,10 +290,10 @@ get_token <- function(){
 #' @param repo Repository name in format "owner/repo". Will guess
 #' the current repo if not specified.
 #' @param tag tag to create for this release
-#' @param commit Specifies the commitish value that
+#' @param commit Specifies the commit-ish value that
 #'  determines where the Git tag is created from.
 #'  Can be any branch or commit SHA. Unused if the
-#'  Git tag already exists. Default: the repository's
+#'  git tag already exists. Default: the repository's
 #'  default branch (usually `master`).
 #' @param name The name of the release. Defaults to tag.
 #' @param body Text describing the contents of the tag.
@@ -301,7 +301,7 @@ get_token <- function(){
 #' @param draft default `FALSE`. Set to `TRUE` to create
 #' a draft (unpublished) release.
 #' @param prerelease default `FALSE`. Set to `TRUE` to
-#' identify the release as a prerelease.
+#' identify the release as a pre-release.
 #' @inheritParams pb_upload
 #' @export
 #' @importFrom jsonlite toJSON

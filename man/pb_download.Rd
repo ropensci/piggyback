@@ -2,7 +2,7 @@
 % Please edit documentation in R/gh.R
 \name{pb_download}
 \alias{pb_download}
-\title{download_data("cboettig/ghdata")}
+\title{Download data from an existing release}
 \usage{
 pb_download(file = NULL, dest = ".", repo = guess_repo(),
   tag = "latest", overwrite = TRUE, ignore = "manifest.json")
@@ -27,5 +27,5 @@ by default, "manifest.json" is ignored as this file is created and used only for
 avoiding redundant file transfer by \code{pb_push} and \code{pb_pull}}
 }
 \description{
-download_data("cboettig/ghdata")
+Download data from an existing release
 }

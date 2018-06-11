@@ -14,10 +14,10 @@ the current repo if not specified.}
 
 \item{tag}{tag to create for this release}
 
-\item{commit}{Specifies the commitish value that
+\item{commit}{Specifies the commit-ish value that
 determines where the Git tag is created from.
 Can be any branch or commit SHA. Unused if the
-Git tag already exists. Default: the repository's
+git tag already exists. Default: the repository's
 default branch (usually \code{master}).}
 
 \item{name}{The name of the release. Defaults to tag.}
@@ -29,7 +29,7 @@ default text is "Data release".}
 a draft (unpublished) release.}
 
 \item{prerelease}{default \code{FALSE}. Set to \code{TRUE} to
-identify the release as a prerelease.}
+identify the release as a pre-release.}
 
 \item{.token}{GitHub authentication token. Typically set from an environmental
 variable, e.g. \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")}, which helps prevent

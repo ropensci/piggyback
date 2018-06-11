@@ -24,7 +24,7 @@ from the name used on the GitHub asset list.}
 }
 \description{
 Download any tracked datasets piggybacking on GitHub. Files identical on
-local and remote versions will not be transfered.  Otherwise, \strong{assumes
+local and remote versions will not be transferred.  Otherwise, \strong{assumes
 GitHub version should overwrite local versions.}
 }
 \details{

@@ -10,6 +10,7 @@ status](https://codecov.io/gh/cboettig/piggyback/branch/master/graph/badge.svg)]
 status](https://ci.appveyor.com/api/projects/status/github/cboettig/piggyback?branch=master&svg=true)](https://ci.appveyor.com/project/cboettig/piggyback)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/piggyback)](https://cran.r-project.org/package=piggyback)
+[![](https://badges.ropensci.org/220_status.svg)](https://github.com/ropensci/onboarding/issues/220)
 
 # piggyback
 
@@ -57,20 +58,23 @@ No authentication is required to download data from *public* GitHub
 repositories using `piggyback`. Nevertheless, `piggyback` recommends
 setting a token when possible to avoid rate limits. To upload data to
 any repository, or to download data from *private* repositories, you
-will need to authenticate first. To do so, add your [GitHub
+will need to authenticate first.
+
+To do so, add your [GitHub
 Token](https://github.com/settings/tokens/new?scopes=repo,gist&description=R:GITHUB_PAT)
-to an environmental variable, e.g. in a `~/.Renviron` file in your home
-directory (or some place private you won’t upload), or simply set it in
-the R console using:
+to an environmental variable, e.g. in a `.Renviron` file in your home
+directory or project directory (any private place you won’t upload), see
+`usethis::edit_r_environ()`. For one-off use you can also sey your token
+from the R console using:
 
 ``` r
 Sys.setenv(GITHUB_TOKEN="xxxxxx")
 ```
 
-Try to avoid writing `Sys.setenv()` in scripts – remember, the goal here
-is to avoid writing your private token in any file that might be shared,
-even privately. For help setting up your token, try
-`usethis::browse_github_pat()`.
+But try to avoid putting `Sys.setenv()` in any R scripts – remember, the
+goal here is to avoid writing your private token in any file that might
+be shared, even privately. For more help setting up a GitHub token, for
+the first time, see `usethis::browse_github_pat()`.
 
 ## Basic Interface
 

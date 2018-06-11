@@ -23,7 +23,7 @@ a character vector of release asset names, (normalized to local paths)
 List all assets attached to a release
 }
 \details{
-To preserve path information, local path delimeters are converted to \code{.2f}
+To preserve path information, local path delimiters are converted to \code{.2f}
 when files are uploaded as assets.  Listing will display the local filename,
 with asset names converting the \code{.2f} escape code back to the system delimiter.
 }
