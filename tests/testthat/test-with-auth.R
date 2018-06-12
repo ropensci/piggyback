@@ -6,6 +6,8 @@ testthat::context("Requiring Authentication")
 
 testthat::test_that("We can upload data",{
   testthat::skip_if(piggyback:::get_token() == "")
+  testthat::skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
+
   data <- readr::write_tsv(datasets::iris, "iris.tsv.gz")
   out <- pb_upload(repo = "cboettig/piggyback",
                    file = "iris.tsv.gz",
@@ -21,6 +23,7 @@ testthat::test_that("We can upload data",{
 
 testthat::test_that("We can push and pull data",{
   testthat::skip_if(piggyback:::get_token() == "")
+  testthat::skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
 
   ##  Setup
   cur <- getwd()
@@ -64,6 +67,7 @@ testthat::test_that("We can push and pull data",{
 
 testthat::test_that(
   "we error when deleting non-existant files", {
+
     testthat::skip_on_cran()
     testthat::expect_error(
       pb_delete(repo = "cboettig/piggyback", "not_a_file"), "404")
