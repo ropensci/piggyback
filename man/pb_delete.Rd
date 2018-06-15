@@ -4,19 +4,22 @@
 \alias{pb_delete}
 \title{Delete an asset attached to a release}
 \usage{
-pb_delete(repo = guess_repo(), tag = "latest", file, .token = get_token())
+pb_delete(file, repo = guess_repo(), tag = "latest", .token = get_token(),
+  verbose = FALSE)
 }
 \arguments{
+\item{file}{path to file to be uploaded}
+
 \item{repo}{Repository name in format "owner/repo". Will guess the current
 repo if not specified.}
 
 \item{tag}{tag for the GitHub release to which this data should be attached.}
 
-\item{file}{path to file to be uploaded}
-
 \item{.token}{GitHub authentication token. Typically set from an environmental
 variable, e.g. \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")}, which helps prevent
 accidental disclosure of a secret token when sharing scripts.}
+
+\item{verbose}{should we message if file not found? (default faluse)}
 }
 \value{
 \code{TRUE} (invisibly) if a file is found and deleted.
@@ -24,4 +27,13 @@ Otherwise, returns \code{NULL} (invisibly) if no file matching the name was foun
 }
 \description{
 Delete an asset attached to a release
+}
+\examples{
+\donttest{
+readr::write_tsv(mtcars, "mtcars.tsv.gz")
+pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback",
+          tag = "v0.0.3", overwrite = TRUE)
+pb_delete("mtcars.tsv.gz", repo = "cboettig/piggyback", tag = "v0.0.3")
+}
+
 }

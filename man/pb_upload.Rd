@@ -29,11 +29,11 @@ accidental disclosure of a secret token when sharing scripts.}
 NOTE: you must first create a release if one does not already exists.
 }
 \examples{
-\dontrun{
+\donttest{
 # Needs your real token to run
-Sys.setenv(GITHUB_TOKEN = "xxxxx")
 
 readr::write_tsv(mtcars,"mtcars.tsv.xz")
-ghdata_upload("cboettig/piggyback", "v0.0.3", "mtcars.tsv.xz")
+pb_upload("mtcars.tsv.xz", "cboettig/piggyback",
+          "v0.0.3", overwrite = TRUE)
 }
 }

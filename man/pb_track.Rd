@@ -4,11 +4,13 @@
 \alias{pb_track}
 \title{Track data files of a given pattern or location}
 \usage{
-pb_track(glob)
+pb_track(glob, repo_root = usethis::proj_get())
 }
 \arguments{
 \item{glob}{vector of file names and/or glob pattern (e.g. \code{*.csv}, \code{data/*.csv})
 which will be tracked by piggyback.}
+
+\item{repo_root}{repository root, will be guessed by \code{usethis} otherwise.}
 }
 \value{
 input \code{globpath} (invisibly)
@@ -24,8 +26,9 @@ as to version control., with \code{git add .psattributes}.  Note that
 tracked file patterns will also be added to \code{.gitignore}.
 }
 \examples{
-\donttest{
+\dontrun{
 ## Track all .csv and .tsv files
 pb_track(c("*.tsv", "*.tsv.gz"))
+
 }
 }

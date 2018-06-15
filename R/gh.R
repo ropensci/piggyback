@@ -19,6 +19,13 @@
 #' @importFrom gh gh
 #' @importFrom fs dir_create
 #' @export
+#' @examples \donttest{
+#'  ## Download a specific file:
+#'  piggyback::pb_download("data/iris.tsv.gz", repo = "cboettig/piggyback")
+#'
+#'  ## Download all files
+#'  piggyback::pb_download(repo = "cboettig/piggyback")
+#' }
 pb_download <- function(file = NULL,
                         dest = ".",
                         repo = guess_repo(),
@@ -73,6 +80,9 @@ pb_download <- function(file = NULL,
 #' @inheritParams pb_download
 #' @return the URL to download a file
 #' @export
+#' @examples \donttest{
+#' pb_download_url("data/iris.tsv.gz", repo="cboettig/piggyback")
+#' }
 pb_download_url <- function(file = NULL,
                             repo = guess_repo(),
                             tag = "latest"){
@@ -112,10 +122,10 @@ gh_download_asset <- function(owner,
 #' Upload data to an existing release
 #'
 #' NOTE: you must first create a release if one does not already exists.
+#' @param file path to file to be uploaded
 #' @param repo Repository name in format "owner/repo". Will guess the current
 #' repo if not specified.
 #' @param tag  tag for the GitHub release to which this data should be attached.
-#' @param file path to file to be uploaded
 #' @param name name for uploaded file. If not provided will use the basename of
 #' `file` (i.e. filename without directory)
 #' @param overwrite overwrite any existing file with the same name already
@@ -124,12 +134,12 @@ gh_download_asset <- function(owner,
 #' variable, e.g. `Sys.setenv(GITHUB_TOKEN = "xxxxx")`, which helps prevent
 #' accidental disclosure of a secret token when sharing scripts.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Needs your real token to run
-#' Sys.setenv(GITHUB_TOKEN = "xxxxx")
 #'
 #' readr::write_tsv(mtcars,"mtcars.tsv.xz")
-#' ghdata_upload("cboettig/piggyback", "v0.0.3", "mtcars.tsv.xz")
+#' pb_upload("mtcars.tsv.xz", "cboettig/piggyback",
+#'           "v0.0.3", overwrite = TRUE)
 #' }
 #' @importFrom httr progress upload_file POST stop_for_status
 #' @export
@@ -229,13 +239,23 @@ pb_list <- function(repo = guess_repo(),
 #' Delete an asset attached to a release
 #'
 #' @inheritParams pb_upload
+#' @param verbose should we message if file not found? (default faluse)
 #' @return `TRUE` (invisibly) if a file is found and deleted.
 #' Otherwise, returns `NULL` (invisibly) if no file matching the name was found.
 #' @export
-pb_delete <- function(repo = guess_repo(),
+#' @examples
+#' \donttest{
+#' readr::write_tsv(mtcars, "mtcars.tsv.gz")
+#' pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback",
+#'           tag = "v0.0.3", overwrite = TRUE)
+#' pb_delete("mtcars.tsv.gz", repo = "cboettig/piggyback", tag = "v0.0.3")
+#' }
+#'
+pb_delete <- function(file,
+                      repo = guess_repo(),
                       tag="latest",
-                      file,
-                      .token = get_token()){
+                      .token = get_token(),
+                      verbose = FALSE){
   x <- release_info(repo, tag)
 
   name <- asset_filename(file)
@@ -250,6 +270,9 @@ pb_delete <- function(repo = guess_repo(),
     gh::gh("DELETE /repos/:owner/:repo/releases/assets/:id",
        owner = x$owner, repo = x$repo, id = ids[i], .token = .token)
     out <- TRUE
+  } else {
+    if(verbose)
+      message(paste(name, "not found on GitHub"))
   }
 
   invisible(out)

@@ -29,3 +29,12 @@ avoiding redundant file transfer by \code{pb_push} and \code{pb_pull}}
 \description{
 Download data from an existing release
 }
+\examples{
+\donttest{
+ ## Download a specific file:
+ piggyback::pb_download("data/iris.tsv.gz", repo = "cboettig/piggyback")
+
+ ## Download all files
+ piggyback::pb_download(repo = "cboettig/piggyback")
+}
+}

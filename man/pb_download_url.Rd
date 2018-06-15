@@ -23,3 +23,8 @@ Returns the URL download for a public file. This can be useful when writing
 scripts that may want to download the file directly without introducing any
 dependency on \code{piggyback} or authentication steps.
 }
+\examples{
+\donttest{
+pb_download_url("data/iris.tsv.gz", repo="cboettig/piggyback")
+}
+}

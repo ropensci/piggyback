@@ -66,11 +66,15 @@ testthat::test_that("We can push and pull data",{
 
 
 testthat::test_that(
-  "we error when deleting non-existant files", {
+  "we do can optionally message when deleting non-existant files", {
 
     testthat::skip_on_cran()
-    testthat::expect_error(
-      pb_delete(repo = "cboettig/piggyback", "not_a_file"), "404")
+
+    testthat::expect_silent(
+      pb_delete("not_a_file", repo = "cboettig/piggyback"))
+    testthat::expect_message(
+      pb_delete("not_a_file", repo = "cboettig/piggyback", verbose=TRUE),
+      "not found on GitHub")
   })
 
 
@@ -78,5 +82,5 @@ testthat::test_that(
   "we error when creating a release on non-existant repo", {
     testthat::skip_on_cran()
     testthat::expect_error(
-      pb_new_release("cboettig/not_a_file", "v2.0"), "404")
+      pb_new_release("cboettig/not_a_repo", "v2.0"), "404")
   })

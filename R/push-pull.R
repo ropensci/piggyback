@@ -19,16 +19,18 @@
 #' tracked file patterns will also be added to `.gitignore`.
 #' @param glob vector of file names and/or glob pattern (e.g. `*.csv`, `data/*.csv`)
 #' which will be tracked by piggyback.
+#' @param repo_root repository root, will be guessed by `usethis` otherwise.
 #' @importFrom usethis use_git_ignore proj_get
 #' @importFrom fs path_join
 #' @return input `globpath` (invisibly)
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' ## Track all .csv and .tsv files
 #' pb_track(c("*.tsv", "*.tsv.gz"))
+#'
 #' }
-pb_track <- function(glob){
+pb_track <- function(glob, repo_root = usethis::proj_get()){
 
   write_union(usethis::proj_get(),
               ".pbattributes",
