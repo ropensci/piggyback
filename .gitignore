@@ -7,8 +7,11 @@ inst/doc
 *.csv
 *.RData
 *.tsv
-*.tsv.gz
+*.gz
 .manifest.json
 *.tif
 *.zip
+manifest.json
+*.xz
+*.bz2
 data/*
