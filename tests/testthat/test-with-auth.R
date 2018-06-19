@@ -22,6 +22,7 @@ testthat::test_that("We can upload data",{
 
 
 testthat::test_that("We can push and pull data",{
+
   testthat::skip_if(piggyback:::get_token() == "")
   testthat::skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
 
@@ -41,11 +42,12 @@ testthat::test_that("We can push and pull data",{
                               protocol = "https"))
   setwd("piggyback")
 
-
-  pb_track("*.tsv")
-
-  testthat::expect_true(pb_pull(repo = "cboettig/piggyback"))
+  fs::dir_create("data")
+  readr::write_tsv(mtcars, "mtcars.tsv.gz")
+  pb_track("*.tsv.gz")
   testthat::expect_true(pb_push(repo = "cboettig/piggyback"))
+  testthat::expect_true(pb_pull(repo = "cboettig/piggyback"))
+
   testthat::expect_true(pb_pull())
   testthat::expect_true(pb_push())
   pb_push()
