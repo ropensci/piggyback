@@ -120,7 +120,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>pb_track</span>(<span class='no'>glob</span>)</pre>
+    <pre class="usage"><span class='fu'>pb_track</span>(<span class='no'>glob</span>, <span class='kw'>repo_root</span> <span class='kw'>=</span> <span class='kw pkg'>usethis</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/usethis/topics/proj_get'>proj_get</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -129,6 +129,10 @@
       <th>glob</th>
       <td><p>vector of file names and/or glob pattern (e.g. <code>*.csv</code>, <code>data/*.csv</code>)
 which will be tracked by piggyback.</p></td>
+    </tr>
+    <tr>
+      <th>repo_root</th>
+      <td><p>repository root, will be guessed by <code>usethis</code> otherwise.</p></td>
     </tr>
     </table>
     
@@ -146,8 +150,11 @@ tracked file patterns will also be added to <code>.gitignore</code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>## Track all .csv and .tsv files</span>
-<span class='fu'>pb_track</span>(<span class='fu'>c</span>(<span class='st'>"*.tsv"</span>, <span class='st'>"*.tsv.gz"</span>))</div></pre>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='co'>## Track all .csv and .tsv files</span>
+<span class='fu'>pb_track</span>(<span class='fu'>c</span>(<span class='st'>"*.tsv"</span>, <span class='st'>"*.tsv.gz"</span>))
+
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

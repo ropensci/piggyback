@@ -1,0 +1,9 @@
+{
+  "data/data/iris.tsv.gz": "70e13d6b359633296f73b60f600dd3f7",
+  "data/data/mtcars.tsv.gz": "10bd19ad61e72b9ba14c6d4f0d26e651",
+  "data/iris.tsv.gz": "70e13d6b359633296f73b60f600dd3f7",
+  "data/mtcars.tsv.gz": "10bd19ad61e72b9ba14c6d4f0d26e651",
+  "mtcars.tsv.gz": "10bd19ad61e72b9ba14c6d4f0d26e651",
+  "tests/testthat/data/iris.tsv.gz": "70e13d6b359633296f73b60f600dd3f7",
+  "tests/testthat/data/mtcars.tsv.gz": "10bd19ad61e72b9ba14c6d4f0d26e651"
+}

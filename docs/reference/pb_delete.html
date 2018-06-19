@@ -120,11 +120,16 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>pb_delete</span>(<span class='kw'>repo</span> <span class='kw'>=</span> <span class='fu'>guess_repo</span>(), <span class='kw'>tag</span> <span class='kw'>=</span> <span class='st'>"latest"</span>, <span class='no'>file</span>, <span class='kw'>.token</span> <span class='kw'>=</span> <span class='fu'>get_token</span>())</pre>
+    <pre class="usage"><span class='fu'>pb_delete</span>(<span class='no'>file</span>, <span class='kw'>repo</span> <span class='kw'>=</span> <span class='fu'>guess_repo</span>(), <span class='kw'>tag</span> <span class='kw'>=</span> <span class='st'>"latest"</span>, <span class='kw'>.token</span> <span class='kw'>=</span> <span class='fu'>get_token</span>(),
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>file</th>
+      <td><p>path to file to be uploaded</p></td>
+    </tr>
     <tr>
       <th>repo</th>
       <td><p>Repository name in format "owner/repo". Will guess the current
@@ -135,14 +140,14 @@ repo if not specified.</p></td>
       <td><p>tag for the GitHub release to which this data should be attached.</p></td>
     </tr>
     <tr>
-      <th>file</th>
-      <td><p>path to file to be uploaded</p></td>
-    </tr>
-    <tr>
       <th>.token</th>
       <td><p>GitHub authentication token. Typically set from an environmental
 variable, e.g. <code>Sys.setenv(GITHUB_TOKEN = "xxxxx")</code>, which helps prevent
 accidental disclosure of a secret token when sharing scripts.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>should we message if file not found? (default faluse)</p></td>
     </tr>
     </table>
     
@@ -152,6 +157,12 @@ accidental disclosure of a secret token when sharing scripts.</p></td>
 Otherwise, returns <code>NULL</code> (invisibly) if no file matching the name was found.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw pkg'>readr</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/readr/topics/write_delim'>write_tsv</a></span>(<span class='no'>mtcars</span>, <span class='st'>"mtcars.tsv.gz"</span>)
+<span class='fu'><a href='pb_upload.html'>pb_upload</a></span>(<span class='st'>"mtcars.tsv.gz"</span>, <span class='kw'>repo</span> <span class='kw'>=</span> <span class='st'>"cboettig/piggyback"</span>,
+          <span class='kw'>tag</span> <span class='kw'>=</span> <span class='st'>"v0.0.3"</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
+#&gt; </div><div class='input'><span class='fu'>pb_delete</span>(<span class='st'>"mtcars.tsv.gz"</span>, <span class='kw'>repo</span> <span class='kw'>=</span> <span class='st'>"cboettig/piggyback"</span>, <span class='kw'>tag</span> <span class='kw'>=</span> <span class='st'>"v0.0.3"</span>)</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -159,7 +170,9 @@ Otherwise, returns <code>NULL</code> (invisibly) if no file matching the name wa
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
