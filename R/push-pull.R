@@ -55,14 +55,20 @@ create_manifest <- function(manifest = ".manifest.json"){
     glob <- character()
   }
 
-  list_globs <- function(g){
-    path <- fs::path_join(c(proj_dir, fs::path_rel(fs::path_dir(g))))
+  list_globs <- function(g, start = "."){
+    path <- fs::path_join(c(start, fs::path_rel(fs::path_dir(g))))
     glob <- fs::path_file(g)
-    fs::dir_ls(path = path, glob = glob, all = TRUE,
-               recursive = TRUE, type = "file")
+    if(fs::dir_exists(path)){
+    fs::path_rel(
+      fs::dir_ls(path = path, glob = glob, all = TRUE,
+               recursive = TRUE, type = "file"),
+      start)
+    } else {
+      NULL
+    }
   }
 
-  files <- fs::path_rel(unname(unlist(lapply(glob, list_globs))))
+  files <- unname(unlist(lapply(glob, list_globs, proj_dir)))
 
   hashes <- lapply(files, tools::md5sum)
   names(hashes) <- files
