@@ -229,8 +229,9 @@ pb_list <- function(repo = guess_repo(),
   file_names <- vapply(x$assets, `[[`, character(1), "name")
 
   i <- which(file_names %in% ignore)
-  file_names <- file_names[-i]
-
+  if(length(i) > 0){
+    file_names <- file_names[-i]
+  }
   ## Should we report the tag name too? x$tag_name?
   local_filename(file_names)
 
