@@ -45,31 +45,19 @@ pb_track <- function(glob, repo_root = usethis::proj_get()){
 
 #' @importFrom fs dir_ls
 #' @importFrom jsonlite write_json
+#' @importFrom magrittr %>%
 create_manifest <- function(manifest = ".manifest.json"){
 
   proj_dir <- usethis::proj_get()
-  full_path <- fs::path_rel(file.path(proj_dir, ".pbattributes"))
-  if (file.exists(full_path)) {
-    glob <- readLines(full_path, warn = FALSE)
+  pbattrs <- fs::path_rel(".pbattributes", proj_dir)
+
+  if (file.exists(pbattrs)) {
+    glob <- readLines(pbattrs, warn = FALSE)
   } else {
-    glob <- character()
+    glob <- character(0L)
   }
 
-  list_globs <- function(g, start = "."){
-    path <- fs::path_join(c(start, fs::path_rel(fs::path_dir(g))))
-    glob <- fs::path_file(g)
-    if(fs::dir_exists(path)){
-    fs::path_rel(
-      fs::dir_ls(path = path, glob = glob, all = TRUE,
-               recursive = TRUE, type = "file"),
-      start)
-    } else {
-      NULL
-    }
-  }
-
-  files <- unname(unlist(lapply(glob, list_globs, proj_dir)))
-
+  files <- match_globs(glob, proj_dir)
   hashes <- lapply(files, tools::md5sum)
   names(hashes) <- files
 
@@ -80,7 +68,15 @@ create_manifest <- function(manifest = ".manifest.json"){
   invisible(hashes)
 }
 
-
+## Helper function
+#' @importFrom fs path_rel path_filter
+match_globs <- function(globs, proj_dir = usethis::proj_get()){
+  unname(unlist(lapply(globs, function(g){
+  dir_ls(path = proj_dir, recursive = TRUE) %>%
+    fs::path_rel(proj_dir) %>%
+    fs::path_filter(glob = g)
+  })))
+}
 
 #' Pull data from GitHub
 #'

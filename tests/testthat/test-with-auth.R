@@ -44,7 +44,9 @@ testthat::test_that("We can push and pull data",{
 
   fs::dir_create("data")
   readr::write_tsv(mtcars, "mtcars.tsv.gz")
-  pb_track("*.tsv.gz")
+  readr::write_tsv(mtcars, "data/mtcars.tsv.xz")
+
+  pb_track(c("*.tsv.gz", "data/*"))
   testthat::expect_true(pb_push(repo = "cboettig/piggyback"))
   testthat::expect_true(pb_pull(repo = "cboettig/piggyback"))
 

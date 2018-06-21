@@ -29,7 +29,8 @@ Imports:
     fs,
     usethis,
     crayon,
-    clisymbols
+    clisymbols,
+    magrittr
 Suggests:
     readr,
     covr,
