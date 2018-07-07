@@ -13,9 +13,9 @@
 #'
 #' It has two main modes or workflows:
 #'
-#' - `pb_upload()` / `pb_download()`:  Upload and download individual files to/from
+#' - [pb_upload()] / [pb_download()]:  Upload and download individual files to/from
 #'   the desired release of the specified repository
-#' - `pb_track()` + `pb_pull()` / `pb_push()`: Use a `git-lfs` style tracking of specific
+#' - [pb_track()] + [pb_pull()] / [pb_push()]: Use a `git-lfs` style tracking of specific
 #'    file types and sync all tracked files with `pull` and `push` commands.  Convenient
 #'    for projects working with many piggybacked data files.
 #'
