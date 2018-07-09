@@ -86,18 +86,21 @@ pb_download <- function(file = NULL,
     update <- df$timestamp > local_timestamp
     update[is.na(update)] <- TRUE # we'll download if missing locally
     df <- df[update,]
+
+    if(dim(df)[[1]] < 1){
+      message(paste("All files up-to-date already\n"))
+    }
+
   }
 
-  for(i in seq_along(df$id)){
-    resp <- gh_download_asset(x$owner,
-                              x$repo,
-                              id = df$id[i],
-                              destfile = dest[i],
-                              overwrite = overwrite)
+  lapply(seq_along(df$id), function(i)
+    gh_download_asset(x$owner,
+                      x$repo,
+                      id = df$id[i],
+                      destfile = dest[i],
+                      overwrite = overwrite)
 
-    httr::stop_for_status(resp)
-  }
-  invisible(resp)
+  )
 }
 
 
@@ -145,6 +148,7 @@ gh_download_asset <- function(owner,
                     httr::add_headers(Accept = "application/octet-stream"),
                     httr::write_disk(destfile, overwrite = overwrite),
                     httr::progress("down"))
+  ## handle error cases? resp not found
   httr::stop_for_status(resp)
   invisible(resp)
 }
