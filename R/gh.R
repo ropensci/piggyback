@@ -275,7 +275,7 @@ pb_list <- function(repo = guess_repo(),
 #' Delete an asset attached to a release
 #'
 #' @inheritParams pb_upload
-#' @param verbose should we message if file not found? (default faluse)
+#' @param verbose should we message if file not found? (default FALSE)
 #' @return `TRUE` (invisibly) if a file is found and deleted.
 #' Otherwise, returns `NULL` (invisibly) if no file matching the name was found.
 #' @export
