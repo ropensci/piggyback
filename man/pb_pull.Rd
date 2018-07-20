@@ -36,15 +36,15 @@ GitHub version should overwrite local versions.}
 attached to the requested release on GitHub. Add files to tracking with
 \code{\link[=pb_track]{pb_track()}} first and push to GitHub with \code{\link[=pb_push]{pb_push()}}.
 
-By default, use_timestamps is false in \code{\link[=pb_pull]{pb_pull()}} amd \code{\link[=pb_push]{pb_push()}} since
+By default, use_timestamps is false in \code{\link[=pb_pull]{pb_pull()}} and \code{\link[=pb_push]{pb_push()}} since
 these methods are designed to use the manifest, which relies on hashes
 rather than timestamps to decide if a file has changed.  You can use
 timestamps and hashes together, but note that timestamps may not be
 as reliable, particularly if your files are being moved or copied
 some other way without actually being updated.
 
-Hash comparisons can be more reliable, but unlike timestamps, have no
-directionality -- we cannot tell which file is most recent.  Checking
+Hash comparisons can be more reliable, but unlike timestamps, are not
+directional -- we cannot tell which file is most recent.  Checking
 hashes therefore only ensures we not bother uploading or downloading
 a file identical to one we already have.
 }

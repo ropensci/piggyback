@@ -20,10 +20,6 @@ variable, e.g. \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")}, which helps prevent
 accidental disclosure of a secret token when sharing scripts.}
 
 \item{verbose}{should we message if file not found? (default FALSE)}
-
-\item{use_timestamps}{If \code{TRUE}, then files will only be downloaded
-if timestamp on GitHub is newer than the local timestamp (if \code{overwrite=TRUE}).
-Defaults to \code{TRUE}.}
 }
 \value{
 \code{TRUE} (invisibly) if a file is found and deleted.

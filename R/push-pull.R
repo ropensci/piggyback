@@ -103,15 +103,15 @@ match_globs <- function(globs, proj_dir = usethis::proj_get()){
 #'  attached to the requested release on GitHub. Add files to tracking with
 #'  [pb_track()] first and push to GitHub with [pb_push()].
 #'
-#'  By default, use_timestamps is false in [pb_pull()] amd [pb_push()] since
+#'  By default, use_timestamps is false in [pb_pull()] and [pb_push()] since
 #'  these methods are designed to use the manifest, which relies on hashes
 #'  rather than timestamps to decide if a file has changed.  You can use
 #'  timestamps and hashes together, but note that timestamps may not be
 #'  as reliable, particularly if your files are being moved or copied
 #'  some other way without actually being updated.
 #'
-#'  Hash comparisons can be more reliable, but unlike timestamps, have no
-#'  directionality -- we cannot tell which file is most recent.  Checking
+#'  Hash comparisons can be more reliable, but unlike timestamps, are not
+#'  directional -- we cannot tell which file is most recent.  Checking
 #'  hashes therefore only ensures we not bother uploading or downloading
 #'  a file identical to one we already have.
 #'
@@ -170,15 +170,15 @@ pb_pull <- function(repo = guess_repo(),
 #' @details Will only upload tracked files, as identified by the local
 #' manifest.  Add files to tracking with \code{\link{pb_track}} first.
 #'
-#'  By default, use_timestamps is false in [pb_pull()] amd [pb_push()] since
+#'  By default, use_timestamps is false in [pb_pull()] and [pb_push()] since
 #'  these methods are designed to use the manifest, which relies on hashes
 #'  rather than timestamps to decide if a file has changed.  You can use
 #'  timestamps and hashes together, but note that timestamps may not be
 #'  as reliable, particularly if your files are being moved or copied
 #'  some other way without actually being updated.
 #'
-#'  Hash comparisons can be more reliable, but unlike timestamps, have no
-#'  directionality -- we cannot tell which file is most recent.  Checking
+#'  Hash comparisons can be more reliable, but unlike timestamps, are not
+#'  directional -- we cannot tell which file is most recent.  Checking
 #'  hashes therefore only ensures we not bother uploading or downloading
 #'  a file identical to one we already have.'
 #' @export

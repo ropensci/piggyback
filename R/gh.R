@@ -151,6 +151,9 @@ gh_download_asset <- function(owner,
 #' `file` (i.e. filename without directory)
 #' @param overwrite overwrite any existing file with the same name already
 #'  attached to the on release?
+#' @param use_timestamps If `TRUE`, then files will only be downloaded
+#' if timestamp on GitHub is newer than the local timestamp (if `overwrite=TRUE`).
+#' Defaults to `TRUE`.
 #' @param .token GitHub authentication token. Typically set from an environmental
 #' variable, e.g. `Sys.setenv(GITHUB_TOKEN = "xxxxx")`, which helps prevent
 #' accidental disclosure of a secret token when sharing scripts.
@@ -274,9 +277,6 @@ pb_list <- function(repo = guess_repo(),
 #'
 #' @inheritParams pb_upload
 #' @param verbose should we message if file not found? (default FALSE)
-#' @param use_timestamps If `TRUE`, then files will only be downloaded
-#' if timestamp on GitHub is newer than the local timestamp (if `overwrite=TRUE`).
-#' Defaults to `TRUE`.
 #' @return `TRUE` (invisibly) if a file is found and deleted.
 #' Otherwise, returns `NULL` (invisibly) if no file matching the name was found.
 #' @export

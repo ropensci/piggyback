@@ -21,6 +21,10 @@ repo if not specified.}
 \item{overwrite}{overwrite any existing file with the same name already
 attached to the on release?}
 
+\item{use_timestamps}{If \code{TRUE}, then files will only be downloaded
+if timestamp on GitHub is newer than the local timestamp (if \code{overwrite=TRUE}).
+Defaults to \code{TRUE}.}
+
 \item{.token}{GitHub authentication token. Typically set from an environmental
 variable, e.g. \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")}, which helps prevent
 accidental disclosure of a secret token when sharing scripts.}
