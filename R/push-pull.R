@@ -72,7 +72,8 @@ create_manifest <- function(manifest = ".manifest.json"){
 #' @importFrom fs path_rel path_filter
 match_globs <- function(globs, proj_dir = usethis::proj_get()){
   unname(unlist(lapply(globs, function(g){
-  dir_ls(path = proj_dir, recursive = TRUE) %>%
+  ## only match files (i.e. things we can hash)
+  fs::dir_ls(path = proj_dir, recursive = TRUE, type = "file") %>%
     fs::path_rel(proj_dir) %>%
     fs::path_filter(glob = g)
   })))
