@@ -5,7 +5,7 @@
 \title{Pull data from GitHub}
 \usage{
 pb_pull(repo = guess_repo(), tag = "latest", overwrite = TRUE,
-  manifest = ".manifest.json")
+  manifest = ".manifest.json", use_timestamps = FALSE)
 }
 \arguments{
 \item{repo}{Name of the repo on GitHub (\code{owner/repo}, i.e.
@@ -21,6 +21,10 @@ not match? default \code{TRUE}.}
 \item{manifest}{name of the local manifest file. Note: A leading dot
 (i.e. indicating a hidden file) in the manifest name will be removed
 from the name used on the GitHub asset list.}
+
+\item{use_timestamps}{If \code{TRUE}, then files will only be uploaded/downloaded
+if timestamp of target is newer than the existing version.  Default is \code{FALSE},
+see details.}
 }
 \description{
 Download any tracked datasets piggybacking on GitHub. Files identical on
@@ -28,9 +32,21 @@ local and remote versions will not be transferred.  Otherwise, \strong{assumes
 GitHub version should overwrite local versions.}
 }
 \details{
-Will only download tracked files, as identified by the manifest
+\code{\link[=pb_pull]{pb_pull()}} Will only download tracked files, as identified by the manifest
 attached to the requested release on GitHub. Add files to tracking with
-\code{\link{pb_track}} first and push to GitHub with \code{\link{pb_push}}.
+\code{\link[=pb_track]{pb_track()}} first and push to GitHub with \code{\link[=pb_push]{pb_push()}}.
+
+By default, use_timestamps is false in \code{\link[=pb_pull]{pb_pull()}} amd \code{\link[=pb_push]{pb_push()}} since
+these methods are designed to use the manifest, which relies on hashes
+rather than timestamps to decide if a file has changed.  You can use
+timestamps and hashes together, but note that timestamps may not be
+as reliable, particularly if your files are being moved or copied
+some other way without actually being updated.
+
+Hash comparisons can be more reliable, but unlike timestamps, have no
+directionality -- we cannot tell which file is most recent.  Checking
+hashes therefore only ensures we not bother uploading or downloading
+a file identical to one we already have.
 }
 \examples{
 \dontrun{
