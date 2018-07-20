@@ -19,7 +19,7 @@ repo if not specified.}
 variable, e.g. \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")}, which helps prevent
 accidental disclosure of a secret token when sharing scripts.}
 
-\item{verbose}{should we message if file not found? (default faluse)}
+\item{verbose}{should we message if file not found? (default FALSE)}
 }
 \value{
 \code{TRUE} (invisibly) if a file is found and deleted.

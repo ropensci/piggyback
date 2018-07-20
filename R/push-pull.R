@@ -95,9 +95,26 @@ match_globs <- function(globs, proj_dir = usethis::proj_get()){
 #' @param manifest name of the local manifest file. Note: A leading dot
 #'  (i.e. indicating a hidden file) in the manifest name will be removed
 #'  from the name used on the GitHub asset list.
-#' @details Will only download tracked files, as identified by the manifest
+#' @param use_timestamps If `TRUE`, then files will only be uploaded/downloaded
+#' if timestamp of target is newer than the existing version.  Default is `FALSE`,
+#' see details.
+#' @details
+#'  [pb_pull()] Will only download tracked files, as identified by the manifest
 #'  attached to the requested release on GitHub. Add files to tracking with
-#'  \code{\link{pb_track}} first and push to GitHub with \code{\link{pb_push}}.
+#'  [pb_track()] first and push to GitHub with [pb_push()].
+#'
+#'  By default, use_timestamps is false in [pb_pull()] amd [pb_push()] since
+#'  these methods are designed to use the manifest, which relies on hashes
+#'  rather than timestamps to decide if a file has changed.  You can use
+#'  timestamps and hashes together, but note that timestamps may not be
+#'  as reliable, particularly if your files are being moved or copied
+#'  some other way without actually being updated.
+#'
+#'  Hash comparisons can be more reliable, but unlike timestamps, have no
+#'  directionality -- we cannot tell which file is most recent.  Checking
+#'  hashes therefore only ensures we not bother uploading or downloading
+#'  a file identical to one we already have.
+#'
 #'
 #' @export
 #'
@@ -108,7 +125,8 @@ match_globs <- function(globs, proj_dir = usethis::proj_get()){
 pb_pull <- function(repo = guess_repo(),
                     tag = "latest",
                     overwrite = TRUE,
-                    manifest = ".manifest.json")
+                    manifest = ".manifest.json",
+                    use_timestamps = FALSE)
                     {
 
   # Get hashes of all tracked files
@@ -132,7 +150,8 @@ pb_pull <- function(repo = guess_repo(),
               tag = tag,
               file = files,
               dest = proj_dir,
-              overwrite = overwrite)
+              overwrite = overwrite,
+              use_timestamps = use_timestamps)
 
   unlink(manifest)
 
@@ -151,6 +170,17 @@ pb_pull <- function(repo = guess_repo(),
 #' @details Will only upload tracked files, as identified by the local
 #' manifest.  Add files to tracking with \code{\link{pb_track}} first.
 #'
+#'  By default, use_timestamps is false in [pb_pull()] amd [pb_push()] since
+#'  these methods are designed to use the manifest, which relies on hashes
+#'  rather than timestamps to decide if a file has changed.  You can use
+#'  timestamps and hashes together, but note that timestamps may not be
+#'  as reliable, particularly if your files are being moved or copied
+#'  some other way without actually being updated.
+#'
+#'  Hash comparisons can be more reliable, but unlike timestamps, have no
+#'  directionality -- we cannot tell which file is most recent.  Checking
+#'  hashes therefore only ensures we not bother uploading or downloading
+#'  a file identical to one we already have.'
 #' @export
 #'
 #' @examples
@@ -160,7 +190,8 @@ pb_pull <- function(repo = guess_repo(),
 pb_push <- function(repo = guess_repo(),
                     tag = "latest",
                     overwrite = TRUE,
-                    manifest = ".manifest.json"){
+                    manifest = ".manifest.json",
+                    use_timestamps = FALSE){
 
   create_manifest(manifest)
 
@@ -175,7 +206,8 @@ pb_push <- function(repo = guess_repo(),
     pb_upload(repo = repo,
               file = f,
               tag = tag,
-              overwrite = overwrite)
+              overwrite = overwrite,
+              use_timestamps = use_timestamps)
   })
 
   ## Merge local manifest with GitHub manifest first.

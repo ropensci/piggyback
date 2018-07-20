@@ -1,5 +1,3 @@
-## FIXME consider supporting tag as part of repo string: user/repo@tag
-
 
 #' Download data from an existing release
 #'
@@ -40,19 +38,7 @@ pb_download <- function(file = NULL,
 
 
   x <- release_info(repo, tag)
-
-  # drop ignore
-  # enforce timestamp
-  # handle file = NULL
-  # return ids
-
-  df <- data.frame(
-    id = vapply(x$assets, `[[`, integer(1), "id"),
-    file_name = local_filename(vapply(x$assets, `[[`,
-                                      character(1), "name")),
-    timestamp = as.POSIXct(vapply(x$assets, `[[`,
-                                  character(1), "updated_at")),
-    stringsAsFactors = FALSE)
+  df <- rectangle_info(x)
 
   if(!is.null(file)){
     i <- which(df$file_name %in% file)
@@ -183,24 +169,36 @@ pb_upload <- function(file,
                       tag = "latest",
                       name = NULL,
                       overwrite = FALSE,
+                      use_timestamps = TRUE,
                       .token = get_token()){
 
   if(is.null(name)){
+    ## name is name on GitHub, technically need not be name of local file
     name <- asset_filename(file)
   }
 
   x <- release_info(repo, tag)
+  df <- rectangle_info(x)
+
+  i <- which(df$file_name == name)
+
+  if(length(i) > 0){ # File of same name is on GitHub
+
+    if(use_timestamps){
+      local_timestamp <- fs::file_info(file)$modification_time
+
+      update <- local_timestamp > df[i,"timestamp"]
+      if(!update){
+        message(paste("more recent version of", file, "found on GitHub, not uploading"))
+        return(NULL)
+      }
+
+    }
 
   if(overwrite){
-    ## Get id for file
-    filenames <- vapply(x$assets, `[[`, character(1), "name")
-    ids <- vapply(x$assets, `[[`, integer(1), "id")
-
-    if(name %in% filenames){
-      i <- which(filenames == name)
       ## If we find matching id, Delete file from release.
       gh("DELETE /repos/:owner/:repo/releases/assets/:id",
-         owner = x$owner, repo = x$repo, id = ids[i], .token = .token)
+         owner = x$owner, repo = x$repo, id = df$id[i], .token = .token)
     }
   }
 
@@ -276,6 +274,9 @@ pb_list <- function(repo = guess_repo(),
 #'
 #' @inheritParams pb_upload
 #' @param verbose should we message if file not found? (default FALSE)
+#' @param use_timestamps If `TRUE`, then files will only be downloaded
+#' if timestamp on GitHub is newer than the local timestamp (if `overwrite=TRUE`).
+#' Defaults to `TRUE`.
 #' @return `TRUE` (invisibly) if a file is found and deleted.
 #' Otherwise, returns `NULL` (invisibly) if no file matching the name was found.
 #' @export
@@ -366,6 +367,16 @@ release_info <- function(repo = guess_repo(), tag="latest"){
   out$repo <-  r[[2]]
   out$tag <- tag
   out
+}
+
+rectangle_info <- function(x){
+data.frame(
+  id = vapply(x$assets, `[[`, integer(1), "id"),
+  file_name = local_filename(vapply(x$assets, `[[`,
+                                    character(1), "name")),
+  timestamp = as.POSIXct(vapply(x$assets, `[[`,
+                                character(1), "updated_at")),
+  stringsAsFactors = FALSE)
 }
 
 
