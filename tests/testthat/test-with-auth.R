@@ -28,7 +28,7 @@ testthat::test_that("We can push and pull data",{
 
   ##  Setup
   cur <- getwd()
-  tmp <- fs::path_temp("piggyback-test")
+  tmp <- fs::path(tempfile(), "pb_test")
   fs::dir_create(tmp)
   setwd(tmp)
   if(packageVersion("git2r") <= "0.21.0"){
@@ -88,3 +88,4 @@ testthat::test_that(
     testthat::expect_error(
       pb_new_release("cboettig/not_a_repo", "v2.0"), "404")
   })
+

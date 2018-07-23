@@ -1,5 +1,5 @@
 Package: piggyback
-Version: 0.0.0.9000
+Version: 0.0.0.9900
 Title: Managing Larger Data on a GitHub Repository
 Description: Because larger (> 50 MB) data files cannot easily be committed to git,
   a different approach is required to manage data associated with an analysis in a 
@@ -32,6 +32,7 @@ Imports:
     clisymbols,
     magrittr
 Suggests:
+    spelling,
     readr,
     covr,
     testthat,
@@ -41,3 +42,4 @@ Suggests:
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1.9000
 Roxygen: list(markdown = TRUE)
+Language: en-US

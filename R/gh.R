@@ -1,5 +1,3 @@
-## FIXME consider supporting tag as part of repo string: user/repo@tag
-
 
 #' Download data from an existing release
 #'
@@ -11,10 +9,13 @@
 #' Should be a directory or a list of filenames the same length as `file` vector.
 #' Can include paths to files, but any directories in that path must already exist.
 #' @param tag tag for the GitHub release to which this data is attached
-#' @param overwrite default `TRUE`, should any local files of the same name be overwritten?
+#' @param overwrite Should any local files of the same name be overwritten? default `TRUE`.
 #' @param ignore a list of files to ignore (if downloading "all" because `file=NULL`).
 #' by default, "manifest.json" is ignored as this file is created and used only for
-#' avoiding redundant file transfer by `pb_push` and `pb_pull`
+#' avoiding redundant file transfer by [pb_push()] and [pb_pull()]
+#' @param use_timestamps If `TRUE`, then files will only be downloaded
+#' if timestamp on GitHub is newer than the local timestamp (if `overwrite=TRUE`).
+#' Defaults to `TRUE`.
 #' @importFrom httr GET add_headers write_disk
 #' @importFrom gh gh
 #' @importFrom fs dir_create
@@ -31,46 +32,63 @@ pb_download <- function(file = NULL,
                         repo = guess_repo(),
                         tag = "latest",
                         overwrite = TRUE,
-                        ignore = "manifest.json"){
+                        ignore = "manifest.json",
+                        use_timestamps = TRUE){
 
-  ## FIXME revisit using path escape logic!!
+
 
   x <- release_info(repo, tag)
-  id <- vapply(x$assets, `[[`, integer(1), "id")
-  gh_file_names <- vapply(x$assets, `[[`, character(1), "name")
-  file_names <- local_filename(gh_file_names)
+  df <- rectangle_info(x)
 
   if(!is.null(file)){
-    i <- which(file_names %in% file)
-    id <- id[i]
+    i <- which(df$file_name %in% file)
+    if(length(i) < 1)
+      stop(paste("file(s)",
+                 paste(crayon::blue(file), collapse=" "),
+                       "not found in repo",
+                       crayon::blue(repo)))
+
+    df <- df[i,]
   } else {
-    i <- which(file_names %in% ignore)
-    if(length(i) > 1){
-      file_names <- file_names[-i]
-      id <- id[-i]
+    i <- which(df$file_name %in% ignore)
+    if(length(i) >= 1){
+      df <- df[-i,]
     }
-    file <- file_names
+    file <- df$file_name
   }
+
+
+
   ## if dest not provided, we will write
-  if(length(dest) <= 1){
-    i <- which(file_names %in% file)
+  if(length(dest) == 1){
+    i <- which(df$file_name %in% file)
     ## Make sure dest dir exists!
-    dest <- fs::path_rel(file.path(dest, file_names[i]))
+    dest <- fs::path_rel(file.path(dest, df$file_name[i]))
     fs::dir_create(fs::path_dir(dest))
+  }
+
+  if(use_timestamps){
+    local_timestamp <- fs::file_info(dest)$modification_time
+    update <- df$timestamp > local_timestamp
+    update[is.na(update)] <- TRUE # we'll download if missing locally
+    df <- df[update,]
+
+    if(dim(df)[[1]] < 1){
+      message(paste("All files up-to-date already\n"))
+    }
 
   }
 
-  for(i in seq_along(id)){
-    resp <- gh_download_asset(x$owner,
-                              x$repo,
-                              id=id[i],
-                              destfile = dest[i],
-                              overwrite = overwrite)
+  lapply(seq_along(df$id), function(i)
+    gh_download_asset(x$owner,
+                      x$repo,
+                      id = df$id[i],
+                      destfile = dest[i],
+                      overwrite = overwrite)
 
-    httr::stop_for_status(resp)
-  }
-  invisible(resp)
+  )
 }
+
 
 #' Get the download url of a given file
 #'
@@ -88,6 +106,8 @@ pb_download_url <- function(file = NULL,
                             tag = "latest"){
 
   x <- release_info(repo, tag)
+
+
   gh_file_names <- vapply(x$assets, `[[`, character(1), "name")
   file_names <- local_filename(gh_file_names)
 
@@ -114,6 +134,7 @@ gh_download_asset <- function(owner,
                     httr::add_headers(Accept = "application/octet-stream"),
                     httr::write_disk(destfile, overwrite = overwrite),
                     httr::progress("down"))
+  ## handle error cases? resp not found
   httr::stop_for_status(resp)
   invisible(resp)
 }
@@ -130,6 +151,9 @@ gh_download_asset <- function(owner,
 #' `file` (i.e. filename without directory)
 #' @param overwrite overwrite any existing file with the same name already
 #'  attached to the on release?
+#' @param use_timestamps If `TRUE`, then files will only be downloaded
+#' if timestamp on GitHub is newer than the local timestamp (if `overwrite=TRUE`).
+#' Defaults to `TRUE`.
 #' @param .token GitHub authentication token. Typically set from an environmental
 #' variable, e.g. `Sys.setenv(GITHUB_TOKEN = "xxxxx")`, which helps prevent
 #' accidental disclosure of a secret token when sharing scripts.
@@ -148,24 +172,36 @@ pb_upload <- function(file,
                       tag = "latest",
                       name = NULL,
                       overwrite = FALSE,
+                      use_timestamps = TRUE,
                       .token = get_token()){
 
   if(is.null(name)){
+    ## name is name on GitHub, technically need not be name of local file
     name <- asset_filename(file)
   }
 
   x <- release_info(repo, tag)
+  df <- rectangle_info(x)
+
+  i <- which(df$file_name == name)
+
+  if(length(i) > 0){ # File of same name is on GitHub
+
+    if(use_timestamps){
+      local_timestamp <- fs::file_info(file)$modification_time
+
+      update <- local_timestamp > df[i,"timestamp"]
+      if(!update){
+        message(paste("more recent version of", file, "found on GitHub, not uploading"))
+        return(NULL)
+      }
+
+    }
 
   if(overwrite){
-    ## Get id for file
-    filenames <- vapply(x$assets, `[[`, character(1), "name")
-    ids <- vapply(x$assets, `[[`, integer(1), "id")
-
-    if(name %in% filenames){
-      i <- which(filenames == name)
       ## If we find matching id, Delete file from release.
       gh("DELETE /repos/:owner/:repo/releases/assets/:id",
-         owner = x$owner, repo = x$repo, id = ids[i], .token = .token)
+         owner = x$owner, repo = x$repo, id = df$id[i], .token = .token)
     }
   }
 
@@ -240,7 +276,7 @@ pb_list <- function(repo = guess_repo(),
 #' Delete an asset attached to a release
 #'
 #' @inheritParams pb_upload
-#' @param verbose should we message if file not found? (default faluse)
+#' @param verbose should we message if file not found? (default FALSE)
 #' @return `TRUE` (invisibly) if a file is found and deleted.
 #' Otherwise, returns `NULL` (invisibly) if no file matching the name was found.
 #' @export
@@ -286,19 +322,61 @@ pb_delete <- function(file,
 
 
 ##################### Generic helpers ##################
+
+
+
 release_info <- function(repo = guess_repo(), tag="latest"){
+
+  ## Support error handling for: repo not found, tag not found,
+  ## token issues
+
   r <- strsplit(repo, "/")[[1]]
-  if(tag == "latest"){
-    out <- gh("/repos/:owner/:repo/releases/latest",
-              owner = r[[1]], repo = r[[2]])
-  } else {
-    out <- gh("/repos/:owner/:repo/releases/tags/:tag",
-              owner = r[[1]], repo = r[[2]], tag = tag)
+  if(length(r) != 2){
+    stop(paste("Could not parse", r, "as a repository",
+               "Make sure you have used the format:",
+               crayon::blue$bold("owner/repo")))
   }
+
+  err <- paste(
+    "No", crayon::blue$bold(tag),
+    "release for repository",
+    crayon::blue$bold(paste0(r[[1]], "/", r[[2]])),
+    "could be found.",
+    "Do you need to create a release first?",
+    "If this is a private repository,",
+    "confirm you have set a GITHUB_TOKEN"
+  )
+
+
+  ## FIXME: determine if repository exists separately from if tag
+  ## exists, and handle the different errors explicitly.
+
+  maybe({
+
+    if(tag == "latest"){
+      out <- gh("/repos/:owner/:repo/releases/latest",
+                owner = r[[1]], repo = r[[2]])
+    } else {
+      out <- gh("/repos/:owner/:repo/releases/tags/:tag",
+                owner = r[[1]], repo = r[[2]], tag = tag)
+    }
+
+  }, otherwise = stop(err))
+
   out$owner <- r[[1]]
   out$repo <-  r[[2]]
   out$tag <- tag
   out
+}
+
+rectangle_info <- function(x){
+data.frame(
+  id = vapply(x$assets, `[[`, integer(1), "id"),
+  file_name = local_filename(vapply(x$assets, `[[`,
+                                    character(1), "name")),
+  timestamp = as.POSIXct(vapply(x$assets, `[[`,
+                                character(1), "updated_at")),
+  stringsAsFactors = FALSE)
 }
 
 
@@ -364,3 +442,17 @@ pb_new_release <- function(repo = guess_repo(),
   release <- httr::content(resp)
 }
 
+
+maybe <- function(expr, otherwise, quiet = TRUE) {
+  if (missing(otherwise)) {
+    try(expr, silent = quiet)
+  } else {
+    tryCatch(expr,
+             error = function(e) {
+               if (!quiet)
+                 message("Error: ", e$message)
+               otherwise
+             }
+    )
+  }
+}

@@ -14,7 +14,7 @@ the current repo if not specified.}
 
 \item{ignore}{a list of files to ignore (if downloading "all" because \code{file=NULL}).
 by default, "manifest.json" is ignored as this file is created and used only for
-avoiding redundant file transfer by \code{pb_push} and \code{pb_pull}}
+avoiding redundant file transfer by \code{\link[=pb_push]{pb_push()}} and \code{\link[=pb_pull]{pb_pull()}}}
 }
 \value{
 a character vector of release asset names, (normalized to local paths)

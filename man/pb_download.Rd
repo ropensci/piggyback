@@ -5,7 +5,8 @@
 \title{Download data from an existing release}
 \usage{
 pb_download(file = NULL, dest = ".", repo = guess_repo(),
-  tag = "latest", overwrite = TRUE, ignore = "manifest.json")
+  tag = "latest", overwrite = TRUE, ignore = "manifest.json",
+  use_timestamps = TRUE)
 }
 \arguments{
 \item{file}{name or vector of names of files to be downloaded. If \code{NULL},
@@ -20,11 +21,15 @@ the current repo if not specified.}
 
 \item{tag}{tag for the GitHub release to which this data is attached}
 
-\item{overwrite}{default \code{TRUE}, should any local files of the same name be overwritten?}
+\item{overwrite}{Should any local files of the same name be overwritten? default \code{TRUE}.}
 
 \item{ignore}{a list of files to ignore (if downloading "all" because \code{file=NULL}).
 by default, "manifest.json" is ignored as this file is created and used only for
-avoiding redundant file transfer by \code{pb_push} and \code{pb_pull}}
+avoiding redundant file transfer by \code{\link[=pb_push]{pb_push()}} and \code{\link[=pb_pull]{pb_pull()}}}
+
+\item{use_timestamps}{If \code{TRUE}, then files will only be downloaded
+if timestamp on GitHub is newer than the local timestamp (if \code{overwrite=TRUE}).
+Defaults to \code{TRUE}.}
 }
 \description{
 Download data from an existing release
