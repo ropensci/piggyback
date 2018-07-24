@@ -3,7 +3,9 @@
 testthat::test_that(
   "upload obeys timestamp only when newer",
   {
-    testthat::skip_on_cran()
+
+    testthat::skip_if(piggyback:::get_token() == "")
+    testthat::skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
 
     readr::write_tsv(datasets::mtcars, "mtcars2.tsv.gz")
     testthat::expect_silent(
