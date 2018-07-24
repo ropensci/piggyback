@@ -326,9 +326,8 @@ pb_list <- function(repo = guess_repo(),
 #'
 pb_delete <- function(file,
                       repo = guess_repo(),
-                      tag="latest",
-                      .token = get_token(),
-                      verbose = FALSE){
+                      tag = "latest",
+                      .token = get_token()){
   x <- release_info(repo, tag, .token)
 
   name <- asset_filename(file)
@@ -344,7 +343,6 @@ pb_delete <- function(file,
        owner = x$owner, repo = x$repo, id = ids[i], .token = .token)
     out <- TRUE
   } else {
-    if(verbose)
       message(paste(name, "not found on GitHub"))
   }
 
