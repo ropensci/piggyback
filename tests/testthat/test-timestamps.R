@@ -11,12 +11,14 @@ testthat::test_that(
                        repo = "cboettig/piggyback",
                        tag = "v0.0.1",
                        overwrite = TRUE,
-                       show_progress = FALSE))
+                       show_progress = FALSE,
+                       use_timestamps = TRUE))
     testthat::expect_message(
       out <- pb_upload(file = "mtcars2.tsv.gz",
                        repo = "cboettig/piggyback",
                        tag = "v0.0.1",
-                       overwrite = TRUE),
+                       overwrite = TRUE,
+                       use_timestamps = TRUE),
       "more recent version of"
     )
 
