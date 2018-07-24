@@ -217,21 +217,13 @@ pb_push <- function(repo = guess_repo(),
   })
 
   ## Merge local manifest with GitHub manifest first.
-
-  ## Upload the manifest, quietly
-
-  s <- tempfile()
-  sink(s)
-  ## manifest name cannot start with . in upload
   m <- file.path(usethis::proj_get(), basename(manifest))
   pb_upload(repo = repo,
             file = m,
             tag = tag,
-            overwrite = TRUE)
-
-  ## tidy up
-  unlink(s)
-  sink()
+            use_timestamps = FALSE,
+            overwrite = TRUE,
+            show_progress = FALSE)
 
   unlink(manifest)
   invisible(TRUE)
@@ -257,20 +249,23 @@ new_data <- function(mode = c("push", "pull"),
   } else {
     ## Read in the online manifest, silently and cleanly!
     tmp <- tempdir()
-    s <- tempfile()
-    sink(s)
+    #s <- tempfile()
+    #sink(s)
     ## here we go
     pb_download(repo = repo,
                 file = manifest,
                 dest = tmp,
-                tag = tag)
+                tag = tag,
+                ignore = "",
+                use_timestamps = FALSE,
+                show_progress = FALSE)
     github_manifest <- jsonlite::read_json(
       file.path(tmp, manifest))
 
     ## Tidy up
     unlink(tmp)
-    sink()
-    unlink(s)
+    #sink()
+    #unlink(s)
   }
   ## Read in local manifest
   m <- file.path(usethis::proj_get(), manifest)

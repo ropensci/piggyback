@@ -54,7 +54,7 @@ pb_download <- function(file = NULL,
   if(!is.null(file)){
     i <- which(df$file_name %in% file)
     if(length(i) < 1)
-      stop(paste("file(s)",
+      warning(paste("file(s)",
                  paste(crayon::blue(file), collapse=" "),
                        "not found in repo",
                        crayon::blue(repo)))
@@ -211,7 +211,7 @@ pb_upload <- function(file,
   x <- release_info(repo, tag, .token)
   df <- rectangle_info(x)
 
-  i <- which(df$file_name == file)
+  i <- which(df$file_name == name)
 
   if(length(i) > 0){ # File of same name is on GitHub
 

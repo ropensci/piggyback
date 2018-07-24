@@ -63,7 +63,7 @@ testthat::test_that(
   {
 
     testthat::skip_on_cran()
-    testthat::expect_error(
+    testthat::expect_warning(
       out <- pb_download(repo = "cboettig/piggyback",
                        file = "not-a-file",
                        tag = "v0.0.1"),
