@@ -19,7 +19,7 @@ testthat::test_that(
       out <- pb_upload(file = "mtcars2.tsv.gz",
                        repo = "cboettig/piggyback",
                        tag = "v0.0.1",
-                       overwrite = TRUE,
+                       overwrite = FALSE,
                        show_progress = FALSE,
                        use_timestamps = TRUE))
     testthat::expect_message(
