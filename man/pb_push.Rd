@@ -5,7 +5,7 @@
 \title{Push data to GitHub}
 \usage{
 pb_push(repo = guess_repo(), tag = "latest", overwrite = TRUE,
-  manifest = ".manifest.json", use_timestamps = FALSE)
+  manifest = "manifest.json", use_timestamps = FALSE)
 }
 \arguments{
 \item{repo}{Name of the repo on GitHub (\code{owner/repo}, i.e.

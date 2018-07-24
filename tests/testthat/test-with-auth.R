@@ -48,19 +48,21 @@ testthat::test_that("We can push and pull data",{
   readr::write_tsv(datasets::iris, "data/iris.tsv.xz")
 
   pb_track("data/*")
-  testthat::expect_true(pb_push(repo = "cboettig/piggyback"))
-  testthat::expect_true(pb_pull(repo = "cboettig/piggyback"))
+  testthat::expect_true(
+    pb_push(repo = "cboettig/piggyback", tag = "v0.0.3"))
+  testthat::expect_true(
+    pb_pull(repo = "cboettig/piggyback", tag = "v0.0.3"))
 
   testthat::expect_true(pb_pull())
   testthat::expect_true(pb_push())
   pb_push()
   pb_pull()
 
-  testthat::expect_true(pb_pull(tag="v0.0.1"))
+  testthat::expect_true(pb_pull(tag="v0.0.3"))
 
   ## Should error if tag already exists
   testthat::expect_error(
-    gh_new_release(repo = "cboettig/piggyback", tag = "v0.0.1"))
+    gh_new_release(repo = "cboettig/piggyback", tag = "v0.0.3"))
 
    ## tare down
   setwd(cur)

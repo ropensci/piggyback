@@ -2,7 +2,7 @@
 ## of a file with the same name are not identical.  It does not tell us which
 ## one is more recent.
 
-## FIXME?: this approach assumes that .manifest.json is not version managed,
+## FIXME?: this approach assumes that manifest.json is not version managed,
 ## but is treated like another data asset attached only to the release.
 ## Alternately, this file could be committed to GitHub.  We could potentially
 ## then use `git` logic to decide if the local manifeset or GitHub manifest
@@ -37,9 +37,9 @@ pb_track <- function(glob = NULL, repo_root = usethis::proj_get()){
     write_union(usethis::proj_get(),
                 ".pbattributes",
                 glob)
-    usethis::use_build_ignore(c(".pbattributes", ".manifest.json"))
+    usethis::use_build_ignore(c(".pbattributes", "manifest.json"))
     if(!is.null(git2r::discover_repository("."))){
-      usethis::use_git_ignore(".manifest.json")
+      usethis::use_git_ignore("manifest.json")
       usethis::use_git_ignore(glob)
     }
   }
@@ -57,7 +57,7 @@ pb_track <- function(glob = NULL, repo_root = usethis::proj_get()){
 #' @importFrom fs dir_ls
 #' @importFrom jsonlite write_json
 #' @importFrom magrittr %>%
-create_manifest <- function(manifest = ".manifest.json"){
+create_manifest <- function(manifest = "manifest.json"){
 
   proj_dir <- usethis::proj_get()
   files <- pb_track()
@@ -131,7 +131,7 @@ match_globs <- function(globs, proj_dir = usethis::proj_get()){
 pb_pull <- function(repo = guess_repo(),
                     tag = "latest",
                     overwrite = TRUE,
-                    manifest = ".manifest.json",
+                    manifest = "manifest.json",
                     use_timestamps = FALSE)
                     {
 
@@ -196,7 +196,7 @@ pb_pull <- function(repo = guess_repo(),
 pb_push <- function(repo = guess_repo(),
                     tag = "latest",
                     overwrite = TRUE,
-                    manifest = ".manifest.json",
+                    manifest = "manifest.json",
                     use_timestamps = FALSE){
 
   create_manifest(manifest)
@@ -243,12 +243,12 @@ pb_push <- function(repo = guess_repo(),
 new_data <- function(mode = c("push", "pull"),
                      repo = guess_repo(),
                      tag = "latest",
-                     manifest = ".manifest.json"){
+                     manifest = "manifest.json"){
 
   ## github name for files (i.e. manifest) cannot start with `.`
   mode <- match.arg(mode)
   id <- gh_file_id(repo = repo,
-                   file = gsub("^\\.", "", manifest),
+                   file = manifest,
                    tag = tag)
 
   ## If no manifest yet on GitHub, then nothing to exclude
@@ -261,11 +261,11 @@ new_data <- function(mode = c("push", "pull"),
     sink(s)
     ## here we go
     pb_download(repo = repo,
-                file = gsub("^\\.", "", manifest),
+                file = manifest,
                 dest = tmp,
                 tag = tag)
     github_manifest <- jsonlite::read_json(
-      file.path(tmp, gsub("^\\.", "", manifest)))
+      file.path(tmp, manifest))
 
     ## Tidy up
     unlink(tmp)

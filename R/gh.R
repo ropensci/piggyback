@@ -260,7 +260,7 @@ asset_filename <- function(x, start = "."){
 }
 
 local_filename <- function(x){
-  x <- gsub("^manifest.json$", ".manifest.json", x)
+  #x <- gsub("^manifest.json$", ".manifest.json", x)
 
   gsub("\\.2f", .Platform$file.sep, x)
 }

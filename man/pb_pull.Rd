@@ -5,7 +5,7 @@
 \title{Pull data from GitHub}
 \usage{
 pb_pull(repo = guess_repo(), tag = "latest", overwrite = TRUE,
-  manifest = ".manifest.json", use_timestamps = FALSE)
+  manifest = "manifest.json", use_timestamps = FALSE)
 }
 \arguments{
 \item{repo}{Name of the repo on GitHub (\code{owner/repo}, i.e.
