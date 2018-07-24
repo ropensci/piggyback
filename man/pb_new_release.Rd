@@ -32,7 +32,8 @@ a draft (unpublished) release.}
 identify the release as a pre-release.}
 
 \item{.token}{GitHub authentication token. Typically set from an environmental
-variable, e.g. \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")}, which helps prevent
+variable, e.g. in a \code{.Renviron} file or with \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")},
+which helps prevent
 accidental disclosure of a secret token when sharing scripts.}
 }
 \description{

@@ -16,6 +16,11 @@
 #' @param use_timestamps If `TRUE`, then files will only be downloaded
 #' if timestamp on GitHub is newer than the local timestamp (if `overwrite=TRUE`).
 #' Defaults to `TRUE`.
+#' @param show_progress logical, should we show progress bar for download? default TRUE.
+#' @param .token GitHub authentication token. Typically set from an environmental
+#' variable, e.g. in a `.Renviron` file or with `Sys.setenv(GITHUB_TOKEN = "xxxxx")`,
+#' which helps prevent
+#' accidental disclosure of a secret token when sharing scripts.
 #' @importFrom httr GET add_headers write_disk
 #' @importFrom gh gh
 #' @importFrom fs dir_create
@@ -33,11 +38,17 @@ pb_download <- function(file = NULL,
                         tag = "latest",
                         overwrite = TRUE,
                         ignore = "manifest.json",
-                        use_timestamps = TRUE){
+                        use_timestamps = TRUE,
+                        show_progress = TRUE,
+                        .token = get_token()){
+
+  progress <- httr::progress("down")
+  if(!show_progress){
+    progress <- NULL
+  }
 
 
-
-  x <- release_info(repo, tag)
+  x <- release_info(repo, tag, .token)
   df <- rectangle_info(x)
 
   if(!is.null(file)){
@@ -84,7 +95,8 @@ pb_download <- function(file = NULL,
                       x$repo,
                       id = df$id[i],
                       destfile = dest[i],
-                      overwrite = overwrite)
+                      overwrite = overwrite,
+                      progress = progress)
 
   )
 }
@@ -103,9 +115,11 @@ pb_download <- function(file = NULL,
 #' }
 pb_download_url <- function(file = NULL,
                             repo = guess_repo(),
-                            tag = "latest"){
+                            tag = "latest",
+                            .token = .token){
 
-  x <- release_info(repo, tag)
+
+  x <- release_info(repo, tag, .token)
 
 
   gh_file_names <- vapply(x$assets, `[[`, character(1), "name")
@@ -126,14 +140,21 @@ gh_download_asset <- function(owner,
                               id,
                               destfile,
                               overwrite=TRUE,
-                              .token = get_token()
+                              .token = get_token(),
+                              progress = httr::progress("down")
                               ){
+  if(fs::file_exists(destfile) && !overwrite){
+    warning(paste(destfile, "already exists, skipping download.",
+                  "Set overwrite = TRUE to overwrite files."))
+    return(NULL)
+  }
+
   resp <- httr::GET(paste0("https://api.github.com/repos/", owner,"/",
                     repo, "/", "releases/assets/", id,
                     "?access_token=", .token),
                     httr::add_headers(Accept = "application/octet-stream"),
                     httr::write_disk(destfile, overwrite = overwrite),
-                    httr::progress("down"))
+                    progress)
   ## handle error cases? resp not found
   httr::stop_for_status(resp)
   invisible(resp)
@@ -151,11 +172,13 @@ gh_download_asset <- function(owner,
 #' `file` (i.e. filename without directory)
 #' @param overwrite overwrite any existing file with the same name already
 #'  attached to the on release?
-#' @param use_timestamps If `TRUE`, then files will only be downloaded
+#' @param use_timestamps logical, if `TRUE`, then files will only be downloaded
 #' if timestamp on GitHub is newer than the local timestamp (if `overwrite=TRUE`).
-#' Defaults to `TRUE`.
+#' Defaults to `TRUE`. NOTE: GitHub only provides timestamps
+#' @param show_progress logical, show a progress bar be shown for uploading? Default true.
 #' @param .token GitHub authentication token. Typically set from an environmental
-#' variable, e.g. `Sys.setenv(GITHUB_TOKEN = "xxxxx")`, which helps prevent
+#' variable, e.g. in a `.Renviron` file or with `Sys.setenv(GITHUB_TOKEN = "xxxxx")`,
+#' which helps prevent
 #' accidental disclosure of a secret token when sharing scripts.
 #' @examples
 #' \donttest{
@@ -173,14 +196,19 @@ pb_upload <- function(file,
                       name = NULL,
                       overwrite = FALSE,
                       use_timestamps = TRUE,
+                      show_progress = TRUE,
                       .token = get_token()){
+  progress <- httr::progress("up")
+  if(!show_progress){
+    progress <- NULL
+  }
 
   if(is.null(name)){
     ## name is name on GitHub, technically need not be name of local file
     name <- asset_filename(file)
   }
 
-  x <- release_info(repo, tag)
+  x <- release_info(repo, tag, .token)
   df <- rectangle_info(x)
 
   i <- which(df$file_name == name)
@@ -190,25 +218,32 @@ pb_upload <- function(file,
     if(use_timestamps){
       local_timestamp <- fs::file_info(file)$modification_time
 
-      update <- local_timestamp > df[i,"timestamp"]
-      if(!update){
-        message(paste("more recent version of", file, "found on GitHub, not uploading"))
+      no_update <- local_timestamp <= df[i,"timestamp"]
+      if(no_update){
+        message(paste("matching or more recent version of", file, "found on GitHub, not uploading"))
         return(NULL)
       }
 
     }
 
-  if(overwrite){
+    if(overwrite){
       ## If we find matching id, Delete file from release.
       gh("DELETE /repos/:owner/:repo/releases/assets/:id",
          owner = x$owner, repo = x$repo, id = df$id[i], .token = .token)
+    } else {
+      warning(paste("Skipping upload of", df$file_name[i], "as file exists on GitHub",
+                    repo, "and overwrite = FALSE"))
+      return(NULL)
     }
   }
 
 
-  r <- httr::POST(sub("\\{.+$", "", x$upload_url), query = list(name = name),
-                  body = httr::upload_file(file), httr::progress("up"),
+  r <- httr::POST(sub("\\{.+$", "", x$upload_url),
+                  query = list(name = name),
+                  body = httr::upload_file(file),
+                  progress,
                   httr::authenticate(.token, "x-oauth-basic", "basic"))
+
   cat("\n")
   httr::stop_for_status(r)
   invisible(r)
@@ -228,12 +263,12 @@ local_filename <- function(x){
 
 ## Helper routine:
 ## get the id of a file, or NA if file is not found in release assets
-gh_file_id <- function(repo, file, tag = "latest", name = NULL){
+gh_file_id <- function(repo, file, tag = "latest", name = NULL, .token = get_token()){
   if(is.null(name)){
     name <- asset_filename(file)
   }
 
-  x <- release_info(repo, tag)
+  x <- release_info(repo, tag, .token)
 
   filenames <- vapply(x$assets, `[[`, character(1), "name")
   ids <- vapply(x$assets, `[[`, integer(1), "id")
@@ -260,8 +295,9 @@ gh_file_id <- function(repo, file, tag = "latest", name = NULL){
 #' @export
 pb_list <- function(repo = guess_repo(),
                     tag="latest",
-                    ignore = "manifest.json"){
-  x <- release_info(repo, tag)
+                    ignore = "manifest.json",
+                    .token = get_token()){
+  x <- release_info(repo, tag, .token)
   file_names <- vapply(x$assets, `[[`, character(1), "name")
 
   i <- which(file_names %in% ignore)
@@ -293,7 +329,7 @@ pb_delete <- function(file,
                       tag="latest",
                       .token = get_token(),
                       verbose = FALSE){
-  x <- release_info(repo, tag)
+  x <- release_info(repo, tag, .token)
 
   name <- asset_filename(file)
 
@@ -325,7 +361,7 @@ pb_delete <- function(file,
 
 
 
-release_info <- function(repo = guess_repo(), tag="latest"){
+release_info <- function(repo = guess_repo(), tag="latest", .token = get_token()){
 
   ## Support error handling for: repo not found, tag not found,
   ## token issues
@@ -337,14 +373,14 @@ release_info <- function(repo = guess_repo(), tag="latest"){
                crayon::blue$bold("owner/repo")))
   }
 
-  err <- paste(
-    "No", crayon::blue$bold(tag),
-    "release for repository",
+  err <- paste0(
+    "Cannot access release ", crayon::blue$bold(tag),
+    " for repository ",
     crayon::blue$bold(paste0(r[[1]], "/", r[[2]])),
-    "could be found.",
-    "Do you need to create a release first?",
-    "If this is a private repository,",
-    "confirm you have set a GITHUB_TOKEN"
+    ".",
+    " Check that you have set a GITHUB_TOKEN and",
+    " that a release named ", crayon::blue$bold(tag),
+    " exists on your GitHub repository page."
   )
 
 
@@ -355,10 +391,10 @@ release_info <- function(repo = guess_repo(), tag="latest"){
 
     if(tag == "latest"){
       out <- gh("/repos/:owner/:repo/releases/latest",
-                owner = r[[1]], repo = r[[2]])
+                owner = r[[1]], repo = r[[2]], .token = .token)
     } else {
       out <- gh("/repos/:owner/:repo/releases/tags/:tag",
-                owner = r[[1]], repo = r[[2]], tag = tag)
+                owner = r[[1]], repo = r[[2]], tag = tag, .token = .token)
     }
 
   }, otherwise = stop(err))
@@ -369,12 +405,13 @@ release_info <- function(repo = guess_repo(), tag="latest"){
   out
 }
 
+#' @importFrom lubridate as_datetime
 rectangle_info <- function(x){
 data.frame(
   id = vapply(x$assets, `[[`, integer(1), "id"),
   file_name = local_filename(vapply(x$assets, `[[`,
                                     character(1), "name")),
-  timestamp = as.POSIXct(vapply(x$assets, `[[`,
+  timestamp = lubridate::as_datetime(vapply(x$assets, `[[`,
                                 character(1), "updated_at")),
   stringsAsFactors = FALSE)
 }

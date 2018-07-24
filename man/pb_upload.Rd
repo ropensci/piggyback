@@ -5,7 +5,8 @@
 \title{Upload data to an existing release}
 \usage{
 pb_upload(file, repo = guess_repo(), tag = "latest", name = NULL,
-  overwrite = FALSE, use_timestamps = TRUE, .token = get_token())
+  overwrite = FALSE, use_timestamps = TRUE, show_progress = TRUE,
+  .token = get_token())
 }
 \arguments{
 \item{file}{path to file to be uploaded}
@@ -21,12 +22,15 @@ repo if not specified.}
 \item{overwrite}{overwrite any existing file with the same name already
 attached to the on release?}
 
-\item{use_timestamps}{If \code{TRUE}, then files will only be downloaded
+\item{use_timestamps}{logical, if \code{TRUE}, then files will only be downloaded
 if timestamp on GitHub is newer than the local timestamp (if \code{overwrite=TRUE}).
-Defaults to \code{TRUE}.}
+Defaults to \code{TRUE}. NOTE: GitHub only provides timestamps}
+
+\item{show_progress}{logical, show a progress bar be shown for uploading? Default true.}
 
 \item{.token}{GitHub authentication token. Typically set from an environmental
-variable, e.g. \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")}, which helps prevent
+variable, e.g. in a \code{.Renviron} file or with \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")},
+which helps prevent
 accidental disclosure of a secret token when sharing scripts.}
 }
 \description{

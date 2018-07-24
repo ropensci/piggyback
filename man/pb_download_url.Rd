@@ -4,7 +4,8 @@
 \alias{pb_download_url}
 \title{Get the download url of a given file}
 \usage{
-pb_download_url(file = NULL, repo = guess_repo(), tag = "latest")
+pb_download_url(file = NULL, repo = guess_repo(), tag = "latest",
+  .token = .token)
 }
 \arguments{
 \item{file}{name or vector of names of files to be downloaded. If \code{NULL},
@@ -14,6 +15,11 @@ all assets attached to the release will be downloaded.}
 the current repo if not specified.}
 
 \item{tag}{tag for the GitHub release to which this data is attached}
+
+\item{.token}{GitHub authentication token. Typically set from an environmental
+variable, e.g. in a \code{.Renviron} file or with \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")},
+which helps prevent
+accidental disclosure of a secret token when sharing scripts.}
 }
 \value{
 the URL to download a file

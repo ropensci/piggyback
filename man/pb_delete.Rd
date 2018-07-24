@@ -16,7 +16,8 @@ repo if not specified.}
 \item{tag}{tag for the GitHub release to which this data should be attached.}
 
 \item{.token}{GitHub authentication token. Typically set from an environmental
-variable, e.g. \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")}, which helps prevent
+variable, e.g. in a \code{.Renviron} file or with \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")},
+which helps prevent
 accidental disclosure of a secret token when sharing scripts.}
 
 \item{verbose}{should we message if file not found? (default FALSE)}

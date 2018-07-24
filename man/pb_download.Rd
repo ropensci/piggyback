@@ -6,7 +6,7 @@
 \usage{
 pb_download(file = NULL, dest = ".", repo = guess_repo(),
   tag = "latest", overwrite = TRUE, ignore = "manifest.json",
-  use_timestamps = TRUE)
+  use_timestamps = TRUE, show_progress = TRUE, .token = get_token())
 }
 \arguments{
 \item{file}{name or vector of names of files to be downloaded. If \code{NULL},
@@ -30,6 +30,13 @@ avoiding redundant file transfer by \code{\link[=pb_push]{pb_push()}} and \code{
 \item{use_timestamps}{If \code{TRUE}, then files will only be downloaded
 if timestamp on GitHub is newer than the local timestamp (if \code{overwrite=TRUE}).
 Defaults to \code{TRUE}.}
+
+\item{show_progress}{logical, should we show progress bar for download? default TRUE.}
+
+\item{.token}{GitHub authentication token. Typically set from an environmental
+variable, e.g. in a \code{.Renviron} file or with \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")},
+which helps prevent
+accidental disclosure of a secret token when sharing scripts.}
 }
 \description{
 Download data from an existing release

@@ -4,7 +4,8 @@
 \alias{pb_list}
 \title{List all assets attached to a release}
 \usage{
-pb_list(repo = guess_repo(), tag = "latest", ignore = "manifest.json")
+pb_list(repo = guess_repo(), tag = "latest", ignore = "manifest.json",
+  .token = get_token())
 }
 \arguments{
 \item{repo}{Repository name in format "owner/repo". Will guess
@@ -15,6 +16,11 @@ the current repo if not specified.}
 \item{ignore}{a list of files to ignore (if downloading "all" because \code{file=NULL}).
 by default, "manifest.json" is ignored as this file is created and used only for
 avoiding redundant file transfer by \code{\link[=pb_push]{pb_push()}} and \code{\link[=pb_pull]{pb_pull()}}}
+
+\item{.token}{GitHub authentication token. Typically set from an environmental
+variable, e.g. in a \code{.Renviron} file or with \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")},
+which helps prevent
+accidental disclosure of a secret token when sharing scripts.}
 }
 \value{
 a character vector of release asset names, (normalized to local paths)

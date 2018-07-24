@@ -30,7 +30,8 @@ Imports:
     usethis,
     crayon,
     clisymbols,
-    magrittr
+    magrittr,
+    lubridate
 Suggests:
     spelling,
     readr,
