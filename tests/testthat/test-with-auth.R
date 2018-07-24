@@ -12,7 +12,8 @@ testthat::test_that("We can upload data",{
   out <- pb_upload(repo = "cboettig/piggyback",
                    file = "iris.tsv.gz",
                    tag = "v0.0.1",
-                   overwrite = TRUE)
+                   overwrite = TRUE,
+                   show_progress = FALSE)
   testthat::expect_is(out, "response")
 
   unlink("iris.tsv.gz")
@@ -69,18 +70,17 @@ testthat::test_that("We can push and pull data",{
 
 
 
-testthat::test_that(
-  "we do can optionally message when deleting non-existant files", {
+testthat::test_that("we can get a download url", {
 
-    testthat::skip_on_cran()
+  testthat::skip_if(piggyback:::get_token() == "")
+  testthat::skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
 
-    testthat::expect_silent(
-      pb_delete("not_a_file", repo = "cboettig/piggyback"))
-    testthat::expect_message(
-      pb_delete("not_a_file", repo = "cboettig/piggyback", verbose=TRUE),
-      "not found on GitHub")
-  })
-
+  x <- pb_download_url("data/iris.tsv.gz",
+                       repo = "cboettig/piggyback",
+                       tag = "v0.0.1",
+                       .token = piggyback:::get_token() )
+  testthat::expect_is(x, "character")
+})
 
 testthat::test_that(
   "we error when creating a release on non-existant repo", {

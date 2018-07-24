@@ -59,6 +59,22 @@ testthat::test_that(
 
 
 testthat::test_that(
+  "Attempt download non-existent file",
+  {
+
+    testthat::skip_on_cran()
+    testthat::expect_error(
+      out <- pb_download(repo = "cboettig/piggyback",
+                       file = "not-a-file",
+                       tag = "v0.0.1"),
+      "not found"
+
+    )
+    unlink("iris.tsv.gz")
+
+  })
+
+testthat::test_that(
   "Attempt upload to non-existent tag",
   {
 

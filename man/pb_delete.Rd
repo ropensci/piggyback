@@ -4,8 +4,7 @@
 \alias{pb_delete}
 \title{Delete an asset attached to a release}
 \usage{
-pb_delete(file, repo = guess_repo(), tag = "latest", .token = get_token(),
-  verbose = FALSE)
+pb_delete(file, repo = guess_repo(), tag = "latest", .token = get_token())
 }
 \arguments{
 \item{file}{path to file to be uploaded}
@@ -19,8 +18,6 @@ repo if not specified.}
 variable, e.g. in a \code{.Renviron} file or with \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")},
 which helps prevent
 accidental disclosure of a secret token when sharing scripts.}
-
-\item{verbose}{should we message if file not found? (default FALSE)}
 }
 \value{
 \code{TRUE} (invisibly) if a file is found and deleted.

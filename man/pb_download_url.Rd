@@ -5,7 +5,7 @@
 \title{Get the download url of a given file}
 \usage{
 pb_download_url(file = NULL, repo = guess_repo(), tag = "latest",
-  .token = .token)
+  .token = get_token())
 }
 \arguments{
 \item{file}{name or vector of names of files to be downloaded. If \code{NULL},
@@ -31,6 +31,6 @@ dependency on \code{piggyback} or authentication steps.
 }
 \examples{
 \donttest{
-pb_download_url("data/iris.tsv.gz", repo="cboettig/piggyback")
+pb_download_url("data/iris.tsv.gz", repo="cboettig/piggyback", tag = "v0.0.1")
 }
 }

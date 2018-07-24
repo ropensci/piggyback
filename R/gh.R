@@ -111,12 +111,12 @@ pb_download <- function(file = NULL,
 #' @return the URL to download a file
 #' @export
 #' @examples \donttest{
-#' pb_download_url("data/iris.tsv.gz", repo="cboettig/piggyback")
+#' pb_download_url("data/iris.tsv.gz", repo="cboettig/piggyback", tag = "v0.0.1")
 #' }
 pb_download_url <- function(file = NULL,
                             repo = guess_repo(),
                             tag = "latest",
-                            .token = .token){
+                            .token = get_token()){
 
 
   x <- release_info(repo, tag, .token)
@@ -312,7 +312,6 @@ pb_list <- function(repo = guess_repo(),
 #' Delete an asset attached to a release
 #'
 #' @inheritParams pb_upload
-#' @param verbose should we message if file not found? (default FALSE)
 #' @return `TRUE` (invisibly) if a file is found and deleted.
 #' Otherwise, returns `NULL` (invisibly) if no file matching the name was found.
 #' @export
