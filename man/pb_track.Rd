@@ -4,16 +4,17 @@
 \alias{pb_track}
 \title{Track data files of a given pattern or location}
 \usage{
-pb_track(glob, repo_root = usethis::proj_get())
+pb_track(glob = NULL, repo_root = usethis::proj_get())
 }
 \arguments{
 \item{glob}{vector of file names and/or glob pattern (e.g. \code{*.csv}, \code{data/*.csv})
-which will be tracked by piggyback.}
+which will be tracked by piggyback.  Omit (default \code{NULL}) to just return
+a list of files currently tracked.}
 
 \item{repo_root}{repository root, will be guessed by \code{usethis} otherwise.}
 }
 \value{
-input \code{globpath} (invisibly)
+list of tracked files (invisibly)
 }
 \description{
 Track data files of a given pattern or location

@@ -211,7 +211,7 @@ pb_upload <- function(file,
   x <- release_info(repo, tag, .token)
   df <- rectangle_info(x)
 
-  i <- which(df$file_name == name)
+  i <- which(df$file_name == file)
 
   if(length(i) > 0){ # File of same name is on GitHub
 
@@ -220,7 +220,8 @@ pb_upload <- function(file,
 
       no_update <- local_timestamp <= df[i,"timestamp"]
       if(no_update){
-        message(paste("matching or more recent version of", file, "found on GitHub, not uploading"))
+        message(paste("matching or more recent version of",
+                      file, "found on GitHub, not uploading"))
         return(NULL)
       }
 
@@ -228,7 +229,7 @@ pb_upload <- function(file,
 
     if(overwrite){
       ## If we find matching id, Delete file from release.
-      gh("DELETE /repos/:owner/:repo/releases/assets/:id",
+      gh::gh("DELETE /repos/:owner/:repo/releases/assets/:id",
          owner = x$owner, repo = x$repo, id = df$id[i], .token = .token)
     } else {
       warning(paste("Skipping upload of", df$file_name[i], "as file exists on GitHub",
@@ -251,13 +252,16 @@ pb_upload <- function(file,
 
 ## Map local paths to valid names for GitHub assets
 asset_filename <- function(x, start = "."){
-  # name relative to repo
   x <- fs::path_rel(x, start)
+  x <- gsub("^\\.", "", x)
+  # name relative to repo
   ## Cannot use %2f as html escape for slash
-  gsub(.Platform$file.sep, "\\.2f", x)
+  gsub(.Platform$file.sep, ".2f", x)
 }
 
 local_filename <- function(x){
+  x <- gsub("^manifest.json$", ".manifest.json", x)
+
   gsub("\\.2f", .Platform$file.sep, x)
 }
 

@@ -1,5 +1,1 @@
-*.tsv
-*.tsv.gz
-*.tif
-*.zip
 data/*

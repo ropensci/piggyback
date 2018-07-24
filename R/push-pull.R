@@ -18,11 +18,12 @@
 #' as to version control., with `git add .psattributes`.  Note that
 #' tracked file patterns will also be added to `.gitignore`.
 #' @param glob vector of file names and/or glob pattern (e.g. `*.csv`, `data/*.csv`)
-#' which will be tracked by piggyback.
+#' which will be tracked by piggyback.  Omit (default `NULL`) to just return
+#' a list of files currently tracked.
 #' @param repo_root repository root, will be guessed by `usethis` otherwise.
 #' @importFrom usethis use_git_ignore proj_get
 #' @importFrom fs path_join
-#' @return input `globpath` (invisibly)
+#' @return list of tracked files (invisibly)
 #' @export
 #' @examples
 #' \dontrun{
@@ -30,17 +31,27 @@
 #' pb_track(c("*.tsv", "*.tsv.gz"))
 #'
 #' }
-pb_track <- function(glob, repo_root = usethis::proj_get()){
+pb_track <- function(glob = NULL, repo_root = usethis::proj_get()){
 
-  write_union(usethis::proj_get(),
-              ".pbattributes",
-              glob)
-  usethis::use_build_ignore(c(".pbattributes", ".manifest.json"))
-  if(!is.null(git2r::discover_repository("."))){
-    usethis::use_git_ignore(".manifest.json")
-    usethis::use_git_ignore(glob)
+  if(!is.null(glob)){
+    write_union(usethis::proj_get(),
+                ".pbattributes",
+                glob)
+    usethis::use_build_ignore(c(".pbattributes", ".manifest.json"))
+    if(!is.null(git2r::discover_repository("."))){
+      usethis::use_git_ignore(".manifest.json")
+      usethis::use_git_ignore(glob)
+    }
   }
-  invisible(glob)
+
+
+  pbattrs <- fs::path_rel(".pbattributes", repo_root)
+  if (file.exists(pbattrs)) {
+    glob <- readLines(pbattrs, warn = FALSE)
+  } else {
+    glob <- character(0L)
+  }
+  invisible(match_globs(glob, repo_root))
 }
 
 #' @importFrom fs dir_ls
@@ -49,15 +60,9 @@ pb_track <- function(glob, repo_root = usethis::proj_get()){
 create_manifest <- function(manifest = ".manifest.json"){
 
   proj_dir <- usethis::proj_get()
-  pbattrs <- fs::path_rel(".pbattributes", proj_dir)
+  files <- pb_track()
 
-  if (file.exists(pbattrs)) {
-    glob <- readLines(pbattrs, warn = FALSE)
-  } else {
-    glob <- character(0L)
-  }
 
-  files <- match_globs(glob, proj_dir)
   hashes <- lapply(files, tools::md5sum)
   names(hashes) <- files
 
@@ -71,12 +76,13 @@ create_manifest <- function(manifest = ".manifest.json"){
 ## Helper function
 #' @importFrom fs path_rel path_filter
 match_globs <- function(globs, proj_dir = usethis::proj_get()){
+  unique(
   unname(unlist(lapply(globs, function(g){
   ## only match files (i.e. things we can hash)
   fs::dir_ls(path = proj_dir, recursive = TRUE, type = "file") %>%
     fs::path_rel(proj_dir) %>%
     fs::path_filter(glob = g)
-  })))
+  }))))
 }
 
 #' Pull data from GitHub
@@ -220,7 +226,6 @@ pb_push <- function(repo = guess_repo(),
   m <- file.path(usethis::proj_get(), basename(manifest))
   pb_upload(repo = repo,
             file = m,
-            name = gsub("^\\.", "", manifest),
             tag = tag,
             overwrite = TRUE)
 
