@@ -90,7 +90,7 @@ pb_download <- function(file = NULL,
 
   }
 
-  lapply(seq_along(df$id), function(i)
+  resp <- lapply(seq_along(df$id), function(i)
     gh_download_asset(x$owner,
                       x$repo,
                       id = df$id[i],
@@ -99,6 +99,7 @@ pb_download <- function(file = NULL,
                       progress = progress)
 
   )
+ invisible(resp)
 }
 
 
