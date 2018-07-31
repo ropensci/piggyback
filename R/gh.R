@@ -427,6 +427,7 @@ get_token <- function(warn=TRUE){
     if(warn) warning("Using default public GITHUB_TOKEN.
                      Please set your own token")
   }
+  pat
 }
 #####################################################
 

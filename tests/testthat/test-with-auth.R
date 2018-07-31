@@ -5,7 +5,8 @@ testthat::context("Requiring Authentication")
 
 
 testthat::test_that("We can upload data",{
-  testthat::skip_if(piggyback:::get_token() == "")
+  # public pat
+  testthat::skip_if(piggyback:::get_token() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
   testthat::skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
 
   data <- readr::write_tsv(datasets::iris, "iris.tsv.gz")
@@ -24,7 +25,8 @@ testthat::test_that("We can upload data",{
 
 testthat::test_that("We can push and pull data",{
 
-  testthat::skip_if(piggyback:::get_token() == "")
+  # public pat
+  testthat::skip_if(piggyback:::get_token() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
   testthat::skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
 
   ##  Setup
@@ -74,7 +76,8 @@ testthat::test_that("We can push and pull data",{
 
 testthat::test_that("we can get a download url", {
 
-  testthat::skip_if(piggyback:::get_token() == "")
+  # public pat
+  testthat::skip_if(piggyback:::get_token() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
   testthat::skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
 
   x <- pb_download_url("data/iris.tsv.gz",
