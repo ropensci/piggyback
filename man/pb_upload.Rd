@@ -6,7 +6,7 @@
 \usage{
 pb_upload(file, repo = guess_repo(), tag = "latest", name = NULL,
   overwrite = FALSE, use_timestamps = TRUE, show_progress = TRUE,
-  .token = get_token())
+  .token = get_token(), dir = ".")
 }
 \arguments{
 \item{file}{path to file to be uploaded}
@@ -32,6 +32,8 @@ Defaults to \code{TRUE}. NOTE: GitHub only provides timestamps}
 variable, e.g. in a \code{.Renviron} file or with \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")},
 which helps prevent
 accidental disclosure of a secret token when sharing scripts.}
+
+\item{dir}{directory relative to which file names should be based.}
 }
 \description{
 NOTE: you must first create a release if one does not already exists.

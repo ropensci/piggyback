@@ -49,7 +49,7 @@ testthat::test_that("We can push and pull data",{
   readr::write_tsv(datasets::mtcars, "data/mtcars.tsv.gz")
   readr::write_tsv(datasets::iris, "data/iris.tsv.xz")
 
-  pb_track("data/*")
+  x <- pb_track("data/*")
   testthat::expect_true(
     pb_push(repo = "cboettig/piggyback", tag = "v0.0.3"))
   testthat::expect_true(

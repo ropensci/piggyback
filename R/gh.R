@@ -181,6 +181,7 @@ gh_download_asset <- function(owner,
 #' variable, e.g. in a `.Renviron` file or with `Sys.setenv(GITHUB_TOKEN = "xxxxx")`,
 #' which helps prevent
 #' accidental disclosure of a secret token when sharing scripts.
+#' @param dir directory relative to which file names should be based.
 #' @examples
 #' \donttest{
 #' # Needs your real token to run
@@ -198,7 +199,8 @@ pb_upload <- function(file,
                       overwrite = FALSE,
                       use_timestamps = TRUE,
                       show_progress = TRUE,
-                      .token = get_token()){
+                      .token = get_token(),
+                      dir = "."){
   progress <- httr::progress("up")
   if(!show_progress){
     progress <- NULL
@@ -206,7 +208,7 @@ pb_upload <- function(file,
 
   if(is.null(name)){
     ## name is name on GitHub, technically need not be name of local file
-    name <- asset_filename(file)
+    name <- fs::path_rel(file, start = dir)
   }
 
   x <- release_info(repo, tag, .token)
@@ -241,7 +243,7 @@ pb_upload <- function(file,
 
 
   r <- httr::POST(sub("\\{.+$", "", x$upload_url),
-                  query = list(name = name),
+                  query = list(name = asset_filename(name)),
                   body = httr::upload_file(file),
                   progress,
                   httr::authenticate(.token, "x-oauth-basic", "basic"))

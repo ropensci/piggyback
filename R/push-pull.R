@@ -200,7 +200,7 @@ pb_push <- function(repo = guess_repo(),
                     use_timestamps = FALSE){
 
   create_manifest(manifest)
-
+  dir <- usethis::proj_get()
   files <- new_data(mode = "push",
                     tag = tag,
                     manifest = manifest,
@@ -213,7 +213,8 @@ pb_push <- function(repo = guess_repo(),
               file = f,
               tag = tag,
               overwrite = overwrite,
-              use_timestamps = use_timestamps)
+              use_timestamps = use_timestamps,
+              dir = dir)
   })
 
   ## Merge local manifest with GitHub manifest first.
@@ -223,7 +224,8 @@ pb_push <- function(repo = guess_repo(),
             tag = tag,
             use_timestamps = FALSE,
             overwrite = TRUE,
-            show_progress = FALSE)
+            show_progress = FALSE,
+            dir = dir)
 
   unlink(manifest)
   invisible(TRUE)
