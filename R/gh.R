@@ -201,7 +201,31 @@ gh_download_asset <- function(owner,
 #' }
 #' @importFrom httr progress upload_file POST stop_for_status
 #' @export
+#'
 pb_upload <- function(file,
+                      repo = guess_repo(),
+                      tag = "latest",
+                      name = NULL,
+                      overwrite = FALSE,
+                      use_timestamps = TRUE,
+                      show_progress = TRUE,
+                      .token = get_token(),
+                      dir = "."){
+  out <- lapply(file, function(f)
+                pb_upload_file(f,
+                        repo = guess_repo(),
+                        tag = "latest",
+                        name = NULL,
+                        overwrite = FALSE,
+                        use_timestamps = TRUE,
+                        show_progress = TRUE,
+                        .token = get_token(),
+                        dir = "."))
+  invisible(out)
+
+}
+
+pb_upload_file <- function(file,
                       repo = guess_repo(),
                       tag = "latest",
                       name = NULL,
