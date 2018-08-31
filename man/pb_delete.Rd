@@ -14,10 +14,10 @@ repo if not specified.}
 
 \item{tag}{tag for the GitHub release to which this data should be attached.}
 
-\item{.token}{GitHub authentication token. Typically set from an environmental
-variable, e.g. in a \code{.Renviron} file or with \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")},
-which helps prevent
-accidental disclosure of a secret token when sharing scripts.}
+\item{.token}{GitHub authentication token. Typically set from an
+environmental variable, e.g. in a \code{.Renviron} file or with
+\code{Sys.setenv(GITHUB_TOKEN = "xxxxx")}, which helps prevent accidental
+disclosure of a secret token when sharing scripts.}
 }
 \value{
 \code{TRUE} (invisibly) if a file is found and deleted.

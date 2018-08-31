@@ -213,14 +213,14 @@ pb_upload <- function(file,
                       dir = "."){
   out <- lapply(file, function(f)
                 pb_upload_file(f,
-                        repo = guess_repo(),
-                        tag = "latest",
-                        name = NULL,
-                        overwrite = FALSE,
-                        use_timestamps = TRUE,
-                        show_progress = TRUE,
-                        .token = get_token(),
-                        dir = "."))
+                        repo,
+                        tag,
+                        name,
+                        overwrite,
+                        use_timestamps,
+                        show_progress,
+                        .token,
+                        dir))
   invisible(out)
 
 }
@@ -235,7 +235,7 @@ pb_upload_file <- function(file,
                       .token = get_token(),
                       dir = "."){
 
-  if (!file.exists (file)){
+  if(!file.exists(file)){
     warning ("file ", file, " does not exist")
     return(NULL)
   }
@@ -401,8 +401,45 @@ pb_delete <- function(file,
 
 
 ##################### Generic helpers ##################
+api_error_msg <- function(r){
+  paste0(
+  "Cannot access release data for repository ",
+  crayon::blue$bold(paste0(r[[1]], "/", r[[2]])),
+  ".",
+  " Check that you have set a GITHUB_TOKEN and",
+  " that at least one release on your GitHub repository page."
+  )
+}
+pb_info <- function(repo = guess_repo(), .token = get_token()){
 
 
+  r <- strsplit(repo, "/")[[1]]
+  if(length(r) != 2){
+    stop(paste("Could not parse", r, "as a repository",
+               "Make sure you have used the format:",
+               crayon::blue$bold("owner/repo")))
+  }
+  releases <- maybe(gh::gh("/repos/:owner/:repo/releases",
+                       owner = r[[1]], repo = r[[2]], .token = .token),
+                    otherwise = stop(api_error_msg(r)))
+
+  info <-
+    do.call(rbind,
+            lapply(releases,
+             function(x){
+              data.frame(
+                file_name = local_filename(
+                  vapply(x$assets, `[[`, character(1), "name")),
+                tag = x$tag_name,
+                timestamp = lubridate::as_datetime(
+                  vapply(x$assets, `[[`, character(1), "updated_at")),
+                repo = repo,
+                id = vapply(x$assets, `[[`, integer(1), "id"),
+                stringsAsFactors = FALSE)
+              }))
+
+  info
+}
 
 release_info <- function(repo = guess_repo(), tag="latest", .token = get_token()){
 
@@ -415,16 +452,6 @@ release_info <- function(repo = guess_repo(), tag="latest", .token = get_token()
                "Make sure you have used the format:",
                crayon::blue$bold("owner/repo")))
   }
-
-  err <- paste0(
-    "Cannot access release ", crayon::blue$bold(tag),
-    " for repository ",
-    crayon::blue$bold(paste0(r[[1]], "/", r[[2]])),
-    ".",
-    " Check that you have set a GITHUB_TOKEN and",
-    " that a release named ", crayon::blue$bold(tag),
-    " exists on your GitHub repository page."
-  )
 
 
   ## FIXME: determine if repository exists separately from if tag
@@ -440,7 +467,7 @@ release_info <- function(repo = guess_repo(), tag="latest", .token = get_token()
                 owner = r[[1]], repo = r[[2]], tag = tag, .token = .token)
     }
 
-  }, otherwise = stop(err))
+  }, otherwise = stop(api_error_msg(r)))
 
   out$owner <- r[[1]]
   out$repo <-  r[[2]]

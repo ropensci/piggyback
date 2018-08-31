@@ -16,9 +16,9 @@ the current repo if not specified.}
 
 \item{tag}{tag for the GitHub release to which this data is attached}
 
-\item{.token}{GitHub authentication token. Typically set from an environmental
-variable, e.g. in a \code{.Renviron} file or with \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")},
-which helps prevent
+\item{.token}{GitHub authentication token. Typically set from an
+environmental variable, e.g. in a \code{.Renviron} file or with
+\code{Sys.setenv(GITHUB_TOKEN = "xxxxx")}, which helps prevent
 accidental disclosure of a secret token when sharing scripts.}
 }
 \value{
@@ -31,6 +31,10 @@ dependency on \code{piggyback} or authentication steps.
 }
 \examples{
 \donttest{
-pb_download_url("data/iris.tsv.gz", repo="cboettig/piggyback", tag = "v0.0.1")
+
+pb_download_url("data/iris.tsv.gz",
+                repo = "cboettig/piggyback",
+                tag = "v0.0.1")
+
 }
 }

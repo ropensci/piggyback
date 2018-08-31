@@ -5,10 +5,10 @@ testthat::test_that(
   "Attempt upload without authentication",
   {
 
-    data <- readr::write_tsv(datasets::iris, "iris.tsv.gz")
+    readr::write_tsv(datasets::iris, "iris3.tsv.gz")
     testthat::expect_error(
       out <- pb_upload(repo = "cboettig/piggyback",
-                       file = "iris.tsv.gz",
+                       file = "iris3.tsv.gz",
                        tag = "v0.0.1",
                        overwrite = TRUE,
                        .token = "not_valid_token"),
@@ -45,12 +45,12 @@ testthat::test_that(
   {
 
     testthat::skip_on_cran()
-    testthat::expect_error(
+    testthat::expect_warning(
       out <- pb_upload(repo = "cboettig/piggyback",
                        file = "not-a-file",
                        tag = "v0.0.1",
                        use_timestamps = FALSE),
-      "is not TRUE"
+      "not-a-file does not exist"
 
     )
     unlink("iris.tsv.gz")

@@ -15,7 +15,7 @@ testthat::test_that("We can upload data",{
                    tag = "v0.0.1",
                    overwrite = TRUE,
                    show_progress = FALSE)
-  testthat::expect_is(out, "response")
+  testthat::expect_is(out, "list")
 
   unlink("iris.tsv.gz")
   unlink("manifest.json")

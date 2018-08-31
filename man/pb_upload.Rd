@@ -23,15 +23,16 @@ repo if not specified.}
 attached to the on release?}
 
 \item{use_timestamps}{logical, if \code{TRUE}, then files will only be downloaded
-if timestamp on GitHub is newer than the local timestamp (if \code{overwrite=TRUE}).
-Defaults to \code{TRUE}. NOTE: GitHub only provides timestamps}
+if timestamp on GitHub is newer than the local timestamp (if
+\code{overwrite=TRUE}).  Defaults to \code{TRUE}.}
 
-\item{show_progress}{logical, show a progress bar be shown for uploading? Default true.}
+\item{show_progress}{logical, show a progress bar be shown for uploading?
+Defaults to \code{TRUE}.}
 
-\item{.token}{GitHub authentication token. Typically set from an environmental
-variable, e.g. in a \code{.Renviron} file or with \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")},
-which helps prevent
-accidental disclosure of a secret token when sharing scripts.}
+\item{.token}{GitHub authentication token. Typically set from an
+environmental variable, e.g. in a \code{.Renviron} file or with
+\code{Sys.setenv(GITHUB_TOKEN = "xxxxx")}, which helps prevent accidental
+disclosure of a secret token when sharing scripts.}
 
 \item{dir}{directory relative to which file names should be based.}
 }

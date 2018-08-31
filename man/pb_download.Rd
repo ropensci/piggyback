@@ -13,29 +13,33 @@ pb_download(file = NULL, dest = ".", repo = guess_repo(),
 all assets attached to the release will be downloaded.}
 
 \item{dest}{name of vector of names of where file should be downloaded.
-Should be a directory or a list of filenames the same length as \code{file} vector.
-Can include paths to files, but any directories in that path must already exist.}
+Should be a directory or a list of filenames the same length as \code{file}
+vector. Can include paths to files, but any directories in that path
+must already exist.}
 
 \item{repo}{Repository name in format "owner/repo". Will guess
 the current repo if not specified.}
 
 \item{tag}{tag for the GitHub release to which this data is attached}
 
-\item{overwrite}{Should any local files of the same name be overwritten? default \code{TRUE}.}
+\item{overwrite}{Should any local files of the same name be overwritten?
+default \code{TRUE}.}
 
-\item{ignore}{a list of files to ignore (if downloading "all" because \code{file=NULL}).
-by default, "manifest.json" is ignored as this file is created and used only for
-avoiding redundant file transfer by \code{\link[=pb_push]{pb_push()}} and \code{\link[=pb_pull]{pb_pull()}}}
+\item{ignore}{a list of files to ignore (if downloading "all" because
+\code{file=NULL}). By default, "manifest.json" is ignored as this file is
+created and used only for avoiding redundant file transfer by \code{\link[=pb_push]{pb_push()}}
+and \code{\link[=pb_pull]{pb_pull()}}}
 
 \item{use_timestamps}{If \code{TRUE}, then files will only be downloaded
-if timestamp on GitHub is newer than the local timestamp (if \code{overwrite=TRUE}).
+if timestamp on GitHub is newer than the local timestamp (if
+\code{overwrite=TRUE}).  Defaults to \code{TRUE}.}
+
+\item{show_progress}{logical, should we show progress bar for download?
 Defaults to \code{TRUE}.}
 
-\item{show_progress}{logical, should we show progress bar for download? default TRUE.}
-
-\item{.token}{GitHub authentication token. Typically set from an environmental
-variable, e.g. in a \code{.Renviron} file or with \code{Sys.setenv(GITHUB_TOKEN = "xxxxx")},
-which helps prevent
+\item{.token}{GitHub authentication token. Typically set from an
+environmental variable, e.g. in a \code{.Renviron} file or with
+\code{Sys.setenv(GITHUB_TOKEN = "xxxxx")}, which helps prevent
 accidental disclosure of a secret token when sharing scripts.}
 }
 \description{
