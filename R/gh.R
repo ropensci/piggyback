@@ -234,6 +234,11 @@ pb_upload_file <- function(file,
                       show_progress = TRUE,
                       .token = get_token(),
                       dir = "."){
+
+  if (!file.exists (file)){
+    warning ("file ", file, " does not exist")
+    return(NULL)
+  }
   progress <- httr::progress("up")
   if(!show_progress){
     progress <- NULL
