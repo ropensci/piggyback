@@ -6,20 +6,24 @@
 #' @param file name or vector of names of files to be downloaded. If `NULL`,
 #' all assets attached to the release will be downloaded.
 #' @param dest name of vector of names of where file should be downloaded.
-#' Should be a directory or a list of filenames the same length as `file` vector.
-#' Can include paths to files, but any directories in that path must already exist.
+#' Should be a directory or a list of filenames the same length as `file`
+#' vector. Can include paths to files, but any directories in that path
+#' must already exist.
 #' @param tag tag for the GitHub release to which this data is attached
-#' @param overwrite Should any local files of the same name be overwritten? default `TRUE`.
-#' @param ignore a list of files to ignore (if downloading "all" because `file=NULL`).
-#' by default, "manifest.json" is ignored as this file is created and used only for
-#' avoiding redundant file transfer by [pb_push()] and [pb_pull()]
+#' @param overwrite Should any local files of the same name be overwritten?
+#'  default `TRUE`.
+#' @param ignore a list of files to ignore (if downloading "all" because
+#'  `file=NULL`). By default, "manifest.json" is ignored as this file is
+#'   created and used only for avoiding redundant file transfer by [pb_push()]
+#'   and [pb_pull()]
 #' @param use_timestamps If `TRUE`, then files will only be downloaded
-#' if timestamp on GitHub is newer than the local timestamp (if `overwrite=TRUE`).
+#' if timestamp on GitHub is newer than the local timestamp (if
+#' `overwrite=TRUE`).  Defaults to `TRUE`.
+#' @param show_progress logical, should we show progress bar for download?
 #' Defaults to `TRUE`.
-#' @param show_progress logical, should we show progress bar for download? default TRUE.
-#' @param .token GitHub authentication token. Typically set from an environmental
-#' variable, e.g. in a `.Renviron` file or with `Sys.setenv(GITHUB_TOKEN = "xxxxx")`,
-#' which helps prevent
+#' @param .token GitHub authentication token. Typically set from an
+#' environmental variable, e.g. in a `.Renviron` file or with
+#' `Sys.setenv(GITHUB_TOKEN = "xxxxx")`, which helps prevent
 #' accidental disclosure of a secret token when sharing scripts.
 #' @importFrom httr GET add_headers write_disk
 #' @importFrom gh gh
@@ -112,7 +116,11 @@ pb_download <- function(file = NULL,
 #' @return the URL to download a file
 #' @export
 #' @examples \donttest{
-#' pb_download_url("data/iris.tsv.gz", repo="cboettig/piggyback", tag = "v0.0.1")
+#'
+#' pb_download_url("data/iris.tsv.gz",
+#'                 repo = "cboettig/piggyback",
+#'                 tag = "v0.0.1")
+#'
 #' }
 pb_download_url <- function(file = NULL,
                             repo = guess_repo(),
@@ -174,13 +182,14 @@ gh_download_asset <- function(owner,
 #' @param overwrite overwrite any existing file with the same name already
 #'  attached to the on release?
 #' @param use_timestamps logical, if `TRUE`, then files will only be downloaded
-#' if timestamp on GitHub is newer than the local timestamp (if `overwrite=TRUE`).
-#' Defaults to `TRUE`. NOTE: GitHub only provides timestamps
-#' @param show_progress logical, show a progress bar be shown for uploading? Default true.
-#' @param .token GitHub authentication token. Typically set from an environmental
-#' variable, e.g. in a `.Renviron` file or with `Sys.setenv(GITHUB_TOKEN = "xxxxx")`,
-#' which helps prevent
-#' accidental disclosure of a secret token when sharing scripts.
+#' if timestamp on GitHub is newer than the local timestamp (if
+#' `overwrite=TRUE`).  Defaults to `TRUE`.
+#' @param show_progress logical, show a progress bar be shown for uploading?
+#' Defaults to `TRUE`.
+#' @param .token GitHub authentication token. Typically set from an
+#'  environmental variable, e.g. in a `.Renviron` file or with
+#'  `Sys.setenv(GITHUB_TOKEN = "xxxxx")`, which helps prevent accidental
+#'   disclosure of a secret token when sharing scripts.
 #' @param dir directory relative to which file names should be based.
 #' @examples
 #' \donttest{
@@ -235,7 +244,8 @@ pb_upload <- function(file,
       gh::gh("DELETE /repos/:owner/:repo/releases/assets/:id",
          owner = x$owner, repo = x$repo, id = df$id[i], .token = .token)
     } else {
-      warning(paste("Skipping upload of", df$file_name[i], "as file exists on GitHub",
+      warning(paste("Skipping upload of", df$file_name[i],
+                    "as file exists on GitHub",
                     repo, "and overwrite = FALSE"))
       return(NULL)
     }
@@ -301,7 +311,7 @@ gh_file_id <- function(repo, file, tag = "latest", name = NULL, .token = get_tok
 #' }
 #' @export
 pb_list <- function(repo = guess_repo(),
-                    tag="latest",
+                    tag = "latest",
                     ignore = "manifest.json",
                     .token = get_token()){
   x <- release_info(repo, tag, .token)
