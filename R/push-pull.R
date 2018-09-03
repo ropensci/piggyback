@@ -298,15 +298,24 @@ new_data <- function(mode = c("push", "pull"),
 }
 
 
+## Helper routine:
+## get the id of a file, or NA if file is not found in release assets
+gh_file_id <- function(repo, file, tag = "latest", name = NULL, .token = get_token()){
+  if(is.null(name)){
+    name <- asset_filename(file)
+  }
 
+  x <- release_info(repo, tag, .token)
 
-#' @importFrom git2r remote_url repository discover_repository
-guess_repo <- function(path = "."){
-  addr <-
-    git2r::remote_url(
-      git2r::repository(
-        git2r::discover_repository(path)))
-  out <- gsub(".*[:|/]([^/]+/[^/]+)(?:\\.git$)?", "\\1", addr)
-  gsub("\\.git$", "", out)
+  filenames <- vapply(x$assets, `[[`, character(1), "name")
+  ids <- vapply(x$assets, `[[`, integer(1), "id")
+  if(name %in% filenames){
+    i <- which(filenames == name)
+    ids[i]
+  } else {
+    NA
+  }
+
 }
+
 

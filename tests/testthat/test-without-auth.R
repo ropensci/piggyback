@@ -12,17 +12,17 @@ testthat::test_that(
 
     testthat::skip_on_cran()
     pb_download(repo = "cboettig/piggyback",
-                dest = tempdir(),
+                dest = tmp,
                 show_progress = FALSE)
 
-    f <- fs::path(tempdir(), "data/mtcars.tsv.gz")
+    f <- fs::path(tmp, "data/mtcars.tsv.gz")
     testthat::expect_true(file.exists(f))
     cars <- readr::read_tsv(f)
     testthat::expect_equivalent(cars, mtcars)
 
     unlink(f)
-    unlink(fs::path(tempdir(), "data/iris.tsv.gz"))
-    unlink(fs::path(tempdir(), "data"))
+    unlink(fs::path(tmp, "data/iris.tsv.gz"))
+    unlink(fs::path(tmp, "data"))
   })
 
 

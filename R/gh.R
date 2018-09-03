@@ -52,8 +52,9 @@ pb_download <- function(file = NULL,
   }
 
 
-  x <- release_info(repo, tag, .token)
-  df <- rectangle_info(x)
+  #x <- release_info(repo, tag, .token)
+  #df <- rectangle_info(x)
+  df <- pb_info(repo, tag, .token)
 
   if(!is.null(file)){
     i <- which(df$file_name %in% file)
@@ -97,8 +98,8 @@ pb_download <- function(file = NULL,
   }
 
   resp <- lapply(seq_along(df$id), function(i)
-    gh_download_asset(x$owner,
-                      x$repo,
+    gh_download_asset(df$owner[[1]],
+                      df$repo[[1]],
                       id = df$id[i],
                       destfile = dest[i],
                       overwrite = overwrite,
@@ -251,8 +252,10 @@ pb_upload_file <- function(file,
     name <- fs::path_rel(file, start = dir)
   }
 
-  x <- release_info(repo, tag, .token)
-  df <- rectangle_info(x)
+  #x <- release_info(repo, tag, .token)
+  #df <- rectangle_info(x)
+  df <- pb_info(repo, tag, .token)
+
 
   i <- which(df$file_name == name)
 
@@ -273,7 +276,7 @@ pb_upload_file <- function(file,
     if(overwrite){
       ## If we find matching id, Delete file from release.
       gh::gh("DELETE /repos/:owner/:repo/releases/assets/:id",
-         owner = x$owner, repo = x$repo, id = df$id[i], .token = .token)
+         owner = df$owner[[1]], repo = df$repo[[1]], id = df$id[i], .token = .token)
     } else {
       warning(paste("Skipping upload of", df$file_name[i],
                     "as file exists on GitHub",
@@ -283,7 +286,7 @@ pb_upload_file <- function(file,
   }
 
 
-  r <- httr::POST(sub("\\{.+$", "", x$upload_url),
+  r <- httr::POST(sub("\\{.+$", "", df$upload_url[[1]]),
                   query = list(name = asset_filename(name)),
                   body = httr::upload_file(file),
                   progress,
@@ -307,26 +310,6 @@ local_filename <- function(x){
   #x <- gsub("^manifest.json$", ".manifest.json", x)
 
   gsub("\\.2f", .Platform$file.sep, x)
-}
-
-## Helper routine:
-## get the id of a file, or NA if file is not found in release assets
-gh_file_id <- function(repo, file, tag = "latest", name = NULL, .token = get_token()){
-  if(is.null(name)){
-    name <- asset_filename(file)
-  }
-
-  x <- release_info(repo, tag, .token)
-
-  filenames <- vapply(x$assets, `[[`, character(1), "name")
-  ids <- vapply(x$assets, `[[`, integer(1), "id")
-  if(name %in% filenames){
-    i <- which(filenames == name)
-    ids[i]
-  } else {
-    NA
-  }
-
 }
 
 
@@ -412,9 +395,10 @@ api_error_msg <- function(r){
   " that at least one release on your GitHub repository page."
   )
 }
-pb_info <- function(repo = guess_repo(), .token = get_token()){
 
 
+
+pb_info <- function(repo = guess_repo(), tag = NULL, .token = get_token()){
   r <- strsplit(repo, "/")[[1]]
   if(length(r) != 2){
     stop(paste("Could not parse", r, "as a repository",
@@ -435,11 +419,22 @@ pb_info <- function(repo = guess_repo(), .token = get_token()){
                 tag = x$tag_name,
                 timestamp = lubridate::as_datetime(
                   vapply(x$assets, `[[`, character(1), "updated_at")),
-                repo = repo,
+                owner = r[[1]],
+                repo = r[[2]],
+                upload_url = x$upload_url,
                 id = vapply(x$assets, `[[`, integer(1), "id"),
                 stringsAsFactors = FALSE)
               }))
 
+  if(!is.null(tag)){
+    if(tag == "latest"){
+      info <- info[info$tag == info$tag[[1]],]
+    } else if(tag %in% info$tag) {
+      info <- info[info$tag == tag,]
+    } else {
+      stop(paste("Cannot access release tag", tag))
+    }
+  }
   info
 }
 
@@ -572,3 +567,16 @@ maybe <- function(expr, otherwise, quiet = TRUE) {
     )
   }
 }
+
+
+#' @importFrom git2r remote_url repository discover_repository
+guess_repo <- function(path = "."){
+  addr <-
+    git2r::remote_url(
+      git2r::repository(
+        git2r::discover_repository(path)))
+  out <- gsub(".*[:|/]([^/]+/[^/]+)(?:\\.git$)?", "\\1", addr)
+  gsub("\\.git$", "", out)
+}
+
+
