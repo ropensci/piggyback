@@ -5,7 +5,8 @@
 \title{Pull data from GitHub}
 \usage{
 pb_pull(repo = guess_repo(), tag = "latest", overwrite = TRUE,
-  manifest = "manifest.json", use_timestamps = FALSE)
+  manifest = "manifest.json", use_timestamps = FALSE,
+  show_progress = TRUE)
 }
 \arguments{
 \item{repo}{Name of the repo on GitHub (\code{owner/repo}, i.e.
@@ -25,6 +26,9 @@ from the name used on the GitHub asset list.}
 \item{use_timestamps}{If \code{TRUE}, then files will only be uploaded/downloaded
 if timestamp of target is newer than the existing version.  Default is \code{FALSE},
 see details.}
+
+\item{show_progress}{logical, should we show progress bar for download?
+Defaults to \code{TRUE}.}
 }
 \description{
 Download any tracked datasets piggybacking on GitHub. Files identical on

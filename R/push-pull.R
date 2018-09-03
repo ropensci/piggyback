@@ -104,6 +104,8 @@ match_globs <- function(globs, proj_dir = usethis::proj_get()){
 #' @param use_timestamps If `TRUE`, then files will only be uploaded/downloaded
 #' if timestamp of target is newer than the existing version.  Default is `FALSE`,
 #' see details.
+#' @param show_progress logical, should we show progress bar for download?
+#' Defaults to `TRUE`.
 #' @details
 #'  [pb_pull()] Will only download tracked files, as identified by the manifest
 #'  attached to the requested release on GitHub. Add files to tracking with
@@ -132,7 +134,8 @@ pb_pull <- function(repo = guess_repo(),
                     tag = "latest",
                     overwrite = TRUE,
                     manifest = "manifest.json",
-                    use_timestamps = FALSE)
+                    use_timestamps = FALSE,
+                    show_progress = TRUE)
                     {
 
   # Get hashes of all tracked files
@@ -157,7 +160,8 @@ pb_pull <- function(repo = guess_repo(),
               file = files,
               dest = proj_dir,
               overwrite = overwrite,
-              use_timestamps = use_timestamps)
+              use_timestamps = use_timestamps,
+              show_progress = show_progress)
 
   unlink(manifest)
 
@@ -197,7 +201,8 @@ pb_push <- function(repo = guess_repo(),
                     tag = "latest",
                     overwrite = TRUE,
                     manifest = "manifest.json",
-                    use_timestamps = FALSE){
+                    use_timestamps = FALSE,
+                    show_progress = TRUE){
 
   create_manifest(manifest)
   dir <- usethis::proj_get()
@@ -224,7 +229,7 @@ pb_push <- function(repo = guess_repo(),
             tag = tag,
             use_timestamps = FALSE,
             overwrite = TRUE,
-            show_progress = FALSE,
+            show_progress = show_progress,
             dir = dir)
 
   unlink(manifest)
@@ -251,9 +256,6 @@ new_data <- function(mode = c("push", "pull"),
   } else {
     ## Read in the online manifest, silently and cleanly!
     tmp <- tempdir()
-    #s <- tempfile()
-    #sink(s)
-    ## here we go
     pb_download(repo = repo,
                 file = manifest,
                 dest = tmp,
@@ -263,11 +265,8 @@ new_data <- function(mode = c("push", "pull"),
                 show_progress = FALSE)
     github_manifest <- jsonlite::read_json(
       file.path(tmp, manifest))
-
     ## Tidy up
-    unlink(tmp)
-    #sink()
-    #unlink(s)
+    unlink(file.path(tmp, manifest))
   }
   ## Read in local manifest
   m <- file.path(usethis::proj_get(), manifest)

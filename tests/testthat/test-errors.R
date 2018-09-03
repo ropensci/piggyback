@@ -1,5 +1,6 @@
 testthat::context("Error Handling")
 
+tmp <- tempdir()
 
 testthat::test_that(
   "Attempt upload without authentication",
@@ -11,7 +12,8 @@ testthat::test_that(
                        file = "iris3.tsv.gz",
                        tag = "v0.0.1",
                        overwrite = TRUE,
-                       .token = "not_valid_token"),
+                       .token = "not_valid_token",
+                       show_progress = FALSE),
       "GITHUB_TOKEN"
 
     )
@@ -32,7 +34,8 @@ testthat::test_that(
       out <- pb_upload(repo = "cboettig/piggyback",
                        file = "iris2.tsv.gz",
                        tag = "v0.0.1",
-                       overwrite = FALSE),
+                       overwrite = FALSE,
+                       show_progress = FALSE),
       "Skipping upload of iris2.tsv.gz as file exists"
     )
     unlink("iris2.tsv.gz")
@@ -49,7 +52,8 @@ testthat::test_that(
       out <- pb_upload(repo = "cboettig/piggyback",
                        file = "not-a-file",
                        tag = "v0.0.1",
-                       use_timestamps = FALSE),
+                       use_timestamps = FALSE,
+                       show_progress = FALSE),
       "not-a-file does not exist"
 
     )
@@ -66,11 +70,12 @@ testthat::test_that(
     testthat::expect_warning(
       out <- pb_download(repo = "cboettig/piggyback",
                        file = "not-a-file",
-                       tag = "v0.0.1"),
+                       tag = "v0.0.1",
+                       dest = tmp,
+                       show_progress = FALSE),
       "not found"
 
     )
-    unlink("iris.tsv.gz")
 
   })
 
@@ -85,7 +90,8 @@ testthat::test_that(
       out <- pb_upload(repo = "cboettig/piggyback",
                        file = "iris.tsv.gz",
                        tag = "not-a-tag",
-                       overwrite = TRUE),
+                       overwrite = TRUE,
+                       show_progress = FALSE),
       "Cannot access release"
 
     )
@@ -102,13 +108,15 @@ testthat::test_that(
 
     testthat::skip_on_cran()
 
-    data <- readr::write_tsv(datasets::iris, "iris.tsv.gz")
+    data <- readr::write_tsv(datasets::iris, file.path(tmp, "iris.tsv.gz"))
     testthat::expect_warning(
       out <- pb_download(repo = "cboettig/piggyback",
                        file = "iris.tsv.gz",
+                       dest = tmp,
                        tag = "v0.0.1",
                        overwrite = FALSE,
-                       use_timestamps = FALSE),
+                       use_timestamps = FALSE,
+                       show_progress = FALSE),
       "exists"
     )
     unlink("iris.tsv.gz")

@@ -1,5 +1,7 @@
 testthat::context("Without Authentication")
 
+tmp <- tempdir()
+
 ## Even though authentication is not required for these tests,
 ## they do call the GH API and are subject to tight rate-limiting
 ## when no Token is available.  It is preferable / advisable to have
@@ -9,7 +11,9 @@ testthat::test_that(
   "we can download all files from the latest release", {
 
     testthat::skip_on_cran()
-    pb_download(repo = "cboettig/piggyback", dest = tempdir())
+    pb_download(repo = "cboettig/piggyback",
+                dest = tempdir(),
+                show_progress = FALSE)
 
     f <- fs::path(tempdir(), "data/mtcars.tsv.gz")
     testthat::expect_true(file.exists(f))
@@ -22,26 +26,7 @@ testthat::test_that(
   })
 
 
-testthat::test_that(
-  "we can omit dest dir", {
 
-  testthat::skip_on_cran()
-
-  ## Works interactively but check will fail when this tries to write to "."
-  pb_download(repo = "cboettig/piggyback")
-
-  testthat::expect_true(file.exists("data/mtcars.tsv.gz"))
-  cars <- readr::read_tsv("data/mtcars.tsv.gz")
-  testthat::expect_equivalent(cars, mtcars)
-
-
-  pb_download(repo = "cboettig/piggyback")
-
-
-  unlink("data/mtcars.tsv.gz")
-  unlink("data/iris.tsv.gz")
-  unlink("data")
-})
 
 
 testthat::test_that(
@@ -60,7 +45,8 @@ testthat::test_that(
     pb_download(
       repo = "cboettig/piggyback",
       ignore = c("manifest.json", "big_data_file.csv"),
-      dest = tempdir())
+      dest = tempdir(),
+      show_progress = FALSE)
     testthat::expect_true(TRUE)
   })
 
@@ -70,15 +56,15 @@ testthat::test_that(
     testthat::skip_on_cran()
 
 
-    pb_download(repo = "cboettig/piggyback", tag="v0.0.1")
+    pb_download(repo = "cboettig/piggyback",
+                tag = "v0.0.3",
+                dest = tmp,
+                show_progress = FALSE)
 
-    ## v0.0.1 has 2 files
-    testthat::expect_true(file.exists("mtcars.tsv.gz"))
-    testthat::expect_true(file.exists("iris.tsv.xz"))
+    ## v0.0.3 has 2 files
+    testthat::expect_true(file.exists(file.path(tmp,"data/mtcars.tsv.gz")))
+    testthat::expect_true(file.exists(file.path(tmp,"data/iris.tsv.xz")))
 
-    unlink("mtcars.tsv.gz")
-    unlink("iris.tsv.xz")
-    unlink("iris.tsv.gz")
 
   })
 
@@ -91,12 +77,14 @@ testthat::test_that(
 
     pb_download( file = "mtcars.tsv.gz",
                  repo = "cboettig/piggyback",
-                 tag = "v0.0.1")
+                 tag = "v0.0.1",
+                 dest = tmp,
+                 show_progress = FALSE)
 
-    testthat::expect_true(file.exists("mtcars.tsv.gz"))
-    cars <- readr::read_tsv("mtcars.tsv.gz")
+    testthat::expect_true(file.exists(file.path(tmp, "mtcars.tsv.gz")))
+    cars <- readr::read_tsv(file.path(tmp, "mtcars.tsv.gz"))
     testthat::expect_equivalent(cars, mtcars)
-    unlink("mtcars.tsv.gz")
+    unlink(file.path(tmp, "mtcars.tsv.gz"))
   })
 
 testthat::test_that(
@@ -105,16 +93,18 @@ testthat::test_that(
     testthat::skip_on_cran()
 
 
-    dir.create("test_data/")
+    dir.create(file.path(tmp, "test_data/"))
     pb_download( file = "mtcars.tsv.gz",
-                 dest = "test_data/",
+                 dest = file.path(tmp, "test_data/"),
                  repo = "cboettig/piggyback",
-                 tag = "v0.0.1")
+                 tag = "v0.0.1",
+                 show_progress = FALSE)
 
-    testthat::expect_true(file.exists("test_data/mtcars.tsv.gz"))
-    cars <- readr::read_tsv("test_data/mtcars.tsv.gz")
+    path <- file.path(tmp, "test_data", "mtcars.tsv.gz")
+    testthat::expect_true(file.exists(path))
+    cars <- readr::read_tsv(path)
     testthat::expect_equivalent(cars, mtcars)
-    unlink("test_data", TRUE)
+    unlink(path)
   })
 
 
@@ -125,7 +115,6 @@ testthat::test_that("we can track data with manifest", {
   testthat::skip_on_cran()
 
   cur <- getwd()
-  tmp <- tempdir()
   proj_dir <- file.path(tmp, "piggyback-test")
   suppressMessages(usethis::create_project(proj_dir,
                           open=FALSE))
@@ -136,7 +125,6 @@ testthat::test_that("we can track data with manifest", {
   testthat::expect_true(out)
 
     setwd(cur)
-    unlink(tmp)
 
 })
 

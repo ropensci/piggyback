@@ -38,29 +38,33 @@ testthat::test_that("We can push and pull data",{
     testthat::skip_on_os("mac")
   }
 
-  suppressMessages(
+  sink(tempfile())
   usethis::create_from_github(repo = "cboettig/piggyback",
                               destdir = ".",
                               open = FALSE,
-                              protocol = "https"))
+                              protocol = "https")
+
   setwd("piggyback")
 
   fs::dir_create("data")
   readr::write_tsv(datasets::mtcars, "data/mtcars.tsv.gz")
   readr::write_tsv(datasets::iris, "data/iris.tsv.xz")
-
   x <- pb_track("data/*")
-  testthat::expect_true(
-    pb_push(repo = "cboettig/piggyback", tag = "v0.0.3"))
-  testthat::expect_true(
-    pb_pull(repo = "cboettig/piggyback", tag = "v0.0.3"))
 
-  testthat::expect_true(pb_pull())
-  testthat::expect_true(pb_push())
-  pb_push()
-  pb_pull()
+  sink() # avoid verbose messages in test log. usethis msgs cannot turn off(?)
 
-  testthat::expect_true(pb_pull(tag="v0.0.3"))
+
+  testthat::expect_true(
+    pb_push(repo = "cboettig/piggyback", tag = "v0.0.3", show_progress=FALSE))
+  testthat::expect_true(
+    pb_pull(repo = "cboettig/piggyback", tag = "v0.0.3", show_progress=FALSE))
+
+  testthat::expect_true(pb_pull(show_progress=FALSE))
+  testthat::expect_true(pb_push(show_progress=FALSE))
+  pb_push(show_progress=FALSE)
+  pb_pull(show_progress=FALSE)
+
+  testthat::expect_true(pb_pull(tag="v0.0.3", show_progress = FALSE))
 
   ## Should error if tag already exists
   testthat::expect_error(
@@ -83,7 +87,7 @@ testthat::test_that("we can get a download url", {
   x <- pb_download_url("data/iris.tsv.gz",
                        repo = "cboettig/piggyback",
                        tag = "v0.0.1",
-                       .token = piggyback:::get_token() )
+                       .token = piggyback:::get_token())
   testthat::expect_is(x, "character")
 })
 

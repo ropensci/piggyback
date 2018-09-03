@@ -24,7 +24,7 @@ testthat::test_that(
                        show_progress = FALSE,
                        use_timestamps = TRUE,
                        dir = tmp))
-
+    Sys.sleep(5)
     testthat::expect_message(
       out <- pb_upload(file = fs::path(tmp, "mtcars2.tsv.gz"),
                        repo = "cboettig/piggyback",

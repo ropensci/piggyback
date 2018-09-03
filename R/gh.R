@@ -37,7 +37,7 @@
 #'  piggyback::pb_download(repo = "cboettig/piggyback")
 #' }
 pb_download <- function(file = NULL,
-                        dest = ".",
+                        dest = usethis::proj_get(),
                         repo = guess_repo(),
                         tag = "latest",
                         overwrite = TRUE,
@@ -73,7 +73,6 @@ pb_download <- function(file = NULL,
   }
 
 
-
   ## if dest not provided, we will write
   if(length(dest) == 1){
     i <- which(df$file_name %in% file)
@@ -81,6 +80,9 @@ pb_download <- function(file = NULL,
     dest <- fs::path_rel(file.path(dest, df$file_name[i]))
     fs::dir_create(fs::path_dir(dest))
   }
+  # dest should now be of length df
+  df$dest <- dest
+
 
   if(use_timestamps){
     local_timestamp <- fs::file_info(dest)$modification_time

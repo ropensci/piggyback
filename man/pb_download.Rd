@@ -4,7 +4,7 @@
 \alias{pb_download}
 \title{Download data from an existing release}
 \usage{
-pb_download(file = NULL, dest = ".", repo = guess_repo(),
+pb_download(file = NULL, dest = usethis::proj_get(), repo = guess_repo(),
   tag = "latest", overwrite = TRUE, ignore = "manifest.json",
   use_timestamps = TRUE, show_progress = TRUE, .token = get_token())
 }
