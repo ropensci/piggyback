@@ -334,7 +334,7 @@ pb_list <- function(repo = guess_repo(),
 #'
 #' @inheritParams pb_upload
 #' @param file file(s) to be deleted from the release. If `NULL` (default
-#' when argument is ommitted), function will delete all attachments to the release.
+#' when argument is omitted), function will delete all attachments to the release.
 #' delete
 #' @return `TRUE` (invisibly) if a file is found and deleted.
 #' Otherwise, returns `NULL` (invisibly) if no file matching the name was found.

@@ -9,7 +9,7 @@ pb_delete(file = NULL, repo = guess_repo(), tag = "latest",
 }
 \arguments{
 \item{file}{file(s) to be deleted from the release. If \code{NULL} (default
-when argument is ommitted), function will delete all attachments to the release.
+when argument is omitted), function will delete all attachments to the release.
 delete}
 
 \item{repo}{Repository name in format "owner/repo". Will guess the current
