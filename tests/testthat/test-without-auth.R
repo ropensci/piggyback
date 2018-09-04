@@ -32,9 +32,10 @@ testthat::test_that(
 testthat::test_that(
   "we can list files", {
     testthat::skip_on_cran()
-    testthat::expect_output(cat(
-      pb_list(repo = "cboettig/piggyback",
-              tag = "v0.0.1")), "iris.tsv.gz")
+
+    x <- pb_list(repo = "cboettig/piggyback",
+              tag = "v0.0.1")
+    testthat::expect_true("iris.tsv.gz" %in% x$file_name)
   })
 
 

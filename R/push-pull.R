@@ -301,20 +301,11 @@ new_data <- function(mode = c("push", "pull"),
 ## Helper routine:
 ## get the id of a file, or NA if file is not found in release assets
 gh_file_id <- function(repo, file, tag = "latest", name = NULL, .token = get_token()){
-  if(is.null(name)){
-    name <- asset_filename(file)
-  }
 
-  x <- release_info(repo, tag, .token)
+  df <- pb_info(repo, tag, .token)
 
-  filenames <- vapply(x$assets, `[[`, character(1), "name")
-  ids <- vapply(x$assets, `[[`, integer(1), "id")
-  if(name %in% filenames){
-    i <- which(filenames == name)
-    ids[i]
-  } else {
-    NA
-  }
+  df[df$file_name %in% file, "id"]
+
 
 }
 
