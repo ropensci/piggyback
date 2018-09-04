@@ -4,10 +4,13 @@
 \alias{pb_delete}
 \title{Delete an asset attached to a release}
 \usage{
-pb_delete(file, repo = guess_repo(), tag = "latest", .token = get_token())
+pb_delete(file = NULL, repo = guess_repo(), tag = "latest",
+  .token = get_token())
 }
 \arguments{
-\item{file}{path to file to be uploaded}
+\item{file}{file(s) to be deleted from the release. If \code{NULL} (default
+when argument is ommitted), function will delete all attachments to the release.
+delete}
 
 \item{repo}{Repository name in format "owner/repo". Will guess the current
 repo if not specified.}
