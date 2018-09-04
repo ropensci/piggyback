@@ -11,10 +11,13 @@ Description: Because larger (> 50 MB) data files cannot easily be committed to g
   works equally well with public or private repositories.  Data can be uploaded
   and downloaded programmatically from scripts. No authentication is required to
   download data from public repositories.
-Authors@R: person("Carl", "Boettiger", 
-                  email = "cboettig@gmail.com", 
-                  role = c("aut", "cre", "cph"),
-                  comment=c(ORCID = "0000-0002-1642-628X"))
+Authors@R: c(person("Carl", "Boettiger", 
+                    email = "cboettig@gmail.com", 
+                    role = c("aut", "cre", "cph"),
+                    comment = c(ORCID = "0000-0002-1642-628X")),
+             person("Mark", "Padgham", 
+                     role = c("ctb"),
+                     comment = c(ORCID = "0000-0003-2172-5265")))
 URL: https://github.com/cboettig/piggyback
 BugReports: https://github.com/cboettig/piggyback/issues
 License: GPL-3

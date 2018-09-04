@@ -95,6 +95,6 @@ testthat::test_that(
   "we error when creating a release on non-existant repo", {
     testthat::skip_on_cran()
     testthat::expect_error(
-      pb_new_release("cboettig/not_a_repo", "v2.0"), "404")
+      pb_new_release("cboettig/not_a_repo", "v2.0"), "Cannot access release data")
   })
 

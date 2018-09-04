@@ -333,6 +333,9 @@ pb_list <- function(repo = guess_repo(),
 #' Delete an asset attached to a release
 #'
 #' @inheritParams pb_upload
+#' @param file file(s) to be deleted from the release. If `NULL` (default
+#' when argument is ommitted), function will delete all attachments to the release.
+#' delete
 #' @return `TRUE` (invisibly) if a file is found and deleted.
 #' Otherwise, returns `NULL` (invisibly) if no file matching the name was found.
 #' @export
@@ -344,25 +347,30 @@ pb_list <- function(repo = guess_repo(),
 #' pb_delete("mtcars.tsv.gz", repo = "cboettig/piggyback", tag = "v0.0.3")
 #' }
 #'
-pb_delete <- function(file,
+pb_delete <- function(file = NULL,
                       repo = guess_repo(),
                       tag = "latest",
                       .token = get_token()){
-  df <- pb_info(repo, tag, .token)
-  name <- asset_filename(file)
 
-  out <- NULL
-  if(name %in% df$file_name){
-    i <- which(df$file_name == name)
-    ## If we find matching id, Delete file from release.
-    gh::gh("DELETE /repos/:owner/:repo/releases/assets/:id",
-       owner = df$owner[[1]], repo = df$repo[[1]], id = df$id[i], .token = .token)
-    out <- TRUE
+  df <- pb_info(repo, tag, .token)
+
+  if(is.null(file)){
+    ids <- df$id
   } else {
-      message(paste(name, "not found on GitHub"))
+    ids <- df[df$file_name %in% file, "id"]
   }
 
-  invisible(out)
+  if(length(ids) < 1){
+    message(paste(file, "not found on GitHub"))
+    return(NULL)
+  }
+
+  lapply(ids, function(id){
+    ## If we find matching id, Delete file from release.
+    gh::gh("DELETE /repos/:owner/:repo/releases/assets/:id",
+       owner = df$owner[[1]], repo = df$repo[[1]], id = id, .token = .token)
+  })
+  invisible(TRUE)
 }
 
 
@@ -428,7 +436,21 @@ pb_info <- function(repo = guess_repo(), tag = NULL, .token = get_token()){
     } else if(tag %in% info$tag) {
       info <- info[info$tag == tag,]
     } else {
-      stop(paste("Cannot access release tag", tag))
+
+      if(!interactive()){
+        stop(paste0("No release with tag ", tag, " exists on repo ", repo,
+                 ". You can create a new release with pb_new_release() function."))
+      } else {
+        create <- utils::askYesNo(paste("release tag", tag,
+                              "does not exist. Would you like to create it?"),
+                        )
+        if(create){
+          pb_new_release(repo, tag, .token = .token)
+        } else {
+          return(NULL)
+        }
+      }
+
     }
   }
   info
@@ -484,6 +506,12 @@ pb_new_release <- function(repo = guess_repo(),
                            draft = FALSE,
                            prerelease = FALSE,
                            .token = get_token()){
+
+
+  df <- pb_info(repo, tag, .token)
+  if(tag %in%  df$tag){
+    stop(paste("release tag", tag, "already exists"))
+  }
   r <- strsplit(repo, "/")[[1]]
 
   payload <- list(

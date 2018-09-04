@@ -92,7 +92,7 @@ testthat::test_that(
                        tag = "not-a-tag",
                        overwrite = TRUE,
                        show_progress = FALSE),
-      "Cannot access release"
+      "No release with tag not-a-tag exists"
 
     )
     unlink("iris.tsv.gz")
@@ -123,11 +123,25 @@ testthat::test_that(
 
   })
 
-## FIXME should message
 testthat::test_that(
   "Attempt to delete non-existent file",
   {
-pb_delete(repo = "cboettig/piggyback",
-          file = "mtcars2.tsv.gz",
-          tag = "v0.0.1")
+    testthat::expect_message(
+      pb_delete(repo = "cboettig/piggyback",
+              file = "mtcars2.tsv.gz",
+              tag = "v0.0.1"),
+      "not found on GitHub")
   })
+
+
+testthat::test_that(
+  "message when tag already exists",
+  {
+
+    testthat::expect_error(
+      pb_new_release(repo = "cboettig/piggyback",
+                     tag = "v0.0.1"),
+      "already exists"
+    )
+
+})
