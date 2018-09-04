@@ -4,14 +4,15 @@
 \alias{pb_list}
 \title{List all assets attached to a release}
 \usage{
-pb_list(repo = guess_repo(), tag = "latest", ignore = "manifest.json",
+pb_list(repo = guess_repo(), tag = NULL, ignore = "manifest.json",
   .token = get_token())
 }
 \arguments{
 \item{repo}{Repository name in format "owner/repo". Will guess
 the current repo if not specified.}
 
-\item{tag}{tag for the GitHub release to which this data is attached}
+\item{tag}{which release tag do we want information for? If \code{NULL} (default),
+will return a table for all available release tags.}
 
 \item{ignore}{a list of files to ignore (if downloading "all" because
 \code{file=NULL}). By default, "manifest.json" is ignored as this file is
@@ -24,7 +25,8 @@ environmental variable, e.g. in a \code{.Renviron} file or with
 accidental disclosure of a secret token when sharing scripts.}
 }
 \value{
-a character vector of release asset names, (normalized to local paths)
+a data.frame of release asset names, (normalized to local paths), release tag,
+timestamp, owner, and repo.
 }
 \description{
 List all assets attached to a release
