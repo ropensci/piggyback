@@ -17,8 +17,9 @@ write_union <- function(base_path, path, new_lines, quiet = FALSE) {
   }
 
   new <- setdiff(new_lines, lines)
-  if (length(new) == 0)
+  if (length(new) == 0) {
     return(invisible(FALSE))
+  }
 
   if (!quiet) {
     quoted <- paste0(value(new), collapse = ", ")
@@ -46,20 +47,20 @@ write_utf8 <- function(path, lines) {
 
 #' @importFrom crayon green blue
 #' @importFrom clisymbols symbol
-done <- function (...) {
+done <- function(...) {
   bullet(paste0(...), bullet = crayon::green(clisymbols::symbol$tick))
 }
 
-value <- function (...) {
+value <- function(...) {
   x <- paste0(...)
   crayon::blue(encodeString(x, quote = "'"))
 }
 
-bullet <- function (lines, bullet){
+bullet <- function(lines, bullet) {
   lines <- paste0(bullet, " ", lines)
   cat_line(lines)
 }
 
-cat_line <- function (...) {
+cat_line <- function(...) {
   cat(..., "\n", sep = "")
 }
