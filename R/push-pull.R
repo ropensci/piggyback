@@ -31,14 +31,15 @@
 #' pb_track(c("*.tsv", "*.tsv.gz"))
 #'
 #' }
-pb_track <- function(glob = NULL, repo_root = usethis::proj_get()){
-
-  if(!is.null(glob)){
-    write_union(usethis::proj_get(),
-                ".pbattributes",
-                glob)
+pb_track <- function(glob = NULL, repo_root = usethis::proj_get()) {
+  if (!is.null(glob)) {
+    write_union(
+      usethis::proj_get(),
+      ".pbattributes",
+      glob
+    )
     usethis::use_build_ignore(c(".pbattributes", "manifest.json"))
-    if(!is.null(git2r::discover_repository("."))){
+    if (!is.null(git2r::discover_repository("."))) {
       usethis::use_git_ignore("manifest.json")
       usethis::use_git_ignore(glob)
     }
@@ -57,8 +58,7 @@ pb_track <- function(glob = NULL, repo_root = usethis::proj_get()){
 #' @importFrom fs dir_ls
 #' @importFrom jsonlite write_json
 #' @importFrom magrittr %>%
-create_manifest <- function(manifest = "manifest.json"){
-
+create_manifest <- function(manifest = "manifest.json") {
   proj_dir <- usethis::proj_get()
   files <- pb_track()
 
@@ -67,22 +67,24 @@ create_manifest <- function(manifest = "manifest.json"){
   names(hashes) <- files
 
   json <- jsonlite::write_json(hashes,
-                               file.path(proj_dir, manifest),
-                               auto_unbox = TRUE,
-                               pretty = TRUE)
+    file.path(proj_dir, manifest),
+    auto_unbox = TRUE,
+    pretty = TRUE
+  )
   invisible(hashes)
 }
 
 ## Helper function
 #' @importFrom fs path_rel path_filter
-match_globs <- function(globs, proj_dir = usethis::proj_get()){
+match_globs <- function(globs, proj_dir = usethis::proj_get()) {
   unique(
-  unname(unlist(lapply(globs, function(g){
-  ## only match files (i.e. things we can hash)
-  fs::dir_ls(path = proj_dir, recursive = TRUE, type = "file") %>%
-    fs::path_rel(proj_dir) %>%
-    fs::path_filter(glob = g)
-  }))))
+    unname(unlist(lapply(globs, function(g) {
+      ## only match files (i.e. things we can hash)
+      fs::dir_ls(path = proj_dir, recursive = TRUE, type = "file") %>%
+        fs::path_rel(proj_dir) %>%
+        fs::path_filter(glob = g)
+    })))
+  )
 }
 
 #' Pull data from GitHub
@@ -135,33 +137,36 @@ pb_pull <- function(repo = guess_repo(),
                     overwrite = TRUE,
                     manifest = "manifest.json",
                     use_timestamps = FALSE,
-                    show_progress = TRUE)
-                    {
+                    show_progress = TRUE) {
 
   # Get hashes of all tracked files
   create_manifest(manifest)
   proj_dir <- usethis::proj_get()
 
   ## List files that will be newly pulled
-  files <- new_data(mode = "pull",
-                    tag = tag,
-                    manifest = manifest,
-                    repo = repo)
-  if(is.null(files)){
+  files <- new_data(
+    mode = "pull",
+    tag = tag,
+    manifest = manifest,
+    repo = repo
+  )
+  if (is.null(files)) {
     message("Already up to date")
     return(invisible(TRUE))
   }
-  if(length(files)==0){
+  if (length(files) == 0) {
     message("Already up to date")
     return(invisible(TRUE))
   }
-  pb_download(repo = repo,
-              tag = tag,
-              file = files,
-              dest = proj_dir,
-              overwrite = overwrite,
-              use_timestamps = use_timestamps,
-              show_progress = show_progress)
+  pb_download(
+    repo = repo,
+    tag = tag,
+    file = files,
+    dest = proj_dir,
+    overwrite = overwrite,
+    use_timestamps = use_timestamps,
+    show_progress = show_progress
+  )
 
   unlink(manifest)
 
@@ -202,35 +207,40 @@ pb_push <- function(repo = guess_repo(),
                     overwrite = TRUE,
                     manifest = "manifest.json",
                     use_timestamps = FALSE,
-                    show_progress = TRUE){
-
+                    show_progress = TRUE) {
   create_manifest(manifest)
   dir <- usethis::proj_get()
-  files <- new_data(mode = "push",
-                    tag = tag,
-                    manifest = manifest,
-                    repo = repo)
+  files <- new_data(
+    mode = "push",
+    tag = tag,
+    manifest = manifest,
+    repo = repo
+  )
 
-  lapply(files, function(f){
+  lapply(files, function(f) {
     ## print file name being uploaded?
     message(paste(f))
-    pb_upload(repo = repo,
-              file = f,
-              tag = tag,
-              overwrite = overwrite,
-              use_timestamps = use_timestamps,
-              dir = dir)
+    pb_upload(
+      repo = repo,
+      file = f,
+      tag = tag,
+      overwrite = overwrite,
+      use_timestamps = use_timestamps,
+      dir = dir
+    )
   })
 
   ## Merge local manifest with GitHub manifest first.
   m <- file.path(usethis::proj_get(), basename(manifest))
-  pb_upload(repo = repo,
-            file = m,
-            tag = tag,
-            use_timestamps = FALSE,
-            overwrite = TRUE,
-            show_progress = show_progress,
-            dir = dir)
+  pb_upload(
+    repo = repo,
+    file = m,
+    tag = tag,
+    use_timestamps = FALSE,
+    overwrite = TRUE,
+    show_progress = show_progress,
+    dir = dir
+  )
 
   unlink(manifest)
   invisible(TRUE)
@@ -242,29 +252,34 @@ pb_push <- function(repo = guess_repo(),
 new_data <- function(mode = c("push", "pull"),
                      repo = guess_repo(),
                      tag = "latest",
-                     manifest = "manifest.json"){
+                     manifest = "manifest.json") {
 
   ## github name for files (i.e. manifest) cannot start with `.`
   mode <- match.arg(mode)
-  id <- gh_file_id(repo = repo,
-                   file = manifest,
-                   tag = tag)
+  id <- gh_file_id(
+    repo = repo,
+    file = manifest,
+    tag = tag
+  )
 
   ## If no manifest yet on GitHub, then nothing to exclude
-  if(is.na(id)){
+  if (is.na(id)) {
     github_manifest <- NULL
   } else {
     ## Read in the online manifest, silently and cleanly!
     tmp <- tempdir()
-    pb_download(repo = repo,
-                file = manifest,
-                dest = tmp,
-                tag = tag,
-                ignore = "",
-                use_timestamps = FALSE,
-                show_progress = FALSE)
+    pb_download(
+      repo = repo,
+      file = manifest,
+      dest = tmp,
+      tag = tag,
+      ignore = "",
+      use_timestamps = FALSE,
+      show_progress = FALSE
+    )
     github_manifest <- jsonlite::read_json(
-      file.path(tmp, manifest))
+      file.path(tmp, manifest)
+    )
     ## Tidy up
     unlink(file.path(tmp, manifest))
   }
@@ -273,7 +288,7 @@ new_data <- function(mode = c("push", "pull"),
 
   local_manifest <- jsonlite::read_json(m)
 
-  if(mode == "push"){
+  if (mode == "push") {
 
     ## Return filenames of anything in local whose hash is not on github
     files <- names(local_manifest[ !c(local_manifest %in% github_manifest) ])
@@ -283,30 +298,24 @@ new_data <- function(mode = c("push", "pull"),
     merged <- c(local_manifest, gh_only)
     proj_dir <- usethis::proj_get()
     json <- jsonlite::write_json(merged,
-                                 file.path(proj_dir, manifest),
-                                 auto_unbox = TRUE,
-                                 pretty = TRUE)
-
-  } else if (mode == "pull"){
+      file.path(proj_dir, manifest),
+      auto_unbox = TRUE,
+      pretty = TRUE
+    )
+  } else if (mode == "pull") {
 
     ## Files whose hashes are on GitHub manifest but local manifest
     files <- names(github_manifest[!c(github_manifest %in% local_manifest)])
   }
 
   files
-
 }
 
 
 ## Helper routine:
 ## get the id of a file, or NA if file is not found in release assets
-gh_file_id <- function(repo, file, tag = "latest", name = NULL, .token = get_token()){
-
+gh_file_id <- function(repo, file, tag = "latest", name = NULL, .token = get_token()) {
   df <- pb_info(repo, tag, .token)
 
   df[df$file_name %in% file, "id"]
-
-
 }
-
-

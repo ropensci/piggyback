@@ -44,36 +44,38 @@ pb_download <- function(file = NULL,
                         ignore = "manifest.json",
                         use_timestamps = TRUE,
                         show_progress = TRUE,
-                        .token = get_token()){
-
+                        .token = get_token()) {
   progress <- httr::progress("down")
-  if(!show_progress){
+  if (!show_progress) {
     progress <- NULL
   }
 
 
   df <- pb_info(repo, tag, .token)
 
-  if(!is.null(file)){
+  if (!is.null(file)) {
     i <- which(df$file_name %in% file)
-    if(length(i) < 1)
-      warning(paste("file(s)",
-                 paste(crayon::blue(file), collapse=" "),
-                       "not found in repo",
-                       crayon::blue(repo)))
+    if (length(i) < 1) {
+      warning(paste(
+        "file(s)",
+        paste(crayon::blue(file), collapse = " "),
+        "not found in repo",
+        crayon::blue(repo)
+      ))
+    }
 
-    df <- df[i,]
+    df <- df[i, ]
   } else {
     i <- which(df$file_name %in% ignore)
-    if(length(i) >= 1){
-      df <- df[-i,]
+    if (length(i) >= 1) {
+      df <- df[-i, ]
     }
     file <- df$file_name
   }
 
 
   ## if dest not provided, we will write
-  if(length(dest) == 1){
+  if (length(dest) == 1) {
     i <- which(df$file_name %in% file)
     ## Make sure dest dir exists!
     dest <- fs::path_rel(file.path(dest, df$file_name[i]))
@@ -83,28 +85,26 @@ pb_download <- function(file = NULL,
   df$dest <- dest
 
 
-  if(use_timestamps){
+  if (use_timestamps) {
     local_timestamp <- fs::file_info(dest)$modification_time
     update <- df$timestamp > local_timestamp
     update[is.na(update)] <- TRUE # we'll download if missing locally
-    df <- df[update,]
+    df <- df[update, ]
 
-    if(dim(df)[[1]] < 1){
+    if (dim(df)[[1]] < 1) {
       message(paste("All files up-to-date already\n"))
     }
-
   }
 
   resp <- lapply(seq_along(df$id), function(i)
     gh_download_asset(df$owner[[1]],
-                      df$repo[[1]],
-                      id = df$id[i],
-                      destfile = dest[i],
-                      overwrite = overwrite,
-                      progress = progress)
-
-  )
- invisible(resp)
+      df$repo[[1]],
+      id = df$id[i],
+      destfile = dest[i],
+      overwrite = overwrite,
+      progress = progress
+    ))
+  invisible(resp)
 }
 
 
@@ -126,19 +126,15 @@ pb_download <- function(file = NULL,
 pb_download_url <- function(file = NULL,
                             repo = guess_repo(),
                             tag = "latest",
-                            .token = get_token()){
-
-
+                            .token = get_token()) {
   df <- pb_info(repo, tag, .token)
-  if(is.null(file)){
+  if (is.null(file)) {
     return(df$browser_download_url)
-  }else if(file %in% df$file_name){
+  } else if (file %in% df$file_name) {
     return(df[file == df$file_name, "browser_download_url"])
   } else {
     stop(paste("file", file, "not found in release", tag, "for repo", repo))
   }
-
-
 }
 
 
@@ -148,22 +144,27 @@ gh_download_asset <- function(owner,
                               repo,
                               id,
                               destfile,
-                              overwrite=TRUE,
+                              overwrite = TRUE,
                               .token = get_token(),
-                              progress = httr::progress("down")
-                              ){
-  if(fs::file_exists(destfile) && !overwrite){
-    warning(paste(destfile, "already exists, skipping download.",
-                  "Set overwrite = TRUE to overwrite files."))
+                              progress = httr::progress("down")) {
+  if (fs::file_exists(destfile) && !overwrite) {
+    warning(paste(
+      destfile, "already exists, skipping download.",
+      "Set overwrite = TRUE to overwrite files."
+    ))
     return(NULL)
   }
 
-  resp <- httr::GET(paste0("https://api.github.com/repos/", owner,"/",
-                    repo, "/", "releases/assets/", id,
-                    "?access_token=", .token),
-                    httr::add_headers(Accept = "application/octet-stream"),
-                    httr::write_disk(destfile, overwrite = overwrite),
-                    progress)
+  resp <- httr::GET(
+    paste0(
+      "https://api.github.com/repos/", owner, "/",
+      repo, "/", "releases/assets/", id,
+      "?access_token=", .token
+    ),
+    httr::add_headers(Accept = "application/octet-stream"),
+    httr::write_disk(destfile, overwrite = overwrite),
+    progress
+  )
   ## handle error cases? resp not found
   httr::stop_for_status(resp)
   invisible(resp)
@@ -210,41 +211,41 @@ pb_upload <- function(file,
                       use_timestamps = TRUE,
                       show_progress = TRUE,
                       .token = get_token(),
-                      dir = "."){
+                      dir = ".") {
   out <- lapply(file, function(f)
-                pb_upload_file(f,
-                        repo,
-                        tag,
-                        name,
-                        overwrite,
-                        use_timestamps,
-                        show_progress,
-                        .token,
-                        dir))
+    pb_upload_file(
+      f,
+      repo,
+      tag,
+      name,
+      overwrite,
+      use_timestamps,
+      show_progress,
+      .token,
+      dir
+    ))
   invisible(out)
-
 }
 
 pb_upload_file <- function(file,
-                      repo = guess_repo(),
-                      tag = "latest",
-                      name = NULL,
-                      overwrite = FALSE,
-                      use_timestamps = TRUE,
-                      show_progress = TRUE,
-                      .token = get_token(),
-                      dir = "."){
-
-  if(!file.exists(file)){
-    warning ("file ", file, " does not exist")
+                           repo = guess_repo(),
+                           tag = "latest",
+                           name = NULL,
+                           overwrite = FALSE,
+                           use_timestamps = TRUE,
+                           show_progress = TRUE,
+                           .token = get_token(),
+                           dir = ".") {
+  if (!file.exists(file)) {
+    warning("file ", file, " does not exist")
     return(NULL)
   }
   progress <- httr::progress("up")
-  if(!show_progress){
+  if (!show_progress) {
     progress <- NULL
   }
 
-  if(is.null(name)){
+  if (is.null(name)) {
     ## name is name on GitHub, technically need not be name of local file
     name <- fs::path_rel(file, start = dir)
   }
@@ -254,38 +255,43 @@ pb_upload_file <- function(file,
 
   i <- which(df$file_name == name)
 
-  if(length(i) > 0){ # File of same name is on GitHub
+  if (length(i) > 0) { # File of same name is on GitHub
 
-    if(use_timestamps){
+    if (use_timestamps) {
       local_timestamp <- fs::file_info(file)$modification_time
 
-      no_update <- local_timestamp <= df[i,"timestamp"]
-      if(no_update){
-        message(paste("matching or more recent version of",
-                      file, "found on GitHub, not uploading"))
+      no_update <- local_timestamp <= df[i, "timestamp"]
+      if (no_update) {
+        message(paste(
+          "matching or more recent version of",
+          file, "found on GitHub, not uploading"
+        ))
         return(NULL)
       }
-
     }
 
-    if(overwrite){
+    if (overwrite) {
       ## If we find matching id, Delete file from release.
       gh::gh("DELETE /repos/:owner/:repo/releases/assets/:id",
-         owner = df$owner[[1]], repo = df$repo[[1]], id = df$id[i], .token = .token)
+        owner = df$owner[[1]], repo = df$repo[[1]], id = df$id[i], .token = .token
+      )
     } else {
-      warning(paste("Skipping upload of", df$file_name[i],
-                    "as file exists on GitHub",
-                    repo, "and overwrite = FALSE"))
+      warning(paste(
+        "Skipping upload of", df$file_name[i],
+        "as file exists on GitHub",
+        repo, "and overwrite = FALSE"
+      ))
       return(NULL)
     }
   }
 
 
   r <- httr::POST(sub("\\{.+$", "", df$upload_url[[1]]),
-                  query = list(name = asset_filename(name)),
-                  body = httr::upload_file(file),
-                  progress,
-                  httr::authenticate(.token, "x-oauth-basic", "basic"))
+    query = list(name = asset_filename(name)),
+    body = httr::upload_file(file),
+    progress,
+    httr::authenticate(.token, "x-oauth-basic", "basic")
+  )
 
   cat("\n")
   httr::stop_for_status(r)
@@ -293,7 +299,7 @@ pb_upload_file <- function(file,
 }
 
 ## Map local paths to valid names for GitHub assets
-asset_filename <- function(x, start = "."){
+asset_filename <- function(x, start = ".") {
   x <- fs::path_rel(x, start)
   x <- gsub("^\\.", "", x)
   # name relative to repo
@@ -301,8 +307,8 @@ asset_filename <- function(x, start = "."){
   gsub(.Platform$file.sep, ".2f", x)
 }
 
-local_filename <- function(x){
-  #x <- gsub("^manifest.json$", ".manifest.json", x)
+local_filename <- function(x) {
+  # x <- gsub("^manifest.json$", ".manifest.json", x)
 
   gsub("\\.2f", .Platform$file.sep, x)
 }
@@ -325,7 +331,7 @@ local_filename <- function(x){
 pb_list <- function(repo = guess_repo(),
                     tag = NULL,
                     ignore = "manifest.json",
-                    .token = get_token()){
+                    .token = get_token()) {
   df <- pb_info(repo, tag, .token)
   df[c("file_name", "tag", "timestamp", "owner", "repo")]
 }
@@ -350,25 +356,25 @@ pb_list <- function(repo = guess_repo(),
 pb_delete <- function(file = NULL,
                       repo = guess_repo(),
                       tag = "latest",
-                      .token = get_token()){
-
+                      .token = get_token()) {
   df <- pb_info(repo, tag, .token)
 
-  if(is.null(file)){
+  if (is.null(file)) {
     ids <- df$id
   } else {
     ids <- df[df$file_name %in% file, "id"]
   }
 
-  if(length(ids) < 1){
+  if (length(ids) < 1) {
     message(paste(file, "not found on GitHub"))
     return(NULL)
   }
 
-  lapply(ids, function(id){
+  lapply(ids, function(id) {
     ## If we find matching id, Delete file from release.
     gh::gh("DELETE /repos/:owner/:repo/releases/assets/:id",
-       owner = df$owner[[1]], repo = df$repo[[1]], id = id, .token = .token)
+      owner = df$owner[[1]], repo = df$repo[[1]], id = id, .token = .token
+    )
   })
   invisible(TRUE)
 }
@@ -380,77 +386,90 @@ pb_delete <- function(file = NULL,
 
 
 ##################### Generic helpers ##################
-api_error_msg <- function(r){
+api_error_msg <- function(r) {
   paste0(
-  "Cannot access release data for repository ",
-  crayon::blue$bold(paste0(r[[1]], "/", r[[2]])),
-  ".",
-  " Check that you have set a GITHUB_TOKEN and",
-  " that at least one release on your GitHub repository page."
+    "Cannot access release data for repository ",
+    crayon::blue$bold(paste0(r[[1]], "/", r[[2]])),
+    ".",
+    " Check that you have set a GITHUB_TOKEN and",
+    " that at least one release on your GitHub repository page."
   )
 }
 
 
 
-release_info <- function(repo = guess_repo(), .token = get_token()){
+release_info <- function(repo = guess_repo(), .token = get_token()) {
   r <- strsplit(repo, "/")[[1]]
-  if(length(r) != 2){
-    stop(paste("Could not parse", r, "as a repository",
-               "Make sure you have used the format:",
-               crayon::blue$bold("owner/repo")))
+  if (length(r) != 2) {
+    stop(paste(
+      "Could not parse", r, "as a repository",
+      "Make sure you have used the format:",
+      crayon::blue$bold("owner/repo")
+    ))
   }
   releases <- maybe(gh::gh("/repos/:owner/:repo/releases",
-                           owner = r[[1]], repo = r[[2]], .token = .token),
-                    otherwise = stop(api_error_msg(r)))
+    owner = r[[1]], repo = r[[2]], .token = .token
+  ),
+  otherwise = stop(api_error_msg(r))
+  )
   releases
 }
 
 
-pb_info <- function(repo = guess_repo(), tag = NULL, .token = get_token()){
-
+pb_info <- function(repo = guess_repo(), tag = NULL, .token = get_token()) {
   releases <- release_info(repo, .token)
   r <- strsplit(repo, "/")[[1]]
 
   info <-
-    do.call(rbind,
-            lapply(releases,
-             function(x){
-              data.frame(
-                file_name = local_filename(
-                  vapply(x$assets, `[[`, character(1), "name")),
-                tag = x$tag_name,
-                timestamp = lubridate::as_datetime(
-                  vapply(x$assets, `[[`, character(1), "updated_at")),
-                owner = r[[1]],
-                repo = r[[2]],
-                upload_url = x$upload_url,
-                browser_download_url = vapply(x$assets, `[[`, character(1),
-                                              "browser_download_url"),
-                id = vapply(x$assets, `[[`, integer(1), "id"),
-                stringsAsFactors = FALSE)
-              }))
+    do.call(
+      rbind,
+      lapply(
+        releases,
+        function(x) {
+          data.frame(
+            file_name = local_filename(
+              vapply(x$assets, `[[`, character(1), "name")
+            ),
+            tag = x$tag_name,
+            timestamp = lubridate::as_datetime(
+              vapply(x$assets, `[[`, character(1), "updated_at")
+            ),
+            owner = r[[1]],
+            repo = r[[2]],
+            upload_url = x$upload_url,
+            browser_download_url = vapply(
+              x$assets, `[[`, character(1),
+              "browser_download_url"
+            ),
+            id = vapply(x$assets, `[[`, integer(1), "id"),
+            stringsAsFactors = FALSE
+          )
+        }
+      )
+    )
 
-  if(!is.null(tag)){
-    if(tag == "latest"){
-      info <- info[info$tag == info$tag[[1]],]
-    } else if(tag %in% info$tag) {
-      info <- info[info$tag == tag,]
+  if (!is.null(tag)) {
+    if (tag == "latest") {
+      info <- info[info$tag == info$tag[[1]], ]
+    } else if (tag %in% info$tag) {
+      info <- info[info$tag == tag, ]
     } else {
-
-      if(!interactive()){
-        stop(paste0("No release with tag ", tag, " exists on repo ", repo,
-                 ". You can create a new release with pb_new_release() function."))
+      if (!interactive()) {
+        stop(paste0(
+          "No release with tag ", tag, " exists on repo ", repo,
+          ". You can create a new release with pb_new_release() function."
+        ))
       } else {
-        create <- utils::askYesNo(paste("release tag", tag,
-                              "does not exist. Would you like to create it?"),
-                        )
-        if(create){
+        create <- utils::askYesNo(paste(
+          "release tag", tag,
+          "does not exist. Would you like to create it?"
+        ), )
+        if (create) {
           pb_new_release(repo, tag, .token = .token)
         } else {
           return(NULL)
         }
       }
-
     }
   }
   info
@@ -460,12 +479,14 @@ pb_info <- function(repo = guess_repo(), tag = NULL, .token = get_token()){
 
 
 
-get_token <- function(warn=TRUE){
+get_token <- function(warn = TRUE) {
   pat <- Sys.getenv("GITHUB_PAT", Sys.getenv("GITHUB_TOKEN"))
-  if(pat == ""){
-    pat <- paste0("b2b7441d", "aeeb010b", "1df26f1f6",
-                  "0a7f1ed", "c485e443")
-    if(warn) warning("Using default public GITHUB_TOKEN.
+  if (pat == "") {
+    pat <- paste0(
+      "b2b7441d", "aeeb010b", "1df26f1f6",
+      "0a7f1ed", "c485e443"
+    )
+    if (warn) warning("Using default public GITHUB_TOKEN.
                      Please set your own token")
   }
   pat
@@ -505,11 +526,9 @@ pb_new_release <- function(repo = guess_repo(),
                            body = "Data release",
                            draft = FALSE,
                            prerelease = FALSE,
-                           .token = get_token()){
-
-
+                           .token = get_token()) {
   df <- pb_info(repo, tag, .token)
-  if(tag %in%  df$tag){
+  if (tag %in% df$tag) {
     stop(paste("release tag", tag, "already exists"))
   }
   r <- strsplit(repo, "/")[[1]]
@@ -519,17 +538,21 @@ pb_new_release <- function(repo = guess_repo(),
     target_commitish = commit,
     name = name,
     body = body,
-    draft =  draft,
-    prerelease = prerelease)
+    draft = draft,
+    prerelease = prerelease
+  )
 
   ## gh fails to pass body correctly??
-  #gh("/repos/:owner/:repo/releases", owner = r[[1]], repo = r[[2]],
+  # gh("/repos/:owner/:repo/releases", owner = r[[1]], repo = r[[2]],
   #   .method = "POST", body = toJSON(payload,auto_unbox = TRUE), encode="json")
 
   token <- .token
-  resp <- httr::POST(paste0("https://api.github.com/repos/", r[[1]],"/",
-                            r[[2]], "/", "releases?access_token=", token),
-                     body = jsonlite::toJSON(payload,auto_unbox = TRUE))
+  resp <- httr::POST(paste0(
+    "https://api.github.com/repos/", r[[1]], "/",
+    r[[2]], "/", "releases?access_token=", token
+  ),
+  body = jsonlite::toJSON(payload, auto_unbox = TRUE)
+  )
 
   httr::stop_for_status(resp)
   release <- httr::content(resp)
@@ -541,24 +564,25 @@ maybe <- function(expr, otherwise, quiet = TRUE) {
     try(expr, silent = quiet)
   } else {
     tryCatch(expr,
-             error = function(e) {
-               if (!quiet)
-                 message("Error: ", e$message)
-               otherwise
-             }
+      error = function(e) {
+        if (!quiet) {
+          message("Error: ", e$message)
+        }
+        otherwise
+      }
     )
   }
 }
 
 
 #' @importFrom git2r remote_url repository discover_repository
-guess_repo <- function(path = "."){
+guess_repo <- function(path = ".") {
   addr <-
     git2r::remote_url(
       git2r::repository(
-        git2r::discover_repository(path)))
+        git2r::discover_repository(path)
+      )
+    )
   out <- gsub(".*[:|/]([^/]+/[^/]+)(?:\\.git$)?", "\\1", addr)
   gsub("\\.git$", "", out)
 }
-
-
