@@ -47,7 +47,7 @@ Piggyback can download data attached to a release on any repository:
 
 ``` r
 library(piggyback)
-pb_download( "data/mtcars.tsv.gz", repo = "cboettig/piggyback")
+pb_download("mtcars.tsv.gz", repo = "cboettig/piggyback")
 ```
 
 Downloading from private repos or uploading to any repo requires

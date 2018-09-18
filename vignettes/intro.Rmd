@@ -39,7 +39,7 @@ devtools::install_github("cboettig/piggyback")
 
 No authentication is required to download data from *public* GitHub repositories using `piggyback`. Nevertheless, `piggyback` recommends setting a token when possible to avoid rate limits. To upload data to any repository, or to download data from *private* repositories, you will need to authenticate first. 
 
-To do so, add your [GitHub Token](https://github.com/settings/tokens/new?scopes=repo,gist&description=R:GITHUB_PAT) to an environmental variable, e.g. in a `.Renviron` file in your home directory or project directory (any private place you won't upload), see `usethis::edit_r_environ()`.  For one-off use you can also sey your token from the R console using:
+To do so, add your [GitHub Token](https://github.com/settings/tokens/new?scopes=repo,gist&description=R:GITHUB_PAT) to an environmental variable, e.g. in a `.Renviron` file in your home directory or project directory (any private place you won't upload), see `usethis::edit_r_environ()`.  For one-off use you can also set your token from the R console using:
 
 ```r
 Sys.setenv(GITHUB_TOKEN="xxxxxx")
@@ -54,7 +54,7 @@ Download the latest version or a specific version of the data:
 
 ```{r}
 library(piggyback)
-pb_download( "data/mtcars.tsv.gz", repo = "cboettig/piggyback")
+pb_download("mtcars.tsv.gz", repo = "cboettig/piggyback")
 ```
 
 Or a specific version:
@@ -72,14 +72,14 @@ pb_download(repo = "cboettig/piggyback")
 
 Sometimes it is preferable to have a URL from which the data can be read in directly, rather than downloading the data to a local file.  For example, such a URL can be embedded directly into another R script, avoiding any dependence on `piggyback` (provided the repository is already public.)  To get a list of URLs rather than actually downloading the files, use `pb_download_url()`:
 
-```{r  results="hide"}
-pb_download_url("mtcars.tsv.gz") 
+```{r  results="hide", eval=FALSE}
+pb_download_url("data/mtcars.tsv.gz", tag = "v0.0.3") 
 ```
 
 Or store and read the URL directly into R:
 
 ```{r}
-url <- pb_download_url("mtcars.tsv.gz") 
+url <- pb_download_url("data/mtcars.tsv.gz", tag = "v0.0.3")
 readr::read_tsv(url)
 ```
 
@@ -148,7 +148,7 @@ library(magrittr)
 pb_track() %>% pb_upload()
 ```
 
-Similarly, you can download all current data assets of the latest or specificed release by using pb_download without additional arguments: 
+Similarly, you can download all current data assets of the latest or specified release by using `pb_download` without additional arguments: 
 
 ```{r}
 pb_download()
@@ -157,21 +157,21 @@ pb_download()
 
 ## Timestamps and caching
 
-By default, files will not be transfered if the timestamp is more recent at the destination (e.g. `pb_download()` will not download a copy if the local version is newer than the uploaded version).  If necessary, you can override this behavior by setting `use_timestamps = FALSE` in `pb_download()` or `pb_upload()`.  
+By default, files will not be transferred if the timestamp is more recent at the destination (e.g. `pb_download()` will not download a copy if the local version is newer than the uploaded version).  If necessary, you can override this behavior by setting `use_timestamps = FALSE` in `pb_download()` or `pb_upload()`.  
 
 To reduce API calls to GitHub, piggyback caches most calls with a timeout of 1 second by default.  This avoids repeating identical requests to update it's internal record of the repository data (releases, assets, timestamps, etc) during programmatic use.  You can increase or decrease this delay by setting the environmental variable in seconds, e.g. `Sys.setenv("piggyback_cache_duration"=10)` for a longer delay.  Note that the delay cannot be less than `1e-6` seconds at this time.
 
 
 ## Path names
 
-GitHb assets attached to a release do not support file paths, and will convert most special characters (`#`, `%`, etc) to `.` or throw an error (e.g. for filenames containing `$`, `@`, `/`).  To preserve path information on uploading data, `piggyback` uses relative paths (relative to the working directory, or for `pb_push()` and `pb_pull`, relative to the project directory, see `here::here()`) in data file names, and encodes the system path delimiter as `.2f` (`%2f` is the HTML encoding of a literal `/`, but `%` cannot be used in asset names).  `piggyback` functions will always show and use the decoded file names, e.g. `data/mtcars.csv`, but you'll see `data.2fmtcars.csv` if you look at the release attachment on GitHub.
+GitHub assets attached to a release do not support file paths, and will convert most special characters (`#`, `%`, etc) to `.` or throw an error (e.g. for file names containing `$`, `@`, `/`).  To preserve path information on uploading data, `piggyback` uses relative paths (relative to the working directory, or for `pb_push()` and `pb_pull`, relative to the project directory, see `here::here()`) in data file names, and encodes the system path delimiter as `.2f` (`%2f` is the HTML encoding of a literal `/`, but `%` cannot be used in asset names).  `piggyback` functions will always show and use the decoded file names, e.g. `data/mtcars.csv`, but you'll see `data.2fmtcars.csv` if you look at the release attachment on GitHub.
 
 
 ## A Note on GitHub Releases vs Data Archiving
 
 `piggyback` is not intended as a data archiving solution.  Importantly, bare in mind that there is nothing special about multiple "versions" in releases, as far as data assets uploaded by `piggyback` are concerned.  The data files `piggyback` attaches to a Release can be deleted or modified at any time -- creating a new release to store data assets is the functional equivalent of just creating new directories `v0.1`, `v0.2` to store your data.  (GitHub Releases are always pinned to a particular `git` tag, so the code/git-managed contents associated with repo are more immutable, but remember our data assets just piggyback on top of the repo).  
 
-Permanent, published data should always be archived in a proper data repository with a DOI, such as [zenodo.org](https://zenodo.org). Zenodo can freely archive public research data files up to 50 GB in size, and data is strictly versioned (once released, a DOI always refers to the same version of the data, new releases are given new DOIs). `piggyback` is meant only to lower the friction of working with data during the research process.  (e.g. provide data accessible to collaborators or continuus integration systems during research process, including for private repositories.)
+Permanent, published data should always be archived in a proper data repository with a DOI, such as [zenodo.org](https://zenodo.org). Zenodo can freely archive public research data files up to 50 GB in size, and data is strictly versioned (once released, a DOI always refers to the same version of the data, new releases are given new DOIs). `piggyback` is meant only to lower the friction of working with data during the research process.  (e.g. provide data accessible to collaborators or continuous integration systems during research process, including for private repositories.)
 
 
 

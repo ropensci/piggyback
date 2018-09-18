@@ -71,8 +71,10 @@ testthat::test_that(
     )
 
     ## v0.0.3 has 2 files
-    testthat::expect_true(file.exists(file.path(tmp, "data/mtcars.tsv.gz")))
+
     testthat::expect_true(file.exists(file.path(tmp, "data/iris.tsv.xz")))
+
+    #testthat::expect_true(file.exists(file.path(tmp, "data/mtcars.tsv.gz")))
   }
 )
 
