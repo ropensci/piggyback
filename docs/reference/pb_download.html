@@ -21,9 +21,11 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
@@ -32,6 +34,7 @@
 
 <meta property="og:description" content="Download data from an existing release" />
 <meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -58,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">piggyback</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.0.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.0.9900</span>
       </span>
     </div>
 
@@ -80,6 +83,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/alternatives.html">Piggyback comparison to alternatives</a>
+    </li>
     <li>
       <a href="../articles/intro.html">Piggyback Data atop your GitHub Repository!</a>
     </li>
@@ -110,7 +116,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Download data from an existing release</h1>
-    <small class="dont-index">Source: <a href='https://github.com/cboettig/piggyback/blob/master/R/gh.R'><code>R/gh.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/cboettig/piggyback/blob/master/R/pb_download.R'><code>R/pb_download.R</code></a></small>
     <div class="hidden name"><code>pb_download.Rd</code></div>
     </div>
 
@@ -120,8 +126,9 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>pb_download</span>(<span class='kw'>file</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>dest</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>repo</span> <span class='kw'>=</span> <span class='fu'>guess_repo</span>(),
-  <span class='kw'>tag</span> <span class='kw'>=</span> <span class='st'>"latest"</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ignore</span> <span class='kw'>=</span> <span class='st'>"manifest.json"</span>)</pre>
+    <pre class="usage"><span class='fu'>pb_download</span>(<span class='kw'>file</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>dest</span> <span class='kw'>=</span> <span class='kw pkg'>usethis</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/usethis/topics/proj_utils'>proj_get</a></span>(), <span class='kw'>repo</span> <span class='kw'>=</span> <span class='fu'>guess_repo</span>(),
+  <span class='kw'>tag</span> <span class='kw'>=</span> <span class='st'>"latest"</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ignore</span> <span class='kw'>=</span> <span class='st'>"manifest.json"</span>,
+  <span class='kw'>use_timestamps</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>show_progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>.token</span> <span class='kw'>=</span> <span class='fu'>get_token</span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,8 +141,9 @@ all assets attached to the release will be downloaded.</p></td>
     <tr>
       <th>dest</th>
       <td><p>name of vector of names of where file should be downloaded.
-Should be a directory or a list of filenames the same length as <code>file</code> vector.
-Can include paths to files, but any directories in that path must already exist.</p></td>
+Should be a directory or a list of filenames the same length as <code>file</code>
+vector. Can include paths to files, but any directories in that path
+must already exist.</p></td>
     </tr>
     <tr>
       <th>repo</th>
@@ -148,22 +156,41 @@ the current repo if not specified.</p></td>
     </tr>
     <tr>
       <th>overwrite</th>
-      <td><p>default <code>TRUE</code>, should any local files of the same name be overwritten?</p></td>
+      <td><p>Should any local files of the same name be overwritten?
+default <code>TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>ignore</th>
-      <td><p>a list of files to ignore (if downloading "all" because <code>file=NULL</code>).
-by default, "manifest.json" is ignored as this file is created and used only for
-avoiding redundant file transfer by <code>pb_push</code> and <code>pb_pull</code></p></td>
+      <td><p>a list of files to ignore (if downloading "all" because
+<code>file=NULL</code>).</p></td>
+    </tr>
+    <tr>
+      <th>use_timestamps</th>
+      <td><p>If <code>TRUE</code>, then files will only be downloaded
+if timestamp on GitHub is newer than the local timestamp (if
+<code>overwrite=TRUE</code>).  Defaults to <code>TRUE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>show_progress</th>
+      <td><p>logical, should we show progress bar for download?
+Defaults to <code>TRUE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>.token</th>
+      <td><p>GitHub authentication token. Typically set from an
+environmental variable, e.g. in a <code>.Renviron</code> file or with
+<code>Sys.setenv(GITHUB_TOKEN = "xxxxx")</code>, which helps prevent
+accidental disclosure of a secret token when sharing scripts.</p></td>
     </tr>
     </table>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'> <span class='co'>## Download a specific file:</span>
- <span class='kw pkg'>piggyback</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/piggyback/topics/pb_download'>pb_download</a></span>(<span class='st'>"data/iris.tsv.gz"</span>, <span class='kw'>repo</span> <span class='kw'>=</span> <span class='st'>"cboettig/piggyback"</span>)</div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</div><div class='input'>
+ <span class='kw pkg'>piggyback</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/piggyback/topics/pb_download'>pb_download</a></span>(<span class='st'>"data/iris.tsv.gz"</span>, <span class='kw'>repo</span> <span class='kw'>=</span> <span class='st'>"cboettig/piggyback"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: file(s) data/iris.tsv.gz not found in repo cboettig/piggyback</span></div><div class='output co'>#&gt; <span class='message'>All files up-to-date already</span></div><div class='input'>
  <span class='co'>## Download all files</span>
  <span class='kw pkg'>piggyback</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/piggyback/topics/pb_download'>pb_download</a></span>(<span class='kw'>repo</span> <span class='kw'>=</span> <span class='st'>"cboettig/piggyback"</span>)</div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
+#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
 #&gt;   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
 #&gt;   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</div></pre>
   </div>

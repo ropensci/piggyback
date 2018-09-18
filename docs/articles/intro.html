@@ -8,8 +8,8 @@
 <title>Piggyback Data atop your GitHub Repository! • piggyback</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><meta property="og:title" content="Piggyback Data atop your GitHub Repository!">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Piggyback Data atop your GitHub Repository!">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">piggyback</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.0.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.0.9900</span>
       </span>
     </div>
 
@@ -52,6 +52,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/alternatives.html">Piggyback comparison to alternatives</a>
+    </li>
+    <li>
       <a href="../articles/intro.html">Piggyback Data atop your GitHub Repository!</a>
     </li>
   </ul>
@@ -82,7 +85,7 @@
       <h1>Piggyback Data atop your GitHub Repository!</h1>
                         <h4 class="author">Carl Boettiger</h4>
             
-            <h4 class="date">2018-06-19</h4>
+            <h4 class="date">2018-09-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/cboettig/piggyback/blob/master/vignettes/intro.Rmd"><code>vignettes/intro.Rmd</code></a></small>
       <div class="hidden name"><code>intro.Rmd</code></div>
@@ -95,62 +98,94 @@
 <h1 class="hasAnchor">
 <a href="#why-piggyback" class="anchor"></a>Why <code>piggyback</code>?</h1>
 <p><code>piggyback</code> grew out of the needs of students both in my classroom and in my research group, who frequently need to work with data files somewhat larger than one can conveniently manage by committing directly to GitHub. As we frequently want to share and run code that depends on &gt;50MB data files on each of our own machines, on continuous integration (i.e. <a href="https://travis.org">travis</a>), and on larger computational servers, data sharing quickly becomes a bottleneck.</p>
-<p>Piggyback aims to address this using a <a href="https://git-lfs.github.com/">Git LFS</a> style approach, in which you specify the type of files you wish to track, and then can pull an push data files to GitHub (though not through <code>git</code> itself):</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(piggyback)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="co"># track csv files, compressed data, and geotiff files:</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="../reference/pb_track.html">pb_track</a></span>(<span class="kw">c</span>(<span class="st">"*.csv"</span>, <span class="st">"*.gz"</span>, <span class="st">"*.tif"</span>))</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="../reference/pb_push.html">pb_push</a></span>()</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">## pull data onto a new machine:</a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="kw"><a href="../reference/pb_pull.html">pb_pull</a></span>()</a></code></pre></div>
-<p>To authenticate, add your <code>GITHUB_TOKEN</code> to a secure <code>.Renviron</code> file (and <code>.gitignore</code> it!). If you have never created a GitHub token before, use <code><a href="http://www.rdocumentation.org/packages/usethis/topics/browse_github_pat">usethis::browse_github_pat()</a></code> to get started. Note that <code>piggyback</code> can also be used more manually to upload or download individual files to your GitHub repositories:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="../reference/pb_upload.html">pb_upload</a></span>(<span class="st">"my-data.csv"</span>, <span class="dt">repo =</span> <span class="st">"user/repo"</span>)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="../reference/pb_download.html">pb_download</a></span>(<span class="st">"my-data.csv"</span>, <span class="dt">repo =</span> <span class="st">"user/repo"</span>)</a></code></pre></div>
-<p>See the README for additional information on basic use.</p>
-<div id="piggyback-vs-the-alternatives" class="section level2">
+<div id="installation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#piggyback-vs-the-alternatives" class="anchor"></a><code>piggyback</code> vs the alternatives</h2>
-<p>There are many alternatives to <code>piggyback</code>, and after considerable experience I haven’t found any that ticked all the boxes for me:</p>
-<ul>
-<li>[x] Free storage</li>
-<li>[x] Can be integrated into private code / private workflows</li>
-<li>[x] Simple and practical to deploy on continuous integration</li>
-<li>[x] Works well with private data</li>
-<li>[x] Minimal configuration</li>
-</ul>
-<div id="git-lfs" class="section level3">
-<h3 class="hasAnchor">
-<a href="#git-lfs" class="anchor"></a>Git LFS</h3>
-<p>Git LFS provides the closest user experience to what I was going for. It stands out above all other alternatives for providing both the <em>best authentication</em> experience (relying directly on any of the standard <code>git</code> authentication mechanisms such as https, ssh keys, app integration), and it provides the most legitimate version control of the data. However, there are many show-stoppers to using Git LFS for me.</p>
-<ul>
-<li><p>GitHub pricing &amp; resulting problems for GitHub’s fork / PR model. <a href="https://medium.com/@megastep/github-s-large-file-storage-is-no-panacea-for-open-source-quite-the-opposite-12c0e16a9a91">Described eleqouently here</a>. Basically, despite generous rates and free data options everywhere else, GitHub’s LFS storage and bandwidth not only cost a lot, but also make it impossible to have public forks and pull request for your repository. Technically this is a problem only for GitHub’s LFS (since it stems from the pricing rules); and can be avoided by using LFS on GitLab or other platform, as <a href="https://github.com/jimhester/test-glfs/">Jim Hester has described</a>. Still, this proved <a href="https://github.com/jimhester/test-glfs/issues/2">unsuccessful for me</a>, and still faces the other big issue with <code>git-lfs</code>:</p></li>
-<li><p>Overwrites <code>git</code> itself. Git LFS is just <em>too</em> integrated into <code>git</code> – it replaces your authentic <code>git</code> engine with <code>git-lfs</code>, such that the identical <code>git</code> command can have different behaviors on a machine with <code>git-lfs</code> installed vs just plain <code>git</code>. Maybe fine for a professional team that is “all in” on <code>git-lfs</code>, but is a constant source of pitfalls when working with students and moving between machines that all have only authentic <code>git</code> installed. The difficulties with supporting pull requests etc are also related to this – in some sense, once you have a <code>git-lfs</code> repository, you’re really using an entirely new version control system that isn’t going to be 100% compatible with the nearly-ubiquitous authentic <code>git</code>.</p></li>
-</ul>
+<a href="#installation" class="anchor"></a>Installation</h2>
+<p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"cboettig/piggyback"</span>)</a></code></pre></div>
 </div>
-<div id="amazon-s3" class="section level3">
-<h3 class="hasAnchor">
-<a href="#amazon-s3" class="anchor"></a>Amazon S3</h3>
-<p>Amazon S3 is perhaps the most universal and most obvious go-to place for online-available public and private data storage. The 5 GB/mo free tier is nice and the pricing is very reasonable and only very incremental after that. It is easily the most industry-standard solution, and still probably the best way to go in many cases. It is probably the most scalable solution for very large data, and the only such that has built in support/integration to larger query services like Apache Spark / <code>sparklyr</code>. It falls short of my own use case though in the authentication area. I require students create a GitHub account for my courses and my lab group. I don’t like requiring such third-party accounts, but this one is fundamental to our daily use in classroom and in research, and most of them will continue using the service afterwards. I particularly don’t like having people create complex accounts that they might not even use much in the class or afterwards, just to deal with some pesky minor issue of some data file that is just a little too big for GitHub.</p>
-<p>Amazon’s authentication is also much more complex than GitHub’s passwords or tokens, as is the process of uploading and downloading data from S3 (though the <code>aws.s3</code> R package is rather nice remedy here, it doesn’t conform to the same user API as the <code>aws-cli</code> (python) tool, leaving some odd quirks and patterns that don’t match standard Linux commands.) Together, these make it significantly more difficult to deploy as a quick solution for moving private data around with private repositories.</p>
+<div id="authentication" class="section level2">
+<h2 class="hasAnchor">
+<a href="#authentication" class="anchor"></a>Authentication</h2>
+<p>No authentication is required to download data from <em>public</em> GitHub repositories using <code>piggyback</code>. Nevertheless, <code>piggyback</code> recommends setting a token when possible to avoid rate limits. To upload data to any repository, or to download data from <em>private</em> repositories, you will need to authenticate first.</p>
+<p>To do so, add your <a href="https://github.com/settings/tokens/new?scopes=repo,gist&amp;description=R:GITHUB_PAT">GitHub Token</a> to an environmental variable, e.g. in a <code>.Renviron</code> file in your home directory or project directory (any private place you won’t upload), see <code><a href="http://www.rdocumentation.org/packages/usethis/topics/edit">usethis::edit_r_environ()</a></code>. For one-off use you can also set your token from the R console using:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">Sys.setenv</span>(<span class="dt">GITHUB_TOKEN=</span><span class="st">"xxxxxx"</span>)</a></code></pre></div>
+<p>But try to avoid putting <code>Sys.setenv()</code> in any R scripts – remember, the goal here is to avoid writing your private token in any file that might be shared, even privately. For more help setting up a GitHub token, for the first time, see <code><a href="http://www.rdocumentation.org/packages/usethis/topics/browse_github_pat">usethis::browse_github_pat()</a></code>.</p>
 </div>
-<div id="scientific-repositories-with-private-storage" class="section level3">
-<h3 class="hasAnchor">
-<a href="#scientific-repositories-with-private-storage" class="anchor"></a>Scientific repositories with private storage</h3>
-<p>For scientific research purposes, this would be my ideal solution. Encouraging researchers to submit data to a repository at the time of publication is always a challenge, since doing so inevitably involves time &amp; effort and the immediate benefit to the researcher is relatively minimal. If uploading the data to a repository served an immediate practical purpose of facilitating collaboration, backing up and possibly versioning data, etc, during the research process itself rather than after all is said and done, it would be much more compelling. Several repositories permit sharing of private data, at least up to some threshold, including DataONE and figshare. Unfortunately, at this time, I have found the interfaces and R tooling for these too limited or cumbersome for everyday use.</p>
+<div id="downloading-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#downloading-data" class="anchor"></a>Downloading data</h2>
+<p>Download the latest version or a specific version of the data:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(piggyback)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="../reference/pb_download.html">pb_download</a></span>(<span class="st">"mtcars.tsv.gz"</span>, <span class="dt">repo =</span> <span class="st">"cboettig/piggyback"</span>)</a></code></pre></div>
+<p>Or a specific version:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="../reference/pb_download.html">pb_download</a></span>(<span class="st">"mtcars.tsv.gz"</span>, <span class="dt">repo =</span> <span class="st">"cboettig/piggyback"</span>, <span class="dt">tag =</span> <span class="st">"v0.0.4"</span>)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; All files up-to-date already</span></a></code></pre></div>
+<p>Or simply omit the file name to download all assets connected with a given release. (You can also always specify a destination directory to download. This directory will be created if it does not yet exist.)</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="../reference/pb_download.html">pb_download</a></span>(<span class="dt">repo =</span> <span class="st">"cboettig/piggyback"</span>)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; All files up-to-date already</span></a></code></pre></div>
+<p>Sometimes it is preferable to have a URL from which the data can be read in directly, rather than downloading the data to a local file. For example, such a URL can be embedded directly into another R script, avoiding any dependence on <code>piggyback</code> (provided the repository is already public.) To get a list of URLs rather than actually downloading the files, use <code><a href="../reference/pb_download_url.html">pb_download_url()</a></code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="../reference/pb_download_url.html">pb_download_url</a></span>(<span class="st">"data/mtcars.tsv.gz"</span>, <span class="dt">tag =</span> <span class="st">"v0.0.3"</span>) </a></code></pre></div>
+<p>Or store and read the URL directly into R:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">url &lt;-<span class="st"> </span><span class="kw"><a href="../reference/pb_download_url.html">pb_download_url</a></span>(<span class="st">"data/mtcars.tsv.gz"</span>, <span class="dt">tag =</span> <span class="st">"v0.0.3"</span>)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">readr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/readr/topics/read_delim">read_tsv</a></span>(url)</a></code></pre></div>
 </div>
-<div id="datastorr" class="section level3">
-<h3 class="hasAnchor">
-<a href="#datastorr" class="anchor"></a><a href="https://github.com/ropenscilabs/datastorr">datastorr</a>
-</h3>
-<p>The <code>piggyback</code> approach is partly inspired by the strategy used in the <code>datastorr</code> package, which also uploads data to GitHub releases. <code>datastorr</code> envisions a rather different workflow around this storage strategy, based on the concept of an R “data package” rather than the Git LFS. I am not a fan of the “data package” approach in general – I think data should be stored in a platform agnostic way, not as <code>.Rdata</code> files, and I often want to first download my data to disk and read it with dedicated functions, not load it “auto-magically” as a package. This latter issue is particularly important when the data files are larger than what can conveniently fit into working memory, and is better accessed as a database (e.g. SQLite for tabular data, postgis spatial data, etc).</p>
-<p>In terms of practical implementation, <code>datastorr</code> also creates a new release every time the data file is updated, rather than letting you overwrite files. In principle <code>piggyback</code> will let you version data this way as well, simply create a new release first using <code><a href="../reference/pb_new_release.html">pb_new_release(tag="v2")</a></code> or whatever tag you like. I have not opted for this workflow since in reality, versioning data with releases this way is technically equivalent to creating a new folder for each new version of the data and storing that – unlike true git commits, release assets such as <code>datastorr</code> creates can be easily deleted or overwritten. I still believe permanent versioned archives like Zenodo should be used for long-term versioned distribution. Meanwhile, for day-to-day use I often want to overwrite data files with their most recent versions. (In my case these ‘data’ files are most often created from upstream data and/or other possibly-long-running code, and are tracked for convenience. As such they often change as a result of continued work on the upstream processing code. Perhaps this is not the case for many users and more attention should be paid to versioning.)</p>
+<div id="uploading-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#uploading-data" class="anchor"></a>Uploading data</h2>
+<p>If your GitHub repository doesn’t have any <a href="https://help.github.com/articles/creating-releases/">releases</a> yet, <code>piggyback</code> will help you quickly create one. Create new releases to manage multiple versions of a given data file. While you can create releases as often as you like, making a new release is by no means necessary each time you upload a file. If maintaining old versions of the data is not useful, you can stick with a single release and upload all of your data there.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="../reference/pb_new_release.html">pb_new_release</a></span>(<span class="st">"cboettig/piggyback"</span>, <span class="st">"v0.0.1"</span>)</a></code></pre></div>
+<p>Once we have at least one release available, we are ready to upload. By default, <code>pb_upload</code> will attach data to the latest release.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">## We'll need some example data first.</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">## Pro tip: compress your tabular data to save space &amp; speed upload/downloads</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">readr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/readr/topics/write_delim">write_tsv</a></span>(mtcars, <span class="st">"mtcars.tsv.gz"</span>)</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="kw"><a href="../reference/pb_upload.html">pb_upload</a></span>(<span class="st">"mtcars.tsv.gz"</span>, <span class="dt">repo =</span> <span class="st">"cboettig/piggyback"</span>)</a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt; Warning in pb_upload_file(f, repo, tag, name, overwrite, use_timestamps, :</span></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#&gt; Skipping upload of mtcars.tsv.gz as file exists on GitHub cboettig/</span></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt; piggyback and overwrite = FALSE</span></a></code></pre></div>
+<p><code><a href="../reference/pb_upload.html">pb_upload()</a></code> will ovewrite any existing file by default, unless the timestamp the uploaded version is more recent. You can toggle these settings with <code>overwrite=FALSE</code> and <code>use_timestamps=FALSE</code>.</p>
 </div>
-<div id="sharding-on-github" class="section level3">
-<h3 class="hasAnchor">
-<a href="#sharding-on-github" class="anchor"></a>Sharding on GitHub</h3>
-<p>Another creative solution (hack), at least for some file types, is to break large files into multiple smaller files, and commit those to one or many GitHub repositories. While <a href="https://en.wikipedia.org/wiki/Shard_(database_architecture)">sharding</a> is sometimes a legitimate strategy, it has many obvious practical disadvantages and limitations.</p>
+<div id="additional-convenience-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#additional-convenience-functions" class="anchor"></a>Additional convenience functions</h2>
+<p>List all files currently piggybacking on a given release (as always, defaults to <code>latest</code> if no <code>tag</code> is given):</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="../reference/pb_list.html">pb_list</a></span>(<span class="dt">repo =</span> <span class="st">"cboettig/piggyback"</span>, <span class="dt">tag =</span> <span class="st">"data"</span>)</a></code></pre></div>
+<p>Delete a file from a release:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="../reference/pb_delete.html">pb_delete</a></span>(<span class="dt">file =</span> <span class="st">"mtcars.tsv.gz"</span>, <span class="dt">repo =</span> <span class="st">"cboettig/piggyback"</span>)</a></code></pre></div>
+<p>Note that this is irreversible unless you have a copy of the data elsewhere. You can also simply set <code>overwrite=TRUE</code> in <code><a href="../reference/pb_upload.html">pb_upload()</a></code> to overwrite an existing file.</p>
 </div>
+<div id="git-style-tracking" class="section level2">
+<h2 class="hasAnchor">
+<a href="#git-style-tracking" class="anchor"></a>git-style tracking</h2>
+<p>For an even simpler way to sync many data files to GitHub, <code>piggyback</code> provides Git-LFS-like <code>push</code> and <code>pull</code> methods. These methods are simple wrappers around the basic upload and download interface that streamline the process of managing a potentially large number of data files of a given type or location.</p>
+<p>By default, specify a <code>glob</code> pattern of files to track. <code>pb_track</code> can also track all files at a given path. These patterns are simply written into a hidden config file, <code>.pbattributes</code> (just like <code>.gitattributes</code> in Git LFS), which you can also edit manually.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="../reference/pb_track.html">pb_track</a></span>(<span class="kw">c</span>(<span class="st">"*.tsv.gz"</span>, <span class="st">"*.tif"</span>, <span class="st">"*.zip"</span>))</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw"><a href="../reference/pb_track.html">pb_track</a></span>(<span class="st">"data/*"</span>)</a></code></pre></div>
+<p>Adding a pattern with <code><a href="../reference/pb_track.html">pb_track()</a></code> will also automatically add that pattern to <code>.gitignore</code>, since these data files will be piggybacking on top of the repo rather than being version managed by <code>git</code>. You probably will want to check in the <code>.pbattributes</code> file to version control, just as you would a <code>.gitattributes</code> or <code>.gitignore</code>.</p>
+<p>Upload all tracked data to GitHub. By default, <code><a href="../reference/pb_track.html">pb_track()</a></code> will return a list of all tracked files which can be easily passed (or piped) to <code>pb_upload</code>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">library</span>(magrittr)</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw"><a href="../reference/pb_track.html">pb_track</a></span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/pb_upload.html">pb_upload</a></span>()</a></code></pre></div>
+<p>Similarly, you can download all current data assets of the latest or specified release by using <code>pb_download</code> without additional arguments:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="../reference/pb_download.html">pb_download</a></span>(<span class="dt">dest =</span> <span class="kw">tempdir</span>())</a></code></pre></div>
+</div>
+<div id="timestamps-and-caching" class="section level2">
+<h2 class="hasAnchor">
+<a href="#timestamps-and-caching" class="anchor"></a>Timestamps and caching</h2>
+<p>By default, files will not be transferred if the timestamp is more recent at the destination (e.g. <code><a href="../reference/pb_download.html">pb_download()</a></code> will not download a copy if the local version is newer than the uploaded version). If necessary, you can override this behavior by setting <code>use_timestamps = FALSE</code> in <code><a href="../reference/pb_download.html">pb_download()</a></code> or <code><a href="../reference/pb_upload.html">pb_upload()</a></code>.</p>
+<p>To reduce API calls to GitHub, piggyback caches most calls with a timeout of 1 second by default. This avoids repeating identical requests to update it’s internal record of the repository data (releases, assets, timestamps, etc) during programmatic use. You can increase or decrease this delay by setting the environmental variable in seconds, e.g. <code>Sys.setenv("piggyback_cache_duration"=10)</code> for a longer delay. Note that the delay cannot be less than <code>1e-6</code> seconds at this time.</p>
+</div>
+<div id="path-names" class="section level2">
+<h2 class="hasAnchor">
+<a href="#path-names" class="anchor"></a>Path names</h2>
+<p>GitHub assets attached to a release do not support file paths, and will convert most special characters (<code>#</code>, <code>%</code>, etc) to <code>.</code> or throw an error (e.g. for file names containing <code>$</code>, <code>@</code>, <code>/</code>). To preserve path information on uploading data, <code>piggyback</code> uses relative paths (relative to the working directory, or for <code>pb_push()</code> and <code>pb_pull</code>, relative to the project directory, see <code><a href="http://www.rdocumentation.org/packages/here/topics/here">here::here()</a></code>) in data file names, and encodes the system path delimiter as <code>.2f</code> (<code>%2f</code> is the HTML encoding of a literal <code>/</code>, but <code>%</code> cannot be used in asset names). <code>piggyback</code> functions will always show and use the decoded file names, e.g. <code>data/mtcars.csv</code>, but you’ll see <code>data.2fmtcars.csv</code> if you look at the release attachment on GitHub.</p>
+</div>
+<div id="a-note-on-github-releases-vs-data-archiving" class="section level2">
+<h2 class="hasAnchor">
+<a href="#a-note-on-github-releases-vs-data-archiving" class="anchor"></a>A Note on GitHub Releases vs Data Archiving</h2>
+<p><code>piggyback</code> is not intended as a data archiving solution. Importantly, bare in mind that there is nothing special about multiple “versions” in releases, as far as data assets uploaded by <code>piggyback</code> are concerned. The data files <code>piggyback</code> attaches to a Release can be deleted or modified at any time – creating a new release to store data assets is the functional equivalent of just creating new directories <code>v0.1</code>, <code>v0.2</code> to store your data. (GitHub Releases are always pinned to a particular <code>git</code> tag, so the code/git-managed contents associated with repo are more immutable, but remember our data assets just piggyback on top of the repo).</p>
+<p>Permanent, published data should always be archived in a proper data repository with a DOI, such as <a href="https://zenodo.org">zenodo.org</a>. Zenodo can freely archive public research data files up to 50 GB in size, and data is strictly versioned (once released, a DOI always refers to the same version of the data, new releases are given new DOIs). <code>piggyback</code> is meant only to lower the friction of working with data during the research process. (e.g. provide data accessible to collaborators or continuous integration systems during research process, including for private repositories.)</p>
 </div>
 </div>
   </div>
@@ -162,7 +197,15 @@
       <ul class="nav nav-pills nav-stacked">
 <li>
 <a href="#why-piggyback">Why <code>piggyback</code>?</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#piggyback-vs-the-alternatives"><code>piggyback</code> vs the alternatives</a></li>
+<li><a href="#installation">Installation</a></li>
+      <li><a href="#authentication">Authentication</a></li>
+      <li><a href="#downloading-data">Downloading data</a></li>
+      <li><a href="#uploading-data">Uploading data</a></li>
+      <li><a href="#additional-convenience-functions">Additional convenience functions</a></li>
+      <li><a href="#git-style-tracking">git-style tracking</a></li>
+      <li><a href="#timestamps-and-caching">Timestamps and caching</a></li>
+      <li><a href="#path-names">Path names</a></li>
+      <li><a href="#a-note-on-github-releases-vs-data-archiving">A Note on GitHub Releases vs Data Archiving</a></li>
       </ul>
 </li>
       </ul>

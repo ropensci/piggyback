@@ -21,9 +21,11 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
@@ -34,6 +36,7 @@
 scripts that may want to download the file directly without introducing any
 dependency on piggyback or authentication steps." />
 <meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -60,7 +63,7 @@ dependency on piggyback or authentication steps." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">piggyback</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.0.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.0.9900</span>
       </span>
     </div>
 
@@ -82,6 +85,9 @@ dependency on piggyback or authentication steps." />
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/alternatives.html">Piggyback comparison to alternatives</a>
+    </li>
     <li>
       <a href="../articles/intro.html">Piggyback Data atop your GitHub Repository!</a>
     </li>
@@ -112,7 +118,7 @@ dependency on piggyback or authentication steps." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get the download url of a given file</h1>
-    <small class="dont-index">Source: <a href='https://github.com/cboettig/piggyback/blob/master/R/gh.R'><code>R/gh.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/cboettig/piggyback/blob/master/R/pb_download_url.R'><code>R/pb_download_url.R</code></a></small>
     <div class="hidden name"><code>pb_download_url.Rd</code></div>
     </div>
 
@@ -124,7 +130,8 @@ dependency on <code>piggyback</code> or authentication steps.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>pb_download_url</span>(<span class='kw'>file</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>repo</span> <span class='kw'>=</span> <span class='fu'>guess_repo</span>(), <span class='kw'>tag</span> <span class='kw'>=</span> <span class='st'>"latest"</span>)</pre>
+    <pre class="usage"><span class='fu'>pb_download_url</span>(<span class='kw'>file</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>repo</span> <span class='kw'>=</span> <span class='fu'>guess_repo</span>(), <span class='kw'>tag</span> <span class='kw'>=</span> <span class='st'>"latest"</span>,
+  <span class='kw'>.token</span> <span class='kw'>=</span> <span class='fu'>get_token</span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -143,6 +150,13 @@ the current repo if not specified.</p></td>
       <th>tag</th>
       <td><p>tag for the GitHub release to which this data is attached</p></td>
     </tr>
+    <tr>
+      <th>.token</th>
+      <td><p>GitHub authentication token. Typically set from an
+environmental variable, e.g. in a <code>.Renviron</code> file or with
+<code>Sys.setenv(GITHUB_TOKEN = "xxxxx")</code>, which helps prevent
+accidental disclosure of a secret token when sharing scripts.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -151,7 +165,11 @@ the current repo if not specified.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>pb_download_url</span>(<span class='st'>"data/iris.tsv.gz"</span>, <span class='kw'>repo</span><span class='kw'>=</span><span class='st'>"cboettig/piggyback"</span>)</div><div class='output co'>#&gt; [1] "https://github.com/cboettig/piggyback/releases/download/data/data.2firis.tsv.gz"</div></pre>
+    <pre class="examples"><div class='input'>
+<span class='fu'>pb_download_url</span>(<span class='st'>"data/iris.tsv.gz"</span>,
+                <span class='kw'>repo</span> <span class='kw'>=</span> <span class='st'>"cboettig/piggyback"</span>,
+                <span class='kw'>tag</span> <span class='kw'>=</span> <span class='st'>"v0.0.1"</span>)</div><div class='output co'>#&gt; [1] "https://github.com/cboettig/piggyback/releases/download/v0.0.1/data.2firis.tsv.gz"</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

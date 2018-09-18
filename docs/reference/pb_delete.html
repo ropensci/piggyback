@@ -21,9 +21,11 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
@@ -32,6 +34,7 @@
 
 <meta property="og:description" content="Delete an asset attached to a release" />
 <meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -58,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">piggyback</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.0.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.0.9900</span>
       </span>
     </div>
 
@@ -80,6 +83,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/alternatives.html">Piggyback comparison to alternatives</a>
+    </li>
     <li>
       <a href="../articles/intro.html">Piggyback Data atop your GitHub Repository!</a>
     </li>
@@ -110,7 +116,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Delete an asset attached to a release</h1>
-    <small class="dont-index">Source: <a href='https://github.com/cboettig/piggyback/blob/master/R/gh.R'><code>R/gh.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/cboettig/piggyback/blob/master/R/pb_delete.R'><code>R/pb_delete.R</code></a></small>
     <div class="hidden name"><code>pb_delete.Rd</code></div>
     </div>
 
@@ -120,15 +126,17 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>pb_delete</span>(<span class='no'>file</span>, <span class='kw'>repo</span> <span class='kw'>=</span> <span class='fu'>guess_repo</span>(), <span class='kw'>tag</span> <span class='kw'>=</span> <span class='st'>"latest"</span>, <span class='kw'>.token</span> <span class='kw'>=</span> <span class='fu'>get_token</span>(),
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>pb_delete</span>(<span class='kw'>file</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>repo</span> <span class='kw'>=</span> <span class='fu'>guess_repo</span>(), <span class='kw'>tag</span> <span class='kw'>=</span> <span class='st'>"latest"</span>,
+  <span class='kw'>.token</span> <span class='kw'>=</span> <span class='fu'>get_token</span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>file</th>
-      <td><p>path to file to be uploaded</p></td>
+      <td><p>file(s) to be deleted from the release. If <code>NULL</code> (default
+when argument is omitted), function will delete all attachments to the release.
+delete</p></td>
     </tr>
     <tr>
       <th>repo</th>
@@ -141,13 +149,10 @@ repo if not specified.</p></td>
     </tr>
     <tr>
       <th>.token</th>
-      <td><p>GitHub authentication token. Typically set from an environmental
-variable, e.g. <code>Sys.setenv(GITHUB_TOKEN = "xxxxx")</code>, which helps prevent
-accidental disclosure of a secret token when sharing scripts.</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>should we message if file not found? (default faluse)</p></td>
+      <td><p>GitHub authentication token. Typically set from an
+environmental variable, e.g. in a <code>.Renviron</code> file or with
+<code>Sys.setenv(GITHUB_TOKEN = "xxxxx")</code>, which helps prevent accidental
+disclosure of a secret token when sharing scripts.</p></td>
     </tr>
     </table>
     

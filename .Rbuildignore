@@ -1,3 +1,4 @@
+^_pkgdown\.yml$
 ^\.pbattributes$
 ^manifest\.json$
 ^piggyback\.Rproj$
@@ -16,3 +17,4 @@
 ^paper\.bib$
 ^codemeta\.json$
 ^docs$
+^.*\.gz$

@@ -4,7 +4,7 @@ author: "Carl Boettiger"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Piggyback Data atop your GitHub Repository!}
+  %\VignetteIndexEntry{piggyback}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -20,6 +20,7 @@ knitr::opts_chunk$set(
 Sys.setenv(piggyback_cache_duration="1e-6")
 
 ```
+
 
 
 # Why `piggyback`?
@@ -72,13 +73,13 @@ pb_download(repo = "cboettig/piggyback")
 
 Sometimes it is preferable to have a URL from which the data can be read in directly, rather than downloading the data to a local file.  For example, such a URL can be embedded directly into another R script, avoiding any dependence on `piggyback` (provided the repository is already public.)  To get a list of URLs rather than actually downloading the files, use `pb_download_url()`:
 
-```{r  results="hide", eval=FALSE}
+```{r  eval=FALSE}
 pb_download_url("data/mtcars.tsv.gz", tag = "v0.0.3") 
 ```
 
 Or store and read the URL directly into R:
 
-```{r}
+```{r eval=FALSE}
 url <- pb_download_url("data/mtcars.tsv.gz", tag = "v0.0.3")
 readr::read_tsv(url)
 ```
@@ -102,13 +103,8 @@ readr::write_tsv(mtcars, "mtcars.tsv.gz")
 pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback")
 ```
 
-You can also simply overwrite the a previous version of the file on an existing release, rather than creating a new release every time:
+`pb_upload()` will overwrite any existing file by default, unless the timestamp the uploaded version is more recent.  You can toggle these settings with `overwrite=FALSE` and `use_timestamps=FALSE`.  
 
-```{r  results="hide"}
-pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback", overwrite = TRUE)
-```
-
-This is useful in scripts that may automatically upload their results, or whenever a previous version of a data file is disposable.  
 
 ## Additional convenience functions
 
@@ -150,7 +146,7 @@ pb_track() %>% pb_upload()
 
 Similarly, you can download all current data assets of the latest or specified release by using `pb_download` without additional arguments: 
 
-```{r}
+```{r eval=FALSE}
 pb_download()
 ```
 
@@ -175,6 +171,9 @@ Permanent, published data should always be archived in a proper data repository 
 
 
 
+```{r include=FALSE}
+unlink("*.gz")
+```
 
 
 

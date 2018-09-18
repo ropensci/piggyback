@@ -73,7 +73,7 @@ testthat::test_that(
     ## v0.0.3 has 2 files
 
     testthat::expect_true(file.exists(file.path(tmp, "data/iris.tsv.xz")))
-
+    ## fine locally, why does this fail?
     #testthat::expect_true(file.exists(file.path(tmp, "data/mtcars.tsv.gz")))
   }
 )
