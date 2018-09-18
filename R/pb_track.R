@@ -46,13 +46,14 @@ pb_track <- function(glob = NULL, repo_root = usethis::proj_get()) {
 
 ## Helper function
 #' @importFrom fs path_rel path_filter
+#' @importFrom magrittr %>%
 match_globs <- function(globs, proj_dir = usethis::proj_get()) {
   unique(
     unname(unlist(lapply(globs, function(g) {
       ## only match files (i.e. things we can hash)
-      fs::dir_ls(path = proj_dir, recursive = TRUE, type = "file") %>%
-        fs::path_rel(proj_dir) %>%
-        fs::path_filter(glob = g)
+       tmp <- fs::dir_ls(path = proj_dir, recursive = TRUE, type = "file")
+       tmp <- fs::path_rel(tmp, proj_dir)
+       fs::path_filter(tmp, glob = g)
     })))
   )
 }

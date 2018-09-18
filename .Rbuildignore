@@ -1,3 +1,5 @@
+^\.pbattributes$
+^manifest\.json$
 ^piggyback\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
@@ -9,7 +11,6 @@
 ^\.Renviron$
 ^appveyor\.yml$
 ^CODE_OF_CONDUCT\.md$
-^\.pbattributes$
 ^onboarding-submission\.md$
 ^paper\.md$
 ^paper\.bib$

@@ -1,6 +1,5 @@
 context("Requiring Authentication")
 
-library(magrittr)
 ## Setup: create test repo
 # repo <- "cboettig/piggyback-test"
 
@@ -58,6 +57,7 @@ test_that("working from git repo", {
   sink() # avoid verbose messages in test log. usethis msgs cannot turn off(?)
 
   # pb_push
+  library(magrittr)
   pb_track() %>%
     pb_upload(repo = "cboettig/piggyback", tag = "v0.0.3",
               show_progress = FALSE, overwrite = TRUE)

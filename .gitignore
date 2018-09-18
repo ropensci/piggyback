@@ -1,3 +1,7 @@
+*.tsv.gz
+*.tif
+*.zip
+manifest.json
 .Renviron
 .Rproj.user
 .Rhistory
@@ -8,10 +12,6 @@ inst/doc
 *.RData
 *.tsv
 *.gz
-.manifest.json
-*.tif
-*.zip
-manifest.json
 *.xz
 *.bz2
 data/*
