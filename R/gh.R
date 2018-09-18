@@ -406,7 +406,7 @@ release_info <- function(repo = guess_repo(), .token = get_token()){
 }
 
 
-pb_info <- function(repo = guess_repo(), tag = NULL, .token = get_token()){
+pb_info_fn <- function(repo = guess_repo(), tag = NULL, .token = get_token()){
 
   releases <- release_info(repo, .token)
   r <- strsplit(repo, "/")[[1]]
@@ -455,6 +455,7 @@ pb_info <- function(repo = guess_repo(), tag = NULL, .token = get_token()){
   }
   info
 }
+pb_info <- memoise::memoise(pb_info_fn, ~timeout(10))
 
 
 
