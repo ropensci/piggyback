@@ -13,3 +13,4 @@ testthat::test_that(
     unlink(f)
   }
 )
+

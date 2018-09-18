@@ -31,7 +31,14 @@ api_error_msg <- function(r) {
 
 
 get_token <- function(warn = TRUE) {
-  pat <- Sys.getenv("GITHUB_PAT", Sys.getenv("GITHUB_TOKEN"))
+
+  ## Not safe: doing Sys.setenv(GITHUB_PAT="") prevents default.
+  ## Sys.unsetenv("GITHUB_PAT")
+  #pat <- Sys.getenv("GITHUB_PAT", Sys.getenv("GITHUB_TOKEN"))
+
+
+  pat <- Sys.getenv("GITHUB_PAT")
+  if (pat == "") pat <- Sys.getenv("GITHUB_TOKEN")
   if (pat == "") {
     pat <- paste0(
       "b2b7441d", "aeeb010b", "1df26f1f6",

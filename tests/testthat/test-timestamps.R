@@ -1,5 +1,6 @@
 
 
+
 testthat::test_that(
   "upload obeys timestamp only when newer", {
     testthat::skip_on_travis() ## No idea.
@@ -24,7 +25,7 @@ testthat::test_that(
         dir = tmp
       )
     )
-    Sys.sleep(5)
+    Sys.sleep(1)
     testthat::expect_message(
       out <- pb_upload(
         file = fs::path(tmp, "mtcars2.tsv.gz"),

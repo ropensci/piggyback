@@ -74,13 +74,35 @@ pb_info_fn <- function(repo = guess_repo(), tag = NULL, .token = get_token()) {
       }
     }
   }
+
+  # we deleted a file, so we better break cache.
+  memoise::forget(memoised_pb_info)
+
   info
 }
 
+memoised_pb_info <-
+  memoise::memoise(pb_info_fn,
+                   ~memoise::timeout(as.numeric(
+                     Sys.getenv("piggyback_cache_duration", "1")
+                     ))
+                   )
 
 
-#' @importFrom memoise memoise timeout
-pb_info <- memoise::memoise(pb_info_fn,
-                            ~memoise::timeout(as.numeric(
-                              Sys.getenv("piggyback_cache_duration", "1"))))
+#' @importFrom memoise memoise timeout forget
+pb_info <- function(repo = guess_repo(),
+                    tag = NULL,
+                    .token = get_token(),
+                    cache = TRUE){
 
+  seconds <- as.numeric(Sys.getenv("piggyback_cache_duration", "1"))
+  if(seconds == 0) cache <- FALSE
+  if(cache){
+
+    memoised_pb_info(repo, tag, .token)
+
+  } else {
+    pb_info_fn(repo, tag, .token)
+  }
+
+}

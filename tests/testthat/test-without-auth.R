@@ -140,3 +140,13 @@ testthat::test_that("we can track data with manifest", {
 
   setwd(cur)
 })
+
+test_that("we can get all download urls", {
+
+  x <- pb_download_url(
+    repo = "cboettig/piggyback",
+    tag = "v0.0.1",
+    .token = piggyback:::get_token()
+  )
+  expect_is(x, "character")
+})

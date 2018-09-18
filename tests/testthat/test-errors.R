@@ -147,3 +147,13 @@ testthat::test_that(
     )
   }
 )
+
+
+test_that("download url error", {
+  expect_error(
+  x <- pb_download_url("not-a-file",
+    repo = "cboettig/piggyback",
+    tag = "v0.0.1",
+    .token = piggyback:::get_token()
+  ), "not-a-file")
+})

@@ -58,5 +58,9 @@ pb_new_release <- function(repo = guess_repo(),
   )
 
   httr::stop_for_status(resp)
+
+  ## Release info changed, so break cache
+  memoise::forget(memoised_pb_info)
   release <- httr::content(resp)
+  invisible(release)
 }
