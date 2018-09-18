@@ -8,11 +8,6 @@ testthat::test_that(
     testthat::skip_if(piggyback:::get_token() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
     testthat::skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
 
-    pb_delete(
-      repo = "cboettig/piggyback",
-      file = "mtcars2.tsv.gz",
-      tag = "v0.0.1"
-    )
 
     tmp <- tempdir()
 
@@ -41,6 +36,8 @@ testthat::test_that(
       ),
       "more recent version of"
     )
+
+    Sys.sleep(1)
 
     pb_delete(
       repo = "cboettig/piggyback",

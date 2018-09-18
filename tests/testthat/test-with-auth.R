@@ -1,13 +1,14 @@
-testthat::context("Requiring Authentication")
+context("Requiring Authentication")
 
+library(magrittr)
 ## Setup: create test repo
 # repo <- "cboettig/piggyback-test"
 
 
-testthat::test_that("We can upload data", {
+test_that("We can upload data", {
   # public pat
-  testthat::skip_if(piggyback:::get_token() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
-  testthat::skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
+  skip_if(piggyback:::get_token() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
+  skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
 
   data <- readr::write_tsv(datasets::iris, "iris.tsv.gz")
   out <- pb_upload(
@@ -17,18 +18,18 @@ testthat::test_that("We can upload data", {
     overwrite = TRUE,
     show_progress = FALSE
   )
-  testthat::expect_is(out, "list")
+  expect_is(out, "list")
 
   unlink("iris.tsv.gz")
   unlink("manifest.json")
 })
 
 
-testthat::test_that("We can push and pull data", {
+test_that("working from git repo", {
 
   # public pat
-  testthat::skip_if(piggyback:::get_token() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
-  testthat::skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
+  skip_if(piggyback:::get_token() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
+  skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
 
   ##  Setup
   cur <- getwd()
@@ -36,7 +37,7 @@ testthat::test_that("We can push and pull data", {
   fs::dir_create(tmp)
   setwd(tmp)
   if (packageVersion("git2r") <= "0.21.0") {
-    testthat::skip_on_os("mac")
+    skip_on_os("mac")
   }
 
   sink(tempfile())
@@ -56,23 +57,19 @@ testthat::test_that("We can push and pull data", {
 
   sink() # avoid verbose messages in test log. usethis msgs cannot turn off(?)
 
+  # pb_push
+  pb_track() %>%
+    pb_upload(repo = "cboettig/piggyback", tag = "v0.0.3",
+              show_progress = FALSE, overwrite = TRUE)
 
-  testthat::expect_true(
-    pb_push(repo = "cboettig/piggyback", tag = "v0.0.3", show_progress = FALSE)
-  )
-  testthat::expect_true(
-    pb_pull(repo = "cboettig/piggyback", tag = "v0.0.3", show_progress = FALSE)
-  )
+  # pb_pull
+  pb_download(repo = "cboettig/piggyback", tag = "v0.0.3",
+              show_progress = FALSE)
 
-  testthat::expect_true(pb_pull(show_progress = FALSE))
-  testthat::expect_true(pb_push(show_progress = FALSE))
-  pb_push(show_progress = FALSE)
-  pb_pull(show_progress = FALSE)
-
-  testthat::expect_true(pb_pull(tag = "v0.0.3", show_progress = FALSE))
+  expect_true(TRUE)
 
   ## Should error if tag already exists
-  testthat::expect_error(
+  expect_error(
     gh_new_release(repo = "cboettig/piggyback", tag = "v0.0.3")
   )
 
@@ -83,24 +80,24 @@ testthat::test_that("We can push and pull data", {
 
 
 
-testthat::test_that("we can get a download url", {
+test_that("we can get a download url", {
 
   # public pat
-  testthat::skip_if(piggyback:::get_token() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
-  testthat::skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
+  skip_if(piggyback:::get_token() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
+  skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
 
   x <- pb_download_url("data/iris.tsv.gz",
     repo = "cboettig/piggyback",
     tag = "v0.0.1",
     .token = piggyback:::get_token()
   )
-  testthat::expect_is(x, "character")
+  expect_is(x, "character")
 })
 
-testthat::test_that(
+test_that(
   "we error when creating a release on non-existant repo", {
-    testthat::skip_on_cran()
-    testthat::expect_error(
+    skip_on_cran()
+    expect_error(
       pb_new_release("cboettig/not_a_repo", "v2.0"), "Cannot access release data"
     )
   }

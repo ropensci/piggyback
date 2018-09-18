@@ -1,5 +1,6 @@
 testthat::context("Error Handling")
 
+Sys.setenv(piggyback_cache_duration="1e-6")
 tmp <- tempdir()
 
 testthat::test_that(

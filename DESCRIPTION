@@ -34,7 +34,8 @@ Imports:
     crayon,
     clisymbols,
     magrittr,
-    lubridate
+    lubridate,
+    memoise
 Suggests:
     spelling,
     readr,

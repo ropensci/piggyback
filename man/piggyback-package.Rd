@@ -22,9 +22,8 @@ It has two main modes or workflows:
 \itemize{
 \item \code{\link[=pb_upload]{pb_upload()}} / \code{\link[=pb_download]{pb_download()}}:  Upload and download individual files to/from
 the desired release of the specified repository
-\item \code{\link[=pb_track]{pb_track()}} + \code{\link[=pb_pull]{pb_pull()}} / \code{\link[=pb_push]{pb_push()}}: Use a \code{git-lfs} style tracking of specific
-file types and sync all tracked files with \code{pull} and \code{push} commands.  Convenient
-for projects working with many piggybacked data files.
+\item \code{\link[=pb_track]{pb_track()}}: Use a \code{git-lfs} style tracking of specific
+file types
 }
 }
 \seealso{

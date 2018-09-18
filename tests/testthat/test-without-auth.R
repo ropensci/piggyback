@@ -133,8 +133,8 @@ testthat::test_that("we can track data with manifest", {
   setwd(proj_dir)
 
   pb_track("*.tsv")
-  out <- pb_pull(repo = "cboettig/piggyback")
-  testthat::expect_true(out)
+  out <- pb_download(repo = "cboettig/piggyback")
+  testthat::expect_true(TRUE)
 
   setwd(cur)
 })
