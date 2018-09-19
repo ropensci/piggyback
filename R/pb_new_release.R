@@ -30,10 +30,19 @@ pb_new_release <- function(repo = guess_repo(),
                            draft = FALSE,
                            prerelease = FALSE,
                            .token = get_token()) {
-  df <- pb_info(repo, tag, .token)
-  if (tag %in% df$tag) {
-    stop(paste("release tag", tag, "already exists"))
+
+  releases <- release_info(repo, .token)
+
+  # if no releases exist, release_info returns a gh_response length-1 list
+  # containing only "".  Otherwise, list is at least length 1, with names.
+  if("tag_name" %in% names(releases[[1]])){
+    current_tags <- lapply(releases, `[[`, "tag_name")
+    if (tag %in% current_tags) {
+      stop(paste("release tag", tag, "already exists"))
+    }
   }
+
+
   r <- strsplit(repo, "/")[[1]]
 
   payload <- list(

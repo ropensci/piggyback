@@ -8,7 +8,7 @@ testthat::test_that(
     readr::write_tsv(datasets::iris, "iris3.tsv.gz")
     testthat::expect_error(
       out <- pb_upload(
-        repo = "cboettig/piggyback",
+        repo = "cboettig/piggyback-tests",
         file = "iris3.tsv.gz",
         tag = "v0.0.1",
         overwrite = TRUE,

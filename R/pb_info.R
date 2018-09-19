@@ -15,40 +15,55 @@ release_info <- function(repo = guess_repo(), .token = get_token()) {
   releases
 }
 
+release_data <- function(x, r) {
 
+  if(!"assets" %in% names(x))
+    return(data.frame())
 
+  if(length(x$assets) == 0){
+    ## Release exists but has no assets
+    return(
+    data.frame(
+      file_name = "",
+      tag = x$tag_name,
+      timestamp = "",
+      owner = r[[1]],
+      repo = r[[2]],
+      upload_url = x$upload_url,
+      browser_download_url = "",
+      id = "",
+      stringsAsFactors = FALSE
+    ))
 
-pb_info_fn <- function(repo = guess_repo(), tag = NULL, .token = get_token()) {
+  }
+
+  data.frame(
+    file_name = local_filename(
+      vapply(x$assets, `[[`, character(1), "name")
+    ),
+    tag = x$tag_name,
+    timestamp = lubridate::as_datetime(
+      vapply(x$assets, `[[`, character(1), "updated_at")
+    ),
+    owner = r[[1]],
+    repo = r[[2]],
+    upload_url = x$upload_url,
+    browser_download_url = vapply(
+      x$assets, `[[`, character(1),
+      "browser_download_url"
+    ),
+    id = vapply(x$assets, `[[`, integer(1), "id"),
+    stringsAsFactors = FALSE
+  )
+}
+
+pb_info_fn <- function(repo = guess_repo(),
+                       tag = NULL,
+                       .token = get_token()) {
   releases <- release_info(repo, .token)
   r <- strsplit(repo, "/")[[1]]
 
-  info <-
-    do.call(
-      rbind,
-      lapply(
-        releases,
-        function(x) {
-          data.frame(
-            file_name = local_filename(
-              vapply(x$assets, `[[`, character(1), "name")
-            ),
-            tag = x$tag_name,
-            timestamp = lubridate::as_datetime(
-              vapply(x$assets, `[[`, character(1), "updated_at")
-            ),
-            owner = r[[1]],
-            repo = r[[2]],
-            upload_url = x$upload_url,
-            browser_download_url = vapply(
-              x$assets, `[[`, character(1),
-              "browser_download_url"
-            ),
-            id = vapply(x$assets, `[[`, integer(1), "id"),
-            stringsAsFactors = FALSE
-          )
-        }
-      )
-    )
+  info <- do.call(rbind, lapply(releases, release_data, r))
 
   if (!is.null(tag)) {
     if (tag == "latest") {
