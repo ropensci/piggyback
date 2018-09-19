@@ -47,16 +47,18 @@ Piggyback can download data attached to a release on any repository:
 
 ``` r
 library(piggyback)
-pb_download("data/mtcars.tsv.gz", repo = "cboettig/piggyback-tests")
+pb_download("data/mtcars.tsv.gz", repo = "cboettig/piggyback-tests", dest = tempdir())
 ```
 
 Downloading from private repos or uploading to any repo requires
 authentication, so be sure to set a `GITHUB_TOKEN` (or `GITHUB_PAT`)
-environmental variable, or include the `.token` argument. See
+environmental variable, or include the `.token` argument. Omit the file
+name to download all attached objects. Omit the repository name to
+default to the current repository. See
 [vignette](https://cboettig.github.io/piggyback/articles/intro.html) or
 function documentation for details.
 
-We can then also upload data to an existing release:
+We can also upload data to any existing release (defaults to `latest`):
 
 ``` r
 ## We'll need some example data first.
@@ -76,7 +78,6 @@ so you don’t accidentally commit them to GitHub. `pb_trak` will aslo
 return a list of such files that you can easily pass to `pb_upload()`:
 
 ``` r
-library(piggyback)
 # track csv files, compressed data, and geotiff files:
 pb_track(c("*.csv", "*.gz", "*.tif")) %>%
 pb_upload()

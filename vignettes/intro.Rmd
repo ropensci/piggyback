@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
   eval = Sys.getenv("CBOETTIG_TOKEN", FALSE)
 )
 
-Sys.setenv(piggyback_cache_duration="1e-6")
+Sys.setenv(piggyback_cache_duration=0)
 
 ```
 
@@ -55,22 +55,26 @@ Download the latest version or a specific version of the data:
 
 ```{r}
 library(piggyback)
-pb_download("iris2.tsv.gz", repo = "cboettig/piggyback-tests")
+pb_download("iris2.tsv.gz", 
+            repo = "cboettig/piggyback-tests",
+            tag = "v0.0.1",
+            dest = tempdir())
 ```
 
-**Note**: Whenever you are working from a location inside a git repository corresponding to your GitHub repo, you can simply omit the `repo` argument and it will be detected automatically.  
+**Note**: Whenever you are working from a location inside a git repository corresponding to your GitHub repo, you can simply omit the `repo` argument and it will be detected automatically. Likewise, if you omit the release `tag`, `the`pb_download` will simply pull data from most recent release (`latest`).  Third, you can omit `tempdir()` if you are using an RStudio Project (`.Rproj` file) in your repository, and then the download location will be relative to Project root.  `tempdir()` is used throughout the examples only to meet CRAN policies and is unlikely to be the choice you actually want here.  
 
-Or a specific version:
 
-```{r}
-pb_download("iris2.tsv.gz", repo = "cboettig/piggyback-tests", tag = "v0.0.1")
-```
-
-Or simply omit the file name to download all assets connected with a given release.  (You can also always specify a destination directory to download. This directory will be created if it does not yet exist.)
+Lastly, simply omit the file name to download all assets connected with a given release.  
 
 ```{r results="hide"}
-pb_download(repo = "cboettig/piggyback-tests")
+pb_download(repo = "cboettig/piggyback-tests",
+            tag = "v0.0.1",
+            dest = tempdir())
 ```  
+
+These defaults mean that in most cases, it is sufficient to simply call `pb_download()` without additional arguments to pull in any data associated with a project on a GitHub repo that is too large to commit to git directly. 
+
+`pb_download()` will skip the download of any file that already exists locally if the timestamp on the local copy is more recent than the timestamp on the GitHub copy.  `pb_download()` also includes arguments to control the timestamp behavior, progress bar, whether existing files should be overwritten, or if any particular files should not be downloaded.  See function documentation for details.  
 
 
 Sometimes it is preferable to have a URL from which the data can be read in directly, rather than downloading the data to a local file.  For example, such a URL can be embedded directly into another R script, avoiding any dependence on `piggyback` (provided the repository is already public.)  To get a list of URLs rather than actually downloading the files, use `pb_download_url()`:
@@ -81,14 +85,6 @@ pb_download_url("data/mtcars.tsv.gz",
                 tag = "v0.0.1") 
 ```
 
-Or store and read the URL directly into R:
-
-```{r eval=FALSE}
-url <- pb_download_url("data/mtcars.tsv.gz", 
-                       repo = "cboettig/piggyback-tests",
-                       tag = "v0.0.1")
-readr::read_tsv(url)
-```
 
 
 ## Uploading data
@@ -106,34 +102,37 @@ Once we have at least one release available, we are ready to upload.  By default
 ## Pro tip: compress your tabular data to save space & speed upload/downloads
 readr::write_tsv(mtcars, "mtcars.tsv.gz")
 
-pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback-tests", tag = "v0.0.1")
+pb_upload("mtcars.tsv.gz", 
+          repo = "cboettig/piggyback-tests", 
+          tag = "v0.0.1")
 ```
 
-`pb_upload()` will overwrite any existing file by default, unless the timestamp the uploaded version is more recent.  You can toggle these settings with `overwrite=FALSE` and `use_timestamps=FALSE`.  
+Like `pb_download()`, `pb_upload()` will overwrite any file of the same name already attached to the release file by default, unless the timestamp the previously uploaded version is more recent.  You can toggle these settings with `overwrite=FALSE` and `use_timestamps=FALSE`.  
 
 
 ## Additional convenience functions
 
-List all files currently piggybacking on a given release (as always, defaults to `latest` if no `tag` is given):
+List all files currently piggybacking on a given release.  Omit the `tag` to see files on all releases.  
 
 
 ```{r}
-pb_list(repo = "cboettig/piggyback-tests", tag = "v0.0.1")
+pb_list(repo = "cboettig/piggyback-tests", 
+        tag = "v0.0.1")
 ```
 
 Delete a file from a release:
 
 ```{r eval = FALSE}
-pb_delete(file = "mtcars.tsv.gz", repo = "cboettig/piggyback-tests", tag = "v0.0.1")
+pb_delete(file = "mtcars.tsv.gz", 
+          repo = "cboettig/piggyback-tests", 
+          tag = "v0.0.1")
 ```
 
-Note that this is irreversible unless you have a copy of the data elsewhere.  You can also simply set `overwrite=TRUE` in `pb_upload()` to overwrite an existing file.  
+Note that this is irreversible unless you have a copy of the data elsewhere. 
 
 ## git-style tracking
 
-For an even simpler way to sync many data files to GitHub, `piggyback` provides Git-LFS-like `push` and `pull` methods.  These methods are simple wrappers around the basic upload and download interface that streamline the process of managing a potentially large number of data files of a given type or location.  
-
-By default, specify a `glob` pattern of files to track.  `pb_track` can also track all files at a given path.  These patterns are simply written into a hidden config file, `.pbattributes` (just like `.gitattributes` in Git LFS), which you can also edit manually.  
+`piggyback` can be used in a Git-LFS-like manner by tracking all files that match a particular pattern, typically a file extension such as `*.tif` or `*.tar.gz` frequently found on large binary data files associated with a project but too big to commit to git. Similarly, specific directories for data files can be tracked.  `pb_track()` function takes such patterns and stores them in into a hidden config file, `.pbattributes` (just like `.gitattributes` in Git LFS, which you can also edit manually).    
 
 ```{r}
 pb_track(c("*.tsv.gz", "*.tif", "*.zip"))
@@ -142,25 +141,18 @@ pb_track("data/*")
 
 Adding a pattern with `pb_track()` will also automatically add that pattern to `.gitignore`, since these data files will be piggybacking on top of the repo rather than being version managed by `git`.  You probably will want to check in the `.pbattributes` file to version control, just as you would a `.gitattributes` or `.gitignore`. 
 
-
-Upload all tracked data to GitHub.  By default, `pb_track()` will return a list of all tracked files which can be easily passed (or piped) to `pb_upload`.
+Once you have tracked certain file types, it is easy to push all such files up to GitHub by piping `pb_track() %>% pb_upload()`.  `pb_track()` just returns file paths to all matching files.  As usual, this can upload to a specific repository and tag or merely to the defaults.  
 
 ```{r}
 library(magrittr)
 pb_track() %>% pb_upload(repo = "cboettig/piggyback-tests", tag = "v0.0.1")
 ```
 
-Similarly, you can download all current data assets of the latest or specified release by using `pb_download` without a `file` argument:  
+Similarly, you can download all current data assets of the latest or specified release by using `pb_download()` with no arguments.
 
-```{r eval=FALSE}
-pb_download(repo = "cboettig/piggyback-tests", tag = "v0.0.1", dest = tempfile())
-```
 
-(Typically all arguments above could be ommitted and simply call `pb_download()`, which will download all data from the latest tag of the current repository into that repository.)
-
-## Timestamps and caching
-
-By default, files will not be transferred if the timestamp is more recent at the destination (e.g. `pb_download()` will not download a copy if the local version is newer than the uploaded version).  If necessary, you can override this behavior by setting `use_timestamps = FALSE` in `pb_download()` or `pb_upload()`.  
+## Caching
+ 
 
 To reduce API calls to GitHub, piggyback caches most calls with a timeout of 1 second by default.  This avoids repeating identical requests to update it's internal record of the repository data (releases, assets, timestamps, etc) during programmatic use.  You can increase or decrease this delay by setting the environmental variable in seconds, e.g. `Sys.setenv("piggyback_cache_duration"=10)` for a longer delay or `Sys.setenv("piggyback_cache_duration"=0)` to disable caching. 
 
