@@ -55,32 +55,38 @@ Download the latest version or a specific version of the data:
 
 ```{r}
 library(piggyback)
-pb_download("mtcars.tsv.gz", repo = "cboettig/piggyback")
+pb_download("iris2.tsv.gz", repo = "cboettig/piggyback-tests")
 ```
+
+**Note**: Whenever you are working from a location inside a git repository corresponding to your GitHub repo, you can simply omit the `repo` argument and it will be detected automatically.  
 
 Or a specific version:
 
 ```{r}
-pb_download("mtcars.tsv.gz", repo = "cboettig/piggyback", tag = "v0.0.4")
+pb_download("iris2.tsv.gz", repo = "cboettig/piggyback-tests", tag = "v0.0.1")
 ```
 
 Or simply omit the file name to download all assets connected with a given release.  (You can also always specify a destination directory to download. This directory will be created if it does not yet exist.)
 
 ```{r results="hide"}
-pb_download(repo = "cboettig/piggyback")
+pb_download(repo = "cboettig/piggyback-tests")
 ```  
 
 
 Sometimes it is preferable to have a URL from which the data can be read in directly, rather than downloading the data to a local file.  For example, such a URL can be embedded directly into another R script, avoiding any dependence on `piggyback` (provided the repository is already public.)  To get a list of URLs rather than actually downloading the files, use `pb_download_url()`:
 
 ```{r  eval=FALSE}
-pb_download_url("data/mtcars.tsv.gz", tag = "v0.0.3") 
+pb_download_url("data/mtcars.tsv.gz", 
+                repo = "cboettig/piggyback-tests",  
+                tag = "v0.0.1") 
 ```
 
 Or store and read the URL directly into R:
 
 ```{r eval=FALSE}
-url <- pb_download_url("data/mtcars.tsv.gz", tag = "v0.0.3")
+url <- pb_download_url("data/mtcars.tsv.gz", 
+                       repo = "cboettig/piggyback-tests",
+                       tag = "v0.0.1")
 readr::read_tsv(url)
 ```
 
@@ -90,7 +96,7 @@ readr::read_tsv(url)
 If your GitHub repository doesn't have any [releases](https://help.github.com/articles/creating-releases/) yet, `piggyback` will help you quickly create one.  Create new releases to manage multiple versions of a given data file. While you can create releases as often as you like, making a new release is by no means necessary each time you upload a file.  If maintaining old versions of the data is not useful, you can stick with a single release and upload all of your data there.  
 
 ```{r eval=FALSE}
-pb_new_release("cboettig/piggyback", "v0.0.1")
+pb_new_release("cboettig/piggyback-tests", "v0.0.2")
 ```
 
 Once we have at least one release available, we are ready to upload.  By default, `pb_upload` will attach data to the latest release.  
@@ -100,7 +106,7 @@ Once we have at least one release available, we are ready to upload.  By default
 ## Pro tip: compress your tabular data to save space & speed upload/downloads
 readr::write_tsv(mtcars, "mtcars.tsv.gz")
 
-pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback")
+pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback-tests", tag = "v0.0.1")
 ```
 
 `pb_upload()` will overwrite any existing file by default, unless the timestamp the uploaded version is more recent.  You can toggle these settings with `overwrite=FALSE` and `use_timestamps=FALSE`.  
@@ -112,13 +118,13 @@ List all files currently piggybacking on a given release (as always, defaults to
 
 
 ```{r}
-pb_list(repo = "cboettig/piggyback", tag = "data")
+pb_list(repo = "cboettig/piggyback-tests", tag = "v0.0.1")
 ```
 
 Delete a file from a release:
 
 ```{r eval = FALSE}
-pb_delete(file = "mtcars.tsv.gz", repo = "cboettig/piggyback")
+pb_delete(file = "mtcars.tsv.gz", repo = "cboettig/piggyback-tests", tag = "v0.0.1")
 ```
 
 Note that this is irreversible unless you have a copy of the data elsewhere.  You can also simply set `overwrite=TRUE` in `pb_upload()` to overwrite an existing file.  
@@ -141,15 +147,16 @@ Upload all tracked data to GitHub.  By default, `pb_track()` will return a list 
 
 ```{r}
 library(magrittr)
-pb_track() %>% pb_upload()
+pb_track() %>% pb_upload(repo = "cboettig/piggyback-tests", tag = "v0.0.1")
 ```
 
-Similarly, you can download all current data assets of the latest or specified release by using `pb_download` without additional arguments: 
+Similarly, you can download all current data assets of the latest or specified release by using `pb_download` without a `file` argument:  
 
 ```{r eval=FALSE}
-pb_download()
+pb_download(repo = "cboettig/piggyback-tests", tag = "v0.0.1", dest = tempfile())
 ```
 
+(Typically all arguments above could be ommitted and simply call `pb_download()`, which will download all data from the latest tag of the current repository into that repository.)
 
 ## Timestamps and caching
 

@@ -85,17 +85,19 @@ testthat::test_that(
 
 
     pb_download(
-      file = "mtcars.tsv.gz",
-      repo = "cboettig/piggyback",
+      file = "iris2.tsv.gz",
+      repo = "cboettig/piggyback-tests",
       tag = "v0.0.1",
       dest = tmp,
-      show_progress = FALSE
+      show_progress = FALSE,
+      overwrite = TRUE
     )
 
-    testthat::expect_true(file.exists(file.path(tmp, "mtcars.tsv.gz")))
-    cars <- readr::read_tsv(file.path(tmp, "mtcars.tsv.gz"))
-    testthat::expect_equivalent(cars, mtcars)
-    unlink(file.path(tmp, "mtcars.tsv.gz"))
+    testthat::expect_true(file.exists(file.path(tmp, "iris2.tsv.gz")))
+    ir <- readr::read_tsv(file.path(tmp, "iris2.tsv.gz"))
+    testthat::expect_equivalent(ir[[2]], iris[[2]])
+
+    unlink(file.path(tmp, "iris2.tsv.gz"))
   }
 )
 
@@ -106,14 +108,14 @@ testthat::test_that(
 
     dir.create(file.path(tmp, "test_data/"))
     pb_download(
-      file = "mtcars.tsv.gz",
+      file = "data/mtcars.tsv.gz",
       dest = file.path(tmp, "test_data/"),
-      repo = "cboettig/piggyback",
+      repo = "cboettig/piggyback-tests",
       tag = "v0.0.1",
       show_progress = FALSE
     )
 
-    path <- file.path(tmp, "test_data", "mtcars.tsv.gz")
+    path <- file.path(tmp, "test_data", "data", "mtcars.tsv.gz")
     testthat::expect_true(file.exists(path))
     cars <- readr::read_tsv(path)
     testthat::expect_equivalent(cars, mtcars)
@@ -124,7 +126,7 @@ testthat::test_that(
 
 #######  We need to be in an active project to track something
 
-testthat::test_that("we can track data with manifest", {
+testthat::test_that("we can track data", {
   testthat::skip_on_cran()
 
   cur <- getwd()
@@ -135,7 +137,8 @@ testthat::test_that("we can track data with manifest", {
   setwd(proj_dir)
 
   pb_track("*.tsv")
-  out <- pb_download(repo = "cboettig/piggyback")
+  out <- pb_download(repo = "cboettig/piggyback-tests",
+                     show_progress = FALSE)
   testthat::expect_true(TRUE)
 
   setwd(cur)
@@ -149,4 +152,5 @@ test_that("we can get all download urls", {
     .token = piggyback:::get_token()
   )
   expect_is(x, "character")
+  expect_gt(length(x), 1)
 })

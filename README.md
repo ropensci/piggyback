@@ -47,7 +47,7 @@ Piggyback can download data attached to a release on any repository:
 
 ``` r
 library(piggyback)
-pb_download("mtcars.tsv.gz", repo = "cboettig/piggyback")
+pb_download("data/mtcars.tsv.gz", repo = "cboettig/piggyback-tests")
 ```
 
 Downloading from private repos or uploading to any repo requires
@@ -63,7 +63,7 @@ We can then also upload data to an existing release:
 ## Pro tip: compress your tabular data to save space & speed upload/downloads
 readr::write_tsv(mtcars, "mtcars.tsv.gz")
 
-pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback")
+pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback-tests")
 ```
 
 ### Tracking data files

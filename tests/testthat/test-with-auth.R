@@ -9,18 +9,17 @@ test_that("We can upload data", {
   skip_if(piggyback:::get_token() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
   skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
 
-  data <- readr::write_tsv(datasets::iris, "iris.tsv.gz")
+  data <- readr::write_tsv(datasets::iris, "iris2.tsv.gz")
   out <- pb_upload(
-    repo = "cboettig/piggyback",
-    file = "iris.tsv.gz",
+    repo = "cboettig/piggyback-tests",
+    file = "iris2.tsv.gz",
     tag = "v0.0.1",
     overwrite = TRUE,
     show_progress = FALSE
   )
   expect_is(out, "list")
 
-  unlink("iris.tsv.gz")
-  unlink("manifest.json")
+  unlink("iris2.tsv.gz")
 })
 
 
@@ -41,13 +40,13 @@ test_that("working from git repo", {
 
   sink(tempfile())
   usethis::create_from_github(
-    repo = "cboettig/piggyback",
-    destdir = ".",
+    repo = "cboettig/piggyback-tests",
+    destdir = tmp,
     open = FALSE,
     protocol = "https"
   )
 
-  setwd("piggyback")
+  setwd("piggyback-tests")
 
   fs::dir_create("data")
   readr::write_tsv(datasets::mtcars, "data/mtcars.tsv.gz")
@@ -62,18 +61,18 @@ test_that("working from git repo", {
   # pb_push
   library(magrittr)
   pb_track() %>%
-    pb_upload(repo = "cboettig/piggyback", tag = "v0.0.3",
+    pb_upload(repo = "cboettig/piggyback-tests", tag = "v0.0.1",
               show_progress = FALSE, overwrite = TRUE)
 
   # pb_pull
-  pb_download(repo = "cboettig/piggyback", tag = "v0.0.3",
+  pb_download(repo = "cboettig/piggyback-tests", tag = "v0.0.1",
               show_progress = FALSE)
 
   expect_true(TRUE)
 
   ## Should error if tag already exists
   expect_error(
-    gh_new_release(repo = "cboettig/piggyback", tag = "v0.0.3")
+    gh_new_release(repo = "cboettig/piggyback-tests", tag = "v0.0.1")
   )
 
   ## tare down
@@ -91,8 +90,8 @@ test_that("we can get a download url", {
   skip_if(piggyback:::get_token() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
   skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
 
-  x <- pb_download_url("data/iris.tsv.gz",
-    repo = "cboettig/piggyback",
+  x <- pb_download_url("data/mtcars.tsv.gz",
+    repo = "cboettig/piggyback-tests",
     tag = "v0.0.1",
     .token = piggyback:::get_token()
   )
@@ -103,7 +102,8 @@ test_that(
   "we error when creating a release on non-existant repo", {
     skip_on_cran()
     expect_error(
-      pb_new_release("cboettig/not_a_repo", "v2.0"), "Cannot access release data"
+      pb_new_release("cboettig/not_a_repo", "v2.0"),
+      "Cannot access release data"
     )
   }
 )
@@ -128,7 +128,7 @@ testthat::test_that(
     testthat::expect_silent(
       out <- pb_upload(
         file = fs::path(tmp, "mtcars2.tsv.gz"),
-        repo = "cboettig/piggyback",
+        repo = "cboettig/piggyback-tests",
         tag = "v0.0.1",
         overwrite = FALSE,
         show_progress = FALSE,
@@ -138,11 +138,14 @@ testthat::test_that(
     )
 
     pb_delete(
-      repo = "cboettig/piggyback",
+      repo = "cboettig/piggyback-tests",
       file = "mtcars2.tsv.gz",
       tag = "v0.0.1"
     )
 
+    x <- pb_list(repo = "cboettig/piggyback-tests",
+                 tag = "v0.0.1")
+    expect_false("mtcars2.tsv.gz" %in% x$file_name)
     unlink(fs::path(tmp, "mtcars2.tsv.gz"))
   }
 )
