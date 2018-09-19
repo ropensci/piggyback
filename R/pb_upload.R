@@ -100,7 +100,10 @@ pb_upload_file <- function(file,
     if (overwrite) {
       ## If we find matching id, Delete file from release.
       gh::gh("DELETE /repos/:owner/:repo/releases/assets/:id",
-             owner = df$owner[[1]], repo = df$repo[[1]], id = df$id[i], .token = .token
+             owner = df$owner[[1]],
+             repo = df$repo[[1]],
+             id = df$id[i],
+             .token = .token
       )
     } else {
       warning(paste(

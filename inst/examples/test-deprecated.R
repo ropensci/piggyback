@@ -4,8 +4,10 @@ testthat::context("push/pull (deprecated)")
 testthat::test_that("We can push and pull data", {
 
   # public pat
-  testthat::skip_if(piggyback:::get_token() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
-  testthat::skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
+  testthat::skip_if(piggyback:::get_token() ==
+                      "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
+  testthat::skip_if_not(as.logical(
+    Sys.getenv("CBOETTIG_TOKEN", FALSE)))
 
   ##  Setup
   cur <- getwd()

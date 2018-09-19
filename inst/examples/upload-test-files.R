@@ -3,7 +3,7 @@ library(piggyback)
 library(datasets)
 library(readr)
 
-repo = "cboettig/piggyback-tests"
+repo <- "cboettig/piggyback-tests"
 pb_new_release(repo, "v0.0.1")
 pb_list(repo)
 

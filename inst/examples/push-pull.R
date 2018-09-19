@@ -252,7 +252,11 @@ new_data <- function(mode = c("push", "pull"),
 
 ## Helper routine:
 ## get the id of a file, or NA if file is not found in release assets
-gh_file_id <- function(repo, file, tag = "latest", name = NULL, .token = get_token()) {
+gh_file_id <- function(repo,
+                       file,
+                       tag = "latest",
+                       name = NULL,
+                       .token = get_token()) {
   df <- pb_info(repo, tag, .token)
 
   df[df$file_name %in% file, "id"]
