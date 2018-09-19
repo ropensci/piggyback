@@ -1,4 +1,4 @@
-
+context("utilities")
 
 test_that("get token", {
 
@@ -7,7 +7,7 @@ test_that("get token", {
   Sys.unsetenv("GITHUB_PAT")
   Sys.unsetenv("GITHUB_TOKEN")
 
-  expect_warning(get_token())
+  expect_warning(piggyback:::get_token())
 
   # clean up. Setting to "" is not unsetting!
   if(gh_pat != "")

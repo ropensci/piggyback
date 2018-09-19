@@ -1,4 +1,4 @@
-
+context("timestamps")
 
 
 testthat::test_that(
@@ -17,7 +17,7 @@ testthat::test_that(
     testthat::expect_silent(
       out <- pb_upload(
         file = fs::path(tmp, "mtcars2.tsv.gz"),
-        repo = "cboettig/piggyback",
+        repo = "cboettig/piggyback-tests",
         tag = "v0.0.1",
         overwrite = FALSE,
         show_progress = FALSE,
@@ -29,7 +29,7 @@ testthat::test_that(
     testthat::expect_message(
       out <- pb_upload(
         file = fs::path(tmp, "mtcars2.tsv.gz"),
-        repo = "cboettig/piggyback",
+        repo = "cboettig/piggyback-tests",
         tag = "v0.0.1",
         overwrite = TRUE,
         use_timestamps = TRUE,
@@ -41,7 +41,7 @@ testthat::test_that(
     Sys.sleep(1)
 
     pb_delete(
-      repo = "cboettig/piggyback",
+      repo = "cboettig/piggyback-tests",
       file = "mtcars2.tsv.gz",
       tag = "v0.0.1"
     )

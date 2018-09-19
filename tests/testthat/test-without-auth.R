@@ -11,8 +11,9 @@ testthat::test_that(
   "we can download all files from the latest release", {
     testthat::skip_on_cran()
     pb_download(
-      repo = "cboettig/piggyback",
+      repo = "cboettig/piggyback-tests",
       dest = tmp,
+      tag = "v0.0.1",
       show_progress = FALSE
     )
 
@@ -22,7 +23,7 @@ testthat::test_that(
     testthat::expect_equivalent(cars, mtcars)
 
     unlink(f)
-    unlink(fs::path(tmp, "data/iris.tsv.gz"))
+    unlink(fs::path(tmp, "iris2.tsv.gz"))
     unlink(fs::path(tmp, "data"))
   }
 )
@@ -36,10 +37,10 @@ testthat::test_that(
     testthat::skip_on_cran()
 
     x <- pb_list(
-      repo = "cboettig/piggyback",
+      repo = "cboettig/piggyback-tests",
       tag = "v0.0.1"
     )
-    testthat::expect_true("iris.tsv.gz" %in% x$file_name)
+    testthat::expect_true("iris2.tsv.gz" %in% x$file_name)
   }
 )
 
@@ -49,7 +50,8 @@ testthat::test_that(
   "we can list multiple ignore files, including non-existent ones", {
     testthat::skip_on_cran()
     pb_download(
-      repo = "cboettig/piggyback",
+      repo = "cboettig/piggyback-tests",
+      tag = "v0.0.1",
       ignore = c("manifest.json", "big_data_file.csv"),
       dest = tempdir(),
       show_progress = FALSE
@@ -64,17 +66,15 @@ testthat::test_that(
 
 
     pb_download(
-      repo = "cboettig/piggyback",
-      tag = "v0.0.3",
+      repo = "cboettig/piggyback-tests",
+      tag = "v0.0.1",
       dest = tmp,
       show_progress = FALSE
     )
 
-    ## v0.0.3 has 2 files
-
-    testthat::expect_true(file.exists(file.path(tmp, "data/iris.tsv.xz")))
-    ## fine locally, why does this fail?
-    #testthat::expect_true(file.exists(file.path(tmp, "data/mtcars.tsv.gz")))
+    ## fine locally, why does this fail
+    #testthat::expect_true(file.exists(file.path(tmp, "iris2.tsv.gz")))
+    testthat::expect_true(file.exists(file.path(tmp, "data/mtcars.tsv.gz")))
   }
 )
 
