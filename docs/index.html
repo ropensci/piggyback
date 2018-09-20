@@ -113,22 +113,21 @@
 <p>See the <a href="https://cboettig.github.io/piggyback/articles/intro.html">piggyback vignette</a> for details on authentication and additional package functionality.</p>
 <p>Piggyback can download data attached to a release on any repository:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(piggyback)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="reference/pb_download.html">pb_download</a></span>(<span class="st">"mtcars.tsv.gz"</span>, <span class="dt">repo =</span> <span class="st">"cboettig/piggyback"</span>)</a></code></pre></div>
-<p>Downloading from private repos or uploading to any repo requires authentication, so be sure to set a <code>GITHUB_TOKEN</code> (or <code>GITHUB_PAT</code>) environmental variable, or include the <code>.token</code> argument. See <a href="https://cboettig.github.io/piggyback/articles/intro.html">vignette</a> or function documentation for details.</p>
-<p>We can then also upload data to an existing release:</p>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="reference/pb_download.html">pb_download</a></span>(<span class="st">"data/mtcars.tsv.gz"</span>, <span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>, <span class="dt">dest =</span> <span class="kw">tempdir</span>())</a></code></pre></div>
+<p>Downloading from private repos or uploading to any repo requires authentication, so be sure to set a <code>GITHUB_TOKEN</code> (or <code>GITHUB_PAT</code>) environmental variable, or include the <code>.token</code> argument. Omit the file name to download all attached objects. Omit the repository name to default to the current repository. See <a href="https://cboettig.github.io/piggyback/articles/intro.html">vignette</a> or function documentation for details.</p>
+<p>We can also upload data to any existing release (defaults to <code>latest</code>):</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">## We'll need some example data first.</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">## Pro tip: compress your tabular data to save space &amp; speed upload/downloads</a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">readr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/readr/topics/write_delim">write_tsv</a></span>(mtcars, <span class="st">"mtcars.tsv.gz"</span>)</a>
 <a class="sourceLine" id="cb3-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="kw"><a href="reference/pb_upload.html">pb_upload</a></span>(<span class="st">"mtcars.tsv.gz"</span>, <span class="dt">repo =</span> <span class="st">"cboettig/piggyback"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="kw"><a href="reference/pb_upload.html">pb_upload</a></span>(<span class="st">"mtcars.tsv.gz"</span>, <span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>)</a></code></pre></div>
 <div id="tracking-data-files" class="section level3">
 <h3 class="hasAnchor">
 <a href="#tracking-data-files" class="anchor"></a>Tracking data files</h3>
 <p>For a <a href="https://git-lfs.github.com/">Git LFS</a> style workflow, just specify the type of files you wish to track using <code><a href="reference/pb_track.html">pb_track()</a></code>. Piggyback will retain a record of these files in a hidden <code>.pbattributes</code> file in your repository, and add these to <code>.gitignore</code> so you don’t accidentally commit them to GitHub. <code>pb_trak</code> will aslo return a list of such files that you can easily pass to <code><a href="reference/pb_upload.html">pb_upload()</a></code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">library</span>(piggyback)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co"># track csv files, compressed data, and geotiff files:</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw"><a href="reference/pb_track.html">pb_track</a></span>(<span class="kw">c</span>(<span class="st">"*.csv"</span>, <span class="st">"*.gz"</span>, <span class="st">"*.tif"</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="kw"><a href="reference/pb_upload.html">pb_upload</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># track csv files, compressed data, and geotiff files:</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="reference/pb_track.html">pb_track</a></span>(<span class="kw">c</span>(<span class="st">"*.csv"</span>, <span class="st">"*.gz"</span>, <span class="st">"*.tif"</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw"><a href="reference/pb_upload.html">pb_upload</a></span>()</a></code></pre></div>
 <p>You can easily download the latest version of all data attached to a given release with <code><a href="reference/pb_download.html">pb_download()</a></code> with no file argument (analgous to a <code>git pull</code> for data):</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="reference/pb_download.html">pb_download</a></span>()</a></code></pre></div>
 <hr>
