@@ -4,9 +4,10 @@
 \alias{pb_download}
 \title{Download data from an existing release}
 \usage{
-pb_download(file = NULL, dest = usethis::proj_get(), repo = guess_repo(),
-  tag = "latest", overwrite = TRUE, ignore = "manifest.json",
-  use_timestamps = TRUE, show_progress = TRUE, .token = get_token())
+pb_download(file = NULL, dest = usethis::proj_get(),
+  repo = guess_repo(), tag = "latest", overwrite = TRUE,
+  ignore = "manifest.json", use_timestamps = TRUE,
+  show_progress = TRUE, .token = get_token())
 }
 \arguments{
 \item{file}{name or vector of names of files to be downloaded. If \code{NULL},
