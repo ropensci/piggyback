@@ -14,7 +14,7 @@ release_info <- function(repo = guess_repo(), .token = get_token()) {
   )
   releases
 }
-
+#' @importFrom lubridate as_datetime
 release_data <- function(x, r) {
 
   if(!"assets" %in% names(x))
@@ -26,7 +26,7 @@ release_data <- function(x, r) {
     data.frame(
       file_name = "",
       tag = x$tag_name,
-      timestamp = "",
+      timestamp = lubridate::as_datetime(0),
       owner = r[[1]],
       repo = r[[2]],
       upload_url = x$upload_url,
