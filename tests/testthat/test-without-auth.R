@@ -147,7 +147,7 @@ testthat::test_that("we can track data", {
 test_that("we can get all download urls", {
 
   x <- pb_download_url(
-    repo = "cboettig/piggyback",
+    repo = "cboettig/piggyback-tests",
     tag = "v0.0.1",
     .token = piggyback:::get_token()
   )
