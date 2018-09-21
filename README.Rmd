@@ -4,9 +4,9 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![Travis-CI Build Status](https://travis-ci.org/cboettig/piggyback.svg?branch=master)](https://travis-ci.org/cboettig/piggyback)
-[![Coverage status](https://codecov.io/gh/cboettig/piggyback/branch/master/graph/badge.svg)](https://codecov.io/github/cboettig/piggyback?branch=master)
+[![lifecycle](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://www.tidyverse.org/lifecycle/#stable)
+[![Travis-CI Build Status](https://travis-ci.org/ropensci/piggyback.svg?branch=master)](https://travis-ci.org/ropensci/piggyback)
+[![Coverage status](https://codecov.io/gh/ropensci/piggyback/branch/master/graph/badge.svg)](https://codecov.io/github/ropensci/piggyback?branch=master)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/cboettig/piggyback?branch=master&svg=true)](https://ci.appveyor.com/project/cboettig/piggyback)
 [![CRAN status](https://www.r-pkg.org/badges/version/piggyback)](https://cran.r-project.org/package=piggyback)
 [![](https://badges.ropensci.org/220_status.svg)](https://github.com/ropensci/onboarding/issues/220)
@@ -88,4 +88,8 @@ By participating in this project you agree to abide by its terms.
 
 ```{r include=FALSE}
 unlink("*.gz")
+codemetar::write_codemeta()
 ```
+
+
+[![ropensci_footer](https://ropensci.org/public_images/ropensci_footer.png)](https://ropensci.org)
