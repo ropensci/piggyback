@@ -1,5 +1,8 @@
 {
-  "@context": ["https://doi.org/10.5063/schema/codemeta-2.0", "http://schema.org"],
+  "@context": [
+    "https://doi.org/10.5063/schema/codemeta-2.0",
+    "http://schema.org"
+  ],
   "@type": "SoftwareSourceCode",
   "identifier": "piggyback",
   "description": "Because larger (> 50 MB) data files cannot easily be committed to git,\n  a different approach is required to manage data associated with an analysis in a \n  GitHub repository.  This package provides a simple work-around by allowing larger\n  (up to 2 GB) data files to piggyback on a repository as assets attached to individual\n  GitHub releases.  These files are not handled by git in any way, but instead are\n  uploaded, downloaded, or edited directly by calls through the GitHub API. These\n  data files can be versioned manually by creating different releases.  This approach\n  works equally well with public or private repositories.  Data can be uploaded\n  and downloaded programmatically from scripts. No authentication is required to\n  download data from public repositories.",
@@ -265,8 +268,16 @@
   ],
   "releaseNotes": "https://github.com/ropensci/piggyback/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/piggyback/blob/master/README.md",
-  "fileSize": "26.733KB",
-  "contIntegration": ["https://travis-ci.org/ropensci/piggyback", "https://codecov.io/github/ropensci/piggyback?branch=master", "https://ci.appveyor.com/project/cboettig/piggyback"],
+  "fileSize": "26.771KB",
+  "contIntegration": [
+    "https://travis-ci.org/ropensci/piggyback",
+    "https://codecov.io/github/ropensci/piggyback?branch=master",
+    "https://ci.appveyor.com/project/cboettig/piggyback"
+  ],
   "developmentStatus": "https://www.tidyverse.org/lifecycle/#stable",
-  "keywords": ["git-lfs", "data-store", "r"]
+  "keywords": [
+    "git-lfs",
+    "data-store",
+    "r"
+  ]
 }

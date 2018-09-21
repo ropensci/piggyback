@@ -34,12 +34,12 @@ You can install the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("cboettig/piggyback")
+devtools::install_github("ropensci/piggyback")
 ```
 
 ## Quickstart
 
-See the [piggyback vignette](https://cboettig.github.io/piggyback/articles/intro.html) for details on authentication and additional package functionality. 
+See the [piggyback vignette](https://ropensci.github.io/piggyback/articles/intro.html) for details on authentication and additional package functionality. 
 
 Piggyback can download data attached to a release on any repository: 
 
@@ -49,7 +49,7 @@ pb_download("data/mtcars.tsv.gz", repo = "cboettig/piggyback-tests", dest = temp
 ```
 
 
-Downloading from private repos or uploading to any repo requires authentication, so be sure to set a `GITHUB_TOKEN` (or `GITHUB_PAT`) environmental variable, or include the `.token` argument.  Omit the file name to download all attached objects. Omit the repository name to default to the current repository.  See [vignette](https://cboettig.github.io/piggyback/articles/intro.html) or function documentation for details.  
+Downloading from private repos or uploading to any repo requires authentication, so be sure to set a `GITHUB_TOKEN` (or `GITHUB_PAT`) environmental variable, or include the `.token` argument.  Omit the file name to download all attached objects. Omit the repository name to default to the current repository.  See [vignette](https://ropensci.github.io/piggyback/articles/intro.html) or function documentation for details.  
 
 We can also upload data to any existing release (defaults to `latest`):
 
