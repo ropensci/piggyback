@@ -10,9 +10,13 @@
 #' @examples
 #' \donttest{
 #' readr::write_tsv(mtcars, "mtcars.tsv.gz")
-#' pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback",
-#'           tag = "v0.0.3", overwrite = TRUE)
-#' pb_delete("mtcars.tsv.gz", repo = "cboettig/piggyback", tag = "v0.0.3")
+#' ## Upload
+#' pb_upload("mtcars.tsv.gz",
+#'           repo = "cboettig/piggyback-tests",
+#'            overwrite = TRUE)
+#' pb_delete("mtcars.tsv.gz",
+#'           repo = "cboettig/piggyback-tests",
+#'           tag = "v0.0.1")
 #' }
 #'
 pb_delete <- function(file = NULL,

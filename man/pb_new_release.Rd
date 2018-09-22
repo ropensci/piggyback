@@ -41,6 +41,6 @@ Create a new release on GitHub repo
 }
 \examples{
 \dontrun{
-pb_new_release("cboettig/piggyback", "v0.0.5")
+pb_new_release("cboettig/piggyback-tests", "v0.0.5")
 }
 }

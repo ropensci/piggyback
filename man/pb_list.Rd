@@ -36,6 +36,6 @@ with asset names converting the \code{.2f} escape code back to the system delimi
 }
 \examples{
 \dontrun{
-pb_list("cboettig/piggyback")
+pb_list("cboettig/piggyback-tests")
 }
 }

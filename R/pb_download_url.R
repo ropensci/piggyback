@@ -9,8 +9,8 @@
 #' @export
 #' @examples \donttest{
 #'
-#' pb_download_url("data/iris.tsv.gz",
-#'                 repo = "cboettig/piggyback",
+#' pb_download_url("data/iris.tsv.xz",
+#'                 repo = "cboettig/piggyback-tests",
 #'                 tag = "v0.0.1")
 #'
 #' }

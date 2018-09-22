@@ -28,10 +28,12 @@
 #' @export
 #' @examples \donttest{
 #'  ## Download a specific file:
-#'  piggyback::pb_download("data/iris.tsv.gz", repo = "cboettig/piggyback")
+#'  piggyback::pb_download("data/iris.tsv.gz",
+#'                         repo = "cboettig/piggyback-tests")
 #'
 #'  ## Download all files
-#'  piggyback::pb_download(repo = "cboettig/piggyback")
+#'  piggyback::pb_download(repo = "cboettig/piggyback-tests")
+#'
 #' }
 pb_download <- function(file = NULL,
                         dest = usethis::proj_get(),

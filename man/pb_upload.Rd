@@ -5,7 +5,7 @@
 \title{Upload data to an existing release}
 \usage{
 pb_upload(file, repo = guess_repo(), tag = "latest", name = NULL,
-  overwrite = FALSE, use_timestamps = TRUE, show_progress = TRUE,
+  overwrite = TRUE, use_timestamps = TRUE, show_progress = TRUE,
   .token = get_token(), dir = ".")
 }
 \arguments{
@@ -20,7 +20,7 @@ repo if not specified.}
 \code{file} (i.e. filename without directory)}
 
 \item{overwrite}{overwrite any existing file with the same name already
-attached to the on release?}
+attached to the on release? Defaults to \code{TRUE}}
 
 \item{use_timestamps}{logical, if \code{TRUE}, then files will only be downloaded
 if timestamp on GitHub is newer than the local timestamp (if
@@ -40,11 +40,10 @@ disclosure of a secret token when sharing scripts.}
 NOTE: you must first create a release if one does not already exists.
 }
 \examples{
-\donttest{
+\dontrun{
 # Needs your real token to run
 
 readr::write_tsv(mtcars,"mtcars.tsv.xz")
-pb_upload("mtcars.tsv.xz", "cboettig/piggyback",
-          "v0.0.3", overwrite = TRUE)
+pb_upload("mtcars.tsv.xz", "cboettig/piggyback-tests")
 }
 }

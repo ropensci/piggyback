@@ -20,7 +20,7 @@
 #' @importFrom jsonlite toJSON
 #' @importFrom httr content GET POST stop_for_status
 #' @examples \dontrun{
-#' pb_new_release("cboettig/piggyback", "v0.0.5")
+#' pb_new_release("cboettig/piggyback-tests", "v0.0.5")
 #' }
 pb_new_release <- function(repo = guess_repo(),
                            tag,

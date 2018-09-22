@@ -10,7 +10,7 @@
 #' with asset names converting the `.2f` escape code back to the system delimiter.
 #' @examples
 #' \dontrun{
-#' pb_list("cboettig/piggyback")
+#' pb_list("cboettig/piggyback-tests")
 #' }
 #' @export
 pb_list <- function(repo = guess_repo(),

@@ -8,7 +8,7 @@
 #' @param name name for uploaded file. If not provided will use the basename of
 #' `file` (i.e. filename without directory)
 #' @param overwrite overwrite any existing file with the same name already
-#'  attached to the on release?
+#'  attached to the on release? Defaults to `TRUE`
 #' @param use_timestamps logical, if `TRUE`, then files will only be downloaded
 #' if timestamp on GitHub is newer than the local timestamp (if
 #' `overwrite=TRUE`).  Defaults to `TRUE`.
@@ -20,12 +20,11 @@
 #'   disclosure of a secret token when sharing scripts.
 #' @param dir directory relative to which file names should be based.
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Needs your real token to run
 #'
 #' readr::write_tsv(mtcars,"mtcars.tsv.xz")
-#' pb_upload("mtcars.tsv.xz", "cboettig/piggyback",
-#'           "v0.0.3", overwrite = TRUE)
+#' pb_upload("mtcars.tsv.xz", "cboettig/piggyback-tests")
 #' }
 #' @importFrom httr progress upload_file POST stop_for_status
 #' @export
@@ -34,7 +33,7 @@ pb_upload <- function(file,
                       repo = guess_repo(),
                       tag = "latest",
                       name = NULL,
-                      overwrite = FALSE,
+                      overwrite = TRUE,
                       use_timestamps = TRUE,
                       show_progress = TRUE,
                       .token = get_token(),

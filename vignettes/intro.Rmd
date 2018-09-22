@@ -172,6 +172,7 @@ Permanent, published data should always be archived in a proper data repository 
 
 ```{r include=FALSE}
 unlink("*.gz")
+unlink("data/", TRUE)
 ```
 
 
