@@ -53,8 +53,11 @@ But try to avoid putting `Sys.setenv()` in  any R scripts -- remember, the goal 
 
 Download the latest version or a specific version of the data:
 
-```{r eval = Sys.getenv("CBOETTIG_TOKEN", FALSE)}
+```{r}
 library(piggyback)
+```
+
+```r
 pb_download("iris2.tsv.gz", 
             repo = "cboettig/piggyback-tests",
             tag = "v0.0.1",
@@ -66,7 +69,7 @@ pb_download("iris2.tsv.gz",
 
 Lastly, simply omit the file name to download all assets connected with a given release.  
 
-```{r results="hide"}
+```r
 pb_download(repo = "cboettig/piggyback-tests",
             tag = "v0.0.1",
             dest = tempdir())
@@ -79,7 +82,7 @@ These defaults mean that in most cases, it is sufficient to simply call `pb_down
 
 Sometimes it is preferable to have a URL from which the data can be read in directly, rather than downloading the data to a local file.  For example, such a URL can be embedded directly into another R script, avoiding any dependence on `piggyback` (provided the repository is already public.)  To get a list of URLs rather than actually downloading the files, use `pb_download_url()`:
 
-```{r  eval=FALSE}
+```r
 pb_download_url("data/mtcars.tsv.gz", 
                 repo = "cboettig/piggyback-tests",  
                 tag = "v0.0.1") 
@@ -91,13 +94,13 @@ pb_download_url("data/mtcars.tsv.gz",
 
 If your GitHub repository doesn't have any [releases](https://help.github.com/articles/creating-releases/) yet, `piggyback` will help you quickly create one.  Create new releases to manage multiple versions of a given data file. While you can create releases as often as you like, making a new release is by no means necessary each time you upload a file.  If maintaining old versions of the data is not useful, you can stick with a single release and upload all of your data there.  
 
-```{r eval=FALSE}
+```r
 pb_new_release("cboettig/piggyback-tests", "v0.0.2")
 ```
 
 Once we have at least one release available, we are ready to upload.  By default, `pb_upload` will attach data to the latest release.  
 
-```{r}
+```r
 ## We'll need some example data first.
 ## Pro tip: compress your tabular data to save space & speed upload/downloads
 readr::write_tsv(mtcars, "mtcars.tsv.gz")
@@ -122,7 +125,7 @@ pb_list(repo = "cboettig/piggyback-tests",
 
 Delete a file from a release:
 
-```{r eval = FALSE}
+```r
 pb_delete(file = "mtcars.tsv.gz", 
           repo = "cboettig/piggyback-tests", 
           tag = "v0.0.1")
@@ -134,7 +137,7 @@ Note that this is irreversible unless you have a copy of the data elsewhere.
 
 `piggyback` can be used in a Git-LFS-like manner by tracking all files that match a particular pattern, typically a file extension such as `*.tif` or `*.tar.gz` frequently found on large binary data files associated with a project but too big to commit to git. Similarly, specific directories for data files can be tracked.  `pb_track()` function takes such patterns and stores them in into a hidden config file, `.pbattributes` (just like `.gitattributes` in Git LFS, which you can also edit manually).    
 
-```{r}
+```r
 pb_track(c("*.tsv.gz", "*.tif", "*.zip"))
 pb_track("data/*")
 ```
@@ -143,7 +146,7 @@ Adding a pattern with `pb_track()` will also automatically add that pattern to `
 
 Once you have tracked certain file types, it is easy to push all such files up to GitHub by piping `pb_track() %>% pb_upload()`.  `pb_track()` just returns file paths to all matching files.  As usual, this can upload to a specific repository and tag or merely to the defaults.  
 
-```{r}
+```r
 library(magrittr)
 pb_track() %>% pb_upload(repo = "cboettig/piggyback-tests", tag = "v0.0.1")
 ```
