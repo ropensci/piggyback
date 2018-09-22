@@ -46,12 +46,16 @@ Download data from an existing release
 }
 \examples{
 \donttest{
- ## Download a specific file:
+ ## Download a specific file.
+ ## (dest can be omitted when run inside and R project)
  piggyback::pb_download("data/iris.tsv.gz",
-                        repo = "cboettig/piggyback-tests")
-
+                        repo = "cboettig/piggyback-tests",
+                        dest = tempdir())
+}
+\dontrun{
  ## Download all files
- piggyback::pb_download(repo = "cboettig/piggyback-tests")
+ piggyback::pb_download(repo = "cboettig/piggyback-tests",
+                        dest = tempdir())
 
 }
 }
