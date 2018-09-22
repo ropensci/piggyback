@@ -1,7 +1,11 @@
 
-# piggyback 0.0.6 
+# piggyback 0.0.6 2018-09-21
 
 * bugfix for migrating unit test
+
+# piggyback 0.0.6 2018-09-21
+
+* bugfix for migrating unit test, JOSS submission
 
 # piggyback 0.0.5 2018-09-21
 

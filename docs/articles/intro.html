@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">piggyback</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.6</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.7</span>
       </span>
     </div>
 
@@ -147,10 +147,7 @@
 <a class="sourceLine" id="cb7-4" data-line-number="4"></a>
 <a class="sourceLine" id="cb7-5" data-line-number="5"><span class="kw"><a href="../reference/pb_upload.html">pb_upload</a></span>(<span class="st">"mtcars.tsv.gz"</span>, </a>
 <a class="sourceLine" id="cb7-6" data-line-number="6">          <span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>, </a>
-<a class="sourceLine" id="cb7-7" data-line-number="7">          <span class="dt">tag =</span> <span class="st">"v0.0.1"</span>)</a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; Warning in pb_upload_file(f, repo, tag, name, overwrite, use_timestamps, :</span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; Skipping upload of mtcars.tsv.gz as file exists on GitHub cboettig/</span></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; piggyback-tests and overwrite = FALSE</span></a></code></pre></div>
+<a class="sourceLine" id="cb7-7" data-line-number="7">          <span class="dt">tag =</span> <span class="st">"v0.0.1"</span>)</a></code></pre></div>
 <p>Like <code><a href="../reference/pb_download.html">pb_download()</a></code>, <code><a href="../reference/pb_upload.html">pb_upload()</a></code> will overwrite any file of the same name already attached to the release file by default, unless the timestamp the previously uploaded version is more recent. You can toggle these settings with <code>overwrite=FALSE</code> and <code>use_timestamps=FALSE</code>.</p>
 </div>
 <div id="additional-convenience-functions" class="section level2">
