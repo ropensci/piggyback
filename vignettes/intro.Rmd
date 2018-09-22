@@ -53,7 +53,7 @@ But try to avoid putting `Sys.setenv()` in  any R scripts -- remember, the goal 
 
 Download the latest version or a specific version of the data:
 
-```{r}
+```{r eval = Sys.getenv("CBOETTIG_TOKEN", FALSE)}
 library(piggyback)
 pb_download("iris2.tsv.gz", 
             repo = "cboettig/piggyback-tests",
