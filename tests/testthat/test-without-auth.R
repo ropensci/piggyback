@@ -94,8 +94,7 @@ testthat::test_that(
     )
 
     testthat::expect_true(file.exists(file.path(tmp, "iris2.tsv.gz")))
-    ir <- readr::read_tsv(file.path(tmp, "iris2.tsv.gz"))
-    testthat::expect_equivalent(ir[[2]], iris[[2]])
+    testthat::expect_equivalent(datasets::iris[[2]], iris[[2]])
 
     unlink(file.path(tmp, "iris2.tsv.gz"))
   }
