@@ -145,6 +145,7 @@ testthat::test_that("we can track data", {
 })
 
 test_that("we can get all download urls", {
+  testthat::skip_on_cran()
 
   x <- pb_download_url(
     repo = "cboettig/piggyback-tests",

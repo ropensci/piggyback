@@ -1,22 +1,13 @@
 context("on-cran")
 
+
 testthat::test_that(
-  "we can download a requested file from the latest release", {
+  "we can list files even from CRAN", {
 
-    tmp <- tempdir()
-
-
-    pb_download(
-      file = "data/mtcars.tsv.gz",
+    x <- pb_list(
       repo = "cboettig/piggyback-tests",
-      tag = "v0.0.1",
-      dest = tmp,
-      show_progress = FALSE
+      tag = "v0.0.1"
     )
-
-    f <- file.path(tmp, "data/mtcars.tsv.gz")
-    testthat::expect_true(file.exists(f))
-    unlink(f)
+    testthat::expect_true("iris2.tsv.gz" %in% x$file_name)
   }
 )
-
