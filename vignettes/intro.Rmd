@@ -25,7 +25,7 @@ Sys.setenv(piggyback_cache_duration=0)
 
 # Why `piggyback`?
 
-`piggyback` grew out of the needs of students both in my classroom and in my research group, who frequently need to work with data files somewhat larger than one can conveniently manage by committing directly to GitHub.  As we frequently want to share and run code that depends on >50MB data files on each of our own machines, on continuous integration (i.e. [travis](https://travis.org)), and on larger computational servers, data sharing quickly becomes a bottleneck. 
+`piggyback` grew out of the needs of students both in my classroom and in my research group, who frequently need to work with data files somewhat larger than one can conveniently manage by committing directly to GitHub.  As we frequently want to share and run code that depends on >50MB data files on each of our own machines, on continuous integration (i.e. [travis](https://travis-ci.org)), and on larger computational servers, data sharing quickly becomes a bottleneck. 
 
 ## Installation
 
