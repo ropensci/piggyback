@@ -25,8 +25,9 @@ release_data <- function(x, r) {
     return(
     data.frame(
       file_name = "",
-      tag = x$tag_name,
+      size = 0L,
       timestamp = lubridate::as_datetime(0),
+      tag = x$tag_name,
       owner = r[[1]],
       repo = r[[2]],
       upload_url = x$upload_url,
@@ -41,10 +42,12 @@ release_data <- function(x, r) {
     file_name = local_filename(
       vapply(x$assets, `[[`, character(1), "name")
     ),
-    tag = x$tag_name,
+    size =
+      vapply(x$assets, `[[`, integer(1), "size"),
     timestamp = lubridate::as_datetime(
       vapply(x$assets, `[[`, character(1), "updated_at")
     ),
+    tag = x$tag_name,
     owner = r[[1]],
     repo = r[[2]],
     upload_url = x$upload_url,

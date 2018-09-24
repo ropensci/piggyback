@@ -18,5 +18,5 @@ pb_list <- function(repo = guess_repo(),
                     ignore = "manifest.json",
                     .token = get_token()) {
   df <- pb_info(repo, tag, .token)
-  df[c("file_name", "tag", "timestamp", "owner", "repo")]
+  df[c("file_name", "size", "timestamp", "tag", "owner", "repo")]
 }

@@ -268,7 +268,7 @@
   ],
   "releaseNotes": "https://github.com/ropensci/piggyback/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/piggyback/blob/master/README.md",
-  "fileSize": "25.863KB",
+  "fileSize": "25.975KB",
   "contIntegration": [
     "https://travis-ci.org/ropensci/piggyback",
     "https://codecov.io/github/ropensci/piggyback?branch=master",
