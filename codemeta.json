@@ -268,7 +268,7 @@
   ],
   "releaseNotes": "https://github.com/ropensci/piggyback/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/piggyback/blob/master/README.md",
-  "fileSize": "25.975KB",
+  "fileSize": "25.98KB",
   "contIntegration": [
     "https://travis-ci.org/ropensci/piggyback",
     "https://codecov.io/github/ropensci/piggyback?branch=master",
@@ -278,6 +278,12 @@
   "keywords": [
     "git-lfs",
     "data-store",
-    "r"
-  ]
+    "r",
+    "peer-reviewed"
+  ],
+  "review": {
+    "@type": "Review",
+    "url": "https://github.com/ropensci/onboarding/issues/220",
+    "provider": "http://ropensci.org"
+  }
 }

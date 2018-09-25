@@ -12,6 +12,7 @@ status](https://ci.appveyor.com/api/projects/status/github/cboettig/piggyback?br
 status](https://www.r-pkg.org/badges/version/piggyback)](https://cran.r-project.org/package=piggyback)
 [![](https://badges.ropensci.org/220_status.svg)](https://github.com/ropensci/onboarding/issues/220)
 [![DOI](https://zenodo.org/badge/132979724.svg)](https://zenodo.org/badge/latestdoi/132979724)
+[![DOI](http://joss.theoj.org/papers/10.21105/joss.00971/status.svg)](https://doi.org/10.21105/joss.00971)
 
 # piggyback
 
