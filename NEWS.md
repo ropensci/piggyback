@@ -1,3 +1,6 @@
+# piggyback 0.0.7 2018-10-01
+
+* Initial release to CRAN
 
 # piggyback 0.0.6 2018-09-21
 
