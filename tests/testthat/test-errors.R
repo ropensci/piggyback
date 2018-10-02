@@ -91,12 +91,13 @@ test_that(
 
 
 
+    path <- file.path(tmp, "iris.tsv.gz")
     readr::write_tsv(datasets::iris,
-                     file.path(tmp, "iris.tsv.gz"))
+                     path)
     expect_error(
       out <- pb_upload(
         repo = "cboettig/piggyback-tests",
-        file = "iris.tsv.gz",
+        file = path,
         tag = "not-a-tag",
         overwrite = TRUE,
         show_progress = FALSE
@@ -105,7 +106,7 @@ test_that(
     )
 
 
-    unlink(file.path(tmp, "iris.tsv.gz"))
+    unlink(path)
   }
 )
 
@@ -116,14 +117,19 @@ test_that(
   "Attempt overwrite on download when overwrite is FALSE", {
     skip_on_cran()
 
+    tmp <- tempdir()
+    path <- "iris.tsv.gz"
 
+    ## Note: pb_download file argument needs relative path.
     readr::write_tsv(datasets::iris,
-                     file.path(tmp, "iris.tsv.gz"))
+                     path)
+    readr::write_tsv(datasets::iris,
+                     file.path(tmp, path))
 
     expect_warning(
       out <- pb_download(
         repo = "cboettig/piggyback-tests",
-        file = "iris.tsv.xz",
+        file = path,
         dest = tmp,
         tag = "v0.0.1",
         overwrite = FALSE,
@@ -132,7 +138,8 @@ test_that(
       ),
       "exists"
     )
-    unlink("data/iris.tsv.xz")
+    unlink(path)
+    unlink(file.path(tmp, path))
   }
 )
 
