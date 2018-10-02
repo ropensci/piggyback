@@ -13,7 +13,6 @@ output: github_document
 [![DOI](https://zenodo.org/badge/132979724.svg)](https://zenodo.org/badge/latestdoi/132979724)
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.00971/status.svg)](https://doi.org/10.21105/joss.00971)
 
-
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   eval = TRUE,

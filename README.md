@@ -76,7 +76,7 @@ For a [Git LFS](https://git-lfs.github.com/) style workflow, just
 specify the type of files you wish to track using `pb_track()`.
 Piggyback will retain a record of these files in a hidden
 `.pbattributes` file in your repository, and add these to `.gitignore`
-so you don’t accidentally commit them to GitHub. `pb_trak` will aslo
+so you don’t accidentally commit them to GitHub. `pb_track` will also
 return a list of such files that you can easily pass to `pb_upload()`:
 
 ``` r
