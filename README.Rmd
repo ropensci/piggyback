@@ -9,7 +9,7 @@ output: github_document
 [![Coverage status](https://codecov.io/gh/ropensci/piggyback/branch/master/graph/badge.svg)](https://codecov.io/github/ropensci/piggyback?branch=master)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/cboettig/piggyback?branch=master&svg=true)](https://ci.appveyor.com/project/cboettig/piggyback)
 [![CRAN status](https://www.r-pkg.org/badges/version/piggyback)](https://cran.r-project.org/package=piggyback)
-[![](https://badges.ropensci.org/220_status.svg)](https://github.com/ropensci/onboarding/issues/220)
+[![Peer Review Status](https://badges.ropensci.org/220_status.svg)](https://github.com/ropensci/onboarding/issues/220)
 [![DOI](https://zenodo.org/badge/132979724.svg)](https://zenodo.org/badge/latestdoi/132979724)
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.00971/status.svg)](https://doi.org/10.21105/joss.00971)
 

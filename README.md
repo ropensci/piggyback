@@ -10,7 +10,8 @@ status](https://codecov.io/gh/ropensci/piggyback/branch/master/graph/badge.svg)]
 status](https://ci.appveyor.com/api/projects/status/github/cboettig/piggyback?branch=master&svg=true)](https://ci.appveyor.com/project/cboettig/piggyback)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/piggyback)](https://cran.r-project.org/package=piggyback)
-[![](https://badges.ropensci.org/220_status.svg)](https://github.com/ropensci/onboarding/issues/220)
+[![Peer Review
+Status](https://badges.ropensci.org/220_status.svg)](https://github.com/ropensci/onboarding/issues/220)
 [![DOI](https://zenodo.org/badge/132979724.svg)](https://zenodo.org/badge/latestdoi/132979724)
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.00971/status.svg)](https://doi.org/10.21105/joss.00971)
 
@@ -30,6 +31,11 @@ version or allowed to overwrite previously uploaded data. `piggyback`
 works with both public and private repositories.
 
 ## Installation
+
+Install from CRAN via
+
+    r
+    install.packages("piggyback")
 
 You can install the development version from
 [GitHub](https://github.com/) with:
@@ -86,7 +92,7 @@ pb_upload()
 ```
 
 You can easily download the latest version of all data attached to a
-given release with `pb_download()` with no file argument (analgous to a
+given release with `pb_download()` with no file argument (analogous to a
 `git pull` for data):
 
 ``` r

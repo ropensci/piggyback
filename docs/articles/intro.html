@@ -86,7 +86,7 @@
       <h1>Piggyback Data atop your GitHub Repository!</h1>
                         <h4 class="author">Carl Boettiger</h4>
             
-            <h4 class="date">2018-09-21</h4>
+            <h4 class="date">2018-10-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/piggyback/blob/master/vignettes/intro.Rmd"><code>vignettes/intro.Rmd</code></a></small>
       <div class="hidden name"><code>intro.Rmd</code></div>
@@ -98,7 +98,7 @@
 <div id="why-piggyback" class="section level1">
 <h1 class="hasAnchor">
 <a href="#why-piggyback" class="anchor"></a>Why <code>piggyback</code>?</h1>
-<p><code>piggyback</code> grew out of the needs of students both in my classroom and in my research group, who frequently need to work with data files somewhat larger than one can conveniently manage by committing directly to GitHub. As we frequently want to share and run code that depends on &gt;50MB data files on each of our own machines, on continuous integration (i.e. <a href="https://travis.org">travis</a>), and on larger computational servers, data sharing quickly becomes a bottleneck.</p>
+<p><code>piggyback</code> grew out of the needs of students both in my classroom and in my research group, who frequently need to work with data files somewhat larger than one can conveniently manage by committing directly to GitHub. As we frequently want to share and run code that depends on &gt;50MB data files on each of our own machines, on continuous integration (i.e. <a href="https://travis-ci.org">travis</a>), and on larger computational servers, data sharing quickly becomes a bottleneck.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -118,60 +118,60 @@
 <h2 class="hasAnchor">
 <a href="#downloading-data" class="anchor"></a>Downloading data</h2>
 <p>Download the latest version or a specific version of the data:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(piggyback)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="../reference/pb_download.html">pb_download</a></span>(<span class="st">"iris2.tsv.gz"</span>, </a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">            <span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>,</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">            <span class="dt">tag =</span> <span class="st">"v0.0.1"</span>,</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">            <span class="dt">dest =</span> <span class="kw">tempdir</span>())</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(piggyback)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="../reference/pb_download.html">pb_download</a></span>(<span class="st">"iris2.tsv.gz"</span>, </a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">            <span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>,</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">            <span class="dt">tag =</span> <span class="st">"v0.0.1"</span>,</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">            <span class="dt">dest =</span> <span class="kw">tempdir</span>())</a></code></pre></div>
 <p><strong>Note</strong>: Whenever you are working from a location inside a git repository corresponding to your GitHub repo, you can simply omit the <code>repo</code> argument and it will be detected automatically. Likewise, if you omit the release <code>tag</code>, <code>the</code>pb_download<code>will simply pull data from most recent release (</code>latest<code>).  Third, you can omit</code>tempdir()<code>if you are using an RStudio Project (</code>.Rproj<code>file) in your repository, and then the download location will be relative to Project root.</code>tempdir()` is used throughout the examples only to meet CRAN policies and is unlikely to be the choice you actually want here.</p>
 <p>Lastly, simply omit the file name to download all assets connected with a given release.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="../reference/pb_download.html">pb_download</a></span>(<span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>,</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">            <span class="dt">tag =</span> <span class="st">"v0.0.1"</span>,</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">            <span class="dt">dest =</span> <span class="kw">tempdir</span>())</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="../reference/pb_download.html">pb_download</a></span>(<span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>,</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">            <span class="dt">tag =</span> <span class="st">"v0.0.1"</span>,</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">            <span class="dt">dest =</span> <span class="kw">tempdir</span>())</a></code></pre></div>
 <p>These defaults mean that in most cases, it is sufficient to simply call <code><a href="../reference/pb_download.html">pb_download()</a></code> without additional arguments to pull in any data associated with a project on a GitHub repo that is too large to commit to git directly.</p>
 <p><code><a href="../reference/pb_download.html">pb_download()</a></code> will skip the download of any file that already exists locally if the timestamp on the local copy is more recent than the timestamp on the GitHub copy. <code><a href="../reference/pb_download.html">pb_download()</a></code> also includes arguments to control the timestamp behavior, progress bar, whether existing files should be overwritten, or if any particular files should not be downloaded. See function documentation for details.</p>
 <p>Sometimes it is preferable to have a URL from which the data can be read in directly, rather than downloading the data to a local file. For example, such a URL can be embedded directly into another R script, avoiding any dependence on <code>piggyback</code> (provided the repository is already public.) To get a list of URLs rather than actually downloading the files, use <code><a href="../reference/pb_download_url.html">pb_download_url()</a></code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="../reference/pb_download_url.html">pb_download_url</a></span>(<span class="st">"data/mtcars.tsv.gz"</span>, </a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">                <span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>,  </a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">                <span class="dt">tag =</span> <span class="st">"v0.0.1"</span>) </a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="../reference/pb_download_url.html">pb_download_url</a></span>(<span class="st">"data/mtcars.tsv.gz"</span>, </a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">                <span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>,  </a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">                <span class="dt">tag =</span> <span class="st">"v0.0.1"</span>) </a></code></pre></div>
 </div>
 <div id="uploading-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#uploading-data" class="anchor"></a>Uploading data</h2>
 <p>If your GitHub repository doesn’t have any <a href="https://help.github.com/articles/creating-releases/">releases</a> yet, <code>piggyback</code> will help you quickly create one. Create new releases to manage multiple versions of a given data file. While you can create releases as often as you like, making a new release is by no means necessary each time you upload a file. If maintaining old versions of the data is not useful, you can stick with a single release and upload all of your data there.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="../reference/pb_new_release.html">pb_new_release</a></span>(<span class="st">"cboettig/piggyback-tests"</span>, <span class="st">"v0.0.2"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="../reference/pb_new_release.html">pb_new_release</a></span>(<span class="st">"cboettig/piggyback-tests"</span>, <span class="st">"v0.0.2"</span>)</a></code></pre></div>
 <p>Once we have at least one release available, we are ready to upload. By default, <code>pb_upload</code> will attach data to the latest release.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">## We'll need some example data first.</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">## Pro tip: compress your tabular data to save space &amp; speed upload/downloads</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">readr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/readr/topics/write_delim">write_tsv</a></span>(mtcars, <span class="st">"mtcars.tsv.gz"</span>)</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="kw"><a href="../reference/pb_upload.html">pb_upload</a></span>(<span class="st">"mtcars.tsv.gz"</span>, </a>
-<a class="sourceLine" id="cb7-6" data-line-number="6">          <span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>, </a>
-<a class="sourceLine" id="cb7-7" data-line-number="7">          <span class="dt">tag =</span> <span class="st">"v0.0.1"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">## We'll need some example data first.</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">## Pro tip: compress your tabular data to save space &amp; speed upload/downloads</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">readr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/readr/topics/write_delim">write_tsv</a></span>(mtcars, <span class="st">"mtcars.tsv.gz"</span>)</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="kw"><a href="../reference/pb_upload.html">pb_upload</a></span>(<span class="st">"mtcars.tsv.gz"</span>, </a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">          <span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>, </a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">          <span class="dt">tag =</span> <span class="st">"v0.0.1"</span>)</a></code></pre></div>
 <p>Like <code><a href="../reference/pb_download.html">pb_download()</a></code>, <code><a href="../reference/pb_upload.html">pb_upload()</a></code> will overwrite any file of the same name already attached to the release file by default, unless the timestamp the previously uploaded version is more recent. You can toggle these settings with <code>overwrite=FALSE</code> and <code>use_timestamps=FALSE</code>.</p>
 </div>
 <div id="additional-convenience-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#additional-convenience-functions" class="anchor"></a>Additional convenience functions</h2>
 <p>List all files currently piggybacking on a given release. Omit the <code>tag</code> to see files on all releases.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="../reference/pb_list.html">pb_list</a></span>(<span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>, </a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">        <span class="dt">tag =</span> <span class="st">"v0.0.1"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="../reference/pb_list.html">pb_list</a></span>(<span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>, </a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">        <span class="dt">tag =</span> <span class="st">"v0.0.1"</span>)</a></code></pre></div>
 <p>Delete a file from a release:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="../reference/pb_delete.html">pb_delete</a></span>(<span class="dt">file =</span> <span class="st">"mtcars.tsv.gz"</span>, </a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">          <span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>, </a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">          <span class="dt">tag =</span> <span class="st">"v0.0.1"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="../reference/pb_delete.html">pb_delete</a></span>(<span class="dt">file =</span> <span class="st">"mtcars.tsv.gz"</span>, </a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">          <span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>, </a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">          <span class="dt">tag =</span> <span class="st">"v0.0.1"</span>)</a></code></pre></div>
 <p>Note that this is irreversible unless you have a copy of the data elsewhere.</p>
 </div>
 <div id="git-style-tracking" class="section level2">
 <h2 class="hasAnchor">
 <a href="#git-style-tracking" class="anchor"></a>git-style tracking</h2>
 <p><code>piggyback</code> can be used in a Git-LFS-like manner by tracking all files that match a particular pattern, typically a file extension such as <code>*.tif</code> or <code>*.tar.gz</code> frequently found on large binary data files associated with a project but too big to commit to git. Similarly, specific directories for data files can be tracked. <code><a href="../reference/pb_track.html">pb_track()</a></code> function takes such patterns and stores them in into a hidden config file, <code>.pbattributes</code> (just like <code>.gitattributes</code> in Git LFS, which you can also edit manually).</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="../reference/pb_track.html">pb_track</a></span>(<span class="kw">c</span>(<span class="st">"*.tsv.gz"</span>, <span class="st">"*.tif"</span>, <span class="st">"*.zip"</span>))</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw"><a href="../reference/pb_track.html">pb_track</a></span>(<span class="st">"data/*"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="../reference/pb_track.html">pb_track</a></span>(<span class="kw">c</span>(<span class="st">"*.tsv.gz"</span>, <span class="st">"*.tif"</span>, <span class="st">"*.zip"</span>))</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw"><a href="../reference/pb_track.html">pb_track</a></span>(<span class="st">"data/*"</span>)</a></code></pre></div>
 <p>Adding a pattern with <code><a href="../reference/pb_track.html">pb_track()</a></code> will also automatically add that pattern to <code>.gitignore</code>, since these data files will be piggybacking on top of the repo rather than being version managed by <code>git</code>. You probably will want to check in the <code>.pbattributes</code> file to version control, just as you would a <code>.gitattributes</code> or <code>.gitignore</code>.</p>
 <p>Once you have tracked certain file types, it is easy to push all such files up to GitHub by piping <code>pb_track() %&gt;% pb_upload()</code>. <code><a href="../reference/pb_track.html">pb_track()</a></code> just returns file paths to all matching files. As usual, this can upload to a specific repository and tag or merely to the defaults.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">library</span>(magrittr)</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw"><a href="../reference/pb_track.html">pb_track</a></span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/pb_upload.html">pb_upload</a></span>(<span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>, <span class="dt">tag =</span> <span class="st">"v0.0.1"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">library</span>(magrittr)</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw"><a href="../reference/pb_track.html">pb_track</a></span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/pb_upload.html">pb_upload</a></span>(<span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>, <span class="dt">tag =</span> <span class="st">"v0.0.1"</span>)</a></code></pre></div>
 <p>Similarly, you can download all current data assets of the latest or specified release by using <code><a href="../reference/pb_download.html">pb_download()</a></code> with no arguments.</p>
 </div>
 <div id="caching" class="section level2">

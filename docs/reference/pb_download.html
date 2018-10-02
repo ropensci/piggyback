@@ -188,12 +188,16 @@ accidental disclosure of a secret token when sharing scripts.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'> <span class='co'>## Download a specific file:</span>
+    <pre class="examples"><div class='input'> <span class='co'>## Download a specific file.</span>
+ <span class='co'>## (dest can be omitted when run inside and R project)</span>
  <span class='kw pkg'>piggyback</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/piggyback/topics/pb_download'>pb_download</a></span>(<span class='st'>"data/iris.tsv.gz"</span>,
-                        <span class='kw'>repo</span> <span class='kw'>=</span> <span class='st'>"cboettig/piggyback-tests"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: file(s) [34mdata/iris.tsv.gz[39m not found in repo [34mcboettig/piggyback-tests[39m</span></div><div class='output co'>#&gt; <span class='message'>All files up-to-date already</span></div><div class='input'>
+                        <span class='kw'>repo</span> <span class='kw'>=</span> <span class='st'>"cboettig/piggyback-tests"</span>,
+                        <span class='kw'>dest</span> <span class='kw'>=</span> <span class='fu'>tempdir</span>())</div><div class='output co'>#&gt; <span class='warning'>Warning: file(s) [34mdata/iris.tsv.gz[39m not found in repo [34mcboettig/piggyback-tests[39m</span></div><div class='output co'>#&gt; <span class='message'>All files up-to-date already</span></div><span class='co'># NOT RUN {</span>
  <span class='co'>## Download all files</span>
- <span class='kw pkg'>piggyback</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/piggyback/topics/pb_download'>pb_download</a></span>(<span class='kw'>repo</span> <span class='kw'>=</span> <span class='st'>"cboettig/piggyback-tests"</span>)</div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</div><div class='input'>
-</div></pre>
+ <span class='kw pkg'>piggyback</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/piggyback/topics/pb_download'>pb_download</a></span>(<span class='kw'>repo</span> <span class='kw'>=</span> <span class='st'>"cboettig/piggyback-tests"</span>,
+                        <span class='kw'>dest</span> <span class='kw'>=</span> <span class='fu'>tempdir</span>())
+
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

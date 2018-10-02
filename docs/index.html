@@ -104,33 +104,36 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
+<p>Install from CRAN via</p>
+<pre><code>r
+install.packages("piggyback")</code></pre>
 <p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"ropensci/piggyback"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"ropensci/piggyback"</span>)</a></code></pre></div>
 </div>
 <div id="quickstart" class="section level2">
 <h2 class="hasAnchor">
 <a href="#quickstart" class="anchor"></a>Quickstart</h2>
 <p>See the <a href="https://ropensci.github.io/piggyback/articles/intro.html">piggyback vignette</a> for details on authentication and additional package functionality.</p>
 <p>Piggyback can download data attached to a release on any repository:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(piggyback)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="reference/pb_download.html">pb_download</a></span>(<span class="st">"data/mtcars.tsv.gz"</span>, <span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>, <span class="dt">dest =</span> <span class="kw">tempdir</span>())</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(piggyback)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="reference/pb_download.html">pb_download</a></span>(<span class="st">"data/mtcars.tsv.gz"</span>, <span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>, <span class="dt">dest =</span> <span class="kw">tempdir</span>())</a></code></pre></div>
 <p>Downloading from private repos or uploading to any repo requires authentication, so be sure to set a <code>GITHUB_TOKEN</code> (or <code>GITHUB_PAT</code>) environmental variable, or include the <code>.token</code> argument. Omit the file name to download all attached objects. Omit the repository name to default to the current repository. See <a href="https://ropensci.github.io/piggyback/articles/intro.html">vignette</a> or function documentation for details.</p>
 <p>We can also upload data to any existing release (defaults to <code>latest</code>):</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">## We'll need some example data first.</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">## Pro tip: compress your tabular data to save space &amp; speed upload/downloads</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">readr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/readr/topics/write_delim">write_tsv</a></span>(mtcars, <span class="st">"mtcars.tsv.gz"</span>)</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="kw"><a href="reference/pb_upload.html">pb_upload</a></span>(<span class="st">"mtcars.tsv.gz"</span>, <span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">## We'll need some example data first.</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">## Pro tip: compress your tabular data to save space &amp; speed upload/downloads</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">readr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/readr/topics/write_delim">write_tsv</a></span>(mtcars, <span class="st">"mtcars.tsv.gz"</span>)</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="kw"><a href="reference/pb_upload.html">pb_upload</a></span>(<span class="st">"mtcars.tsv.gz"</span>, <span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>)</a></code></pre></div>
 <div id="tracking-data-files" class="section level3">
 <h3 class="hasAnchor">
 <a href="#tracking-data-files" class="anchor"></a>Tracking data files</h3>
-<p>For a <a href="https://git-lfs.github.com/">Git LFS</a> style workflow, just specify the type of files you wish to track using <code><a href="reference/pb_track.html">pb_track()</a></code>. Piggyback will retain a record of these files in a hidden <code>.pbattributes</code> file in your repository, and add these to <code>.gitignore</code> so you don’t accidentally commit them to GitHub. <code>pb_trak</code> will aslo return a list of such files that you can easily pass to <code><a href="reference/pb_upload.html">pb_upload()</a></code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># track csv files, compressed data, and geotiff files:</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="reference/pb_track.html">pb_track</a></span>(<span class="kw">c</span>(<span class="st">"*.csv"</span>, <span class="st">"*.gz"</span>, <span class="st">"*.tif"</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw"><a href="reference/pb_upload.html">pb_upload</a></span>()</a></code></pre></div>
-<p>You can easily download the latest version of all data attached to a given release with <code><a href="reference/pb_download.html">pb_download()</a></code> with no file argument (analgous to a <code>git pull</code> for data):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="reference/pb_download.html">pb_download</a></span>()</a></code></pre></div>
+<p>For a <a href="https://git-lfs.github.com/">Git LFS</a> style workflow, just specify the type of files you wish to track using <code><a href="reference/pb_track.html">pb_track()</a></code>. Piggyback will retain a record of these files in a hidden <code>.pbattributes</code> file in your repository, and add these to <code>.gitignore</code> so you don’t accidentally commit them to GitHub. <code>pb_track</code> will also return a list of such files that you can easily pass to <code><a href="reference/pb_upload.html">pb_upload()</a></code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># track csv files, compressed data, and geotiff files:</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="reference/pb_track.html">pb_track</a></span>(<span class="kw">c</span>(<span class="st">"*.csv"</span>, <span class="st">"*.gz"</span>, <span class="st">"*.tif"</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="kw"><a href="reference/pb_upload.html">pb_upload</a></span>()</a></code></pre></div>
+<p>You can easily download the latest version of all data attached to a given release with <code><a href="reference/pb_download.html">pb_download()</a></code> with no file argument (analogous to a <code>git pull</code> for data):</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="reference/pb_download.html">pb_download</a></span>()</a></code></pre></div>
 <hr>
 <p>Please note that this project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
 <p><a href="https://ropensci.org"><img src="https://ropensci.org/public_images/ropensci_footer.png" alt="ropensci_footer"></a></p>
@@ -143,6 +146,8 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=piggyback">https://​cloud.r-project.org/​package=piggyback</a>
+</li>
 <li>Browse source code at <br><a href="https://github.com/ropensci/piggyback">https://​github.com/​ropensci/​piggyback</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/ropensci/piggyback/issues">https://​github.com/​ropensci/​piggyback/​issues</a>
@@ -172,8 +177,9 @@
 <li><a href="https://codecov.io/github/ropensci/piggyback?branch=master"><img src="https://codecov.io/gh/ropensci/piggyback/branch/master/graph/badge.svg" alt="Coverage status"></a></li>
 <li><a href="https://ci.appveyor.com/project/cboettig/piggyback"><img src="https://ci.appveyor.com/api/projects/status/github/cboettig/piggyback?branch=master&amp;svg=true" alt="AppVeyor build status"></a></li>
 <li><a href="https://cran.r-project.org/package=piggyback"><img src="https://www.r-pkg.org/badges/version/piggyback" alt="CRAN status"></a></li>
-<li><a href="https://github.com/ropensci/onboarding/issues/220"><img src="https://badges.ropensci.org/220_status.svg"></a></li>
+<li><a href="https://github.com/ropensci/onboarding/issues/220"><img src="https://badges.ropensci.org/220_status.svg" alt="Peer Review Status"></a></li>
 <li><a href="https://zenodo.org/badge/latestdoi/132979724"><img src="https://zenodo.org/badge/132979724.svg" alt="DOI"></a></li>
+<li><a href="https://doi.org/10.21105/joss.00971"><img src="http://joss.theoj.org/papers/10.21105/joss.00971/status.svg" alt="DOI"></a></li>
 </ul>
 </div>
 </div>
