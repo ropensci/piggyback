@@ -9,17 +9,17 @@ test_that("We can upload data", {
   skip_if(piggyback:::get_token() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
   skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
 
-  data <- readr::write_tsv(datasets::iris, "iris2.tsv.gz")
+  data <- readr::write_tsv(datasets::iris, "iris.tsv.gz")
   out <- pb_upload(
     repo = "cboettig/piggyback-tests",
-    file = "iris2.tsv.gz",
+    file = "iris.tsv.gz",
     tag = "v0.0.1",
     overwrite = TRUE,
     show_progress = FALSE
   )
   expect_is(out, "list")
 
-  unlink("iris2.tsv.gz")
+  unlink("iris.tsv.gz")
 })
 
 

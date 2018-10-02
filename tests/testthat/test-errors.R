@@ -1,12 +1,12 @@
-testthat::context("Error Handling")
+context("Error Handling")
 
 Sys.setenv(piggyback_cache_duration="1e-6")
 tmp <- tempdir()
 
-testthat::test_that(
+test_that(
   "Attempt upload without authentication", {
     readr::write_tsv(datasets::iris, "iris3.tsv.gz")
-    testthat::expect_error(
+    expect_error(
       out <- pb_upload(
         repo = "cboettig/piggyback-tests",
         file = "iris3.tsv.gz",
@@ -24,32 +24,32 @@ testthat::test_that(
 
 
 
-testthat::test_that(
+test_that(
   "Attempt overwrite on upload when overwrite is FALSE", {
-    testthat::skip_on_cran()
+    skip_on_cran()
 
-    data <- readr::write_tsv(datasets::iris, "iris2.tsv.gz")
-    testthat::expect_warning(
+    data <- readr::write_tsv(datasets::iris, "iris.tsv.gz")
+    expect_warning(
       out <- pb_upload(
         repo = "cboettig/piggyback-tests",
-        file = "iris2.tsv.gz",
+        file = "iris.tsv.gz",
         tag = "v0.0.1",
         overwrite = FALSE,
         show_progress = FALSE
       ),
-      "Skipping upload of iris2.tsv.gz as file exists"
+      "Skipping upload of iris.tsv.gz as file exists"
     )
-    unlink("iris2.tsv.gz")
+    unlink("iris.tsv.gz")
   }
 )
 
 
 
-testthat::test_that(
+test_that(
   "Attempt upload non-existent file", {
-    testthat::skip_on_cran()
+    skip_on_cran()
 
-    testthat::expect_warning(
+    expect_warning(
       out <- pb_upload(
         repo = "cboettig/piggyback-tests",
         file = "not-a-file",
@@ -64,11 +64,11 @@ testthat::test_that(
 )
 
 
-testthat::test_that(
+test_that(
   "Attempt download non-existent file", {
-    testthat::skip_on_cran()
+    skip_on_cran()
 
-    testthat::expect_warning(
+    expect_warning(
       out <- pb_download(
         repo = "cboettig/piggyback-tests",
         file = "not-a-file",
@@ -82,16 +82,18 @@ testthat::test_that(
   }
 )
 
-testthat::test_that(
+test_that(
   "Attempt upload to non-existent tag", {
-    testthat::skip_on_cran()
+    skip_on_cran()
 
     ## Note: in interactive use this will prompt instead
     skip_if(interactive())
 
-    data <- readr::write_tsv(datasets::iris, "iris.tsv.gz")
 
-    testthat::expect_error(
+
+    readr::write_tsv(datasets::iris,
+                     file.path(tmp, "iris.tsv.gz"))
+    expect_error(
       out <- pb_upload(
         repo = "cboettig/piggyback-tests",
         file = "iris.tsv.gz",
@@ -103,22 +105,25 @@ testthat::test_that(
     )
 
 
-    unlink("iris.tsv.gz")
+    unlink(file.path(tmp, "iris.tsv.gz"))
   }
 )
 
 
 
 
-testthat::test_that(
+test_that(
   "Attempt overwrite on download when overwrite is FALSE", {
-    testthat::skip_on_cran()
+    skip_on_cran()
 
-    data <- readr::write_tsv(datasets::iris, file.path(tmp, "iris2.tsv.gz"))
-    testthat::expect_warning(
+
+    readr::write_tsv(datasets::iris,
+                     file.path(tmp, "iris.tsv.gz"))
+
+    expect_warning(
       out <- pb_download(
         repo = "cboettig/piggyback-tests",
-        file = "iris2.tsv.gz",
+        file = "iris.tsv.xz",
         dest = tmp,
         tag = "v0.0.1",
         overwrite = FALSE,
@@ -127,13 +132,13 @@ testthat::test_that(
       ),
       "exists"
     )
-    unlink("iris2.tsv.gz")
+    unlink("data/iris.tsv.xz")
   }
 )
 
-testthat::test_that(
+test_that(
   "Attempt to delete non-existent file", {
-    testthat::expect_message(
+    expect_message(
       pb_delete(
         repo = "cboettig/piggyback-tests",
         file = "mtcars2.tsv.gz",
@@ -145,10 +150,10 @@ testthat::test_that(
 )
 
 
-testthat::test_that(
+test_that(
   "message when tag already exists", {
 
-    testthat::expect_error(
+    expect_error(
       pb_new_release(
         repo = "cboettig/piggyback-tests",
         tag = "v0.0.1"
@@ -161,10 +166,11 @@ testthat::test_that(
 
 
 test_that("download url error", {
-  testthat::expect_error(
+  expect_error(
   x <- pb_download_url("not-a-file",
     repo = "cboettig/piggyback-tests",
     tag = "v0.0.1",
     .token = piggyback:::get_token()
   ), "not-a-file")
 })
+

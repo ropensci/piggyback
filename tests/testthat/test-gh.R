@@ -21,8 +21,11 @@ test_that("get token", {
 
 test_that("maybe", {
 
-  maybe(1)
-  expect_message(maybe(stop(), TRUE, quiet = FALSE), "Error")
+  piggyback:::maybe(1)
+  expect_message(piggyback:::maybe(stop(),
+                                   TRUE,
+                                   quiet = FALSE),
+                 "Error")
 
 
 })

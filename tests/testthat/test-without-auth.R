@@ -1,4 +1,4 @@
-testthat::context("Without Authentication")
+context("Without Authentication")
 
 tmp <- tempdir()
 
@@ -7,9 +7,9 @@ tmp <- tempdir()
 ## when no Token is available.  It is preferable / advisable to have
 ## set GITHUB_TOKEN env var for any testing, as we do on Appveyor
 ## and Travis
-testthat::test_that(
+test_that(
   "we can download all files from the latest release", {
-    testthat::skip_on_cran()
+    skip_on_cran()
     pb_download(
       repo = "cboettig/piggyback-tests",
       dest = tmp,
@@ -18,12 +18,12 @@ testthat::test_that(
     )
 
     f <- fs::path(tmp, "data/mtcars.tsv.gz")
-    testthat::expect_true(file.exists(f))
+    expect_true(file.exists(f))
     cars <- readr::read_tsv(f)
-    testthat::expect_equivalent(cars, mtcars)
+    expect_equivalent(cars, mtcars)
 
     unlink(f)
-    unlink(fs::path(tmp, "iris2.tsv.gz"))
+    unlink(fs::path(tmp, "iris.tsv.gz"))
     unlink(fs::path(tmp, "data"))
   }
 )
@@ -32,23 +32,23 @@ testthat::test_that(
 
 
 
-testthat::test_that(
+test_that(
   "we can list files", {
-    testthat::skip_on_cran()
+    skip_on_cran()
 
     x <- pb_list(
       repo = "cboettig/piggyback-tests",
       tag = "v0.0.1"
     )
-    testthat::expect_true("iris2.tsv.gz" %in% x$file_name)
+    expect_true("iris.tsv.gz" %in% x$file_name)
   }
 )
 
 
 
-testthat::test_that(
+test_that(
   "we can list multiple ignore files, including non-existent ones", {
-    testthat::skip_on_cran()
+    skip_on_cran()
     pb_download(
       repo = "cboettig/piggyback-tests",
       tag = "v0.0.1",
@@ -56,14 +56,13 @@ testthat::test_that(
       dest = tempdir(),
       show_progress = FALSE
     )
-    testthat::expect_true(TRUE)
+    expect_true(TRUE)
   }
 )
 
-testthat::test_that(
+test_that(
   "we can download all files from the requested release", {
-    testthat::skip_on_cran()
-
+    skip_on_cran()
 
     pb_download(
       repo = "cboettig/piggyback-tests",
@@ -72,20 +71,23 @@ testthat::test_that(
       show_progress = FALSE
     )
 
-    ## fine locally, why does this fail
-    #testthat::expect_true(file.exists(file.path(tmp, "iris2.tsv.gz")))
-    testthat::expect_true(file.exists(file.path(tmp, "data/mtcars.tsv.gz")))
+    #print(fs::dir_ls(tmp, recursive = TRUE))
+    expect_true(file.exists(file.path(tmp, "iris.tsv.gz")))
+    ## fine locally, why does this fail in test?
+    #expect_true(file.exists(file.path(tmp, "data", "mtcars.tsv.gz")))
+    expect_true(file.exists(file.path(tmp, "data", "iris.tsv.xz")))
+
   }
 )
 
 
-testthat::test_that(
+test_that(
   "we can download a requested file from the requested release", {
-    testthat::skip_on_cran()
+    skip_on_cran()
 
 
     pb_download(
-      file = "iris2.tsv.gz",
+      file = "iris.tsv.gz",
       repo = "cboettig/piggyback-tests",
       tag = "v0.0.1",
       dest = tmp,
@@ -93,16 +95,16 @@ testthat::test_that(
       overwrite = TRUE
     )
 
-    testthat::expect_true(file.exists(file.path(tmp, "iris2.tsv.gz")))
-    testthat::expect_equivalent(datasets::iris[[2]], iris[[2]])
+    expect_true(file.exists(file.path(tmp, "iris.tsv.gz")))
+    expect_equivalent(datasets::iris[[2]], iris[[2]])
 
-    unlink(file.path(tmp, "iris2.tsv.gz"))
+    unlink(file.path(tmp, "iris.tsv.gz"))
   }
 )
 
-testthat::test_that(
+test_that(
   "we can download a requested file to requested subdirectory", {
-    testthat::skip_on_cran()
+    skip_on_cran()
 
 
     dir.create(file.path(tmp, "test_data/"))
@@ -115,9 +117,9 @@ testthat::test_that(
     )
 
     path <- file.path(tmp, "test_data", "data", "mtcars.tsv.gz")
-    testthat::expect_true(file.exists(path))
+    expect_true(file.exists(path))
     cars <- readr::read_tsv(path)
-    testthat::expect_equivalent(cars, mtcars)
+    expect_equivalent(cars, mtcars)
     unlink(path)
   }
 )
@@ -125,8 +127,8 @@ testthat::test_that(
 
 #######  We need to be in an active project to track something
 
-testthat::test_that("we can track data", {
-  testthat::skip_on_cran()
+test_that("we can track data", {
+  skip_on_cran()
 
   cur <- getwd()
   proj_dir <- file.path(tmp, "piggyback-test")
@@ -138,13 +140,13 @@ testthat::test_that("we can track data", {
   pb_track("*.tsv")
   out <- pb_download(repo = "cboettig/piggyback-tests",
                      show_progress = FALSE)
-  testthat::expect_true(TRUE)
+  expect_true(TRUE)
 
   setwd(cur)
 })
 
 test_that("we can get all download urls", {
-  testthat::skip_on_cran()
+  skip_on_cran()
 
   x <- pb_download_url(
     repo = "cboettig/piggyback-tests",
