@@ -32,6 +32,14 @@ knitr::opts_chunk$set(
 
 ## Installation
 
+
+Install from CRAN via
+
+``` 
+r
+install.packages("piggyback")
+```
+
 You can install the development version from [GitHub](https://github.com/) with:
 
 ``` r
@@ -75,7 +83,7 @@ pb_upload()
 ```
 
 
-You can easily download the latest version of all data attached to a given release with `pb_download()` with no file argument (analgous to  a `git pull` for data):
+You can easily download the latest version of all data attached to a given release with `pb_download()` with no file argument (analogous to  a `git pull` for data):
 
 ```{r eval=FALSE}
 pb_download()
