@@ -35,8 +35,7 @@ knitr::opts_chunk$set(
 
 Install from CRAN via
 
-``` 
-r
+``` r
 install.packages("piggyback")
 ```
 
