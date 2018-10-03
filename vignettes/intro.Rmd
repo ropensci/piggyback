@@ -27,7 +27,15 @@ Sys.setenv(piggyback_cache_duration=0)
 
 `piggyback` grew out of the needs of students both in my classroom and in my research group, who frequently need to work with data files somewhat larger than one can conveniently manage by committing directly to GitHub.  As we frequently want to share and run code that depends on >50MB data files on each of our own machines, on continuous integration (i.e. [travis](https://travis-ci.org)), and on larger computational servers, data sharing quickly becomes a bottleneck. 
 
+[GitHub allows](https://help.github.com/articles/distributing-large-binaries/) repositories to attach files of up to 2 GB each to releases as a way to distribute large files associated with the project source code.  There is no limit on the number of files or bandwidth to deliver them.  
+
 ## Installation
+
+Install the latest release from CRAN using:
+
+``` r
+install.packages("piggyback")
+```
 
 You can install the development version from [GitHub](https://github.com/) with:
 
@@ -179,6 +187,14 @@ unlink("data/", TRUE)
 ```
 
 
+## What will GitHub think of this?
+
+[GitHub documentation](https://help.github.com/articles/distributing-large-binaries/) at the time of writing endorses the use of attachments to releases as a solution for distributing large files as part of your project:
+
+![](man/figures/github-policy.png)
+
+
+Of course, it will be up to GitHub to decide if this use of release attachments is acceptable in the long term. 
 
 
 

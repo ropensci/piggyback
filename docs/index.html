@@ -100,13 +100,12 @@
 <div id="piggyback" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#piggyback" class="anchor"></a>piggyback</h1></div>
-<p><code>piggyback</code> is basically a poor soul’s <a href="https://git-lfs.github.com/">Git LFS</a>. GitHub rejects commits containing files larger than 50 Mb. Git LFS is not only expensive, it also <a href="https://medium.com/@megastep/github-s-large-file-storage-is-no-panacea-for-open-source-quite-the-opposite-12c0e16a9a91">breaks GitHub’s collaborative model</a>. (Someone wants to submit a PR with a simple edit to your docs, they cannot fork) Unlike Git LFS, <code>piggyback</code> doesn’t take over your standard <code>git</code> client, it just perches comfortably on the shoulders of your existing GitHub API. Data can be versioned by <code>piggyback</code>, but relative to <code>git LFS</code> versioning is less strict: uploads can be set as a new version or allowed to overwrite previously uploaded data. <code>piggyback</code> works with both public and private repositories.</p>
+<p>Because larger (&gt; 50 MB) data files cannot easily be committed to git, a different approach is required to manage data associated with an analysis in a GitHub repository. This package provides a simple work-around by allowing larger (<a href="https://help.github.com/articles/distributing-large-binaries/">up to 2 GB per file</a>) data files to piggyback on a repository as assets attached to individual GitHub releases. These files are not handled by git in any way, but instead are uploaded, downloaded, or edited directly by calls through the GitHub API. These data files can be versioned manually by creating different releases. This approach works equally well with public or private repositories. Data can be uploaded and downloaded programmatically from scripts. No authentication is required to download data from public repositories.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Install from CRAN via</p>
-<pre><code>r
-install.packages("piggyback")</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">"piggyback"</span>)</a></code></pre></div>
 <p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"ropensci/piggyback"</span>)</a></code></pre></div>
@@ -118,7 +117,7 @@ install.packages("piggyback")</code></pre>
 <p>Piggyback can download data attached to a release on any repository:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(piggyback)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="reference/pb_download.html">pb_download</a></span>(<span class="st">"data/mtcars.tsv.gz"</span>, <span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>, <span class="dt">dest =</span> <span class="kw">tempdir</span>())</a></code></pre></div>
-<p>Downloading from private repos or uploading to any repo requires authentication, so be sure to set a <code>GITHUB_TOKEN</code> (or <code>GITHUB_PAT</code>) environmental variable, or include the <code>.token</code> argument. Omit the file name to download all attached objects. Omit the repository name to default to the current repository. See <a href="https://ropensci.github.io/piggyback/articles/intro.html">vignette</a> or function documentation for details.</p>
+<p>Downloading from private repos or uploading to any repo requires authentication, so be sure to set a <code>GITHUB_TOKEN</code> (or <code>GITHUB_PAT</code>) environmental variable, or include the <code>.token</code> argument. Omit the file name to download all attached objects. Omit the repository name to default to the current repository. See <a href="https://ropensci.github.io/piggyback/articles/intro.html">introductory vignette</a> or function documentation for details.</p>
 <p>We can also upload data to any existing release (defaults to <code>latest</code>):</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">## We'll need some example data first.</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2">## Pro tip: compress your tabular data to save space &amp; speed upload/downloads</a>
@@ -134,10 +133,26 @@ install.packages("piggyback")</code></pre>
 <a class="sourceLine" id="cb5-3" data-line-number="3"><span class="kw"><a href="reference/pb_upload.html">pb_upload</a></span>()</a></code></pre></div>
 <p>You can easily download the latest version of all data attached to a given release with <code><a href="reference/pb_download.html">pb_download()</a></code> with no file argument (analogous to a <code>git pull</code> for data):</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="reference/pb_download.html">pb_download</a></span>()</a></code></pre></div>
+</div>
+</div>
+<div id="git-lfs-and-other-alternatives" class="section level2">
+<h2 class="hasAnchor">
+<a href="#git-lfs-and-other-alternatives" class="anchor"></a>Git LFS and other alternatives</h2>
+<p><code>piggyback</code> acts like a poor soul’s <a href="https://git-lfs.github.com/">Git LFS</a>. Git LFS is not only expensive, it also <a href="https://medium.com/@megastep/github-s-large-file-storage-is-no-panacea-for-open-source-quite-the-opposite-12c0e16a9a91">breaks GitHub’s collaborative model</a> – basically if someone wants to submit a PR with a simple edit to your docs, they cannot fork your repository since that would otherwise count against your Git LFS storage. Unlike Git LFS, <code>piggyback</code> doesn’t take over your standard <code>git</code> client, it just perches comfortably on the shoulders of your existing GitHub API. Data can be versioned by <code>piggyback</code>, but relative to <code>git LFS</code> versioning is less strict: uploads can be set as a new version or allowed to overwrite previously uploaded data.</p>
+</div>
+<div id="but-what-will-github-think-of-this" class="section level2">
+<h2 class="hasAnchor">
+<a href="#but-what-will-github-think-of-this" class="anchor"></a>But what will GitHub think of this?</h2>
+<p><a href="https://help.github.com/articles/distributing-large-binaries/">GitHub documentation</a> at the time of writing endorses the use of attachments to releases as a solution for distributing large files as part of your project:</p>
+<p><img src="reference/figures/github-policy.png"></p>
+<p>Of course, it will be up to GitHub to decide if this use of release attachments is acceptable in the long term.</p>
+<!--
+ When GitHub first came online, it was questioned whether committing binary objects and data to GitHub was acceptable or an abuse of a *source code* repository.  GitHub has since clearly embraced a inclusive notion of "repository" for containing far more than pure source.  I believe attaching data that is essential to replicating an analysis and within the 2 GB file limits enforced by GitHub to be in the same spirit of this inclusive notion, but GitHub may decide otherwise. 
+ -->
+<p>Also see our <a href="https://ropensci.github.io/piggyback/articles/alternatives.html">vignette comparing alternatives</a>.</p>
 <hr>
 <p>Please note that this project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
 <p><a href="https://ropensci.org"><img src="https://ropensci.org/public_images/ropensci_footer.png" alt="ropensci_footer"></a></p>
-</div>
 </div>
 </div>
   </div>
