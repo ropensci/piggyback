@@ -8,7 +8,7 @@ tmp <- tempdir()
 ## set GITHUB_TOKEN env var for any testing, as we do on Appveyor
 ## and Travis
 test_that(
-  "we can download all files from the latest release", {
+  "we can download all files from the a specific release", {
     skip_on_cran()
     pb_download(
       repo = "cboettig/piggyback-tests",
@@ -17,14 +17,16 @@ test_that(
       show_progress = FALSE
     )
 
-    f <- fs::path(tmp, "data/mtcars.tsv.gz")
+    f <- fs::path(tmp, "data", "mtcars.tsv.gz")
     expect_true(file.exists(f))
     cars <- readr::read_tsv(f)
     expect_equivalent(cars, mtcars)
 
+    expect_true(file.exists(file.path(tmp, "iris.tsv.gz")))
+    expect_true(file.exists(file.path(tmp, "iris2.tsv.gz")))
+    expect_true(file.exists(file.path(tmp, "data", "iris.tsv.xz")))
+
     unlink(f)
-    unlink(fs::path(tmp, "iris.tsv.gz"))
-    unlink(fs::path(tmp, "data"))
   }
 )
 
@@ -60,25 +62,6 @@ test_that(
   }
 )
 
-test_that(
-  "we can download all files from the requested release", {
-    skip_on_cran()
-    tmp <- tempdir()
-    pb_download(
-      repo = "cboettig/piggyback-tests",
-      tag = "v0.0.1",
-      dest = tmp,
-      show_progress = FALSE
-    )
-    # pb_list(repo = "cboettig/piggyback-tests", tag = "v0.0.1")
-    #print(fs::dir_ls(tmp, recursive = TRUE))
-    expect_true(file.exists(file.path(tmp, "iris.tsv.gz")))
-    ## fine locally, why does this fail in test?
-    #expect_true(file.exists(file.path(tmp, "data", "mtcars.tsv.gz")))
-    #expect_true(file.exists(file.path(tmp, "data", "iris.tsv.xz")))
-
-  }
-)
 
 
 test_that(
