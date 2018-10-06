@@ -15,4 +15,3 @@ R oldrel by removing the use of the only recently introduced `utils::askYesNo`.
 
 0 errors | 0 warnings | 1 note
 
-* This is a new release.
