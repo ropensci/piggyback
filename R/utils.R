@@ -64,3 +64,29 @@ bullet <- function(lines, bullet) {
 cat_line <- function(...) {
   cat(..., "\n", sep = "")
 }
+
+
+
+
+# utils::askYesKnow is new to R 3.5.0; avoid using it for backwards compatibility
+askYesNo <- function(msg){
+
+  prompts <- c("Yes", "No", "Cancel")
+  choices <- tolower(prompts)
+  msg1 <- paste0("(", paste(choices, collapse = "/"), ") ")
+
+  if (nchar(paste0(msg, msg1)) > 250) {
+    cat(msg, "\n")
+    msg <- msg1
+  }
+  else msg <- paste0(msg, " ", msg1)
+
+  ans <- readline(msg)
+  match <- pmatch(tolower(ans), tolower(choices))
+
+  if (!nchar(ans))
+    TRUE
+  else if (is.na(match))
+    stop("Unrecognized response ", dQuote(ans))
+  else c(TRUE, FALSE, NA)[match]
+}

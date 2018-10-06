@@ -1,6 +1,8 @@
 Dear CRAN Maintainers,
 
-We are pleased to submit our initial release of the `piggyback` R package.
+We are pleased to submit an updated release of `piggyback` which improves the
+existing documentation and resolves an issue of backwards compatibility with
+R oldrel by removing the use of the only recently introduced `utils::askYesNo`.  
 
 
 ## Test environments

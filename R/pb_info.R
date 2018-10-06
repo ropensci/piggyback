@@ -80,10 +80,10 @@ pb_info_fn <- function(repo = guess_repo(),
           ". You can create a new release with pb_new_release() function."
         ))
       } else {
-        create <- utils::askYesNo(paste(
+        create <- askYesNo(paste(
           "release tag", tag,
           "does not exist. Would you like to create it?"
-        ), )
+        ))
         if (create) {
           pb_new_release(repo, tag, .token = .token)
         } else {

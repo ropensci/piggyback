@@ -1,3 +1,8 @@
+# piggyback 0.0.8
+
+* Updates to documentation, streamlining tests
+* remove dependency on `utils::askYesNo` which is only available in R >= 3.5.0
+
 # piggyback 0.0.7 2018-10-01
 
 * Initial release to CRAN
