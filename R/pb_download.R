@@ -130,6 +130,10 @@ gh_download_asset <- function(owner,
     return(NULL)
   }
 
+  if (!is.null(progress)) {
+    message(paste("downloading", basename(destfile), "..."))
+  }
+
   resp <- httr::GET(
     paste0(
       "https://api.github.com/repos/", owner, "/",

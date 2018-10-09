@@ -114,7 +114,9 @@ pb_upload_file <- function(file,
     }
   }
 
-
+  if (!is.null(progress)) {
+    message(paste("uploading", name, "..."))
+}
   r <- httr::POST(sub("\\{.+$", "", df$upload_url[[1]]),
                   query = list(name = asset_filename(name)),
                   body = httr::upload_file(file),
