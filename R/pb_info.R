@@ -7,11 +7,29 @@ release_info <- function(repo = guess_repo(), .token = get_token()) {
       crayon::blue$bold("owner/repo")
     ))
   }
+
+  # get release ids
   releases <- maybe(gh::gh("/repos/:owner/:repo/releases",
                            owner = r[[1]], repo = r[[2]], .token = .token
   ),
   otherwise = stop(api_error_msg(r))
   )
+
+  # fetch asset meta-data individually, see #19
+  for (i in seq_along(releases)) {
+     a <- gh::gh(endpoint = "/repos/:owner/:repo/releases/:release_id/assets",
+                 owner = r[[1]], repo = r[[2]], release_id = releases[[i]]$id,
+                 .token = .token)
+     if (!identical(a[[1]], "")) {
+      # if the i'th release does not have any assets then we skip updating
+      # the assets in the releases object
+      class(a) <- "list"
+      attributes(a) <- NULL
+      releases[[i]]$assets <- a
+    }
+  }
+  
+  # return result
   releases
 }
 #' @importFrom lubridate as_datetime
