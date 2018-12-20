@@ -1,3 +1,7 @@
+# piggyback 0.0.9
+
+* Enable re-upload and deletion of partially uploaded files (#19)
+
 # piggyback 0.0.8
 
 * Updates to documentation, streamlining tests
