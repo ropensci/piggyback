@@ -8,6 +8,8 @@
 
 <title>Upload data to an existing release — pb_upload • piggyback</title>
 
+<link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
+
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
@@ -33,12 +35,14 @@
 <meta property="og:title" content="Upload data to an existing release — pb_upload" />
 
 <meta property="og:description" content="NOTE: you must first create a release if one does not already exists." />
+
+<meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
 
 
 <!-- mathjax -->
-<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -62,7 +66,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">piggyback</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.7</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9</span>
       </span>
     </div>
 
@@ -186,7 +190,7 @@ disclosure of a secret token when sharing scripts.</p></td>
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='co'># Needs your real token to run</span>
 
-<span class='kw pkg'>readr</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/readr/topics/write_delim'>write_tsv</a></span>(<span class='no'>mtcars</span>,<span class='st'>"mtcars.tsv.xz"</span>)
+<span class='kw pkg'>readr</span><span class='kw ns'>::</span><span class='fu'><a href='https://readr.tidyverse.org/reference/write_delim.html'>write_tsv</a></span>(<span class='no'>mtcars</span>,<span class='st'>"mtcars.tsv.xz"</span>)
 <span class='fu'>pb_upload</span>(<span class='st'>"mtcars.tsv.xz"</span>, <span class='st'>"cboettig/piggyback-tests"</span>)
 <span class='co'># }</span></pre>
   </div>

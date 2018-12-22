@@ -40,6 +40,7 @@ Useful links:
 Other contributors:
 \itemize{
   \item Mark Padgham (0000-0003-2172-5265) [contributor]
+  \item Jeffrey O Hanson (0000-0002-4716-6134) [contributor]
 }
 
 }

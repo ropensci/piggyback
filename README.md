@@ -1,6 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+# piggyback <img src="man/figures/logo.png" align="right" alt="" width="120" />
+
 [![lifecycle](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![Travis-CI Build
 Status](https://travis-ci.org/ropensci/piggyback.svg?branch=master)](https://travis-ci.org/ropensci/piggyback)
@@ -14,8 +16,6 @@ status](https://www.r-pkg.org/badges/version/piggyback)](https://cran.r-project.
 Status](https://badges.ropensci.org/220_status.svg)](https://github.com/ropensci/onboarding/issues/220)
 [![DOI](https://zenodo.org/badge/132979724.svg)](https://zenodo.org/badge/latestdoi/132979724)
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.00971/status.svg)](https://doi.org/10.21105/joss.00971)
-
-# piggyback
 
 Because larger (\> 50 MB) data files cannot easily be committed to git,
 a different approach is required to manage data associated with an
