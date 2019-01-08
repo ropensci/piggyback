@@ -14,10 +14,10 @@
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.5.1",
+    "version": "3.5.2",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.5.1 (2018-07-02)",
+  "runtimePlatform": "R version 3.5.2 (2018-12-20)",
   "author": [
     {
       "@type": "Person",
@@ -274,7 +274,7 @@
   ],
   "releaseNotes": "https://github.com/ropensci/piggyback/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/piggyback/blob/master/README.md",
-  "fileSize": "332.133KB",
+  "fileSize": "274.26KB",
   "contIntegration": [
     "https://travis-ci.org/ropensci/piggyback",
     "https://codecov.io/github/ropensci/piggyback?branch=master",

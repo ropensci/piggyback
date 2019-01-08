@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# piggyback <img src="man/figures/logo.png" align="right" alt="" width="120" />
+# piggyback <img src="man/figures/logo.svg" align="right" alt="" width="120" />
 
 [![lifecycle](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![Travis-CI Build

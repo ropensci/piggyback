@@ -6,10 +6,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Managing Larger Data on a GitHub Repository • piggyback</title>
-<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Managing Larger Data on a GitHub Repository">
 <meta property="og:description" content="Because larger (&gt; 50 MB) data files cannot easily be committed to git,
   a different approach is required to manage data associated with an analysis in a 
@@ -23,7 +22,7 @@
   download data from public repositories.">
 <meta property="og:image" content="/logo.png">
 <meta name="twitter:card" content="summary">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
+<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
@@ -41,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">piggyback</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9</span>
       </span>
     </div>
 
@@ -100,7 +99,7 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <div id="piggyback" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#piggyback" class="anchor"></a>piggyback <img src="reference/figures/logo.png" align="right" alt="" width="120">
+<a href="#piggyback" class="anchor"></a>piggyback <img src="reference/figures/logo.svg" align="right" alt="" width="120">
 </h1></div>
 
 <p>Because larger (&gt; 50 MB) data files cannot easily be committed to git, a different approach is required to manage data associated with an analysis in a GitHub repository. This package provides a simple work-around by allowing larger (<a href="https://help.github.com/articles/distributing-large-binaries/">up to 2 GB per file</a>) data files to piggyback on a repository as assets attached to individual GitHub releases. These files are not handled by git in any way, but instead are uploaded, downloaded, or edited directly by calls through the GitHub API. These data files can be versioned manually by creating different releases. This approach works equally well with public or private repositories. Data can be uploaded and downloaded programmatically from scripts. No authentication is required to download data from public repositories.</p>
@@ -108,18 +107,18 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Install from CRAN via</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">"piggyback"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"piggyback"</span>)</a></code></pre></div>
 <p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ropensci/piggyback"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ropensci/piggyback"</span>)</a></code></pre></div>
 </div>
 <div id="quickstart" class="section level2">
 <h2 class="hasAnchor">
 <a href="#quickstart" class="anchor"></a>Quickstart</h2>
 <p>See the <a href="https://ropensci.github.io/piggyback/articles/intro.html">piggyback vignette</a> for details on authentication and additional package functionality.</p>
 <p>Piggyback can download data attached to a release on any repository:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(piggyback)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="reference/pb_download.html">pb_download</a></span>(<span class="st">"data/mtcars.tsv.gz"</span>, <span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>, <span class="dt">dest =</span> <span class="kw">tempdir</span>())</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(piggyback)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="reference/pb_download.html">pb_download</a></span>(<span class="st">"data/mtcars.tsv.gz"</span>, <span class="dt">repo =</span> <span class="st">"cboettig/piggyback-tests"</span>, <span class="dt">dest =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/tempfile">tempdir</a></span>())</a></code></pre></div>
 <p>Downloading from private repos or uploading to any repo requires authentication, so be sure to set a <code>GITHUB_TOKEN</code> (or <code>GITHUB_PAT</code>) environmental variable, or include the <code>.token</code> argument. Omit the file name to download all attached objects. Omit the repository name to default to the current repository. See <a href="https://ropensci.github.io/piggyback/articles/intro.html">introductory vignette</a> or function documentation for details.</p>
 <p>We can also upload data to any existing release (defaults to <code>latest</code>):</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co">## We'll need some example data first.</span></a>
@@ -132,7 +131,7 @@
 <a href="#tracking-data-files" class="anchor"></a>Tracking data files</h3>
 <p>For a <a href="https://git-lfs.github.com/">Git LFS</a> style workflow, just specify the type of files you wish to track using <code><a href="reference/pb_track.html">pb_track()</a></code>. Piggyback will retain a record of these files in a hidden <code>.pbattributes</code> file in your repository, and add these to <code>.gitignore</code> so you don’t accidentally commit them to GitHub. <code>pb_track</code> will also return a list of such files that you can easily pass to <code><a href="reference/pb_upload.html">pb_upload()</a></code>:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># track csv files, compressed data, and geotiff files:</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="reference/pb_track.html">pb_track</a></span>(<span class="kw">c</span>(<span class="st">"*.csv"</span>, <span class="st">"*.gz"</span>, <span class="st">"*.tif"</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="reference/pb_track.html">pb_track</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"*.csv"</span>, <span class="st">"*.gz"</span>, <span class="st">"*.tif"</span>)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb5-3" data-line-number="3"><span class="kw"><a href="reference/pb_upload.html">pb_upload</a></span>()</a></code></pre></div>
 <p>You can easily download the latest version of all data attached to a given release with <code><a href="reference/pb_download.html">pb_download()</a></code> with no file argument (analogous to a <code>git pull</code> for data):</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="reference/pb_download.html">pb_download</a></span>()</a></code></pre></div>
@@ -210,9 +209,8 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
-
       </footer>
 </div>
 
