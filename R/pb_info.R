@@ -10,7 +10,9 @@ release_info <- function(repo = guess_repo(), .token = get_token()) {
 
   # get release ids
   releases <- maybe(gh::gh("/repos/:owner/:repo/releases",
-                           owner = r[[1]], repo = r[[2]], .token = .token
+                           owner = r[[1]], repo = r[[2]],
+                           .limit = Inf,
+                           .token = .token
   ),
   otherwise = stop(api_error_msg(r))
   )
@@ -18,7 +20,10 @@ release_info <- function(repo = guess_repo(), .token = get_token()) {
   # fetch asset meta-data individually, see #19
   for (i in seq_along(releases)) {
      a <- gh::gh(endpoint = "/repos/:owner/:repo/releases/:release_id/assets",
-                 owner = r[[1]], repo = r[[2]], release_id = releases[[i]]$id,
+                 owner = r[[1]],
+                 repo = r[[2]],
+                 release_id = releases[[i]]$id,
+                 .limit = Inf,
                  .token = .token)
      if (!identical(a[[1]], "")) {
       # if the i'th release does not have any assets then we skip updating
@@ -28,7 +33,7 @@ release_info <- function(repo = guess_repo(), .token = get_token()) {
       releases[[i]]$assets <- a
     }
   }
-  
+
   # return result
   releases
 }
