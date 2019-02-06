@@ -1,8 +1,9 @@
 Dear CRAN Maintainers,
 
-We are pleased to submit an updated release of `piggyback` which improves the
-existing documentation and provides a fallback mechanism in the event of 
-a interrupted network connection error when uploading a large numbers of files.
+This release fixes a bug that was introduced in the previous release,
+which prevented functions from seeing more than 30 file assets on 
+any given release.  This release also improves the user interface
+regarding the overwrite behavior, as detailed in NEWS.md.  
 
 
 ## Test environments
