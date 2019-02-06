@@ -8,10 +8,10 @@
 #' @param name name for uploaded file. If not provided will use the basename of
 #' `file` (i.e. filename without directory)
 #' @param overwrite overwrite any existing file with the same name already
-#'  attached to the on release? Defaults to `TRUE`
-#' @param use_timestamps logical, if `TRUE`, then files will only be downloaded
-#' if timestamp on GitHub is newer than the local timestamp (if
-#' `overwrite=TRUE`).  Defaults to `TRUE`.
+#'  attached to the on release? Defaults to `use_timestamps`, only overwriting
+#'  those files which are older.  Set to `TRUE` to always overwrite, or `FALSE`
+#'  to never overwrite existing files.
+#' @param use_timestamps DEPRECATED. please use `overwrite="use_timestamps"`
 #' @param show_progress logical, show a progress bar be shown for uploading?
 #' Defaults to `TRUE`.
 #' @param .token GitHub authentication token. Typically set from an
@@ -33,8 +33,8 @@ pb_upload <- function(file,
                       repo = guess_repo(),
                       tag = "latest",
                       name = NULL,
-                      overwrite = TRUE,
-                      use_timestamps = TRUE,
+                      overwrite = "use_timestamps",
+                      use_timestamps = NULL,
                       show_progress = TRUE,
                       .token = get_token(),
                       dir = ".") {
@@ -57,8 +57,8 @@ pb_upload_file <- function(file,
                            repo = guess_repo(),
                            tag = "latest",
                            name = NULL,
-                           overwrite = FALSE,
-                           use_timestamps = TRUE,
+                           overwrite = "use_timestamps",
+                           use_timestamps = NULL,
                            show_progress = TRUE,
                            .token = get_token(),
                            dir = ".") {
@@ -66,6 +66,27 @@ pb_upload_file <- function(file,
     warning("file ", file, " does not exist")
     return(NULL)
   }
+  if(!is.null(use_timestamps)){
+    warning(paste("use_timestamps argument is deprecated",
+                  "please set overwrite='use_timestamps'",
+                  "instead."))
+  }
+
+
+  ## Yeah, having two separate arguments was clearly a mistake!
+  ## Code has been partially refactored now so that user just
+  ## sets `overwrite` and we handle the twisted logic internally here:
+  use_timestamps <- switch (as.character(overwrite),
+    "TRUE" = FALSE,
+    "FALSE" = FALSE,
+    "use_timestamps" = TRUE
+  )
+  overwrite <- switch (as.character(overwrite),
+    "TRUE" = TRUE,
+    "FALSE" = FALSE,
+    "use_timestamps" = TRUE
+  )
+
   progress <- httr::progress("up")
   if (!show_progress) {
     progress <- NULL

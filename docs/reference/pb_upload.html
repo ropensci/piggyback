@@ -65,7 +65,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">piggyback</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.10</span>
       </span>
     </div>
 
@@ -131,8 +131,8 @@
     </div>
 
     <pre class="usage"><span class='fu'>pb_upload</span>(<span class='no'>file</span>, <span class='kw'>repo</span> <span class='kw'>=</span> <span class='fu'>guess_repo</span>(), <span class='kw'>tag</span> <span class='kw'>=</span> <span class='st'>"latest"</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>use_timestamps</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>show_progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>.token</span> <span class='kw'>=</span> <span class='fu'>get_token</span>(), <span class='kw'>dir</span> <span class='kw'>=</span> <span class='st'>"."</span>)</pre>
+  <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='st'>"use_timestamps"</span>, <span class='kw'>use_timestamps</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>show_progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>.token</span> <span class='kw'>=</span> <span class='fu'>get_token</span>(), <span class='kw'>dir</span> <span class='kw'>=</span> <span class='st'>"."</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,13 +158,13 @@ repo if not specified.</p></td>
     <tr>
       <th>overwrite</th>
       <td><p>overwrite any existing file with the same name already
-attached to the on release? Defaults to <code>TRUE</code></p></td>
+attached to the on release? Defaults to <code>use_timestamps</code>, only overwriting
+those files which are older.  Set to <code>TRUE</code> to always overwrite, or <code>FALSE</code>
+to never overwrite existing files.</p></td>
     </tr>
     <tr>
       <th>use_timestamps</th>
-      <td><p>logical, if <code>TRUE</code>, then files will only be downloaded
-if timestamp on GitHub is newer than the local timestamp (if
-<code>overwrite=TRUE</code>).  Defaults to <code>TRUE</code>.</p></td>
+      <td><p>DEPRECATED. please use <code>overwrite="use_timestamps"</code></p></td>
     </tr>
     <tr>
       <th>show_progress</th>

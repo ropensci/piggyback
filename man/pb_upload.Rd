@@ -5,8 +5,8 @@
 \title{Upload data to an existing release}
 \usage{
 pb_upload(file, repo = guess_repo(), tag = "latest", name = NULL,
-  overwrite = TRUE, use_timestamps = TRUE, show_progress = TRUE,
-  .token = get_token(), dir = ".")
+  overwrite = "use_timestamps", use_timestamps = NULL,
+  show_progress = TRUE, .token = get_token(), dir = ".")
 }
 \arguments{
 \item{file}{path to file to be uploaded}
@@ -20,11 +20,11 @@ repo if not specified.}
 \code{file} (i.e. filename without directory)}
 
 \item{overwrite}{overwrite any existing file with the same name already
-attached to the on release? Defaults to \code{TRUE}}
+attached to the on release? Defaults to \code{use_timestamps}, only overwriting
+those files which are older.  Set to \code{TRUE} to always overwrite, or \code{FALSE}
+to never overwrite existing files.}
 
-\item{use_timestamps}{logical, if \code{TRUE}, then files will only be downloaded
-if timestamp on GitHub is newer than the local timestamp (if
-\code{overwrite=TRUE}).  Defaults to \code{TRUE}.}
+\item{use_timestamps}{DEPRECATED. please use \code{overwrite="use_timestamps"}}
 
 \item{show_progress}{logical, show a progress bar be shown for uploading?
 Defaults to \code{TRUE}.}

@@ -1,8 +1,9 @@
 # piggyback 0.0.10
 
+* Improve interface regarding `overwrite` behavior in `pb_upload()` (#25)
 * Bugfixes for errors introduced in 0.0.9: 
-   - Uploading of directory paths could cause download errors in `pb_download()`. (#24)
    - Access all assets on a release instead of first 30.  This could break upload and download. (#23, #24)
+   - Uploading of directory paths could cause download errors in `pb_download()`. (#24, #26)
 
 # piggyback 0.0.9, 2019-01-08
 
