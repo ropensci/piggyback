@@ -25,9 +25,16 @@ release_info <- function(repo = guess_repo(), .token = get_token()) {
                  release_id = releases[[i]]$id,
                  .limit = Inf,
                  .token = .token)
+
      if (!identical(a[[1]], "")) {
       # if the i'th release does not have any assets then we skip updating
       # the assets in the releases object
+
+       ## first, drop any non-file assets (e.g. base directories) from the list
+       drop <- vapply(a, `[[`, character(1L), "state") == "starter"
+       a[drop] <- NULL
+
+      ## Now use assets given by the release id as the returned assets
       class(a) <- "list"
       attributes(a) <- NULL
       releases[[i]]$assets <- a
@@ -56,6 +63,7 @@ release_data <- function(x, r) {
       upload_url = x$upload_url,
       browser_download_url = "",
       id = "",
+      state = "",
       stringsAsFactors = FALSE
     ))
 
@@ -79,8 +87,14 @@ release_data <- function(x, r) {
       "browser_download_url"
     ),
     id = vapply(x$assets, `[[`, integer(1), "id"),
+    state = null_chr(x$state),
     stringsAsFactors = FALSE
   )
+}
+
+null_chr <- function(x){
+  if(is.null(x)) return("")
+  as.character(NA)
 }
 
 pb_info_fn <- function(repo = guess_repo(),
@@ -147,3 +161,5 @@ pb_info <- function(repo = guess_repo(),
   }
 
 }
+
+
