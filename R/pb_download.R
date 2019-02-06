@@ -56,6 +56,9 @@ pb_download <- function(file = NULL,
 
   df <- pb_info(repo, tag, .token)
 
+  ## drop failed upload states from list
+  df <- df[df$state != "starter",]
+
   if (!is.null(file)) {
     i <- which(df$file_name %in% file)
     if (length(i) < 1) {
