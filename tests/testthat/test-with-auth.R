@@ -132,9 +132,7 @@ testthat::test_that(
         file = fs::path(tmp, "mtcars2.tsv.gz"),
         repo = "cboettig/piggyback-tests",
         tag = "v0.0.1",
-        overwrite = FALSE,
         show_progress = FALSE,
-        use_timestamps = TRUE,
         dir = tmp
       )
     )

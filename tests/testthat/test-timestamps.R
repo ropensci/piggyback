@@ -23,7 +23,6 @@ testthat::test_that(
         tag = "v0.0.1",
         overwrite = FALSE,
         show_progress = FALSE,
-        use_timestamps = TRUE,
         dir = tmp
       )
     )
@@ -33,8 +32,7 @@ testthat::test_that(
         file = fs::path(tmp, "mtcars2.tsv.gz"),
         repo = "cboettig/piggyback-tests",
         tag = "v0.0.1",
-        overwrite = TRUE,
-        use_timestamps = TRUE,
+        overwrite = "use_timestamps",
         dir = tmp
       ),
       "more recent version of"
