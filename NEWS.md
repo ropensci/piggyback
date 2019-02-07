@@ -1,4 +1,4 @@
-# piggyback 0.0.10
+# piggyback 0.0.10 2018-02-06
 
 * Improve interface regarding `overwrite` behavior in `pb_upload()` (#25)
 * Bugfixes for errors introduced in 0.0.9: 
