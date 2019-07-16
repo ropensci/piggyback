@@ -1,6 +1,6 @@
 # piggyback 0.0.10.99 (Unreleased)
 
-* `release_info()` now works properly when there are no existing releases, which enables the usage of `pb_new_release()` on repos without a release.
+* `release_info()` now works properly when there are no existing releases, which enables the usage of `pb_new_release()` on repos without a release (#29).
 
 # piggyback 0.0.10 2018-02-06
 
