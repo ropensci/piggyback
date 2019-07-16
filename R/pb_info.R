@@ -17,6 +17,9 @@ release_info <- function(repo = guess_repo(), .token = get_token()) {
   otherwise = stop(api_error_msg(r))
   )
 
+  # if there are no releases, don't update assets
+  if (length(releases) == 1 && identical(releases[[1]], "")) return(releases)
+
   # fetch asset meta-data individually, see #19
   for (i in seq_along(releases)) {
      a <- gh::gh(endpoint = "/repos/:owner/:repo/releases/:release_id/assets",
