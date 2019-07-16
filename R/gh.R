@@ -80,7 +80,7 @@ guess_repo <- function(path = ".") {
   # When there are more than 1 remote, we prefer "upstream"
   #   then "origin." If neither exists, we error to avoid
   #   ambiguity.
-  remote <- if (length(remotes > 1)) {
+  remote <- if (length(remotes) > 1) {
     if ("upstream" %in% remotes) {
       "upstream"
     } else if ("origin" %in% remotes) {
