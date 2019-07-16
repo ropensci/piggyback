@@ -115,6 +115,7 @@ test_that("we can track data", {
 
   cur <- getwd()
   proj_dir <- file.path(tmp, "piggyback-test")
+  fs::dir_create(proj_dir)
   suppressMessages(usethis::create_project(proj_dir,
     open = FALSE
   ))
