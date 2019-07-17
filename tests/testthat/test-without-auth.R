@@ -112,6 +112,7 @@ test_that(
 
 test_that("we can track data", {
   skip_on_cran()
+  skip_on_travis() # No idea
 
   cur <- getwd()
   proj_dir <- fs::path_abs(fs::path(fs::path_temp(), "piggyback-test"))
