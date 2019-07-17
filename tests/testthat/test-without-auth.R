@@ -112,9 +112,11 @@ test_that(
 
 test_that("we can track data", {
   skip_on_cran()
+  skip_on_travis() # No idea
 
   cur <- getwd()
-  proj_dir <- file.path(tmp, "piggyback-test")
+  proj_dir <- fs::path_abs(fs::path(fs::path_temp(), "piggyback-test"))
+  fs::dir_create(proj_dir)
   suppressMessages(usethis::create_project(proj_dir,
     open = FALSE
   ))
