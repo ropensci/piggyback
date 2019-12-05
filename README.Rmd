@@ -52,7 +52,7 @@ devtools::install_github("ropensci/piggyback")
 
 ## Quickstart
 
-See the [piggyback vignette](https://ropensci.github.io/piggyback/articles/intro.html) for details on authentication and additional package functionality. 
+See the [piggyback vignette](https://docs.ropensci.org/piggyback/articles/intro.html) for details on authentication and additional package functionality. 
 
 Piggyback can download data attached to a release on any repository: 
 
@@ -62,7 +62,7 @@ pb_download("data/mtcars.tsv.gz", repo = "cboettig/piggyback-tests", dest = temp
 ```
 
 
-Downloading from private repos or uploading to any repo requires authentication, so be sure to set a `GITHUB_TOKEN` (or `GITHUB_PAT`) environmental variable, or include the `.token` argument.  Omit the file name to download all attached objects. Omit the repository name to default to the current repository.  See [introductory vignette](https://ropensci.github.io/piggyback/articles/intro.html) or function documentation for details.  
+Downloading from private repos or uploading to any repo requires authentication, so be sure to set a `GITHUB_TOKEN` (or `GITHUB_PAT`) environmental variable, or include the `.token` argument.  Omit the file name to download all attached objects. Omit the repository name to default to the current repository.  See [introductory vignette](https://docs.ropensci.org/piggyback/articles/intro.html) or function documentation for details.  
 
 We can also upload data to any existing release (defaults to `latest`):
 
@@ -113,7 +113,7 @@ Of course, it will be up to GitHub to decide if this use of release attachments 
  When GitHub first came online, it was questioned whether committing binary objects and data to GitHub was acceptable or an abuse of a *source code* repository.  GitHub has since clearly embraced a inclusive notion of "repository" for containing far more than pure source.  I believe attaching data that is essential to replicating an analysis and within the 2 GB file limits enforced by GitHub to be in the same spirit of this inclusive notion, but GitHub may decide otherwise. 
  -->
 
-Also see our [vignette comparing alternatives](https://ropensci.github.io/piggyback/articles/alternatives.html).
+Also see our [vignette comparing alternatives](https://docs.ropensci.org/piggyback/articles/alternatives.html).
 
 ----
 

@@ -50,7 +50,7 @@ devtools::install_github("ropensci/piggyback")
 ## Quickstart
 
 See the [piggyback
-vignette](https://ropensci.github.io/piggyback/articles/intro.html) for
+vignette](https://docs.ropensci.org/piggyback/articles/intro.html) for
 details on authentication and additional package functionality.
 
 Piggyback can download data attached to a release on any repository:
@@ -65,7 +65,7 @@ authentication, so be sure to set a `GITHUB_TOKEN` (or `GITHUB_PAT`)
 environmental variable, or include the `.token` argument. Omit the file
 name to download all attached objects. Omit the repository name to
 default to the current repository. See [introductory
-vignette](https://ropensci.github.io/piggyback/articles/intro.html) or
+vignette](https://docs.ropensci.org/piggyback/articles/intro.html) or
 function documentation for details.
 
 We can also upload data to any existing release (defaults to `latest`):
@@ -133,7 +133,7 @@ attachments is acceptable in the long term.
  -->
 
 Also see our [vignette comparing
-alternatives](https://ropensci.github.io/piggyback/articles/alternatives.html).
+alternatives](https://docs.ropensci.org/piggyback/articles/alternatives.html).
 
 -----
 
