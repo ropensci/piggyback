@@ -139,11 +139,12 @@ gh_download_asset <- function(owner,
 
   resp <- httr::GET(
     paste0(
-      "https://api.github.com/repos/", owner, "/",
-      repo, "/", "releases/assets/", id,
-      "?access_token=", .token
+      "https://",
+      "api.github.com/repos/", owner, "/",
+      repo, "/", "releases/assets/", id#,
+      #"?access_token=", .token
     ),
-    httr::add_headers(Accept = "application/octet-stream"),
+    httr::add_headers(Authorization = paste0("token ",.token), Accept = "application/octet-stream"),
     httr::write_disk(destfile, overwrite = overwrite),
     progress
   )
