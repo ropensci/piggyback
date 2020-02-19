@@ -7,7 +7,7 @@
 pb_track(glob = NULL, repo_root = usethis::proj_get())
 }
 \arguments{
-\item{glob}{vector of file names and/or glob pattern (e.g. \code{*.csv}, \code{data/*.csv})
+\item{glob}{vector of file names and/or glob pattern (e.g. \verb{*.csv}, \verb{data/*.csv})
 which will be tracked by piggyback.  Omit (default \code{NULL}) to just return
 a list of files currently tracked.}
 
@@ -23,7 +23,7 @@ Track data files of a given pattern or location
 Note: tracked patterns are simply written to \code{.pbattributes}
 (analogous to \code{.gitattributes} in \code{git-lfs}.)  You can also edit this
 file manually.  You will probably want to check in \code{.psattributes} to
-as to version control., with \code{git add .psattributes}.  Note that
+as to version control., with \verb{git add .psattributes}.  Note that
 tracked file patterns will also be added to \code{.gitignore}.
 }
 \examples{

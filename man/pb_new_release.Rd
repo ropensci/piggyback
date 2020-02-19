@@ -4,9 +4,16 @@
 \alias{pb_new_release}
 \title{Create a new release on GitHub repo}
 \usage{
-pb_new_release(repo = guess_repo(), tag, commit = "master",
-  name = tag, body = "Data release", draft = FALSE,
-  prerelease = FALSE, .token = get_token())
+pb_new_release(
+  repo = guess_repo(),
+  tag,
+  commit = "master",
+  name = tag,
+  body = "Data release",
+  draft = FALSE,
+  prerelease = FALSE,
+  .token = get_token()
+)
 }
 \arguments{
 \item{repo}{Repository name in format "owner/repo". Will guess
