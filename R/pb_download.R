@@ -143,6 +143,7 @@ gh_download_asset <- function(owner,
       repo, "/", "releases/assets/", id,
       "?access_token=", .token
     ),
+#    httr::authenticate(.token, "x-oauth-basic", "basic"),
     httr::add_headers(Accept = "application/octet-stream"),
     httr::write_disk(destfile, overwrite = overwrite),
     progress
@@ -150,4 +151,12 @@ gh_download_asset <- function(owner,
   ## handle error cases? resp not found
   httr::stop_for_status(resp)
   invisible(resp)
+#  gh::gh(paste0(
+#         "https://api.github.com/repos/", owner, "/",
+#         repo, "/", "releases/assets/", id),
+#         .send_headers = c("Accept" = "application/octet-stream"),
+#         .token = .token,
+#         .destfile = destfile)
+#
+
 }
