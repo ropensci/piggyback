@@ -4,8 +4,12 @@
 \alias{pb_download_url}
 \title{Get the download url of a given file}
 \usage{
-pb_download_url(file = NULL, repo = guess_repo(), tag = "latest",
-  .token = get_token())
+pb_download_url(
+  file = NULL,
+  repo = guess_repo(),
+  tag = "latest",
+  .token = get_token()
+)
 }
 \arguments{
 \item{file}{name or vector of names of files to be downloaded. If \code{NULL},

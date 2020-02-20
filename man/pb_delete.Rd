@@ -4,8 +4,12 @@
 \alias{pb_delete}
 \title{Delete an asset attached to a release}
 \usage{
-pb_delete(file = NULL, repo = guess_repo(), tag = "latest",
-  .token = get_token())
+pb_delete(
+  file = NULL,
+  repo = guess_repo(),
+  tag = "latest",
+  .token = get_token()
+)
 }
 \arguments{
 \item{file}{file(s) to be deleted from the release. If \code{NULL} (default

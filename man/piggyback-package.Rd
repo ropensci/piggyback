@@ -29,19 +29,20 @@ file types
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://docs.ropensci.org/piggyback}
   \item \url{https://github.com/ropensci/piggyback}
   \item Report bugs at \url{https://github.com/ropensci/piggyback/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Carl Boettiger \email{cboettig@gmail.com} (0000-0002-1642-628X) [copyright holder]
+\strong{Maintainer}: Carl Boettiger \email{cboettig@gmail.com} (\href{https://orcid.org/0000-0002-1642-628X}{ORCID}) [copyright holder]
 
 Other contributors:
 \itemize{
-  \item Mark Padgham (0000-0003-2172-5265) [contributor]
-  \item Jeffrey O Hanson (0000-0002-4716-6134) [contributor]
-  \item Kevin Kuo (0000-0001-7803-7901) [contributor]
+  \item Mark Padgham (\href{https://orcid.org/0000-0003-2172-5265}{ORCID}) [contributor]
+  \item Jeffrey O Hanson (\href{https://orcid.org/0000-0002-4716-6134}{ORCID}) [contributor]
+  \item Kevin Kuo (\href{https://orcid.org/0000-0001-7803-7901}{ORCID}) [contributor]
 }
 
 }

@@ -4,8 +4,12 @@
 \alias{pb_list}
 \title{List all assets attached to a release}
 \usage{
-pb_list(repo = guess_repo(), tag = NULL, ignore = "manifest.json",
-  .token = get_token())
+pb_list(
+  repo = guess_repo(),
+  tag = NULL,
+  ignore = "manifest.json",
+  .token = get_token()
+)
 }
 \arguments{
 \item{repo}{Repository name in format "owner/repo". Will guess
@@ -30,9 +34,9 @@ timestamp, owner, and repo.
 List all assets attached to a release
 }
 \details{
-To preserve path information, local path delimiters are converted to \code{.2f}
+To preserve path information, local path delimiters are converted to \verb{.2f}
 when files are uploaded as assets.  Listing will display the local filename,
-with asset names converting the \code{.2f} escape code back to the system delimiter.
+with asset names converting the \verb{.2f} escape code back to the system delimiter.
 }
 \examples{
 \dontrun{

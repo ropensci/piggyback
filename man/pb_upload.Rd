@@ -4,9 +4,17 @@
 \alias{pb_upload}
 \title{Upload data to an existing release}
 \usage{
-pb_upload(file, repo = guess_repo(), tag = "latest", name = NULL,
-  overwrite = "use_timestamps", use_timestamps = NULL,
-  show_progress = TRUE, .token = get_token(), dir = ".")
+pb_upload(
+  file,
+  repo = guess_repo(),
+  tag = "latest",
+  name = NULL,
+  overwrite = "use_timestamps",
+  use_timestamps = NULL,
+  show_progress = TRUE,
+  .token = get_token(),
+  dir = "."
+)
 }
 \arguments{
 \item{file}{path to file to be uploaded}

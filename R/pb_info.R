@@ -19,7 +19,6 @@ release_info <- function(repo = guess_repo(), .token = get_token()) {
 
   # if there are no releases, don't update assets
   if (length(releases) == 1 && identical(releases[[1]], "")) return(releases)
-
   # fetch asset meta-data individually, see #19
   for (i in seq_along(releases)) {
      a <- gh::gh(endpoint = "/repos/:owner/:repo/releases/:release_id/assets",
@@ -28,11 +27,10 @@ release_info <- function(repo = guess_repo(), .token = get_token()) {
                  release_id = releases[[i]]$id,
                  .limit = Inf,
                  .token = .token)
-
+     if(length(a) == 0) next
      if (!identical(a[[1]], "")) {
       # if the i'th release does not have any assets then we skip updating
       # the assets in the releases object
-
       ## Now use assets given by the release id as the returned assets
       class(a) <- "list"
       attributes(a) <- NULL
@@ -43,6 +41,9 @@ release_info <- function(repo = guess_repo(), .token = get_token()) {
   # return result
   releases
 }
+
+
+
 #' @importFrom lubridate as_datetime
 release_data <- function(x, r) {
 
