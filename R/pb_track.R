@@ -51,7 +51,7 @@ match_globs <- function(globs, proj_dir = usethis::proj_get()) {
   unique(
     unname(unlist(lapply(globs, function(g) {
       ## only match files (i.e. things we can hash)
-       tmp <- fs::dir_ls(path = proj_dir, recursive = TRUE, type = "file")
+       tmp <- fs::dir_ls(path = proj_dir, recurse = TRUE, type = "file")
        tmp <- fs::path_rel(tmp, proj_dir)
        fs::path_filter(tmp, glob = g)
     })))

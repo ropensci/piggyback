@@ -5,6 +5,8 @@ tmp <- tempdir()
 
 test_that(
   "Attempt upload without authentication", {
+
+
     readr::write_tsv(datasets::iris, "iris3.tsv.gz")
     expect_error(
       out <- pb_upload(
@@ -145,6 +147,9 @@ test_that(
 
 test_that(
   "Attempt to delete non-existent file", {
+
+    skip_on_cran()
+
     expect_message(
       pb_delete(
         repo = "cboettig/piggyback-tests",
@@ -160,6 +165,9 @@ test_that(
 test_that(
   "message when tag already exists", {
 
+    skip_on_cran()
+
+
     expect_error(
       pb_new_release(
         repo = "cboettig/piggyback-tests",
@@ -173,6 +181,9 @@ test_that(
 
 
 test_that("download url error", {
+  skip_on_cran()
+
+
   expect_error(
   x <- pb_download_url("not-a-file",
     repo = "cboettig/piggyback-tests",
