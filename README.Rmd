@@ -117,12 +117,12 @@ Also see our [vignette comparing alternatives](https://docs.ropensci.org/piggyba
 
 ----
 
-Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md).
+Please note that this project is released with a [Contributor Code of Conduct](https://ropensci.org/code-of-conduct/).
 By participating in this project you agree to abide by its terms.
 
 ```{r include=FALSE}
 unlink("*.gz")
-codemetar::write_codemeta()
+#codemetar::write_codemeta()
 ```
 
 
