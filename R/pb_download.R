@@ -141,14 +141,26 @@ gh_download_asset <- function(owner,
     paste0(
       "https://",
       "api.github.com/repos/", owner, "/",
-      repo, "/", "releases/assets/", id#,
-      #"?access_token=", .token
+      repo, "/", "releases/assets/", id
     ),
-    httr::add_headers(Authorization = paste0("token ",.token), Accept = "application/octet-stream"),
+    httr::add_headers(Accept = "application/octet-stream"),
+    httr::add_headers(Authorization = paste("token",.token)),
     httr::write_disk(destfile, overwrite = overwrite),
     progress
   )
-  ## handle error cases? resp not found
+
+  # Try to use the redirection URL instead in case of "bad request"
+  # See https://gist.github.com/josh-padnick/fdae42c07e648c798fc27dec2367da21
+  if (resp$status_code == 400) {
+    resp <- httr::GET(
+      resp$url,
+      httr::add_headers(Accept = "application/octet-stream"),
+      httr::write_disk(destfile, overwrite = T),
+      progress
+    )
+  }
+
+  # handle error cases? resp not found
   httr::stop_for_status(resp)
   invisible(resp)
 }
