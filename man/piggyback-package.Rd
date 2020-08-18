@@ -29,7 +29,6 @@ file types
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://docs.ropensci.org/piggyback}
   \item \url{https://github.com/ropensci/piggyback}
   \item Report bugs at \url{https://github.com/ropensci/piggyback/issues}
 }
