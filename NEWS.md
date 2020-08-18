@@ -1,4 +1,8 @@
-# piggyback 0.0.11
+# piggyback 0.0.12
+
+* address issues in authentication due to changes in GitHub API (#37)
+
+# piggyback 0.0.11 2020-02-25
 
 * `guess_repo()` now infers a remote when there are multiple associated with the repo. The "upstream" (preferred) or "origin" repo is selected if either exists, otherwise the function errors and asks the user to explicitly specify a repo (#31).
 * `release_info()` now works properly when there are no existing releases, which enables the usage of `pb_new_release()` on repos without a release (#29).

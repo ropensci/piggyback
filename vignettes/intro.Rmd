@@ -27,7 +27,7 @@ Sys.setenv(piggyback_cache_duration=0)
 
 `piggyback` grew out of the needs of students both in my classroom and in my research group, who frequently need to work with data files somewhat larger than one can conveniently manage by committing directly to GitHub.  As we frequently want to share and run code that depends on >50MB data files on each of our own machines, on continuous integration (i.e. [travis](https://travis-ci.org)), and on larger computational servers, data sharing quickly becomes a bottleneck. 
 
-[GitHub allows](https://help.github.com/articles/distributing-large-binaries/) repositories to attach files of up to 2 GB each to releases as a way to distribute large files associated with the project source code.  There is no limit on the number of files or bandwidth to deliver them.  
+[GitHub allows](https://docs.github.com/en/github/managing-large-files/distributing-large-binaries) repositories to attach files of up to 2 GB each to releases as a way to distribute large files associated with the project source code.  There is no limit on the number of files or bandwidth to deliver them.  
 
 ## Installation
 
@@ -100,7 +100,7 @@ pb_download_url("data/mtcars.tsv.gz",
 
 ## Uploading data
 
-If your GitHub repository doesn't have any [releases](https://help.github.com/articles/creating-releases/) yet, `piggyback` will help you quickly create one.  Create new releases to manage multiple versions of a given data file. While you can create releases as often as you like, making a new release is by no means necessary each time you upload a file.  If maintaining old versions of the data is not useful, you can stick with a single release and upload all of your data there.  
+If your GitHub repository doesn't have any [releases](https://docs.github.com/en/github/administering-a-repository/managing-releases-in-a-repository) yet, `piggyback` will help you quickly create one.  Create new releases to manage multiple versions of a given data file. While you can create releases as often as you like, making a new release is by no means necessary each time you upload a file.  If maintaining old versions of the data is not useful, you can stick with a single release and upload all of your data there.  
 
 ```r
 pb_new_release("cboettig/piggyback-tests", "v0.0.2")
@@ -189,7 +189,7 @@ unlink("data/", TRUE)
 
 ## What will GitHub think of this?
 
-[GitHub documentation](https://help.github.com/articles/distributing-large-binaries/) at the time of writing endorses the use of attachments to releases as a solution for distributing large files as part of your project:
+[GitHub documentation](https://docs.github.com/en/github/managing-large-files/distributing-large-binaries) at the time of writing endorses the use of attachments to releases as a solution for distributing large files as part of your project:
 
 ![](https://github.com/ropensci/piggyback/raw/83776863b34bb1c9962154608a5af41867a0622f/man/figures/github-policy.png)
 

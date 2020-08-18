@@ -20,3 +20,4 @@
 ^codemeta\.json$
 ^docs$
 ^.*\.gz$
+mtcars.tsv.gz$
