@@ -29,7 +29,7 @@
 #' @examples \donttest{
 #'  ## Download a specific file.
 #'  ## (dest can be omitted when run inside and R project)
-#'  piggyback::pb_download("data/iris.tsv.gz",
+#'  piggyback::pb_download("data/iris.tsv.xz",
 #'                         repo = "cboettig/piggyback-tests",
 #'                         dest = tempdir())
 #' }
