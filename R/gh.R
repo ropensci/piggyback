@@ -69,30 +69,30 @@ maybe <- function(expr, otherwise, quiet = TRUE) {
 }
 
 
-#' @importFrom git2r remote_url repository discover_repository
+#' @importFrom gert git_find git_info git_remote_list
 guess_repo <- function(path = ".") {
-  repo <- git2r::repository(
-    git2r::discover_repository(path)
-  )
 
-  remotes <- git2r::remotes(repo)
+  repo <- gert::git_find(path)
+  remotes <- gert::git_remote_list(repo)
+  remotes_names <- remotes[["name"]]
 
   # When there are more than 1 remote, we prefer "upstream"
   #   then "origin." If neither exists, we error to avoid
   #   ambiguity.
-  remote <- if (length(remotes) > 1) {
-    if ("upstream" %in% remotes) {
+  remote <- if (length(remotes_names) > 1) {
+    if ("upstream" %in% remotes_names) {
       "upstream"
-    } else if ("origin" %in% remotes) {
+    } else if ("origin" %in% remotes_names) {
       "origin"
     } else
       stop("Cannot infer repo, please provide `repo` explicitly.",
            call. = FALSE)
   } else {
-    remotes
+    remotes_names
   }
 
-  addr <- git2r::remote_url(repo = repo, remote = remote)
+  addr <- remotes[remotes[["name"]] == remote, "url"][["url"]]
+
   out <- gsub(".*[:|/]([^/]+/[^/]+)(?:\\.git$)?", "\\1", addr)
   gsub("\\.git$", "", out)
 }

@@ -34,7 +34,7 @@ Imports:
     gh,
     httr,
     jsonlite,
-    git2r,
+    gert,
     fs,
     usethis,
     crayon,
