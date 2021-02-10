@@ -7,7 +7,7 @@
 #' @inheritParams pb_download
 #' @return the URL to download a file
 #' @export
-#' @examples \donttest{
+#' @examples \dontrun{
 #'
 #' pb_download_url("data/iris.tsv.xz",
 #'                 repo = "cboettig/piggyback-tests",

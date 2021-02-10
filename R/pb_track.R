@@ -28,7 +28,8 @@ pb_track <- function(glob = NULL, repo_root = usethis::proj_get()) {
       glob
     )
     usethis::use_build_ignore(c(".pbattributes", "manifest.json"))
-    if (!is.null(git2r::discover_repository("."))) {
+
+    if (!is.null(maybe(gert::git_find("."), NULL))) {
       usethis::use_git_ignore("manifest.json")
       usethis::use_git_ignore(glob)
     }

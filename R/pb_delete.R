@@ -8,7 +8,7 @@
 #' Otherwise, returns `NULL` (invisibly) if no file matching the name was found.
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' readr::write_tsv(mtcars, "mtcars.tsv.gz")
 #' ## Upload
 #' pb_upload("mtcars.tsv.gz",

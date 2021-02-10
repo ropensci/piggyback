@@ -52,7 +52,7 @@ accidental disclosure of a secret token when sharing scripts.}
 Download data from an existing release
 }
 \examples{
-\donttest{
+\dontrun{
  ## Download a specific file.
  ## (dest can be omitted when run inside and R project)
  piggyback::pb_download("data/iris.tsv.gz",

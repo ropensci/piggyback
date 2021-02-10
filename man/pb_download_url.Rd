@@ -34,7 +34,7 @@ scripts that may want to download the file directly without introducing any
 dependency on \code{piggyback} or authentication steps.
 }
 \examples{
-\donttest{
+\dontrun{
 
 pb_download_url("data/iris.tsv.xz",
                 repo = "cboettig/piggyback-tests",

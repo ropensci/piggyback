@@ -26,7 +26,7 @@
 #' @importFrom gh gh
 #' @importFrom fs dir_create
 #' @export
-#' @examples \donttest{
+#' @examples \dontrun{
 #'  ## Download a specific file.
 #'  ## (dest can be omitted when run inside and R project)
 #'  piggyback::pb_download("data/iris.tsv.gz",
