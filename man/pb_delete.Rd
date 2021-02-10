@@ -34,7 +34,7 @@ Otherwise, returns \code{NULL} (invisibly) if no file matching the name was foun
 Delete an asset attached to a release
 }
 \examples{
-\donttest{
+\dontrun{
 readr::write_tsv(mtcars, "mtcars.tsv.gz")
 ## Upload
 pb_upload("mtcars.tsv.gz",
