@@ -3,7 +3,7 @@
 
 # piggyback <img src="man/figures/logo.svg" align="right" alt="" width="120" />
 
-[![lifecycle](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://www.tidyverse.org/lifecycle/#stable)
+[![lifecycle](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![Travis-CI Build
 Status](https://travis-ci.org/ropensci/piggyback.svg?branch=master)](https://travis-ci.org/ropensci/piggyback)
 [![Coverage
@@ -106,7 +106,7 @@ pb_download()
 `piggyback` acts like a poor soul’s [Git
 LFS](https://git-lfs.github.com/). Git LFS is not only expensive, it
 also [breaks GitHub’s collaborative
-model](https://medium.com/@megastep/github-s-large-file-storage-is-no-panacea-for-open-source-quite-the-opposite-12c0e16a9a91)
+model](https://angryfrenchman.org/github-s-large-file-storage-is-no-panacea-for-open-source-quite-the-opposite-12c0e16a9a91)
 – basically if someone wants to submit a PR with a simple edit to your
 docs, they cannot fork your repository since that would otherwise count
 against your Git LFS storage. Unlike Git LFS, `piggyback` doesn’t take
