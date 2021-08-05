@@ -7,7 +7,7 @@ context("Requiring Authentication")
 test_that("We can upload data", {
   # public pat
   skip_if(piggyback:::get_token() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
-  skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
+  skip_if(Sys.getenv("CBOETTIG_TOKEN") == "")
 
   data <- readr::write_tsv(datasets::iris, "iris.tsv.gz")
   out <- pb_upload(
@@ -27,16 +27,14 @@ test_that("working from git repo", {
 
   # public pat
   skip_if(piggyback:::get_token() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
-  skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
+  skip_if(Sys.getenv("CBOETTIG_TOKEN") == "")
 
   ##  Setup
   cur <- getwd()
   tmp <- fs::path(tempfile(), "pb_test")
   fs::dir_create(tmp)
   setwd(tmp)
-  if (packageVersion("git2r") <= "0.21.0") {
-    skip_on_os("mac")
-  }
+
 
   sink(tempfile())
   usethis::create_from_github(
@@ -49,18 +47,18 @@ test_that("working from git repo", {
   setwd("piggyback-tests")
 
   fs::dir_create("data")
-  readr::write_tsv(datasets::mtcars, "data/mtcars.tsv.gz")
-  readr::write_tsv(datasets::iris, "data/iris.tsv.xz")
-  x <- pb_track("data/*")
+  readr::write_tsv(datasets::mtcars, "mtcars.tsv.gz")
+  readr::write_tsv(datasets::iris, "iris.tsv.xz")
 
   sink() # avoid verbose messages in test log. usethis msgs cannot turn off(?)
+
 
   ## Test guessing repo
   info <- pb_list()
   expect_is(info, "data.frame")
   # pb_push
   library(magrittr)
-  pb_track() %>%
+  fs::dir_ls("data") %>%
     pb_upload(repo = "cboettig/piggyback-tests", tag = "v0.0.1",
               show_progress = FALSE, overwrite = TRUE)
 
@@ -88,9 +86,9 @@ test_that("we can get a download url", {
 
   # public pat
   skip_if(piggyback:::get_token() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
-  skip_if_not(as.logical(Sys.getenv("CBOETTIG_TOKEN", FALSE)))
+  skip_if(Sys.getenv("CBOETTIG_TOKEN") == "")
 
-  x <- pb_download_url("data/mtcars.tsv.gz",
+  x <- pb_download_url("iris.tsv.gz",
     repo = "cboettig/piggyback-tests",
     tag = "v0.0.1",
     .token = piggyback:::get_token()
@@ -119,8 +117,7 @@ testthat::test_that(
     testthat::skip_if(piggyback:::get_token() == "")
     testthat::skip_if(piggyback:::get_token() ==
                         "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
-    testthat::skip_if_not(as.logical(
-      Sys.getenv("CBOETTIG_TOKEN", FALSE)))
+    skip_if(Sys.getenv("CBOETTIG_TOKEN") == "")
 
 
     tmp <- tempdir()

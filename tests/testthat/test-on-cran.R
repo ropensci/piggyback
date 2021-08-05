@@ -8,6 +8,6 @@ testthat::test_that(
       repo = "cboettig/piggyback-tests",
       tag = "v0.0.1"
     )
-    testthat::expect_true("data/iris.tsv.xz" %in% x$file_name)
+    testthat::expect_true("iris.tsv.xz" %in% x$file_name)
   }
 )

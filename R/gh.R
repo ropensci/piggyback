@@ -1,11 +1,8 @@
 
-## Map local paths to valid names for GitHub assets
 asset_filename <- function(x, start = ".") {
-  x <- fs::path_rel(x, start)
-  x <- gsub("^\\.", "", x)
-  # name relative to repo
-  ## Cannot use %2f as html escape for slash
-  gsub(.Platform$file.sep, ".2f", x)
+  ## piggyback will no longer embed file structure in filename
+  ## Asset uploading is simply flat storage
+  x
 }
 
 local_filename <- function(x) {
@@ -69,8 +66,12 @@ maybe <- function(expr, otherwise, quiet = TRUE) {
 }
 
 
-#' @importFrom gert git_find git_info git_remote_list
 guess_repo <- function(path = ".") {
+
+  exists <- requireNamespace("gert", quietly = TRUE)
+  if(!exists) stop(paste(
+    "Install package 'gert' to let piggyback discover the",
+    "current repo, or provide your repo name explicitly"))
 
   repo <- gert::git_find(path)
   remotes <- gert::git_remote_list(repo)
