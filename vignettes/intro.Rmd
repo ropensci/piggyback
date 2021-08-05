@@ -126,7 +126,7 @@ Like `pb_download()`, `pb_upload()` will overwrite any file of the same name alr
 List all files currently piggybacking on a given release.  Omit the `tag` to see files on all releases.  
 
 
-```{r}
+```r
 pb_list(repo = "cboettig/piggyback-tests", 
         tag = "v0.0.1")
 ```
