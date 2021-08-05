@@ -3,22 +3,22 @@
 
 # piggyback <img src="man/figures/logo.svg" align="right" alt="" width="120" />
 
+<!-- badges: start -->
+
 [![lifecycle](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html)
-[![Travis-CI Build
-Status](https://travis-ci.org/ropensci/piggyback.svg?branch=master)](https://travis-ci.org/ropensci/piggyback)
+[![R-CMD-check](https://github.com/ropensci/piggyback/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/piggyback/actions)
 [![Coverage
 status](https://codecov.io/gh/ropensci/piggyback/branch/master/graph/badge.svg)](https://codecov.io/github/ropensci/piggyback?branch=master)
-[![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/cboettig/piggyback?branch=master&svg=true)](https://ci.appveyor.com/project/cboettig/piggyback)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/piggyback)](https://cran.r-project.org/package=piggyback)
 [![Peer Review
 Status](https://badges.ropensci.org/220_status.svg)](https://github.com/ropensci/software-review/issues/220)
 [![DOI](https://zenodo.org/badge/132979724.svg)](https://zenodo.org/badge/latestdoi/132979724)
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.00971/status.svg)](https://doi.org/10.21105/joss.00971)
+<!-- badges: end -->
 
-Because larger (\> 50 MB) data files cannot easily be committed to git,
-a different approach is required to manage data associated with an
+Because larger (&gt; 50 MB) data files cannot easily be committed to
+git, a different approach is required to manage data associated with an
 analysis in a GitHub repository. This package provides a simple
 work-around by allowing larger ([up to 2 GB per
 file](https://docs.github.com/en/github/managing-large-files/distributing-large-binaries))
@@ -57,7 +57,7 @@ Piggyback can download data attached to a release on any repository:
 
 ``` r
 library(piggyback)
-pb_download("data/mtcars.tsv.gz", repo = "cboettig/piggyback-tests", dest = tempdir())
+pb_download("iris.tsv.gz", repo = "cboettig/piggyback-tests", dest = tempdir())
 ```
 
 Downloading from private repos or uploading to any repo requires
@@ -76,29 +76,6 @@ We can also upload data to any existing release (defaults to `latest`):
 readr::write_tsv(mtcars, "mtcars.tsv.gz")
 
 pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback-tests")
-```
-
-### Tracking data files
-
-For a [Git LFS](https://git-lfs.github.com/) style workflow, just
-specify the type of files you wish to track using `pb_track()`.
-Piggyback will retain a record of these files in a hidden
-`.pbattributes` file in your repository, and add these to `.gitignore`
-so you don’t accidentally commit them to GitHub. `pb_track` will also
-return a list of such files that you can easily pass to `pb_upload()`:
-
-``` r
-# track csv files, compressed data, and geotiff files:
-pb_track(c("*.csv", "*.gz", "*.tif")) %>%
-pb_upload()
-```
-
-You can easily download the latest version of all data attached to a
-given release with `pb_download()` with no file argument (analogous to a
-`git pull` for data):
-
-``` r
-pb_download()
 ```
 
 ## Git LFS and other alternatives
@@ -135,7 +112,7 @@ attachments is acceptable in the long term.
 Also see our [vignette comparing
 alternatives](https://docs.ropensci.org/piggyback/articles/alternatives.html).
 
------
+------------------------------------------------------------------------
 
 Please note that this project is released with a [Contributor Code of
 Conduct](https://ropensci.org/code-of-conduct/). By participating in

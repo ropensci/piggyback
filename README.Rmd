@@ -59,7 +59,7 @@ Piggyback can download data attached to a release on any repository:
 
 ```{r results="hide"}
 library(piggyback)
-pb_download("data/mtcars.tsv.gz", repo = "cboettig/piggyback-tests", dest = tempdir())
+pb_download("iris.tsv.gz", repo = "cboettig/piggyback-tests", dest = tempdir())
 ```
 
 
@@ -73,24 +73,6 @@ We can also upload data to any existing release (defaults to `latest`):
 readr::write_tsv(mtcars, "mtcars.tsv.gz")
 
 pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback-tests")
-```
-
-### Tracking data files
-
-
-For a [Git LFS](https://git-lfs.github.com/) style workflow, just specify the type of files you wish to track using `pb_track()`.  Piggyback will retain a record of these files in a hidden `.pbattributes` file in your repository, and add these to `.gitignore` so you don't accidentally commit them to GitHub.  `pb_track` will also return a list of such files that you can easily pass to `pb_upload()`:  
-
-```{r eval=FALSE}
-# track csv files, compressed data, and geotiff files:
-pb_track(c("*.csv", "*.gz", "*.tif")) %>%
-pb_upload()
-```
-
-
-You can easily download the latest version of all data attached to a given release with `pb_download()` with no file argument (analogous to  a `git pull` for data):
-
-```{r eval=FALSE}
-pb_download()
 ```
 
 
