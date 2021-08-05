@@ -50,6 +50,9 @@ pb_upload <- function(file,
       .token,
       dir
     ))
+
+  ## break cache when done
+  memoise::forget(memoised_pb_info)
   invisible(out)
 }
 
@@ -98,8 +101,8 @@ pb_upload_file <- function(file,
   }
 
 
-  ## FIXME When vectorized, every upload is repeating the call to `pb_info()!`
-  df <- memoised_pb_info(repo, tag, .token)
+  ## memoised for piggyback_cache_duration
+  df <- pb_info(repo, tag, .token)
 
 
   i <- which(df$file_name == name)
@@ -139,7 +142,9 @@ pb_upload_file <- function(file,
 
   if (!is.null(progress)) {
     message(paste("uploading", name, "..."))
-}
+  }
+
+  ## FIXME change autentication method!
   r <- httr::POST(sub("\\{.+$", "", df$upload_url[[1]]),
                   query = list(name = asset_filename(name)),
                   body = httr::upload_file(file),
@@ -151,6 +156,6 @@ pb_upload_file <- function(file,
   httr::stop_for_status(r)
 
   ## Release info changed, so break cache
-  memoise::forget(memoised_pb_info)
+  # memoise::forget(memoised_pb_info)
   invisible(r)
 }
