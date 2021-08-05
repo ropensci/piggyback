@@ -24,7 +24,7 @@
 #' }
 pb_new_release <- function(repo = guess_repo(),
                            tag,
-                           commit = "master",
+                           commit = NULL,
                            name = tag,
                            body = "Data release",
                            draft = FALSE,
@@ -33,37 +33,38 @@ pb_new_release <- function(repo = guess_repo(),
 
   releases <- release_info(repo, .token)
 
-  # if no releases exist, release_info returns a gh_response length-1 list
-  # containing only "".  Otherwise, list is at least length 1, with names.
-  if("tag_name" %in% names(releases[[1]])){
-    current_tags <- lapply(releases, `[[`, "tag_name")
-    if (tag %in% current_tags) {
-      stop(paste("release tag", tag, "already exists"))
+  # if no releases exist, release_info returns a gh_response length-0 list
+  if(length(releases) > 0){
+    # Otherwise, list is at least length 1, with names.
+    if("tag_name" %in% names(releases[[1]])){
+      current_tags <- lapply(releases, `[[`, "tag_name")
+      if (tag %in% current_tags) {
+        stop(paste("release tag", tag, "already exists"))
+      }
     }
   }
 
 
   r <- strsplit(repo, "/")[[1]]
 
-  payload <- list(
+  payload <- compact(list(
     tag_name = tag,
     target_commitish = commit,
     name = name,
     body = body,
     draft = draft,
     prerelease = prerelease
-  )
+  ))
 
   ## gh fails to pass body correctly??
-  # gh("/repos/:owner/:repo/releases", owner = r[[1]], repo = r[[2]],
+  #gh("/repos/:owner/:repo/releases", owner = r[[1]], repo = r[[2]],
   #   .method = "POST", body = toJSON(payload,auto_unbox = TRUE), encode="json")
 
-  token <- .token
   resp <- httr::POST(paste0(
-    "https://api.github.com/repos/", r[[1]], "/",
-    r[[2]], "/", "releases?access_token=", token
-  ),
-  body = jsonlite::toJSON(payload, auto_unbox = TRUE)
+      "https://api.github.com/repos/", r[[1]], "/",
+      r[[2]], "/", "releases"),
+    httr::add_headers(Authorization = paste("token",.token)),
+    body = jsonlite::toJSON(payload, auto_unbox = TRUE)
   )
 
   httr::stop_for_status(resp)
@@ -73,3 +74,6 @@ pb_new_release <- function(repo = guess_repo(),
   release <- httr::content(resp)
   invisible(release)
 }
+
+compact <- function (l)
+  Filter(Negate(is.null), l)

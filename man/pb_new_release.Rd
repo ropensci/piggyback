@@ -7,7 +7,7 @@
 pb_new_release(
   repo = guess_repo(),
   tag,
-  commit = "master",
+  commit = NULL,
   name = tag,
   body = "Data release",
   draft = FALSE,
