@@ -38,6 +38,10 @@ pb_upload <- function(file,
                       show_progress = TRUE,
                       .token = get_token(),
                       dir = ".") {
+
+  ## start fresh
+  memoise::forget(memoised_pb_info)
+
   out <- lapply(file, function(f)
     pb_upload_file(
       f,
