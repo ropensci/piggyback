@@ -148,12 +148,11 @@ pb_upload_file <- function(file,
     message(paste("uploading", name, "..."))
   }
 
-  ## FIXME change autentication method!
   r <- httr::POST(sub("\\{.+$", "", df$upload_url[[1]]),
                   query = list(name = asset_filename(name)),
+                  httr::add_headers(Authorization = paste("token", .token)),
                   body = httr::upload_file(file),
-                  progress,
-                  httr::authenticate(.token, "x-oauth-basic", "basic")
+                  progress
   )
 
   cat("\n")
