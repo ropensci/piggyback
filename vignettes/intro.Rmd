@@ -61,7 +61,7 @@ But try to avoid putting `Sys.setenv()` in  any R scripts -- remember, the goal 
 
 Download the latest version or a specific version of the data:
 
-```{r}
+```r
 library(piggyback)
 ```
 
@@ -179,12 +179,6 @@ GitHub assets attached to a release do not support file paths, and will convert 
 
 Permanent, published data should always be archived in a proper data repository with a DOI, such as [zenodo.org](https://zenodo.org). Zenodo can freely archive public research data files up to 50 GB in size, and data is strictly versioned (once released, a DOI always refers to the same version of the data, new releases are given new DOIs). `piggyback` is meant only to lower the friction of working with data during the research process.  (e.g. provide data accessible to collaborators or continuous integration systems during research process, including for private repositories.)
 
-
-
-```{r include=FALSE}
-unlink("*.gz")
-unlink("data/", TRUE)
-```
 
 
 ## What will GitHub think of this?
