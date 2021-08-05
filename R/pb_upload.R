@@ -97,7 +97,9 @@ pb_upload_file <- function(file,
     name <- fs::path_rel(file, start = dir)
   }
 
-  df <- pb_info(repo, tag, .token)
+
+  ## FIXME When vectorized, every upload is repeating the call to `pb_info()!`
+  df <- memoised_pb_info(repo, tag, .token)
 
 
   i <- which(df$file_name == name)

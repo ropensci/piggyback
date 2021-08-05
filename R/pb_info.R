@@ -139,7 +139,7 @@ pb_info_fn <- function(repo = guess_repo(),
 memoised_pb_info <-
   memoise::memoise(pb_info_fn,
                    ~memoise::timeout(as.numeric(
-                     Sys.getenv("piggyback_cache_duration", "1")
+                     Sys.getenv("piggyback_cache_duration", "10")
                      ))
                    )
 
@@ -150,7 +150,7 @@ pb_info <- function(repo = guess_repo(),
                     .token = get_token(),
                     cache = TRUE){
 
-  seconds <- as.numeric(Sys.getenv("piggyback_cache_duration", "1"))
+  seconds <- as.numeric(Sys.getenv("piggyback_cache_duration", "10"))
   if(seconds == 0) cache <- FALSE
   if(cache){
 
