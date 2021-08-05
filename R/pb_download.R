@@ -5,9 +5,8 @@
 #' @param file name or vector of names of files to be downloaded. If `NULL`,
 #' all assets attached to the release will be downloaded.
 #' @param dest name of vector of names of where file should be downloaded.
-#' Should be a directory or a list of filenames the same length as `file`
-#' vector. Can include paths to files, but any directories in that path
-#' must already exist.
+#' Can be a directory or a list of filenames the same length as `file`
+#' vector. Any directories in the path provided must already exist.
 #' @param tag tag for the GitHub release to which this data is attached
 #' @param overwrite Should any local files of the same name be overwritten?
 #'  default `TRUE`.
@@ -40,7 +39,7 @@
 #'
 #' }
 pb_download <- function(file = NULL,
-                        dest = usethis::proj_get(),
+                        dest = ".",
                         repo = guess_repo(),
                         tag = "latest",
                         overwrite = TRUE,
@@ -80,12 +79,12 @@ pb_download <- function(file = NULL,
   }
 
 
-  ## if dest not provided, we will write
+  ## if dest paths are not provided, we will write all files to dest dir
   if (length(dest) == 1) {
     i <- which(df$file_name %in% file)
-    ## Make sure dest dir exists!
-    dest <- fs::path_rel(file.path(dest, df$file_name[i]))
-    fs::dir_create(fs::path_dir(dest))
+    dest <- file.path(dest, df$file_name[i])
+    # User is responsible for making sure dest dir exists!
+    # fs::dir_create(fs::path_dir(dest))
   }
   # dest should now be of length df
   df$dest <- dest
@@ -143,7 +142,6 @@ gh_download_asset <- function(owner,
       "api.github.com/repos/", owner, "/",
       repo, "/", "releases/assets/", id
     ),
-#    httr::authenticate(.token, "x-oauth-basic", "basic"),
     httr::add_headers(Accept = "application/octet-stream"),
     httr::add_headers(Authorization = paste("token",.token)),
     httr::write_disk(destfile, overwrite = overwrite),

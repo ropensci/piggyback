@@ -100,7 +100,25 @@ null_chr <- function(x){
 pb_info_fn <- function(repo = guess_repo(),
                        tag = NULL,
                        .token = get_token()) {
+
   releases <- release_info(repo, .token)
+  ## FIXME Establish if any releases exist first!
+  if(length(releases) == 0){
+    if(!interactive()){
+      message("no releases found")
+      return(data.frame())
+    } else {
+      continue <- askYesNo(paste("No releases with tag", tag, "
+                                 found, would you like to create one?"))
+      if(continue){
+        pb_new_release(repo=repo, tag=tag, .token = .token)
+      } else {
+        return(data.frame())
+      }
+    }
+
+  }
+
   r <- strsplit(repo, "/")[[1]]
 
   info <- do.call(rbind, lapply(releases, release_data, r))

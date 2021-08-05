@@ -15,7 +15,5 @@
 #'
 #' - [pb_upload()] / [pb_download()]:  Upload and download individual files to/from
 #'   the desired release of the specified repository
-#' - [pb_track()]: Use a `git-lfs` style tracking of specific
-#'    file types
 #'
 "_PACKAGE"

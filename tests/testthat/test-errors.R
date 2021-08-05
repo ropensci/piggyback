@@ -153,7 +153,7 @@ test_that(
     expect_message(
       pb_delete(
         repo = "cboettig/piggyback-tests",
-        file = "mtcars2.tsv.gz",
+        file = "mtcars8.tsv.gz",
         tag = "v0.0.1"
       ),
       "not found on GitHub"

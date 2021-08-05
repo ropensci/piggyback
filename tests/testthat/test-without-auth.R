@@ -7,26 +7,21 @@ tmp <- tempdir()
 ## when no Token is available.  It is preferable / advisable to have
 ## set GITHUB_TOKEN env var for any testing, as we do on Appveyor
 ## and Travis
+writeLines("", tempfile())
+
 test_that(
   "we can download all files from the a specific release", {
     skip_on_cran()
     pb_download(
       repo = "cboettig/piggyback-tests",
-      dest = tmp,
+      dest = tempdir(),
       tag = "v0.0.1",
-      show_progress = FALSE
+      show_progress = TRUE
     )
-
-    f <- fs::path(tmp, "data", "mtcars.tsv.gz")
-    expect_true(file.exists(f))
-    cars <- readr::read_tsv(f)
-    expect_equivalent(cars, mtcars)
 
     expect_true(file.exists(file.path(tmp, "iris.tsv.gz")))
     expect_true(file.exists(file.path(tmp, "iris2.tsv.gz")))
-    expect_true(file.exists(file.path(tmp, "data", "iris.tsv.xz")))
 
-    unlink(f)
   }
 )
 
@@ -85,27 +80,6 @@ test_that(
   }
 )
 
-test_that(
-  "we can download a requested file to requested subdirectory", {
-    skip_on_cran()
-
-
-    dir.create(file.path(tmp, "test_data/"))
-    pb_download(
-      file = "data/mtcars.tsv.gz",
-      dest = file.path(tmp, "test_data/"),
-      repo = "cboettig/piggyback-tests",
-      tag = "v0.0.1",
-      show_progress = FALSE
-    )
-
-    path <- file.path(tmp, "test_data", "data", "mtcars.tsv.gz")
-    expect_true(file.exists(path))
-    cars <- readr::read_tsv(path)
-    expect_equivalent(cars, mtcars)
-    unlink(path)
-  }
-)
 
 
 #######  We need to be in an active project to track something
@@ -122,7 +96,6 @@ test_that("we can track data", {
   ))
   setwd(proj_dir)
 
-  pb_track("*.tsv")
   out <- pb_download(repo = "cboettig/piggyback-tests",
                      show_progress = FALSE)
   expect_true(TRUE)
