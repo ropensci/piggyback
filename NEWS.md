@@ -1,4 +1,10 @@
-# piggyback 0.0.13
+# piggyback 0.1.0
+
+* address remaining authentication issue in changes to GitHub API (on pb_upload()) [#47]
+* Use flat file structure on upload/download instead of encoding path [#48]
+* improve performance via more aggressive memoising of `pb_info()` calls, inceasing default `piggyback_cache_duration` to 10 minutes [#46]
+* Resolve bug introduced by API changes that would stop creation of tags on repos with default branch called `main` or without previous releases [#48]
+
 
 # piggyback 0.0.12
 
