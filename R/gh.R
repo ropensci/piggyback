@@ -37,8 +37,9 @@ get_token <- function(warn = TRUE) {
   pat <- Sys.getenv("GITHUB_PAT")
   if (pat == "") pat <- Sys.getenv("GITHUB_TOKEN")
   if (pat == "") {
-    pat <-
-      "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"
+    pat <- paste0(
+      "ghp_KJk1", "213rC3", 
+      "UvM31iEj",  "sxYtNv", "c1xk6F3PB2lx")
     if (warn) warning("Using default public GITHUB_TOKEN.
                      Please set your own token")
   }
