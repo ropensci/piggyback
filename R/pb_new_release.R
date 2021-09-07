@@ -71,6 +71,10 @@ pb_new_release <- function(repo = guess_repo(),
 
   ## Release info changed, so break cache
   memoise::forget(memoised_pb_info)
+
+  ## refresh
+  pb_info(repo = repo, tag = tag, .token = .token)
+
   release <- httr::content(resp)
   invisible(release)
 }

@@ -97,7 +97,7 @@ pb_upload_file <- function(file,
 
   if (is.null(name)) {
     ## name is name on GitHub, technically need not be name of local file
-    name <- fs::path_rel(file, start = dir)
+    name <- basename(file) # fs::path_rel(file, start = dir)
   }
 
 

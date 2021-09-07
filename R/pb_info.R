@@ -108,10 +108,11 @@ pb_info_fn <- function(repo = guess_repo(),
       message("no releases found")
       return(data.frame())
     } else {
-      continue <- askYesNo(paste("No releases with tag", tag, "
-                                 found, would you like to create one?"))
+      continue <- askYesNo(paste("No releases found",
+                                 "would you like to create one?"))
       if(continue){
         pb_new_release(repo=repo, tag=tag, .token = .token)
+
       } else {
         return(data.frame())
       }
@@ -141,6 +142,8 @@ pb_info_fn <- function(repo = guess_repo(),
         ))
         if (create) {
           pb_new_release(repo, tag, .token = .token)
+          # Recursion!
+          info <- pb_info_fn(repo, tag,.token)
         } else {
           return(NULL)
         }
