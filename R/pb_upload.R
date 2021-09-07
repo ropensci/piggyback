@@ -156,7 +156,7 @@ pb_upload_file <- function(file,
   )
 
   cat("\n")
-  httr::stop_for_status(r)
+  if(getOption("verbose")) httr::warn_for_status(r)
 
   ## Release info changed, so break cache
   # memoise::forget(memoised_pb_info)

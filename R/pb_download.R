@@ -160,7 +160,8 @@ gh_download_asset <- function(owner,
   }
 
   # handle error cases? resp not found
-  httr::stop_for_status(resp)
+  if(getOption("verbose")) httr::warn_for_status(resp)
+
   invisible(resp)
 #  gh::gh(paste0(
 #         "https://api.github.com/repos/", owner, "/",
