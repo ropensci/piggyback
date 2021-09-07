@@ -7,8 +7,6 @@ test_that("get token", {
   Sys.unsetenv("GITHUB_PAT")
   Sys.unsetenv("GITHUB_TOKEN")
 
-  expect_warning(piggyback:::get_token())
-
   # clean up. Setting to "" is not unsetting!
   if(gh_pat != "")
     Sys.setenv("GITHUB_PAT" = gh_pat)

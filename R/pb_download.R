@@ -1,28 +1,17 @@
 #' Download data from an existing release
 #'
-#' @param repo Repository name in format "owner/repo". Will guess
-#' the current repo if not specified.
 #' @param file name or vector of names of files to be downloaded. If `NULL`,
 #' all assets attached to the release will be downloaded.
 #' @param dest name of vector of names of where file should be downloaded.
 #' Can be a directory or a list of filenames the same length as `file`
 #' vector. Any directories in the path provided must already exist.
-#' @param tag tag for the GitHub release to which this data is attached
 #' @param overwrite Should any local files of the same name be overwritten?
 #'  default `TRUE`.
 #' @param ignore a list of files to ignore (if downloading "all" because
 #'  `file=NULL`).
-#' @param use_timestamps If `TRUE`, then files will only be downloaded
-#' if timestamp on GitHub is newer than the local timestamp (if
-#' `overwrite=TRUE`).  Defaults to `TRUE`.
-#' @param show_progress logical, should we show progress bar for download?
-#' Defaults to `TRUE`.
-#' @param .token GitHub authentication token. Typically set from an
-#' environmental variable, e.g. in a `.Renviron` file or with
-#' `Sys.setenv(GITHUB_TOKEN = "xxxxx")`, which helps prevent
-#' accidental disclosure of a secret token when sharing scripts.
+#' @inheritParams pb_upload
 #' @importFrom httr GET add_headers write_disk
-#' @importFrom gh gh
+#' @importFrom gh gh gh_token
 #' @importFrom fs dir_create
 #' @export
 #' @examples \dontrun{

@@ -17,7 +17,7 @@ test_that(
         .token = "not_valid_token",
         show_progress = FALSE
       ),
-      "GITHUB_TOKEN"
+      ".token"
     )
     unlink("iris.tsv.gz")
   }

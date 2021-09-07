@@ -12,8 +12,8 @@ pb_list(
 )
 }
 \arguments{
-\item{repo}{Repository name in format "owner/repo". Will guess
-the current repo if not specified.}
+\item{repo}{Repository name in format "owner/repo". Will guess the current
+repo if not specified.}
 
 \item{tag}{which release tag do we want information for? If \code{NULL} (default),
 will return a table for all available release tags.}
@@ -21,10 +21,7 @@ will return a table for all available release tags.}
 \item{ignore}{a list of files to ignore (if downloading "all" because
 \code{file=NULL}).}
 
-\item{.token}{GitHub authentication token. Typically set from an
-environmental variable, e.g. in a \code{.Renviron} file or with
-\code{Sys.setenv(GITHUB_TOKEN = "xxxxx")}, which helps prevent
-accidental disclosure of a secret token when sharing scripts.}
+\item{.token}{GitHub authentication token, see \verb{[gh::gh_token()]}}
 }
 \value{
 a data.frame of release asset names, (normalized to local paths), release tag,

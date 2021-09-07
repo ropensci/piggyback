@@ -15,15 +15,12 @@ pb_download_url(
 \item{file}{name or vector of names of files to be downloaded. If \code{NULL},
 all assets attached to the release will be downloaded.}
 
-\item{repo}{Repository name in format "owner/repo". Will guess
-the current repo if not specified.}
+\item{repo}{Repository name in format "owner/repo". Will guess the current
+repo if not specified.}
 
-\item{tag}{tag for the GitHub release to which this data is attached}
+\item{tag}{tag for the GitHub release to which this data should be attached.}
 
-\item{.token}{GitHub authentication token. Typically set from an
-environmental variable, e.g. in a \code{.Renviron} file or with
-\code{Sys.setenv(GITHUB_TOKEN = "xxxxx")}, which helps prevent
-accidental disclosure of a secret token when sharing scripts.}
+\item{.token}{GitHub authentication token, see \verb{[gh::gh_token()]}}
 }
 \value{
 the URL to download a file
