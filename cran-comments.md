@@ -1,7 +1,6 @@
 Dear CRAN Maintainers,
 
-This release fixes a test that has started to fail due to changes in the 
-GitHub API, and a few minor bugs.  See NEWS.  
+This release fixes a few minor bugs due to changes in the API.  See NEWS.  
 
 - Carl
 

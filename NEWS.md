@@ -1,3 +1,9 @@
+# piggyback 0.1.1
+
+* switch to gh::gh_token() for token management.  Still supports the same env var approach, but also compatible with `gitcreds` and other use.
+* resolve issue in `pb_upload()` when creating a new tag in the process, previously data would be attached to the previously `latest` tag instead of the newly created one. 
+* resolve issue in `pb_download()` where httr would report a 401 status even after data successfully downloads. 
+
 # piggyback 0.1.0
 
 * address remaining authentication issue in changes to GitHub API (on pb_upload()) [#47]
