@@ -58,6 +58,8 @@ Piggyback can download data attached to a release on any repository:
 ``` r
 library(piggyback)
 pb_download("iris.tsv.gz", repo = "cboettig/piggyback-tests", dest = tempdir())
+#> Warning in pb_download("iris.tsv.gz", repo = "cboettig/piggyback-tests", :
+#> file(s) iris.tsv.gz not found in repo cboettig/piggyback-tests
 ```
 
 Downloading from private repos or uploading to any repo requires

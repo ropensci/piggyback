@@ -24,3 +24,5 @@
 ^.*\.gz$
 mtcars.tsv.gz$
 ^\.github$
+^pkgdown$
+

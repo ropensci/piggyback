@@ -105,7 +105,7 @@ By participating in this project you agree to abide by its terms.
 
 ```{r include=FALSE}
 unlink("*.gz")
-#codemetar::write_codemeta()
+codemeta::write_codemeta()
 ```
 
 

@@ -1,7 +1,8 @@
-pandoc: 2.3.1
-pkgdown: 1.3.0.9000
-pkgdown_sha: fa9b7502e80401db4b410086b0a8f6ab444f0c66
+pandoc: 2.11.4
+pkgdown: 1.6.1
+pkgdown_sha: ~
 articles:
   alternatives: alternatives.html
   intro: intro.html
+last_built: 2021-09-08T23:29Z
 

@@ -8,21 +8,36 @@
 
 <title>Changelog • piggyback</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,10 +45,10 @@
 
 
 
-<meta property="og:title" content="Changelog" />
 
-<meta property="og:image" content="/logo.png" />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="Changelog" />
+<meta property="og:image" content="/logo.svg" />
+
 
 
 
@@ -47,9 +62,10 @@
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -63,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">piggyback</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -71,7 +87,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,11 +113,10 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/ropensci/piggyback">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/ropensci/piggyback/">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,18 +127,61 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
+      <h1 data-toc-skip>Changelog <small></small></h1>
       <small>Source: <a href='https://github.com/ropensci/piggyback/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="piggyback-0-0-10" class="section level1">
-<h1 class="page-header">
-<a href="#piggyback-0-0-10" class="anchor"></a>piggyback 0.0.10<small> Unreleased </small>
+    <div id="piggyback-011" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.1">
+<a href="#piggyback-011" class="anchor"></a>piggyback 0.1.1<small> Unreleased </small>
+</h1>
+<ul>
+<li>switch to gh::gh_token() for token management. Still supports the same env var approach, but also compatible with <code>gitcreds</code> and other use.</li>
+<li>resolve issue in <code><a href="../reference/pb_upload.html">pb_upload()</a></code> when creating a new tag in the process, previously data would be attached to the previously <code>latest</code> tag instead of the newly created one.</li>
+<li>resolve issue in <code><a href="../reference/pb_download.html">pb_download()</a></code> where httr would report a 401 status even after data successfully downloads.</li>
+</ul>
+</div>
+    <div id="piggyback-010" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.0">
+<a href="#piggyback-010" class="anchor"></a>piggyback 0.1.0<small> 2021-08-06 </small>
+</h1>
+<ul>
+<li>address remaining authentication issue in changes to GitHub API (on pb_upload()) [<a href='https://github.com/ropensci/piggyback/issues/47'>#47</a>]</li>
+<li>Use flat file structure on upload/download instead of encoding path [<a href='https://github.com/ropensci/piggyback/issues/48'>#48</a>]</li>
+<li>improve performance via more aggressive memoising of <code>pb_info()</code> calls, inceasing default <code>piggyback_cache_duration</code> to 10 minutes [<a href='https://github.com/ropensci/piggyback/issues/46'>#46</a>]</li>
+<li>Resolve bug introduced by API changes that would stop creation of tags on repos with default branch called <code>main</code> or without previous releases [<a href='https://github.com/ropensci/piggyback/issues/48'>#48</a>]</li>
+</ul>
+</div>
+    <div id="piggyback-0012" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.12">
+<a href="#piggyback-0012" class="anchor"></a>piggyback 0.0.12<small> Unreleased </small>
+</h1>
+<ul>
+<li>address issues in authentication due to changes in GitHub API (<a href='https://github.com/ropensci/piggyback/issues/37'>#37</a>)</li>
+</ul>
+</div>
+    <div id="piggyback-0011-2020-02-25" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.11">
+<a href="#piggyback-0011-2020-02-25" class="anchor"></a>piggyback 0.0.11 2020-02-25<small> 2020-02-25 </small>
+</h1>
+<ul>
+<li>
+<code>guess_repo()</code> now infers a remote when there are multiple associated with the repo. The “upstream” (preferred) or “origin” repo is selected if either exists, otherwise the function errors and asks the user to explicitly specify a repo (<a href='https://github.com/ropensci/piggyback/issues/31'>#31</a>).</li>
+<li>
+<code>release_info()</code> now works properly when there are no existing releases, which enables the usage of <code><a href="../reference/pb_new_release.html">pb_new_release()</a></code> on repos without a release (<a href='https://github.com/ropensci/piggyback/issues/29'>#29</a>).</li>
+<li>Fix error on <code>pb_info()</code> under certain cases which resulted in <code>Error in a[[1]] : subscript out of bounds</code>, (<a href='https://github.com/ropensci/piggyback/issues/36'>#36</a>)</li>
+<li>Fix CRAN unit-test on deleting file</li>
+</ul>
+</div>
+    <div id="piggyback-0010-2018-02-06" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.10">
+<a href="#piggyback-0010-2018-02-06" class="anchor"></a>piggyback 0.0.10 2018-02-06<small> 2019-02-07 </small>
 </h1>
 <ul>
 <li>Improve interface regarding <code>overwrite</code> behavior in <code><a href="../reference/pb_upload.html">pb_upload()</a></code> (<a href='https://github.com/ropensci/piggyback/issues/25'>#25</a>)</li>
@@ -135,59 +193,59 @@
 </li>
 </ul>
 </div>
-    <div id="piggyback-0-0-9-2019-01-08" class="section level1">
-<h1 class="page-header">
-<a href="#piggyback-0-0-9-2019-01-08" class="anchor"></a>piggyback 0.0.9, 2019-01-08<small> 2019-01-08 </small>
+    <div id="piggyback-009-2019-01-08" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.9">
+<a href="#piggyback-009-2019-01-08" class="anchor"></a>piggyback 0.0.9, 2019-01-08<small> 2019-01-08 </small>
 </h1>
 <ul>
 <li>Enable re-upload and deletion of partially uploaded files (<a href='https://github.com/ropensci/piggyback/issues/19'>#19</a>)</li>
 </ul>
 </div>
-    <div id="piggyback-0-0-8-2018-10-06" class="section level1">
-<h1 class="page-header">
-<a href="#piggyback-0-0-8-2018-10-06" class="anchor"></a>piggyback 0.0.8, 2018-10-06<small> 2018-10-06 </small>
+    <div id="piggyback-008-2018-10-06" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.8">
+<a href="#piggyback-008-2018-10-06" class="anchor"></a>piggyback 0.0.8, 2018-10-06<small> 2018-10-06 </small>
 </h1>
 <ul>
 <li>Updates to documentation, streamlining tests</li>
-<li>remove dependency on <code><a href="https://www.rdocumentation.org/packages/utils/topics/askYesNo">utils::askYesNo</a></code> which is only available in R &gt;= 3.5.0</li>
+<li>remove dependency on <code><a href="https://rdrr.io/r/utils/askYesNo.html">utils::askYesNo</a></code> which is only available in R &gt;= 3.5.0</li>
 </ul>
 </div>
-    <div id="piggyback-0-0-7-2018-09-30" class="section level1">
-<h1 class="page-header">
-<a href="#piggyback-0-0-7-2018-09-30" class="anchor"></a>piggyback 0.0.7, 2018-09-30<small> 2018-09-30 </small>
+    <div id="piggyback-007-2018-09-30" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.7">
+<a href="#piggyback-007-2018-09-30" class="anchor"></a>piggyback 0.0.7, 2018-09-30<small> 2018-09-30 </small>
 </h1>
 <ul>
 <li>Initial release to CRAN</li>
 </ul>
 <hr>
 </div>
-    <div id="piggyback-0-0-6-2018-09-21" class="section level1">
-<h1 class="page-header">
-<a href="#piggyback-0-0-6-2018-09-21" class="anchor"></a>piggyback 0.0.6, 2018-09-21<small> Unreleased </small>
+    <div id="piggyback-006-2018-09-21" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.6">
+<a href="#piggyback-006-2018-09-21" class="anchor"></a>piggyback 0.0.6, 2018-09-21<small> Unreleased </small>
 </h1>
 <ul>
 <li>bugfix for migrating unit test</li>
 </ul>
 </div>
-    <div id="piggyback-0-0-6-2018-09-21-1" class="section level1">
-<h1 class="page-header">
-<a href="#piggyback-0-0-6-2018-09-21-1" class="anchor"></a>piggyback 0.0.6, 2018-09-21<small> Unreleased </small>
+    <div id="piggyback-006-2018-09-21-1" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.6">
+<a href="#piggyback-006-2018-09-21-1" class="anchor"></a>piggyback 0.0.6, 2018-09-21<small> Unreleased </small>
 </h1>
 <ul>
 <li>bugfix for migrating unit test, JOSS submission</li>
 </ul>
 </div>
-    <div id="piggyback-0-0-5-2018-09-21" class="section level1">
-<h1 class="page-header">
-<a href="#piggyback-0-0-5-2018-09-21" class="anchor"></a>piggyback 0.0.5, 2018-09-21<small> Unreleased </small>
+    <div id="piggyback-005-2018-09-21" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.5">
+<a href="#piggyback-005-2018-09-21" class="anchor"></a>piggyback 0.0.5, 2018-09-21<small> Unreleased </small>
 </h1>
 <ul>
 <li>initial Onboarding to rOpenSci</li>
 </ul>
 </div>
-    <div id="piggyback-0-0-0-9000" class="section level1">
-<h1 class="page-header">
-<a href="#piggyback-0-0-0-9000" class="anchor"></a>piggyback 0.0.0.9000<small> Unreleased </small>
+    <div id="piggyback-0009000" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.0.9000">
+<a href="#piggyback-0009000" class="anchor"></a>piggyback 0.0.0.9000<small> Unreleased </small>
 </h1>
 <ul>
 <li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
@@ -195,23 +253,14 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#piggyback-0-0-10">0.0.10</a></li>
-        <li><a href="#piggyback-0-0-9-2019-01-08">0.0.9</a></li>
-        <li><a href="#piggyback-0-0-8-2018-10-06">0.0.8</a></li>
-        <li><a href="#piggyback-0-0-7-2018-09-30">0.0.7</a></li>
-        <li><a href="#piggyback-0-0-6-2018-09-21">0.0.6</a></li>
-        <li><a href="#piggyback-0-0-6-2018-09-21-1">0.0.6</a></li>
-        <li><a href="#piggyback-0-0-5-2018-09-21">0.0.5</a></li>
-        <li><a href="#piggyback-0-0-0-9000">0.0.0.9000</a></li>
-      </ul>
-    </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -219,13 +268,16 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

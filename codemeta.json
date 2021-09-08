@@ -1,8 +1,5 @@
 {
-  "@context": [
-    "https://doi.org/10.5063/schema/codemeta-2.0",
-    "http://schema.org"
-  ],
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "piggyback",
   "description": "Because larger (> 50 MB) data files cannot easily be committed to git,\n  a different approach is required to manage data associated with an analysis in a \n  GitHub repository.  This package provides a simple work-around by allowing larger\n  (up to 2 GB) data files to piggyback on a repository as assets attached to individual\n  GitHub releases.  These files are not handled by git in any way, but instead are\n  uploaded, downloaded, or edited directly by calls through the GitHub API. These\n  data files can be versioned manually by creating different releases.  This approach\n  works equally well with public or private repositories.  Data can be uploaded\n  and downloaded programmatically from scripts. No authentication is required to\n  download data from public repositories.",
@@ -10,14 +7,19 @@
   "codeRepository": "https://github.com/ropensci/piggyback",
   "issueTracker": "https://github.com/ropensci/piggyback/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.0.10",
+  "version": "0.1.1",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.5.2",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.5.2 (2018-12-20)",
+  "runtimePlatform": "R version 4.1.0 (2021-05-18)",
+  "provider": {
+    "@id": "https://cran.r-project.org",
+    "@type": "Organization",
+    "name": "Comprehensive R Archive Network (CRAN)",
+    "url": "https://cran.r-project.org"
+  },
   "author": [
     {
       "@type": "Person",
@@ -39,6 +41,12 @@
       "givenName": ["Jeffrey", "O"],
       "familyName": "Hanson",
       "@id": "https://orcid.org/0000-0002-4716-6134"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Kevin",
+      "familyName": "Kuo",
+      "@id": "https://orcid.org/0000-0001-7803-7901"
     }
   ],
   "copyrightHolder": [
@@ -110,6 +118,18 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "gert",
+      "name": "gert",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=gert"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "datasets",
       "name": "datasets"
     },
@@ -136,68 +156,6 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
-    }
-  ],
-  "softwareRequirements": [
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "gh",
-      "name": "gh",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=gh"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "httr",
-      "name": "httr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=httr"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "jsonlite",
-      "name": "jsonlite",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=jsonlite"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "git2r",
-      "name": "git2r",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=git2r"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "fs",
-      "name": "fs",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=fs"
     },
     {
       "@type": "SoftwareApplication",
@@ -213,6 +171,68 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "magrittr",
+      "name": "magrittr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=magrittr"
+    }
+  ],
+  "softwareRequirements": {
+    "1": {
+      "@type": "SoftwareApplication",
+      "identifier": "gh",
+      "name": "gh",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=gh"
+    },
+    "2": {
+      "@type": "SoftwareApplication",
+      "identifier": "httr",
+      "name": "httr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=httr"
+    },
+    "3": {
+      "@type": "SoftwareApplication",
+      "identifier": "jsonlite",
+      "name": "jsonlite",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=jsonlite"
+    },
+    "4": {
+      "@type": "SoftwareApplication",
+      "identifier": "fs",
+      "name": "fs",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=fs"
+    },
+    "5": {
+      "@type": "SoftwareApplication",
       "identifier": "crayon",
       "name": "crayon",
       "provider": {
@@ -223,7 +243,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=crayon"
     },
-    {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "clisymbols",
       "name": "clisymbols",
@@ -235,19 +255,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=clisymbols"
     },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "magrittr",
-      "name": "magrittr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=magrittr"
-    },
-    {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "lubridate",
       "name": "lubridate",
@@ -259,7 +267,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=lubridate"
     },
-    {
+    "8": {
       "@type": "SoftwareApplication",
       "identifier": "memoise",
       "name": "memoise",
@@ -270,33 +278,8 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=memoise"
-    }
-  ],
-  "releaseNotes": "https://github.com/ropensci/piggyback/blob/master/NEWS.md",
-  "readme": "https://github.com/ropensci/piggyback/blob/master/README.md",
-  "fileSize": "275.036KB",
-  "contIntegration": [
-    "https://travis-ci.org/ropensci/piggyback",
-    "https://codecov.io/github/ropensci/piggyback?branch=master",
-    "https://ci.appveyor.com/project/cboettig/piggyback"
-  ],
-  "developmentStatus": "https://www.tidyverse.org/lifecycle/#stable",
-  "keywords": [
-    "git-lfs",
-    "data-store",
-    "r",
-    "peer-reviewed"
-  ],
-  "review": {
-    "@type": "Review",
-    "url": "https://github.com/ropensci/onboarding/issues/220",
-    "provider": "http://ropensci.org"
+    },
+    "SystemRequirements": null
   },
-  "provider": {
-    "@id": "https://cran.r-project.org",
-    "@type": "Organization",
-    "name": "Comprehensive R Archive Network (CRAN)",
-    "url": "https://cran.r-project.org"
-  },
-  "relatedLink": "https://CRAN.R-project.org/package=piggyback"
+  "fileSize": "0KB"
 }
