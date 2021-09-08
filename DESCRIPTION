@@ -36,7 +36,6 @@ Imports:
     fs,
     crayon,
     clisymbols,
-    magrittr,
     lubridate,
     memoise
 Suggests:
@@ -48,7 +47,8 @@ Suggests:
     datasets,
     knitr,
     rmarkdown,
-    usethis
+    usethis,
+    magrittr
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)

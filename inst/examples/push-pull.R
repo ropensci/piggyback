@@ -7,7 +7,6 @@
 
 #' @importFrom fs dir_ls
 #' @importFrom jsonlite write_json
-#' @importFrom magrittr %>%
 create_manifest <- function(manifest = "manifest.json") {
   proj_dir <- usethis::proj_get()
   files <- pb_track()

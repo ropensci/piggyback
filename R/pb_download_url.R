@@ -9,7 +9,7 @@
 #' @export
 #' @examples \dontrun{
 #'
-#' pb_download_url("data/iris.tsv.xz",
+#' pb_download_url("iris.tsv.xz",
 #'                 repo = "cboettig/piggyback-tests",
 #'                 tag = "v0.0.1")
 #'
