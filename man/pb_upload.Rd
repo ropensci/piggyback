@@ -28,19 +28,15 @@ repo if not specified.}
 \code{file} (i.e. filename without directory)}
 
 \item{overwrite}{overwrite any existing file with the same name already
-attached to the on release? Defaults to \code{use_timestamps}, only overwriting
-those files which are older.  Set to \code{TRUE} to always overwrite, or \code{FALSE}
-to never overwrite existing files.}
+attached to the on release? Default behavior is based on timestamps,
+only overwriting those files which are older.}
 
-\item{use_timestamps}{DEPRECATED. please use \code{overwrite="use_timestamps"}}
+\item{use_timestamps}{DEPRECATED.}
 
 \item{show_progress}{logical, show a progress bar be shown for uploading?
 Defaults to \code{TRUE}.}
 
-\item{.token}{GitHub authentication token. Typically set from an
-environmental variable, e.g. in a \code{.Renviron} file or with
-\code{Sys.setenv(GITHUB_TOKEN = "xxxxx")}, which helps prevent accidental
-disclosure of a secret token when sharing scripts.}
+\item{.token}{GitHub authentication token, see \verb{[gh::gh_token()]}}
 
 \item{dir}{directory relative to which file names should be based.}
 }

@@ -67,10 +67,14 @@ pb_new_release <- function(repo = guess_repo(),
     body = jsonlite::toJSON(payload, auto_unbox = TRUE)
   )
 
-  httr::stop_for_status(resp)
+  if(getOption("verbose")) httr::warn_for_status(resp)
 
   ## Release info changed, so break cache
   memoise::forget(memoised_pb_info)
+
+  ## refresh
+  pb_info(repo = repo, tag = tag, .token = .token)
+
   release <- httr::content(resp)
   invisible(release)
 }

@@ -38,10 +38,7 @@ a draft (unpublished) release.}
 \item{prerelease}{default \code{FALSE}. Set to \code{TRUE} to
 identify the release as a pre-release.}
 
-\item{.token}{GitHub authentication token. Typically set from an
-environmental variable, e.g. in a \code{.Renviron} file or with
-\code{Sys.setenv(GITHUB_TOKEN = "xxxxx")}, which helps prevent accidental
-disclosure of a secret token when sharing scripts.}
+\item{.token}{GitHub authentication token, see \verb{[gh::gh_token()]}}
 }
 \description{
 Create a new release on GitHub repo

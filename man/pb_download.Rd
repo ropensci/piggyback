@@ -24,10 +24,10 @@ all assets attached to the release will be downloaded.}
 Can be a directory or a list of filenames the same length as \code{file}
 vector. Any directories in the path provided must already exist.}
 
-\item{repo}{Repository name in format "owner/repo". Will guess
-the current repo if not specified.}
+\item{repo}{Repository name in format "owner/repo". Will guess the current
+repo if not specified.}
 
-\item{tag}{tag for the GitHub release to which this data is attached}
+\item{tag}{tag for the GitHub release to which this data should be attached.}
 
 \item{overwrite}{Should any local files of the same name be overwritten?
 default \code{TRUE}.}
@@ -35,17 +35,12 @@ default \code{TRUE}.}
 \item{ignore}{a list of files to ignore (if downloading "all" because
 \code{file=NULL}).}
 
-\item{use_timestamps}{If \code{TRUE}, then files will only be downloaded
-if timestamp on GitHub is newer than the local timestamp (if
-\code{overwrite=TRUE}).  Defaults to \code{TRUE}.}
+\item{use_timestamps}{DEPRECATED.}
 
-\item{show_progress}{logical, should we show progress bar for download?
+\item{show_progress}{logical, show a progress bar be shown for uploading?
 Defaults to \code{TRUE}.}
 
-\item{.token}{GitHub authentication token. Typically set from an
-environmental variable, e.g. in a \code{.Renviron} file or with
-\code{Sys.setenv(GITHUB_TOKEN = "xxxxx")}, which helps prevent
-accidental disclosure of a secret token when sharing scripts.}
+\item{.token}{GitHub authentication token, see \verb{[gh::gh_token()]}}
 }
 \description{
 Download data from an existing release

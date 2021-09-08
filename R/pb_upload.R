@@ -8,16 +8,12 @@
 #' @param name name for uploaded file. If not provided will use the basename of
 #' `file` (i.e. filename without directory)
 #' @param overwrite overwrite any existing file with the same name already
-#'  attached to the on release? Defaults to `use_timestamps`, only overwriting
-#'  those files which are older.  Set to `TRUE` to always overwrite, or `FALSE`
-#'  to never overwrite existing files.
-#' @param use_timestamps DEPRECATED. please use `overwrite="use_timestamps"`
+#'  attached to the on release? Default behavior is based on timestamps,
+#'  only overwriting those files which are older.
+#' @param use_timestamps DEPRECATED.
 #' @param show_progress logical, show a progress bar be shown for uploading?
 #' Defaults to `TRUE`.
-#' @param .token GitHub authentication token. Typically set from an
-#'  environmental variable, e.g. in a `.Renviron` file or with
-#'  `Sys.setenv(GITHUB_TOKEN = "xxxxx")`, which helps prevent accidental
-#'   disclosure of a secret token when sharing scripts.
+#' @param .token GitHub authentication token, see `[gh::gh_token()]`
 #' @param dir directory relative to which file names should be based.
 #' @examples
 #' \dontrun{
@@ -101,7 +97,7 @@ pb_upload_file <- function(file,
 
   if (is.null(name)) {
     ## name is name on GitHub, technically need not be name of local file
-    name <- fs::path_rel(file, start = dir)
+    name <- basename(file) # fs::path_rel(file, start = dir)
   }
 
 
@@ -156,7 +152,7 @@ pb_upload_file <- function(file,
   )
 
   cat("\n")
-  httr::stop_for_status(r)
+  if(getOption("verbose")) httr::warn_for_status(r)
 
   ## Release info changed, so break cache
   # memoise::forget(memoised_pb_info)
