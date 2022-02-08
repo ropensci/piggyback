@@ -141,36 +141,32 @@ pb_delete(file = "mtcars.tsv.gz",
 
 Note that this is irreversible unless you have a copy of the data elsewhere. 
 
-## git-style tracking
+## Multiple files
 
-`piggyback` can be used in a Git-LFS-like manner by tracking all files that match a particular pattern, typically a file extension such as `*.tif` or `*.tar.gz` frequently found on large binary data files associated with a project but too big to commit to git. Similarly, specific directories for data files can be tracked.  `pb_track()` function takes such patterns and stores them in into a hidden config file, `.pbattributes` (just like `.gitattributes` in Git LFS, which you can also edit manually).    
-
-```r
-pb_track(c("*.tsv.gz", "*.tif", "*.zip"))
-pb_track("data/*")
-```
-
-Adding a pattern with `pb_track()` will also automatically add that pattern to `.gitignore`, since these data files will be piggybacking on top of the repo rather than being version managed by `git`.  You probably will want to check in the `.pbattributes` file to version control, just as you would a `.gitattributes` or `.gitignore`. 
-
-Once you have tracked certain file types, it is easy to push all such files up to GitHub by piping `pb_track() %>% pb_upload()`.  `pb_track()` just returns file paths to all matching files.  As usual, this can upload to a specific repository and tag or merely to the defaults.  
+You can pass in a vector of file paths with something like `list.files()` to the `file` argument of `pb_upload()` in order to upload multiple files. Some common patterns: 
 
 ```r
 library(magrittr)
-pb_track() %>% pb_upload(repo = "cboettig/piggyback-tests", tag = "v0.0.1")
-```
 
+## upload a folder of data
+list.files("data") %>% 
+  pb_upload(repo = "cboettig/piggyback-tests", tag = "v0.0.1")
+
+## upload certain file extensions
+list.files(pattern = c("*.tsv.gz", "*.tif", "*.zip")) %>% 
+  pb_upload(repo = "cboettig/piggyback-tests", tag = "v0.0.1")
+
+```
 Similarly, you can download all current data assets of the latest or specified release by using `pb_download()` with no arguments.
 
-
 ## Caching
- 
 
 To reduce API calls to GitHub, piggyback caches most calls with a timeout of 1 second by default.  This avoids repeating identical requests to update it's internal record of the repository data (releases, assets, timestamps, etc) during programmatic use.  You can increase or decrease this delay by setting the environmental variable in seconds, e.g. `Sys.setenv("piggyback_cache_duration"=10)` for a longer delay or `Sys.setenv("piggyback_cache_duration"=0)` to disable caching. 
 
 
 ## Path names
 
-GitHub assets attached to a release do not support file paths, and will convert most special characters (`#`, `%`, etc) to `.` or throw an error (e.g. for file names containing `$`, `@`, `/`).  To preserve path information on uploading data, `piggyback` uses relative paths (relative to the working directory, or for `pb_push()` and `pb_pull`, relative to the project directory, see `here::here()`) in data file names, and encodes the system path delimiter as `.2f` (`%2f` is the HTML encoding of a literal `/`, but `%` cannot be used in asset names).  `piggyback` functions will always show and use the decoded file names, e.g. `data/mtcars.csv`, but you'll see `data.2fmtcars.csv` if you look at the release attachment on GitHub.
+GitHub assets attached to a release do not support file paths, and will convert most special characters (`#`, `%`, etc) to `.` or throw an error (e.g. for file names containing `$`, `@`, `/`).  To preserve path information on uploading data, `piggyback` uses relative paths (relative to the working directory) in data file names, and encodes the system path delimiter as `.2f` (`%2f` is the HTML encoding of a literal `/`, but `%` cannot be used in asset names).  `piggyback` functions will always show and use the decoded file names, e.g. `data/mtcars.csv`, but you'll see `data.2fmtcars.csv` if you look at the release attachment on GitHub.
 
 
 ## A Note on GitHub Releases vs Data Archiving
