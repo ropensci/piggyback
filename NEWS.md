@@ -1,3 +1,7 @@
+# piggyback (development version)
+
+* update intro vignette to remove all mentions of `pb_track()`, `pb_push()`, and `pb_pull()` which were removed as of version 0.0.0.9900
+
 # piggyback 0.1.1
 
 * switch to gh::gh_token() for token management.  Still supports the same env var approach, but also compatible with `gitcreds` and other use.
