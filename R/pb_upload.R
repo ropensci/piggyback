@@ -14,7 +14,7 @@
 #' @param show_progress logical, show a progress bar be shown for uploading?
 #' Defaults to `TRUE`.
 #' @param .token GitHub authentication token, see `[gh::gh_token()]`
-#' @param dir directory relative to which file names should be based.
+#' @param dir directory relative to which file names should be based, defaults to NULL for current working directory.
 #' @examples
 #' \dontrun{
 #' # Needs your real token to run
@@ -33,7 +33,7 @@ pb_upload <- function(file,
                       use_timestamps = NULL,
                       show_progress = TRUE,
                       .token = get_token(),
-                      dir = ".") {
+                      dir = NULL) {
 
   ## start fresh
   memoise::forget(memoised_pb_info)
@@ -64,11 +64,21 @@ pb_upload_file <- function(file,
                            use_timestamps = NULL,
                            show_progress = TRUE,
                            .token = get_token(),
-                           dir = ".") {
-  if (!file.exists(file)) {
-    warning("file ", file, " does not exist")
+                           dir = NULL) {
+
+  file_path <- do.call(file.path, compact(list(dir,file)))
+  ## Uses NULL as default dir, drops it with compact, then
+  ## does the file.path call with what's left
+  ##
+  ## This is better than using "." as default dir because if you try to pass an
+  ## absolute path with "." e.g. file.path(".","C:/Users/Tan") it will
+  ## return "./C:/Users/Tan" which is not desired.
+
+  if (!file.exists(file_path)) {
+    warning("file ", file_path, " does not exist")
     return(NULL)
   }
+
   if(!is.null(use_timestamps)){
     warning(paste("use_timestamps argument is deprecated",
                   "please set overwrite='use_timestamps'",
@@ -100,10 +110,8 @@ pb_upload_file <- function(file,
     name <- basename(file) # fs::path_rel(file, start = dir)
   }
 
-
   ## memoised for piggyback_cache_duration
   df <- pb_info(repo, tag, .token)
-
 
   i <- which(df$file_name == name)
 
@@ -147,7 +155,7 @@ pb_upload_file <- function(file,
   r <- httr::POST(sub("\\{.+$", "", df$upload_url[[1]]),
                   query = list(name = asset_filename(name)),
                   httr::add_headers(Authorization = paste("token", .token)),
-                  body = httr::upload_file(file),
+                  body = httr::upload_file(file_path),
                   progress
   )
 
