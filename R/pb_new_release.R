@@ -78,6 +78,3 @@ pb_new_release <- function(repo = guess_repo(),
   release <- httr::content(resp)
   invisible(release)
 }
-
-compact <- function (l)
-  Filter(Negate(is.null), l)

@@ -65,7 +65,7 @@ cat_line <- function(...) {
   cat(..., "\n", sep = "")
 }
 
-
+compact <- function (l) Filter(Negate(is.null), l)
 
 
 # utils::askYesKnow is new to R 3.5.0; avoid using it for backwards compatibility
