@@ -3,6 +3,7 @@
 * update intro vignette to remove all mentions of `pb_track()`, `pb_push()`, and `pb_pull()` which were removed as of version 0.0.0.9900
 * `pb_upload()` now handles the `dir` argument to control relative path directories.
 * update intro vignette to remove mention of path name handling and instead provide examples of how path names are handled.
+* update intro vignette instructions for git authentication
 
 # piggyback 0.1.1
 
