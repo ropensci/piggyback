@@ -13,7 +13,7 @@ pb_upload(
   use_timestamps = NULL,
   show_progress = TRUE,
   .token = get_token(),
-  dir = "."
+  dir = NULL
 )
 }
 \arguments{
@@ -38,7 +38,7 @@ Defaults to \code{TRUE}.}
 
 \item{.token}{GitHub authentication token, see \verb{[gh::gh_token()]}}
 
-\item{dir}{directory relative to which file names should be based.}
+\item{dir}{directory relative to which file names should be based, defaults to NULL for current working directory.}
 }
 \description{
 NOTE: you must first create a release if one does not already exists.
