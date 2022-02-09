@@ -35,6 +35,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -47,18 +49,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">piggyback</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -83,7 +79,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/ropensci/piggyback/">
+  <a href="https://github.com/ropensci/piggyback/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -100,118 +96,129 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="piggyback-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#piggyback-" class="anchor"></a>piggyback <img src="reference/figures/logo.svg" align="right" alt="" width="120">
+<div class="section level1">
+<div class="page-header"><h1 id="piggyback-">piggyback <img src="reference/figures/logo.svg" align="right" alt="" width="120"><a class="anchor" aria-label="anchor" href="#piggyback-"></a>
 </h1></div>
 <!-- badges: start -->
 
-<p>Because larger (&gt; 50 MB) data files cannot easily be committed to git, a different approach is required to manage data associated with an analysis in a GitHub repository. This package provides a simple work-around by allowing larger (<a href="https://docs.github.com/en/github/managing-large-files/distributing-large-binaries">up to 2 GB per file</a>) data files to piggyback on a repository as assets attached to individual GitHub releases. These files are not handled by git in any way, but instead are uploaded, downloaded, or edited directly by calls through the GitHub API. These data files can be versioned manually by creating different releases. This approach works equally well with public or private repositories. Data can be uploaded and downloaded programmatically from scripts. No authentication is required to download data from public repositories.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<p>Because larger (&gt; 50 MB) data files cannot easily be committed to git, a different approach is required to manage data associated with an analysis in a GitHub repository. This package provides a simple work-around by allowing larger (<a href="https://docs.github.com/en/github/managing-large-files/distributing-large-binaries" class="external-link">up to 2 GB per file</a>) data files to piggyback on a repository as assets attached to individual GitHub releases. These files are not handled by git in any way, but instead are uploaded, downloaded, or edited directly by calls through the GitHub API. These data files can be versioned manually by creating different releases. This approach works equally well with public or private repositories. Data can be uploaded and downloaded programmatically from scripts. No authentication is required to download data from public repositories.</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>Install from CRAN via</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"piggyback"</span><span class="op">)</span></code></pre></div>
-<p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"piggyback"</span><span class="op">)</span></code></pre></div>
+<p>You can install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"ropensci/piggyback"</span><span class="op">)</span></code></pre></div>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ropensci/piggyback"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="quickstart" class="section level2">
-<h2 class="hasAnchor">
-<a href="#quickstart" class="anchor"></a>Quickstart</h2>
-<p>See the <a href="https://docs.ropensci.org/piggyback/articles/intro.html">piggyback vignette</a> for details on authentication and additional package functionality.</p>
+<div class="section level2">
+<h2 id="quickstart">Quickstart<a class="anchor" aria-label="anchor" href="#quickstart"></a>
+</h2>
+<p>See the <a href="https://docs.ropensci.org/piggyback/articles/intro.html" class="external-link">piggyback vignette</a> for details on authentication and additional package functionality.</p>
 <p>Piggyback can download data attached to a release on any repository:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/piggyback">piggyback</a></span><span class="op">)</span>
-<span class="fu"><a href="reference/pb_download.html">pb_download</a></span><span class="op">(</span><span class="st">"iris.tsv.gz"</span>, repo <span class="op">=</span> <span class="st">"cboettig/piggyback-tests"</span>, dest <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>Downloading from private repos or uploading to any repo requires authentication, so be sure to set a <code>GITHUB_TOKEN</code> (or <code>GITHUB_PAT</code>) environmental variable, or include the <code>.token</code> argument. Omit the file name to download all attached objects. Omit the repository name to default to the current repository. See <a href="https://docs.ropensci.org/piggyback/articles/intro.html">introductory vignette</a> or function documentation for details.</p>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/piggyback" class="external-link">piggyback</a></span><span class="op">)</span>
+<span class="fu"><a href="reference/pb_download.html">pb_download</a></span><span class="op">(</span><span class="st">"iris.tsv.gz"</span>, repo <span class="op">=</span> <span class="st">"cboettig/piggyback-tests"</span>, dest <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; Warning in pb_download("iris.tsv.gz", repo = "cboettig/piggyback-tests", :</span>
+<span class="co">#&gt; file(s) iris.tsv.gz not found in repo cboettig/piggyback-tests</span></code></pre></div>
+<p>Downloading from private repos or uploading to any repo requires authentication, so be sure to set a <code>GITHUB_TOKEN</code> (or <code>GITHUB_PAT</code>) environmental variable, or include the <code>.token</code> argument. Omit the file name to download all attached objects. Omit the repository name to default to the current repository. See <a href="https://docs.ropensci.org/piggyback/articles/intro.html" class="external-link">introductory vignette</a> or function documentation for details.</p>
 <p>We can also upload data to any existing release (defaults to <code>latest</code>):</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## We'll need some example data first.</span>
 <span class="co">## Pro tip: compress your tabular data to save space &amp; speed upload/downloads</span>
-<span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html">write_tsv</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"mtcars.tsv.gz"</span><span class="op">)</span>
+<span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_tsv</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"mtcars.tsv.gz"</span><span class="op">)</span>
 
 <span class="fu"><a href="reference/pb_upload.html">pb_upload</a></span><span class="op">(</span><span class="st">"mtcars.tsv.gz"</span>, repo <span class="op">=</span> <span class="st">"cboettig/piggyback-tests"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="git-lfs-and-other-alternatives" class="section level2">
-<h2 class="hasAnchor">
-<a href="#git-lfs-and-other-alternatives" class="anchor"></a>Git LFS and other alternatives</h2>
-<p><code>piggyback</code> acts like a poor soul’s <a href="https://git-lfs.github.com/">Git LFS</a>. Git LFS is not only expensive, it also <a href="https://angryfrenchman.org/github-s-large-file-storage-is-no-panacea-for-open-source-quite-the-opposite-12c0e16a9a91">breaks GitHub’s collaborative model</a> – basically if someone wants to submit a PR with a simple edit to your docs, they cannot fork your repository since that would otherwise count against your Git LFS storage. Unlike Git LFS, <code>piggyback</code> doesn’t take over your standard <code>git</code> client, it just perches comfortably on the shoulders of your existing GitHub API. Data can be versioned by <code>piggyback</code>, but relative to <code>git LFS</code> versioning is less strict: uploads can be set as a new version or allowed to overwrite previously uploaded data.</p>
+<div class="section level2">
+<h2 id="git-lfs-and-other-alternatives">Git LFS and other alternatives<a class="anchor" aria-label="anchor" href="#git-lfs-and-other-alternatives"></a>
+</h2>
+<p><code>piggyback</code> acts like a poor soul’s <a href="https://git-lfs.github.com/" class="external-link">Git LFS</a>. Git LFS is not only expensive, it also <a href="https://angryfrenchman.org/github-s-large-file-storage-is-no-panacea-for-open-source-quite-the-opposite-12c0e16a9a91" class="external-link">breaks GitHub’s collaborative model</a> – basically if someone wants to submit a PR with a simple edit to your docs, they cannot fork your repository since that would otherwise count against your Git LFS storage. Unlike Git LFS, <code>piggyback</code> doesn’t take over your standard <code>git</code> client, it just perches comfortably on the shoulders of your existing GitHub API. Data can be versioned by <code>piggyback</code>, but relative to <code>git LFS</code> versioning is less strict: uploads can be set as a new version or allowed to overwrite previously uploaded data.</p>
 </div>
-<div id="but-what-will-github-think-of-this" class="section level2">
-<h2 class="hasAnchor">
-<a href="#but-what-will-github-think-of-this" class="anchor"></a>But what will GitHub think of this?</h2>
-<p><a href="https://docs.github.com/en/github/managing-large-files/distributing-large-binaries">GitHub documentation</a> at the time of writing endorses the use of attachments to releases as a solution for distributing large files as part of your project:</p>
+<div class="section level2">
+<h2 id="but-what-will-github-think-of-this">But what will GitHub think of this?<a class="anchor" aria-label="anchor" href="#but-what-will-github-think-of-this"></a>
+</h2>
+<p><a href="https://docs.github.com/en/github/managing-large-files/distributing-large-binaries" class="external-link">GitHub documentation</a> at the time of writing endorses the use of attachments to releases as a solution for distributing large files as part of your project:</p>
 <p><img src="reference/figures/github-policy.png"></p>
 <p>Of course, it will be up to GitHub to decide if this use of release attachments is acceptable in the long term.</p>
 <!--
  When GitHub first came online, it was questioned whether committing binary objects and data to GitHub was acceptable or an abuse of a *source code* repository.  GitHub has since clearly embraced a inclusive notion of "repository" for containing far more than pure source.  I believe attaching data that is essential to replicating an analysis and within the 2 GB file limits enforced by GitHub to be in the same spirit of this inclusive notion, but GitHub may decide otherwise. 
  -->
-<p>Also see our <a href="https://docs.ropensci.org/piggyback/articles/alternatives.html">vignette comparing alternatives</a>.</p>
+<p>Also see our <a href="https://docs.ropensci.org/piggyback/articles/alternatives.html" class="external-link">vignette comparing alternatives</a>.</p>
 <hr>
-<p>Please note that this project is released with a <a href="https://ropensci.org/code-of-conduct/">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
-<p><a href="https://ropensci.org"><img src="https://ropensci.org/public_images/ropensci_footer.png" alt="ropensci_footer"></a></p>
+<p>Please note that this project is released with a <a href="https://ropensci.org/code-of-conduct/" class="external-link">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
+<p><a href="https://ropensci.org" class="external-link"><img src="https://ropensci.org/public_images/ropensci_footer.png" alt="ropensci_footer"></a></p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=piggyback">https://​cloud.r-project.org/​package=piggyback</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/ropensci/piggyback/">https://​github.com/​ropensci/​piggyback/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/ropensci/piggyback/issues">https://​github.com/​ropensci/​piggyback/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=piggyback" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/ropensci/piggyback/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/ropensci/piggyback/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></small></li>
+<li><small><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></small></li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>
-<div class="developers">
-<h2>Developers</h2>
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li>Carl Boettiger <br><small class="roles"> Author, maintainer, copyright holder </small> <a href="https://orcid.org/0000-0002-1642-628X" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html#citation">Citing piggyback</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html"><img src="https://img.shields.io/badge/lifecycle-stable-green.svg" alt="lifecycle"></a></li>
-<li><a href="https://github.com/ropensci/piggyback/actions"><img src="https://github.com/ropensci/piggyback/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://codecov.io/github/ropensci/piggyback?branch=master"><img src="https://codecov.io/gh/ropensci/piggyback/branch/master/graph/badge.svg" alt="Coverage status"></a></li>
-<li><a href="https://cran.r-project.org/package=piggyback"><img src="https://www.r-pkg.org/badges/version/piggyback" alt="CRAN status"></a></li>
-<li><a href="https://github.com/ropensci/software-review/issues/220"><img src="https://badges.ropensci.org/220_status.svg" alt="Peer Review Status"></a></li>
-<li><a href="https://zenodo.org/badge/latestdoi/132979724"><img src="https://zenodo.org/badge/132979724.svg" alt="DOI"></a></li>
-<li><a href="https://doi.org/10.21105/joss.00971"><img src="http://joss.theoj.org/papers/10.21105/joss.00971/status.svg" alt="DOI"></a></li>
+<li>Carl Boettiger <br><small class="roles"> Author, maintainer, copyright holder </small> <a href="https://orcid.org/0000-0002-1642-628X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-green.svg" alt="lifecycle"></a></li>
+<li><a href="https://github.com/ropensci/piggyback/actions" class="external-link"><img src="https://github.com/ropensci/piggyback/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://codecov.io/github/ropensci/piggyback?branch=master" class="external-link"><img src="https://codecov.io/gh/ropensci/piggyback/branch/master/graph/badge.svg" alt="Coverage status"></a></li>
+<li><a href="https://cran.r-project.org/package=piggyback" class="external-link"><img src="https://www.r-pkg.org/badges/version/piggyback" alt="CRAN status"></a></li>
+<li><a href="https://github.com/ropensci/software-review/issues/220" class="external-link"><img src="https://badges.ropensci.org/220_status.svg" alt="Peer Review Status"></a></li>
+<li><a href="https://zenodo.org/badge/latestdoi/132979724" class="external-link"><img src="https://zenodo.org/badge/132979724.svg" alt="DOI"></a></li>
+<li><a href="https://doi.org/10.21105/joss.00971" class="external-link"><img src="http://joss.theoj.org/papers/10.21105/joss.00971/status.svg" alt="DOI"></a></li>
+</ul>
 </div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Carl Boettiger.</p>
+  <p></p>
+<p>Developed by Carl Boettiger.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -219,6 +226,8 @@
 
   
 
+
+  
 
   </body>
 </html>
