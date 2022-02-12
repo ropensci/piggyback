@@ -107,7 +107,7 @@ pb_upload_file <- function(file,
 
   if (is.null(name)) {
     ## name is name on GitHub, technically need not be name of local file
-    name <- basename(file) # fs::path_rel(file, start = dir)
+    name <- basename(file_path)
   }
 
   ## memoised for piggyback_cache_duration
@@ -118,13 +118,13 @@ pb_upload_file <- function(file,
   if (length(i) > 0) { # File of same name is on GitHub
 
     if (use_timestamps) {
-      local_timestamp <- fs::file_info(file)$modification_time
+      local_timestamp <- fs::file_info(file_path)$modification_time
 
       no_update <- local_timestamp <= df[i, "timestamp"]
       if (no_update) {
         message(paste(
           "matching or more recent version of",
-          file, "found on GitHub, not uploading"
+          file_path, "found on GitHub, not uploading"
         ))
         return(NULL)
       }
