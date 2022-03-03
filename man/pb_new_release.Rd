@@ -23,7 +23,7 @@ the current repo if not specified.}
 
 \item{commit}{Specifies the commit-ish value that
 determines where the Git tag is created from.
-Can be any branch or commit SHA. Unused if the
+Can be any branch or full commit SHA (not the short hash). Unused if the
 git tag already exists. Default: the repository's
 default branch (usually \code{master}).}
 

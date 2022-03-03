@@ -4,6 +4,7 @@
 * `pb_upload()` now handles the `dir` argument to control relative path directories.
 * update intro vignette to remove mention of path name handling and instead provide examples of how path names are handled.
 * update intro vignette instructions for git authentication
+* `pb_new_release()` now reports HTTP errors when attempting to create a new release and returns the contents of the error if it fails. 
 
 # piggyback 0.1.1
 

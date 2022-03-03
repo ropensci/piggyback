@@ -5,7 +5,7 @@
 #' @param tag tag to create for this release
 #' @param commit Specifies the commit-ish value that
 #'  determines where the Git tag is created from.
-#'  Can be any branch or commit SHA. Unused if the
+#'  Can be any branch or full commit SHA (not the short hash). Unused if the
 #'  git tag already exists. Default: the repository's
 #'  default branch (usually `master`).
 #' @param name The name of the release. Defaults to tag.
@@ -44,7 +44,6 @@ pb_new_release <- function(repo = guess_repo(),
     }
   }
 
-
   r <- strsplit(repo, "/")[[1]]
 
   payload <- compact(list(
@@ -67,7 +66,14 @@ pb_new_release <- function(repo = guess_repo(),
     body = jsonlite::toJSON(payload, auto_unbox = TRUE)
   )
 
-  if(getOption("verbose")) httr::warn_for_status(resp)
+  if(httr::http_error(resp)) {
+    warning(
+      paste("Failed to create release: HTTP error",
+            httr::status_code(resp),
+            "\nSee returned error messages for more details."),
+      call. = FALSE)
+    return(invisible(httr::content(resp)))
+  }
 
   ## Release info changed, so break cache
   memoise::forget(memoised_pb_info)
