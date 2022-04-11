@@ -94,7 +94,7 @@ pb_download <- function(file = NULL,
     gh_download_asset(df$owner[[1]],
                       df$repo[[1]],
                       id = df$id[i],
-                      destfile = dest[i],
+                      destfile = df$dest[i],
                       overwrite = overwrite,
                       progress = progress
     ))
