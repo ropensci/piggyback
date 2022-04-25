@@ -17,7 +17,7 @@
 pb_download_url <- function(file = NULL,
                             repo = guess_repo(),
                             tag = "latest",
-                            .token = get_token()) {
+                            .token = gh::gh_token()()) {
   df <- pb_info(repo, tag, .token)
   if (is.null(file)) {
     return(df$browser_download_url)

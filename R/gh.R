@@ -23,16 +23,7 @@ api_error_msg <- function(r) {
   )
 }
 
-
-
-
-
-get_token <- function(warn = TRUE) {
-  gh::gh_token()
-}
 #####################################################
-
-
 
 maybe <- function(expr, otherwise, quiet = TRUE) {
   if (missing(otherwise)) {

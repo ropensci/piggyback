@@ -29,22 +29,16 @@ pb_new_release <- function(repo = guess_repo(),
                            body = "Data release",
                            draft = FALSE,
                            prerelease = FALSE,
-                           .token = get_token()) {
+                           .token = gh::gh_token()()) {
 
-  releases <- release_info(repo, .token)
+  releases <- pb_releases(repo, .token)
 
-  # if no releases exist, release_info returns a gh_response length-0 list
-  if(length(releases) > 0){
-    # Otherwise, list is at least length 1, with names.
-    if("tag_name" %in% names(releases[[1]])){
-      current_tags <- lapply(releases, `[[`, "tag_name")
-      if (tag %in% current_tags) {
-        stop(paste("release tag", tag, "already exists"))
-      }
-    }
+  # if no releases exist, pb_releases returns a dataframe of releases
+  if(nrow(releases) > 0 && tag %in% releases$tag_name){
+      cli::cli_abort("Release tag {.val {tag}} already exists!")
   }
 
-  r <- strsplit(repo, "/")[[1]]
+  r <- parse_repo(repo)
 
   payload <- compact(list(
     tag_name = tag,
@@ -55,9 +49,9 @@ pb_new_release <- function(repo = guess_repo(),
     prerelease = prerelease
   ))
 
-  ## gh fails to pass body correctly??
-  #gh("/repos/:owner/:repo/releases", owner = r[[1]], repo = r[[2]],
-  #   .method = "POST", body = toJSON(payload,auto_unbox = TRUE), encode="json")
+  # gh fails to pass body correctly??
+  # gh("/repos/:owner/:repo/releases", owner = r[[1]], repo = r[[2]],
+  #  .method = "POST", body = toJSON(payload,auto_unbox = TRUE), encode="json")
 
   resp <- httr::POST(paste0(
       "https://api.github.com/repos/", r[[1]], "/",

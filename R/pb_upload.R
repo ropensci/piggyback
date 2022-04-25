@@ -89,7 +89,7 @@ pb_upload_file <- function(file,
                            overwrite = "use_timestamps",
                            use_timestamps = NULL,
                            show_progress = TRUE,
-                           .token = get_token(),
+                           .token = gh::gh_token()(),
                            dir = NULL) {
 
   file_path <- do.call(file.path, compact(list(dir,file)))

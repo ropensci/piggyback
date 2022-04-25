@@ -11,7 +11,7 @@
 #' @export
 pb_list <- function(repo = guess_repo(),
                     tag = NULL,
-                    .token = get_token()) {
+                    .token = gh::gh_token()()) {
   df <- pb_info(repo, tag, .token)
   df[c("file_name", "size", "timestamp", "tag", "owner", "repo")]
 }

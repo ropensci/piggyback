@@ -188,7 +188,7 @@ test_that("download url error", {
   x <- pb_download_url("not-a-file",
     repo = "cboettig/piggyback-tests",
     tag = "v0.0.1",
-    .token = piggyback:::get_token()
+    .token = piggyback:::gh::gh_token()()
   ), "not-a-file")
 })
 
