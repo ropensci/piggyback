@@ -67,11 +67,10 @@ pb_download <- function(file = NULL,
 
 
   ## if dest paths are not provided, we will write all files to dest dir
+  # User is responsible for making sure dest dir exists!
   if (length(dest) == 1) {
     i <- which(df$file_name %in% file)
     dest <- file.path(dest, df$file_name[i])
-    # User is responsible for making sure dest dir exists!
-    # fs::dir_create(fs::path_dir(dest))
   }
   # dest should now be of length df
   df$dest <- dest
@@ -146,9 +145,10 @@ gh_download_asset <- function(owner,
   }
 
   # handle error cases? resp not found
-  if(getOption("piggyback.verbose")) httr::warn_for_status(resp)
+  if(getOption("piggyback.verbose", default = TRUE)) httr::warn_for_status(resp)
 
   invisible(resp)
+
 #  gh::gh(paste0(
 #         "https://api.github.com/repos/", owner, "/",
 #         repo, "/", "releases/assets/", id),

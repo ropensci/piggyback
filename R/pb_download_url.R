@@ -1,4 +1,3 @@
-
 #' Get the download url of a given file
 #'
 #' Returns the URL download for a public file. This can be useful when writing
