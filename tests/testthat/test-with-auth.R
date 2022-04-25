@@ -6,7 +6,7 @@ context("Requiring Authentication")
 
 test_that("We can upload data", {
   # public pat
-  skip_if(piggyback:::gh::gh_token()() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
+  skip_if(gh::gh_token()() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
   skip_if(Sys.getenv("CBOETTIG_TOKEN") == "")
 
   data <- readr::write_tsv(datasets::iris, "iris.tsv.gz")
@@ -26,7 +26,7 @@ test_that("We can upload data", {
 test_that("working from git repo", {
 
   # public pat
-  skip_if(piggyback:::gh::gh_token()() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
+  skip_if(gh::gh_token()() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
   skip_if(Sys.getenv("CBOETTIG_TOKEN") == "")
 
   ##  Setup
@@ -85,13 +85,13 @@ test_that("working from git repo", {
 test_that("we can get a download url", {
 
   # public pat
-  skip_if(piggyback:::gh::gh_token()() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
+  skip_if(gh::gh_token()() == "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
   skip_if(Sys.getenv("CBOETTIG_TOKEN") == "")
 
   x <- pb_download_url("iris.tsv.gz",
     repo = "cboettig/piggyback-tests",
     tag = "v0.0.1",
-    .token = piggyback:::gh::gh_token()()
+    .token = gh::gh_token()()
   )
   expect_is(x, "character")
 })
@@ -114,8 +114,8 @@ test_that(
 testthat::test_that(
   "test delete", {
 
-    testthat::skip_if(piggyback:::gh::gh_token()() == "")
-    testthat::skip_if(piggyback:::gh::gh_token()() ==
+    testthat::skip_if(gh::gh_token()() == "")
+    testthat::skip_if(gh::gh_token()() ==
                         "b2b7441daeeb010b1df26f1f60a7f1edc485e443")
     skip_if(Sys.getenv("CBOETTIG_TOKEN") == "")
 
