@@ -13,7 +13,7 @@
 #' @return a dataframe of all releases available within a repository.
 #'
 #' @export
-pb_releases <- function(repo = guess_repo(), .token = gh::gh_token()){
+pb_releases <- function(repo = guess_repo(), .token = gh::gh_token(), verbose = TRUE){
 
   r <- parse_repo(repo)
 
@@ -28,10 +28,11 @@ pb_releases <- function(repo = guess_repo(), .token = gh::gh_token()){
   )
 
   if(length(releases) == 0) {
-    cli::cli_warn(
-      c("!" = "No GitHub releases found for {.val {repo}}!",
-        "You can make a new one with {.fun piggyback::pb_new_release}")
-    )
+    if(verbose){
+      cli::cli_warn(
+        c("!" = "No GitHub releases found for {.val {repo}}!",
+          "You can make a new one with {.fun piggyback::pb_new_release}")
+      )}
     return(data.frame())
   }
 
@@ -55,13 +56,13 @@ pb_releases <- function(repo = guess_repo(), .token = gh::gh_token()){
 #' @param releases as created by `pb_releases()`
 #' @param r a list of owner/repo as created by `parse_repo()`
 #' @noRd
-get_release_assets <- function(releases, r) {
+get_release_assets <- function(releases, r, .token) {
 
   if(nrow(releases)==0) return(data.frame())
 
   asset_list <- vector("list", length = nrow(releases))
 
-  # fetch asset meta-data individually, see #19
+  # fetch asset meta-data individually for each release, see #19
   for (i in seq_along(releases$tag_name)) {
     a <- gh::gh(endpoint = "/repos/:owner/:repo/releases/:release_id/assets",
                 owner = r[[1]],
@@ -71,9 +72,7 @@ get_release_assets <- function(releases, r) {
                 .token = .token)
     if(length(a) == 0) next
     if (!identical(a[[1]], "")) {
-
       # convert list to dataframe and store in asset list
-
       a_df <- data.frame(
         file_name = vapply(a, `[[`, character(1), "name"),
         size = vapply(a, `[[`, integer(1), "size"),
@@ -106,7 +105,7 @@ pb_info <- function(repo = guess_repo(),
   r <- parse_repo(repo)
 
   # get all releases
-  releases <- pb_releases(repo, .token)
+  releases <- pb_releases(repo = repo, .token = .token, verbose = FALSE)
 
   # if no releases return empty df
   if(nrow(releases) == 0) {
@@ -126,14 +125,14 @@ pb_info <- function(repo = guess_repo(),
       ))
   }
 
-  # if tag is latest, do call for first tag only
+  # if tag is latest, set tag to first tag present in releases
   if(!is.null(tag) && length(tag) == 1 && tag == "latest") tag <- releases$tag_name[[1]]
 
   # if tag is present, filter the releases to search to just the tags requested
   if(!is.null(tag)) releases <- releases[releases$tag_name %in% tag,]
 
   # get release assets and metadata for each release
-  info <- get_release_assets(releases, r)
+  info <- get_release_assets(releases = releases, r = r, .token = .token)
 
   return(info)
 }
