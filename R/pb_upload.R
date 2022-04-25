@@ -58,7 +58,7 @@ pb_upload <- function(file,
 
     if(run == "No") return(invisible(NULL))
 
-    if(run == "Yes") pb_new_release(repo = repo, tag = tag, .token = token)
+    if(run == "Yes") pb_new_release(repo = repo, tag = tag, .token = .token)
   }
 
   ## start fresh
@@ -89,7 +89,7 @@ pb_upload_file <- function(file,
                            overwrite = "use_timestamps",
                            use_timestamps = NULL,
                            show_progress = TRUE,
-                           .token = gh::gh_token()(),
+                           .token = gh::gh_token(),
                            dir = NULL) {
 
   file_path <- do.call(file.path, compact(list(dir,file)))

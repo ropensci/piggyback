@@ -12,7 +12,7 @@ pb_upload(
   overwrite = "use_timestamps",
   use_timestamps = NULL,
   show_progress = TRUE,
-  .token = get_token(),
+  .token = gh::gh_token(),
   dir = NULL
 )
 }

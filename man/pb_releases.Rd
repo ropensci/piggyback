@@ -4,7 +4,7 @@
 \alias{pb_releases}
 \title{List releases in repository}
 \usage{
-pb_releases(repo = guess_repo(), .token = gh::gh_token())
+pb_releases(repo = guess_repo(), .token = gh::gh_token(), verbose = TRUE)
 }
 \arguments{
 \item{repo}{GitHub repository specification in the form of \code{"owner/repo"}, if not specified will try to guess repo based on current working directory.}

@@ -4,7 +4,7 @@
 \alias{pb_list}
 \title{List all assets attached to a release}
 \usage{
-pb_list(repo = guess_repo(), tag = NULL, .token = get_token())
+pb_list(repo = guess_repo(), tag = NULL, .token = gh::gh_token())
 }
 \arguments{
 \item{repo}{Repository name in format "owner/repo". Will guess the current
@@ -25,4 +25,7 @@ List all assets attached to a release
 \dontrun{
 pb_list("cboettig/piggyback-tests")
 }
+}
+\seealso{
+\code{pb_releases} for a list of all releases in repository
 }

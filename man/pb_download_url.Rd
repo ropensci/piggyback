@@ -8,7 +8,7 @@ pb_download_url(
   file = NULL,
   repo = guess_repo(),
   tag = "latest",
-  .token = get_token()
+  .token = gh::gh_token()
 )
 }
 \arguments{

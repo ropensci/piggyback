@@ -35,7 +35,7 @@ pb_download <- function(file = NULL,
                         ignore = "manifest.json",
                         use_timestamps = TRUE,
                         show_progress = TRUE,
-                        .token = gh::gh_token()()) {
+                        .token = gh::gh_token()) {
   progress <- httr::progress("down")
   if (!show_progress) {
     progress <- NULL
@@ -111,7 +111,7 @@ gh_download_asset <- function(owner,
                               id,
                               destfile,
                               overwrite = TRUE,
-                              .token = gh::gh_token()(),
+                              .token = gh::gh_token(),
                               progress = httr::progress("down")) {
   if (fs::file_exists(destfile) && !overwrite) {
     warning(paste(
