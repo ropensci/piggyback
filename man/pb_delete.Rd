@@ -8,7 +8,7 @@ pb_delete(
   file = NULL,
   repo = guess_repo(),
   tag = "latest",
-  .token = get_token()
+  .token = gh::gh_token()
 )
 }
 \arguments{
