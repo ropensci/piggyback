@@ -1,186 +1,164 @@
-release_info <- function(repo = guess_repo(), .token = get_token()) {
-  r <- strsplit(repo, "/")[[1]]
-  if (length(r) != 2) {
-    stop(paste(
-      "Could not parse", r, "as a repository",
-      "Make sure you have used the format:",
-      crayon::blue$bold("owner/repo")
-    ))
-  }
+#' List releases in repository
+#'
+#'
+#' @param repo GitHub repository specification in the form of `"owner/repo"`, if not specified will try to guess repo based on current working directory.
+#' @param .token a GitHub API token, defaults to `gh::gh_token()`
+#'
+#' @examples
+#' \donttest{
+#' try({ # wrapped in try block to prevent CRAN errors
+#'  pb_releases("nflverse/nflverse-data")
+#' })
+#' }
+#' @return a dataframe of all releases available within a repository.
+#'
+#' @export
+pb_releases <- function(repo = guess_repo(), .token = gh::gh_token()){
+
+  r <- parse_repo(repo)
 
   # get release ids
-  releases <- maybe(gh::gh("/repos/:owner/:repo/releases",
-                           owner = r[[1]], repo = r[[2]],
-                           .limit = Inf,
-                           .token = .token
-  ),
-  otherwise = stop(api_error_msg(r))
+  releases <- maybe(
+    expr = gh::gh("/repos/:owner/:repo/releases",
+                  owner = r[[1]],
+                  repo = r[[2]],
+                  .limit = Inf,
+                  .token = .token),
+    otherwise = stop(api_error_msg(r))
   )
 
-  # if there are no releases, don't update assets
-  if (length(releases) == 1 && identical(releases[[1]], "")) return(releases)
+  if(length(releases) == 0) {
+    cli::cli_warn(
+      c("!" = "No GitHub releases found for {.val {repo}}!",
+        "You can make a new one with {.fun piggyback::pb_new_release}")
+    )
+    return(data.frame())
+  }
+
+  out <- data.frame(
+    release_name = vapply(releases, `[[`, character(1),"name"),
+    release_id = vapply(releases, `[[`, integer(1),"id"),
+    release_body = vapply(releases, `[[`, character(1),"body"),
+    tag_name = vapply(releases, `[[`, character(1),"tag_name"),
+    draft = vapply(releases, `[[`, logical(1),"draft"),
+    created_at = vapply(releases, `[[`, character(1),"created_at"),
+    published_at = vapply(releases, `[[`, character(1),"published_at"),
+    html_url = vapply(releases, `[[`, character(1),"html_url"),
+    upload_url = vapply(releases, `[[`,character(1),"upload_url"),
+    n_assets = vapply(releases, function(x) length(x[["assets"]]), integer(1))
+  )
+
+  return(out)
+}
+
+#' @keywords internal
+#' @param releases as created by `pb_releases()`
+#' @param r a list of owner/repo as created by `parse_repo()`
+#' @noRd
+get_release_assets <- function(releases, r) {
+
+  if(nrow(releases)==0) return(data.frame())
+
+  asset_list <- vector("list", length = nrow(releases))
+
   # fetch asset meta-data individually, see #19
-  for (i in seq_along(releases)) {
-     a <- gh::gh(endpoint = "/repos/:owner/:repo/releases/:release_id/assets",
-                 owner = r[[1]],
-                 repo = r[[2]],
-                 release_id = releases[[i]]$id,
-                 .limit = Inf,
-                 .token = .token)
-     if(length(a) == 0) next
-     if (!identical(a[[1]], "")) {
-      # if the i'th release does not have any assets then we skip updating
-      # the assets in the releases object
-      ## Now use assets given by the release id as the returned assets
-      class(a) <- "list"
-      attributes(a) <- NULL
-      releases[[i]]$assets <- a
+  for (i in seq_along(releases$tag_name)) {
+    a <- gh::gh(endpoint = "/repos/:owner/:repo/releases/:release_id/assets",
+                owner = r[[1]],
+                repo = r[[2]],
+                release_id = releases$release_id[[i]],
+                .limit = Inf,
+                .token = .token)
+    if(length(a) == 0) next
+    if (!identical(a[[1]], "")) {
+
+      # convert list to dataframe and store in asset list
+
+      a_df <- data.frame(
+        file_name = vapply(a, `[[`, character(1), "name"),
+        size = vapply(a, `[[`, integer(1), "size"),
+        timestamp = lubridate::as_datetime(vapply(a, `[[`, character(1), "updated_at")),
+        tag = releases$tag_name[i],
+        owner = r[[1]],
+        repo = r[[2]],
+        upload_url = releases$upload_url[i],
+        browser_download_url = vapply(a, `[[`, character(1L),"browser_download_url"),
+        id = vapply(a, `[[`, integer(1L), "id"),
+        state = vapply(a, `[[`, character(1L), "state"),
+        stringsAsFactors = FALSE
+      )
+
+      asset_list[[i]] <- a_df
     }
   }
+
+  # convert list of asset dataframes to single dataframe
+  release_assets <- do.call(rbind,asset_list)
 
   # return result
-  releases
+  return(release_assets)
 }
 
-
-
-#' @importFrom lubridate as_datetime
-release_data <- function(x, r) {
-
-  if(!"assets" %in% names(x))
-    return(data.frame())
-
-  if(length(x$assets) == 0){
-    ## Release exists but has no assets
-    return(
-    data.frame(
-      file_name = "",
-      size = 0L,
-      timestamp = lubridate::as_datetime(0),
-      tag = x$tag_name,
-      owner = r[[1]],
-      repo = r[[2]],
-      upload_url = x$upload_url,
-      browser_download_url = "",
-      id = "",
-      state = "",
-      stringsAsFactors = FALSE
-    ))
-
-  }
-
-  data.frame(
-    file_name = local_filename(
-      vapply(x$assets, `[[`, character(1), "name")
-    ),
-    size =
-      vapply(x$assets, `[[`, integer(1), "size"),
-    timestamp = lubridate::as_datetime(
-      vapply(x$assets, `[[`, character(1), "updated_at")
-    ),
-    tag = x$tag_name,
-    owner = r[[1]],
-    repo = r[[2]],
-    upload_url = x$upload_url,
-    browser_download_url = vapply(
-      x$assets, `[[`, character(1L),
-      "browser_download_url"
-    ),
-    id = vapply(x$assets, `[[`, integer(1L), "id"),
-    state = vapply(x$assets, `[[`, character(1L), "state"),
-    stringsAsFactors = FALSE
-  )
-}
-
-null_chr <- function(x){
-  if(is.null(x)) return("")
-  as.character(NA)
-}
-
-pb_info_fn <- function(repo = guess_repo(),
-                       tag = NULL,
-                       .token = get_token()) {
-
-  releases <- release_info(repo, .token)
-  ## FIXME Establish if any releases exist first!
-  if(length(releases) == 0){
-    if(!interactive()){
-      message("no releases found")
-      return(data.frame())
-    } else {
-      continue <- askYesNo(paste("No releases found",
-                                 "would you like to create one?"))
-      if(continue){
-        pb_new_release(repo=repo, tag=tag, .token = .token)
-
-      } else {
-        return(data.frame())
-      }
-    }
-
-  }
-
-  r <- strsplit(repo, "/")[[1]]
-
-  info <- do.call(rbind, lapply(releases, release_data, r))
-
-  if (!is.null(tag)) {
-    if (tag == "latest") {
-      info <- info[info$tag == info$tag[[1]], ]
-    } else if (tag %in% info$tag) {
-      info <- info[info$tag == tag, ]
-    } else {
-      if (!interactive()) {
-        stop(paste0(
-          "No release with tag ", tag, " exists on repo ", repo,
-          ". You can create a new release with pb_new_release() function."
-        ))
-      } else {
-        create <- askYesNo(paste(
-          "release tag", tag,
-          "does not exist. Would you like to create it?"
-        ))
-        if (create) {
-          pb_new_release(repo, tag, .token = .token)
-          # Recursion!
-          info <- pb_info_fn(repo, tag,.token)
-        } else {
-          return(NULL)
-        }
-      }
-    }
-  }
-
-  # we deleted a file, so we better break cache.
-  memoise::forget(memoised_pb_info)
-
-  info
-}
-
-memoised_pb_info <-
-  memoise::memoise(pb_info_fn,
-                   ~memoise::timeout(as.numeric(
-                     Sys.getenv("piggyback_cache_duration", "600")
-                     ))
-                   )
-
-
-#' @importFrom memoise memoise timeout forget
 pb_info <- function(repo = guess_repo(),
                     tag = NULL,
-                    .token = get_token(),
-                    cache = TRUE){
+                    .token = gh::gh_token()) {
 
-  seconds <- as.numeric(Sys.getenv("piggyback_cache_duration", "600"))
-  if(seconds == 0) cache <- FALSE
-  if(cache){
+  r <- parse_repo(repo)
 
-    memoised_pb_info(repo, tag, .token)
+  # get all releases
+  releases <- pb_releases(repo, .token)
 
-  } else {
-    pb_info_fn(repo, tag, .token)
+  # if no releases return empty df
+  if(nrow(releases) == 0) {
+    return(
+      data.frame(
+        file_name = "",
+        size = 0L,
+        timestamp = lubridate::as_datetime(0),
+        tag = x$tag_name,
+        owner = r[[1]],
+        repo = r[[2]],
+        upload_url = x$upload_url,
+        browser_download_url = "",
+        id = "",
+        state = "",
+        stringsAsFactors = FALSE
+      ))
   }
 
+  # if tag is latest, do call for first tag only
+  if(!is.null(tag) && length(tag) == 1 && tag == "latest") tag <- releases$tag_name[[1]]
+
+  # if tag is present, filter the releases to search to just the tags requested
+  if(!is.null(tag)) releases <- releases[releases$tag_name %in% tag,]
+
+  # get release assets and metadata for each release
+  info <- get_release_assets(releases, r)
+
+  return(info)
 }
+
+# memoised_pb_info <-
+#   memoise::memoise(pb_info_fn,
+#                    ~memoise::timeout(as.numeric(
+#                      Sys.getenv("piggyback_cache_duration", "600")
+#                    ))
+#   )
+
+# pb_info <- function(repo = guess_repo(),
+#                     tag = NULL,
+#                     .token = get_token(),
+#                     cache = TRUE){
+#
+#   seconds <- as.numeric(Sys.getenv("piggyback_cache_duration", "600"))
+#   if(seconds == 0) cache <- FALSE
+#   if(cache){
+#     memoised_pb_info(repo, tag, .token)
+#   } else {
+#     pb_info_fn(repo, tag, .token)
+#   }
+#
+# }
+
 
 
