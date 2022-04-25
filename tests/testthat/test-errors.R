@@ -145,13 +145,13 @@ test_that(
 
     skip_on_cran()
 
-    expect_message(
+    expect_warning(
       pb_delete(
         repo = "cboettig/piggyback-tests",
         file = "mtcars8.tsv.gz",
         tag = "v0.0.1"
       ),
-      "not found on GitHub"
+      "No file deletions performed"
     )
   }
 )
@@ -177,11 +177,11 @@ test_that(
 
 test_that("download url error", {
   skip_on_cran()
-  expect_error(
-  x <- pb_download_url("not-a-file",
-    repo = "cboettig/piggyback-tests",
-    tag = "v0.0.1",
-    .token = gh::gh_token()
-  ), "not-a-file")
+  expect_warning(
+    expect_error(
+      pb_download_url("not-a-file", repo = "cboettig/piggyback-tests", tag = "v0.0.1", .token = gh::gh_token()),
+      "No download URLs to return"),
+    "file .+ not found in release"
+  )
 })
 
