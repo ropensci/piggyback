@@ -24,7 +24,10 @@ pb_releases <- function(repo = guess_repo(), .token = gh::gh_token(), verbose = 
                   repo = r[[2]],
                   .limit = Inf,
                   .token = .token),
-    otherwise = stop(api_error_msg(r))
+    otherwise = cli::cli_abort(
+      c("!"="Cannot access release data for repo {.val {repo}}.",
+        "Check that you have provided a {.code .token} and that the repo is correctly specified.")
+    )
   )
 
   if(length(releases) == 0) {
@@ -81,7 +84,7 @@ get_release_assets <- function(releases, r, .token) {
         owner = r[[1]],
         repo = r[[2]],
         upload_url = releases$upload_url[i],
-        browser_download_url = vapply(a, `[[`, character(1L),"browser_download_url"),
+        browser_download_url = vapply(a, `[[`, character(1L), "browser_download_url"),
         id = vapply(a, `[[`, integer(1L), "id"),
         state = vapply(a, `[[`, character(1L), "state"),
         stringsAsFactors = FALSE

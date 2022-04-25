@@ -1,26 +1,23 @@
 
-asset_filename <- function(x, start = ".") {
-  ## piggyback will no longer embed file structure in filename
-  ## Asset uploading is simply flat storage
-  x
-}
+# asset_filename <- function(x, start = ".") {
+#   ## piggyback will no longer embed file structure in filename
+#   ## Asset uploading is simply flat storage
+#   x
+# }
 
-local_filename <- function(x) {
-  # x <- gsub("^manifest.json$", ".manifest.json", x)
-
-  gsub("\\.2f", .Platform$file.sep, x)
-}
+# local_filename <- function(x) {
+#   # x <- gsub("^manifest.json$", ".manifest.json", x)
+#   gsub("\\.2f", .Platform$file.sep, x)
+# }
 
 
 ##################### Generic helpers ##################
-api_error_msg <- function(r) {
-  cli::cli_warn(
-    c("!"="Cannot access release data for repo {.val {paste0(r[[1]], "/", r[[2]])}}.",
-      "Check that you have provided a {code .token} and that there is at least one release on your repo"
-  ))
-}
-
-#####################################################
+# api_error_msg <- function(r) {
+#   cli::cli_warn(
+#     c("!"="Cannot access release data for repo {.val {paste0(r[[1]], '/', r[[2]])}}.",
+#       "Check that you have provided a {code .token} and that there is at least one release on your repo"
+#   ))
+# }
 
 maybe <- function(expr, otherwise, quiet = TRUE) {
   if (missing(otherwise)) {
