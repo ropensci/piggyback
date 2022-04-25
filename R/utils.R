@@ -1,6 +1,18 @@
+#' Parses repository spec and errors if it fails
+#' @keywords internal
+#' @noRd
+parse_repo <- function(repo){
+  r <- strsplit(repo, "/")[[1]]
 
+  if (length(r) != 2) {
+    cli::cli_abort(
+      c("Could not parse {.val {repo}} as a GitHub repository.",
+        "Make sure you have used the format: {.val owner/repo}")
+    )
+  }
 
-
+  return(r)
+}
 
 # Adapted from `usethis` and under
 # GPL-3 (Copyright RStudio Inc)
@@ -66,7 +78,6 @@ cat_line <- function(...) {
 }
 
 compact <- function (l) Filter(Negate(is.null), l)
-
 
 # utils::askYesKnow is new to R 3.5.0; avoid using it for backwards compatibility
 askYesNo <- function(msg){
