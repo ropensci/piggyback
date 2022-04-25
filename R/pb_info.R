@@ -1,8 +1,10 @@
 #' List releases in repository
 #'
+#' This function retrieves information about all releases attached to a given repository.
 #'
 #' @param repo GitHub repository specification in the form of `"owner/repo"`, if not specified will try to guess repo based on current working directory.
 #' @param .token a GitHub API token, defaults to `gh::gh_token()`
+#' @param verbose defaults to TRUE, use FALSE to silence messages
 #'
 #' @examples
 #' \donttest{

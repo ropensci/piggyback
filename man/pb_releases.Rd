@@ -10,12 +10,14 @@ pb_releases(repo = guess_repo(), .token = gh::gh_token(), verbose = TRUE)
 \item{repo}{GitHub repository specification in the form of \code{"owner/repo"}, if not specified will try to guess repo based on current working directory.}
 
 \item{.token}{a GitHub API token, defaults to \code{gh::gh_token()}}
+
+\item{verbose}{defaults to TRUE, use FALSE to silence messages}
 }
 \value{
 a dataframe of all releases available within a repository.
 }
 \description{
-List releases in repository
+This function retrieves information about all releases attached to a given repository.
 }
 \examples{
 \donttest{

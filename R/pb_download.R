@@ -50,12 +50,10 @@ pb_download <- function(file = NULL,
   if (!is.null(file)) {
     i <- which(df$file_name %in% file)
     if (length(i) < 1) {
-      warning(paste(
-        "file(s)",
-        paste(crayon::blue(file), collapse = " "),
-        "not found in repo",
-        crayon::blue(repo)
-      ))
+
+      cli::cli_warn(
+        "file(s) {.file {file}} not found in repo {.val {repo}}"
+      )
     }
 
     df <- df[i, ]
@@ -86,7 +84,7 @@ pb_download <- function(file = NULL,
     df <- df[update, ]
 
     if (dim(df)[[1]] < 1) {
-      message(paste("All files up-to-date already\n"))
+      cli::cli_alert_info("All local files already up-to-date!")
     }
   }
 
@@ -101,11 +99,8 @@ pb_download <- function(file = NULL,
   invisible(resp)
 }
 
-
-
-
 ## gh() fails on this, so we do with httr. See https://github.com/r-lib/gh/issues/57
-## Consider option to supress progress bar?
+## Consider option to suppress progress bar?
 gh_download_asset <- function(owner,
                               repo,
                               id,
@@ -114,15 +109,17 @@ gh_download_asset <- function(owner,
                               .token = gh::gh_token(),
                               progress = httr::progress("down")) {
   if (fs::file_exists(destfile) && !overwrite) {
-    warning(paste(
-      destfile, "already exists, skipping download.",
-      "Set overwrite = TRUE to overwrite files."
-    ))
+    cli::cli_warn(
+      c("!"="{.val {destfile}} already exists, skipping download.",
+        "Set {.code overwrite = TRUE} to overwrite files.")
+    )
     return(NULL)
   }
 
   if (!is.null(progress)) {
-    message(paste("downloading", basename(destfile), "..."))
+    cli::cli_alert_info(
+      "Downloading {.val {basename(destfile)}}..."
+    )
   }
 
   resp <- httr::GET(
@@ -149,7 +146,7 @@ gh_download_asset <- function(owner,
   }
 
   # handle error cases? resp not found
-  if(getOption("verbose")) httr::warn_for_status(resp)
+  if(getOption("piggyback.verbose")) httr::warn_for_status(resp)
 
   invisible(resp)
 #  gh::gh(paste0(
