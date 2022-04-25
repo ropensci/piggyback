@@ -14,13 +14,10 @@ local_filename <- function(x) {
 
 ##################### Generic helpers ##################
 api_error_msg <- function(r) {
-  paste0(
-    "Cannot access release data for repository ",
-    crayon::blue$bold(paste0(r[[1]], "/", r[[2]])),
-    ".",
-    " Check that you have provided a .token and",
-    " that at least one release on your GitHub repository page."
-  )
+  cli::cli_warn(
+    c("!"="Cannot access release data for repo {.val {paste0(r[[1]], "/", r[[2]])}}.",
+      "Check that you have provided a {code .token} and that there is at least one release on your repo"
+  ))
 }
 
 #####################################################
