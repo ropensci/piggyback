@@ -22,7 +22,6 @@
 #' readr::write_tsv(mtcars,"mtcars.tsv.xz")
 #' pb_upload("mtcars.tsv.xz", "cboettig/piggyback-tests")
 #' }
-#' @importFrom httr progress upload_file POST stop_for_status
 #' @export
 #'
 pb_upload <- function(file,
@@ -32,11 +31,38 @@ pb_upload <- function(file,
                       overwrite = "use_timestamps",
                       use_timestamps = NULL,
                       show_progress = TRUE,
-                      .token = get_token(),
+                      .token = gh::gh_token(),
                       dir = NULL) {
 
+  stopifnot(
+    is.character(repo),
+    is.character(tag),
+    length(tag) == 1,
+    length(repo) == 1
+  )
+
+  releases <- pb_releases(repo, .token)
+
+  if(tag != "latest" && !tag %in% releases$tag_name) {
+    cli::cli_alert_warning("Release {.val {tag}} not found in {.val {repo}}.")
+
+    if(!interactive()) {
+      cli::cli_alert_warning("No upload performed.")
+      return(invisible(NULL))
+    }
+
+    run <- utils::menu(
+      choices = c("Yes", "No"),
+      title = glue::glue("Would you like to create a new release now?")
+    )
+
+    if(run == "No") return(invisible(NULL))
+
+    if(run == "Yes") pb_new_release(repo = repo, tag = tag, .token = token)
+  }
+
   ## start fresh
-  memoise::forget(memoised_pb_info)
+  memoise::forget(pb_info)
 
   out <- lapply(file, function(f)
     pb_upload_file(
@@ -52,7 +78,7 @@ pb_upload <- function(file,
     ))
 
   ## break cache when done
-  memoise::forget(memoised_pb_info)
+  memoise::forget(pb_info)
   invisible(out)
 }
 
@@ -75,16 +101,13 @@ pb_upload_file <- function(file,
   ## return "./C:/Users/Tan" which is not desired.
 
   if (!file.exists(file_path)) {
-    warning("file ", file_path, " does not exist")
+    cli::cli_warn("file {.file {file_path}} does not exist.")
     return(NULL)
   }
 
   if(!is.null(use_timestamps)){
-    warning(paste("use_timestamps argument is deprecated",
-                  "please set overwrite='use_timestamps'",
-                  "instead."))
+    cli::cli_warn("{.code use_timestamps} argument is deprecated, please set {.code overwrite = 'use_timestamps'} instead")
   }
-
 
   ## Yeah, having two separate arguments was clearly a mistake!
   ## Code has been partially refactored now so that user just
@@ -122,10 +145,7 @@ pb_upload_file <- function(file,
 
       no_update <- local_timestamp <= df[i, "timestamp"]
       if (no_update) {
-        message(paste(
-          "matching or more recent version of",
-          file_path, "found on GitHub, not uploading"
-        ))
+        cli::cli_warn("Matching or more recent version of {.file {file_path}} found on GH, not uploading.")
         return(NULL)
       }
     }
@@ -139,30 +159,24 @@ pb_upload_file <- function(file,
              .token = .token
       )
     } else {
-      warning(paste(
-        "Skipping upload of", df$file_name[i],
-        "as file exists on GitHub",
-        repo, "and overwrite = FALSE"
-      ))
+      cli::cli_warn("Skipping upload of {.file {df$file_name[i]}} as file exists on GitHub and {.code overwrite = FALSE}")
       return(NULL)
     }
   }
 
-  if (!is.null(progress)) {
-    message(paste("uploading", name, "..."))
-  }
+  if (!is.null(progress)) cli::cli_alert_info("Uploading {.file {name}} ...")
 
   r <- httr::POST(sub("\\{.+$", "", df$upload_url[[1]]),
-                  query = list(name = asset_filename(name)),
+                  query = list(name = name),
                   httr::add_headers(Authorization = paste("token", .token)),
                   body = httr::upload_file(file_path),
-                  progress
-  )
+                  progress)
 
   cat("\n")
-  if(getOption("verbose")) httr::warn_for_status(r)
+
+  if(getOption("piggyback.verbose")) httr::warn_for_status(r)
 
   ## Release info changed, so break cache
-  # memoise::forget(memoised_pb_info)
+  memoise::forget(pb_info)
   invisible(r)
 }
