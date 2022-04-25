@@ -49,7 +49,7 @@ pb_new_release <- function(repo = guess_repo(),
     prerelease = prerelease
   ))
 
-  # gh fails to pass body correctly??
+  ## gh fails to pass body correctly?
   # gh("/repos/:owner/:repo/releases", owner = r[[1]], repo = r[[2]],
   #  .method = "POST", body = toJSON(payload,auto_unbox = TRUE), encode="json")
 
