@@ -43,13 +43,12 @@ pb_upload <- function(file,
 
   releases <- pb_releases(repo, .token)
 
+  if(tag != "latest" && !tag %in% releases$tag_name && !interactive()) {
+    cli::cli_abort("Release {.val {tag}} not found in {.val {repo}}. No upload performed.")
+  }
+
   if(tag != "latest" && !tag %in% releases$tag_name) {
     cli::cli_alert_warning("Release {.val {tag}} not found in {.val {repo}}.")
-
-    if(!interactive()) {
-      cli::cli_alert_warning("No upload performed.")
-      return(invisible(NULL))
-    }
 
     run <- utils::menu(
       choices = c("Yes", "No"),
