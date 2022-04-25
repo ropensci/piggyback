@@ -109,7 +109,7 @@ test_that("we can get all download urls", {
   x <- pb_download_url(
     repo = "cboettig/piggyback-tests",
     tag = "v0.0.1",
-    .token = gh::gh_token()()
+    .token = gh::gh_token()
   )
   expect_is(x, "character")
   expect_gt(length(x), 1)
