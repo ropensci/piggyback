@@ -22,25 +22,37 @@
 pb_delete <- function(file = NULL,
                       repo = guess_repo(),
                       tag = "latest",
-                      .token = get_token()) {
+                      .token = gh::gh_token()) {
   df <- pb_info(repo, tag, .token)
 
-  if (is.null(file)) {
-    ids <- df$id
-  } else {
+  if (is.null(file)) ids <- df$id
+
+  if(!is.null(file) && any(!file %in% df$file_name)){
+    missing <- file[!file %in% df$file_name]
+    file <- file[file != missing]
+    cli::cli_warn("{.val {missing}} not found in {.val {tag}} release of {.val {repo}}")
+  }
+
+  if(!is.null(file)){
     ids <- df[df$file_name %in% file, "id"]
   }
 
   if (length(ids) < 1) {
-    message(paste(file, "not found on GitHub"))
-    return(NULL)
+    cli::cli_warn("No file deletions performed.")
+    return(invisible(NULL))
   }
 
   lapply(ids, function(id) {
     ## If we find matching id, Delete file from release.
     gh::gh("DELETE /repos/:owner/:repo/releases/assets/:id",
-           owner = df$owner[[1]], repo = df$repo[[1]], id = id, .token = .token
+           owner = df$owner[[1]],
+           repo = df$repo[[1]],
+           id = id,
+           .token = .token
     )
   })
-  invisible(TRUE)
+
+  cli::cli_alert_info("Deleted {.val {file}} from {.val {tag}} release on {.val {repo}}")
+
+  return(invisible(TRUE))
 }
