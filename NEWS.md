@@ -5,6 +5,12 @@
 * update intro vignette to remove mention of path name handling and instead provide examples of how path names are handled.
 * update intro vignette instructions for git authentication
 * `pb_new_release()` now reports HTTP errors when attempting to create a new release and returns the contents of the error if it fails. 
+* `pb_releases()` created - it returns a list of releases available in the repository.
+* Internal function `pb_info()` refactored to search for the specified tag(s) which should improve performance. Should handle multiple tags gracefully.
+* Internal function `pb_info()` (and therefore `pb_list()`, `pb_download()`, `pb_download_url()`) no longer ask about creating new releases if the release is not found. 
+* `pb_upload()` is now the only function that offers (interactively) to create a new release if release is not found. If noninteractive, user must run `pb_new_release()` manually prior to uploading. 
+* CLI messaging now consistently uses `{cli}` package and no longer uses clisymbols or crayon - this is to align with the imports from the `{gh}` package.
+* Documentation updated.
 
 # piggyback 0.1.1
 
