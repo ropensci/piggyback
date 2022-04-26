@@ -56,7 +56,6 @@ pb_upload <- function(file,
     )
 
     if(run == "No") return(invisible(NULL))
-
     if(run == "Yes") pb_new_release(repo = repo, tag = tag, .token = .token)
   }
 
@@ -173,7 +172,7 @@ pb_upload_file <- function(file,
 
   cat("\n")
 
-  if(getOption("piggyback.verbose")) httr::warn_for_status(r)
+  if(getOption("piggyback.verbose",default = TRUE)) httr::warn_for_status(r)
 
   ## Release info changed, so break cache
   memoise::forget(pb_info)

@@ -50,10 +50,7 @@ pb_download <- function(file = NULL,
   if (!is.null(file)) {
     i <- which(df$file_name %in% file)
     if (length(i) < 1) {
-
-      cli::cli_warn(
-        "file(s) {.file {file}} not found in repo {.val {repo}}"
-      )
+      cli::cli_warn("file(s) {.file {file}} not found in repo {.val {repo}}")
     }
 
     df <- df[i, ]
