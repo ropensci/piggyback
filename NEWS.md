@@ -1,4 +1,4 @@
-# piggyback (development version)
+# piggyback 0.1.2
 
 * update intro vignette to remove all mentions of `pb_track()`, `pb_push()`, and `pb_pull()` which were removed as of version 0.0.0.9900
 * `pb_upload()` now handles the `dir` argument to control relative path directories.
