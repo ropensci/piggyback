@@ -1,3 +1,26 @@
+#' Remove null elements of a list
+#' @keywords internal
+#' @noRd
+compact <- function (l) Filter(Negate(is.null), l)
+
+#' trycatch/try wrapper
+#' @keywords internal
+#' @noRd
+maybe <- function(expr, otherwise, quiet = TRUE) {
+  if (missing(otherwise)) {
+    try(expr, silent = quiet)
+  } else {
+    tryCatch(expr,
+             error = function(e) {
+               if (!quiet) {
+                 message("Error: ", e$message)
+               }
+               otherwise
+             }
+    )
+  }
+}
+
 #' Parses repository spec and errors if it fails
 #' @keywords internal
 #' @noRd
@@ -13,91 +36,38 @@ parse_repo <- function(repo){
 
   return(r)
 }
-#' Remove null elements of a list
+
+#' Guesses GH repo based on git remote info for current git directory
 #' @keywords internal
 #' @noRd
-compact <- function (l) Filter(Negate(is.null), l)
+guess_repo <- function(path = ".") {
 
-# Adapted from `usethis` and under
-# GPL-3 (Copyright RStudio Inc)
-# https://github.com/r-lib/usethis/blob/aacf687445c94d4f726e31f682308a9a3ef3f820/R/write.R
-# See https://github.com/r-lib/usethis/issues/366
-# write_union <- function(base_path, path, new_lines, quiet = FALSE) {
-#   stopifnot(is.character(new_lines))
-#
-#   full_path <- file.path(base_path, path)
-#   if (file.exists(full_path)) {
-#     lines <- readLines(full_path, warn = FALSE)
-#   } else {
-#     lines <- character()
-#   }
-#
-#   new <- setdiff(new_lines, lines)
-#   if (length(new) == 0) {
-#     return(invisible(FALSE))
-#   }
-#
-#   if (!quiet) {
-#     quoted <- paste0(value(new), collapse = ", ")
-#     done("Adding ", quoted, " to ", value(path))
-#   }
-#
-#   all <- union(lines, new_lines)
-#   write_utf8(full_path, all)
-# }
-#
-# write_utf8 <- function(path, lines) {
-#   stopifnot(is.character(path))
-#   stopifnot(is.character(lines))
-#
-#   con <- file(path, encoding = "utf-8")
-#   on.exit(close(con), add = TRUE)
-#
-#   if (length(lines) > 1) {
-#     lines <- paste0(lines, "\n", collapse = "")
-#   }
-#   cat(lines, file = con, sep = "")
-#
-#   invisible(TRUE)
-# }
-#
-# done <- function(...) {
-#   bullet(paste0(...), bullet = crayon::green(clisymbols::symbol$tick))
-# }
-#
-# value <- function(...) {
-#   x <- paste0(...)
-#   crayon::blue(encodeString(x, quote = "'"))
-# }
-#
-# bullet <- function(lines, bullet) {
-#   lines <- paste0(bullet, " ", lines)
-#   cat_line(lines)
-# }
-#
-# cat_line <- function(...) {
-#   cat(..., "\n", sep = "")
-# }
+  exists <- requireNamespace("gert", quietly = TRUE)
+  if(!exists) stop(paste(
+    "Install package 'gert' to let piggyback discover the",
+    "current repo, or provide your repo name explicitly"))
 
-# utils::askYesKnow is new to R 3.5.0; avoid using it for backwards compatibility
-# askYesNo <- function(msg){
-#
-#   prompts <- c("Yes", "No", "Cancel")
-#   choices <- tolower(prompts)
-#   msg1 <- paste0("(", paste(choices, collapse = "/"), ") ")
-#
-#   if (nchar(paste0(msg, msg1)) > 250) {
-#     cat(msg, "\n")
-#     msg <- msg1
-#   }
-#   else msg <- paste0(msg, " ", msg1)
-#
-#   ans <- readline(msg)
-#   match <- pmatch(tolower(ans), tolower(choices))
-#
-#   if (!nchar(ans))
-#     TRUE
-#   else if (is.na(match))
-#     stop("Unrecognized response ", dQuote(ans))
-#   else c(TRUE, FALSE, NA)[match]
-# }
+  repo <- gert::git_find(path)
+  remotes <- gert::git_remote_list(repo)
+  remotes_names <- remotes[["name"]]
+
+  # When there are more than 1 remote, we prefer "upstream"
+  #   then "origin." If neither exists, we error to avoid
+  #   ambiguity.
+  remote <- if (length(remotes_names) > 1) {
+    if ("upstream" %in% remotes_names) {
+      "upstream"
+    } else if ("origin" %in% remotes_names) {
+      "origin"
+    } else
+      stop("Cannot infer repo, please provide `repo` explicitly.",
+           call. = FALSE)
+  } else {
+    remotes_names
+  }
+
+  addr <- remotes[remotes[["name"]] == remote, "url"][["url"]]
+
+  out <- gsub(".*[:|/]([^/]+/[^/]+)(?:\\.git$)?", "\\1", addr)
+  gsub("\\.git$", "", out)
+}

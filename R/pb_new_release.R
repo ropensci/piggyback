@@ -17,8 +17,6 @@
 #' identify the release as a pre-release.
 #' @inheritParams pb_upload
 #' @export
-#' @importFrom jsonlite toJSON
-#' @importFrom httr content GET POST stop_for_status
 #' @examples \dontrun{
 #' pb_new_release("cboettig/piggyback-tests", "v0.0.5")
 #' }
@@ -35,7 +33,7 @@ pb_new_release <- function(repo = guess_repo(),
 
   # if no releases exist, pb_releases returns a dataframe of releases
   if(nrow(releases) > 0 && tag %in% releases$tag_name){
-      cli::cli_abort("Release tag {.val {tag}} already exists!")
+    cli::cli_abort("Release tag {.val {tag}} already exists!")
   }
 
   r <- parse_repo(repo)
@@ -68,8 +66,10 @@ pb_new_release <- function(repo = guess_repo(),
   }
 
   ## Release info changed, so break caches
-  memoise::forget(pb_info)
-  memoise::forget(pb_releases)
+  try({
+    memoise::forget(pb_info)
+    memoise::forget(pb_releases)
+  })
 
   release <- httr::content(resp)
   cli::cli_alert_success()

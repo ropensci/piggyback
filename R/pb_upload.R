@@ -144,7 +144,7 @@ pb_upload_file <- function(file,
       no_update <- local_timestamp <= df[i, "timestamp"]
       if (no_update) {
         cli::cli_warn("Matching or more recent version of {.file {file_path}} found on GH, not uploading.")
-        return(NULL)
+        return(invisible(NULL))
       }
     }
 
@@ -158,7 +158,7 @@ pb_upload_file <- function(file,
       )
     } else {
       cli::cli_warn("Skipping upload of {.file {df$file_name[i]}} as file exists on GitHub and {.code overwrite = FALSE}")
-      return(NULL)
+      return(invisible(NULL))
     }
   }
 
@@ -172,9 +172,9 @@ pb_upload_file <- function(file,
 
   cat("\n")
 
-  if(getOption("piggyback.verbose",default = TRUE)) httr::warn_for_status(r)
+  if(getOption("piggyback.verbose", default = TRUE)) httr::warn_for_status(r)
 
   ## Release info changed, so break cache
-  memoise::forget(pb_info)
+  try({memoise::forget(pb_info)})
   invisible(r)
 }

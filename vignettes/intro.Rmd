@@ -160,7 +160,7 @@ Similarly, you can download all current data assets of the latest or specified r
 
 ## Caching
 
-To reduce API calls to GitHub, piggyback caches most calls with a timeout of 1 second by default.  This avoids repeating identical requests to update it's internal record of the repository data (releases, assets, timestamps, etc) during programmatic use.  You can increase or decrease this delay by setting the environmental variable in seconds, e.g. `Sys.setenv("piggyback_cache_duration"=10)` for a longer delay or `Sys.setenv("piggyback_cache_duration"=0)` to disable caching. 
+To reduce API calls to GitHub, piggyback caches most calls with a timeout of 1 second by default.  This avoids repeating identical requests to update it's internal record of the repository data (releases, assets, timestamps, etc) during programmatic use.  You can increase or decrease this delay by setting the environmental variable in seconds, e.g. `Sys.setenv("piggyback_cache_duration"=10)` for a longer delay or `Sys.setenv("piggyback_cache_duration"=0)` to disable caching, and then restarting R.
 
 ## Valid file names
 

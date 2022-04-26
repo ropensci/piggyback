@@ -11,9 +11,4 @@
 #' and downloaded programmatically from scripts. No authentication is required to
 #' download data from public repositories.
 #'
-#' It has two main modes or workflows:
-#'
-#' - [pb_upload()] / [pb_download()]:  Upload and download individual files to/from
-#'   the desired release of the specified repository
-#'
 "_PACKAGE"

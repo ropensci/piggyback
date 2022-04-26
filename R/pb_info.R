@@ -15,7 +15,9 @@
 #' @return a dataframe of all releases available within a repository.
 #'
 #' @export
-pb_releases <- function(repo = guess_repo(), .token = gh::gh_token(), verbose = TRUE){
+pb_releases <- function(repo = guess_repo(),
+                        .token = gh::gh_token(),
+                        verbose = getOption("piggyback.verbose", default = TRUE)){
 
   r <- parse_repo(repo)
 
@@ -38,7 +40,7 @@ pb_releases <- function(repo = guess_repo(), .token = gh::gh_token(), verbose = 
         c("!" = "No GitHub releases found for {.val {repo}}!",
           "You can make a new one with {.fun piggyback::pb_new_release}")
       )}
-    return(data.frame())
+    return(invisible(data.frame()))
   }
 
   out <- data.frame(

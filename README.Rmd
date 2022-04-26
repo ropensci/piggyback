@@ -44,7 +44,7 @@ Install from CRAN via
 install.packages("piggyback")
 ```
 
-You can install the development version from [GitHub](https://github.com/) with:
+You can install the development version from [GitHub](https://github.com/ropensci/piggyback) with:
 
 ``` r
 # install.packages("devtools")
@@ -75,11 +75,7 @@ readr::write_tsv(mtcars, "mtcars.tsv.gz")
 pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback-tests")
 ```
 
-
-
-
 ## Git LFS and other alternatives
-
 
 `piggyback` acts like a poor soul's [Git LFS](https://git-lfs.github.com/). Git LFS is not only expensive, it also [breaks GitHub's collaborative model](https://angryfrenchman.org/github-s-large-file-storage-is-no-panacea-for-open-source-quite-the-opposite-12c0e16a9a91) -- basically if someone wants to submit a PR with a simple edit to your docs, they cannot fork your repository since that would otherwise count against your Git LFS storage.   Unlike Git LFS, `piggyback` doesn't take over your standard `git` client, it just perches comfortably on the shoulders of your existing GitHub API.  Data can be versioned by `piggyback`, but relative to `git LFS` versioning is less strict: uploads can be set as a new version or allowed to overwrite previously uploaded data.  
 
