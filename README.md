@@ -40,7 +40,7 @@ install.packages("piggyback")
 ```
 
 You can install the development version from
-[GitHub](https://github.com/) with:
+[GitHub](https://github.com/ropensci/piggyback) with:
 
 ``` r
 # install.packages("devtools")

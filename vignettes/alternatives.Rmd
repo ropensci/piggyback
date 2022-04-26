@@ -49,7 +49,3 @@ In terms of practical implementation, `datastorr` also creates a new release eve
 
 Another creative solution (hack), at least for some file types, is to break large files into multiple smaller files, and commit those to one or many GitHub repositories.  While [sharding](https://en.wikipedia.org/wiki/Shard_(database_architecture)) is sometimes a legitimate strategy, it has many obvious practical disadvantages and limitations.
 
-
-
-
-

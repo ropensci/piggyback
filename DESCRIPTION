@@ -33,12 +33,12 @@ License: GPL-3
 Encoding: UTF-8
 ByteCompile: true
 Imports:
+    cli,
+    glue,
     gh,
     httr,
     jsonlite,
     fs,
-    crayon,
-    clisymbols,
     lubridate,
     memoise
 Suggests:

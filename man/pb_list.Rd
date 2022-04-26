@@ -4,39 +4,28 @@
 \alias{pb_list}
 \title{List all assets attached to a release}
 \usage{
-pb_list(
-  repo = guess_repo(),
-  tag = NULL,
-  ignore = "manifest.json",
-  .token = get_token()
-)
+pb_list(repo = guess_repo(), tag = NULL, .token = gh::gh_token())
 }
 \arguments{
 \item{repo}{Repository name in format "owner/repo". Will guess the current
 repo if not specified.}
 
-\item{tag}{which release tag do we want information for? If \code{NULL} (default),
+\item{tag}{which release tag(s) do we want information for? If \code{NULL} (default),
 will return a table for all available release tags.}
-
-\item{ignore}{a list of files to ignore (if downloading "all" because
-\code{file=NULL}).}
 
 \item{.token}{GitHub authentication token, see \verb{[gh::gh_token()]}}
 }
 \value{
-a data.frame of release asset names, (normalized to local paths), release tag,
-timestamp, owner, and repo.
+a data.frame of release asset names, release tag, timestamp, owner, and repo.
 }
 \description{
 List all assets attached to a release
-}
-\details{
-To preserve path information, local path delimiters are converted to \verb{.2f}
-when files are uploaded as assets.  Listing will display the local filename,
-with asset names converting the \verb{.2f} escape code back to the system delimiter.
 }
 \examples{
 \dontrun{
 pb_list("cboettig/piggyback-tests")
 }
+}
+\seealso{
+\code{pb_releases} for a list of all releases in repository
 }

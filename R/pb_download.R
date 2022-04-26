@@ -10,9 +10,7 @@
 #' @param ignore a list of files to ignore (if downloading "all" because
 #'  `file=NULL`).
 #' @inheritParams pb_upload
-#' @importFrom httr GET add_headers write_disk
-#' @importFrom gh gh gh_token
-#' @importFrom fs dir_create
+#'
 #' @export
 #' @examples \dontrun{
 #'  ## Download a specific file.
@@ -35,12 +33,11 @@ pb_download <- function(file = NULL,
                         ignore = "manifest.json",
                         use_timestamps = TRUE,
                         show_progress = TRUE,
-                        .token = get_token()) {
-  progress <- httr::progress("down")
-  if (!show_progress) {
-    progress <- NULL
-  }
+                        .token = gh::gh_token()) {
 
+  progress <- httr::progress("down")
+
+  if (!show_progress) progress <- NULL
 
   df <- pb_info(repo, tag, .token)
 
@@ -50,12 +47,7 @@ pb_download <- function(file = NULL,
   if (!is.null(file)) {
     i <- which(df$file_name %in% file)
     if (length(i) < 1) {
-      warning(paste(
-        "file(s)",
-        paste(crayon::blue(file), collapse = " "),
-        "not found in repo",
-        crayon::blue(repo)
-      ))
+      cli::cli_warn("file(s) {.file {file}} not found in repo {.val {repo}}")
     }
 
     df <- df[i, ]
@@ -69,11 +61,10 @@ pb_download <- function(file = NULL,
 
 
   ## if dest paths are not provided, we will write all files to dest dir
+  # User is responsible for making sure dest dir exists!
   if (length(dest) == 1) {
     i <- which(df$file_name %in% file)
     dest <- file.path(dest, df$file_name[i])
-    # User is responsible for making sure dest dir exists!
-    # fs::dir_create(fs::path_dir(dest))
   }
   # dest should now be of length df
   df$dest <- dest
@@ -86,7 +77,7 @@ pb_download <- function(file = NULL,
     df <- df[update, ]
 
     if (dim(df)[[1]] < 1) {
-      message(paste("All files up-to-date already\n"))
+      cli::cli_alert_info("All local files already up-to-date!")
     }
   }
 
@@ -94,35 +85,34 @@ pb_download <- function(file = NULL,
     gh_download_asset(df$owner[[1]],
                       df$repo[[1]],
                       id = df$id[i],
-                      destfile = dest[i],
+                      destfile = df$dest[i],
                       overwrite = overwrite,
                       progress = progress
     ))
   invisible(resp)
 }
 
-
-
-
 ## gh() fails on this, so we do with httr. See https://github.com/r-lib/gh/issues/57
-## Consider option to supress progress bar?
+## Consider option to suppress progress bar?
 gh_download_asset <- function(owner,
                               repo,
                               id,
                               destfile,
                               overwrite = TRUE,
-                              .token = get_token(),
+                              .token = gh::gh_token(),
                               progress = httr::progress("down")) {
   if (fs::file_exists(destfile) && !overwrite) {
-    warning(paste(
-      destfile, "already exists, skipping download.",
-      "Set overwrite = TRUE to overwrite files."
-    ))
+    cli::cli_warn(
+      c("!"="{.val {destfile}} already exists, skipping download.",
+        "Set {.code overwrite = TRUE} to overwrite files.")
+    )
     return(NULL)
   }
 
   if (!is.null(progress)) {
-    message(paste("downloading", basename(destfile), "..."))
+    cli::cli_alert_info(
+      "Downloading {.val {basename(destfile)}}..."
+    )
   }
 
   resp <- httr::GET(
@@ -149,9 +139,10 @@ gh_download_asset <- function(owner,
   }
 
   # handle error cases? resp not found
-  if(getOption("verbose")) httr::warn_for_status(resp)
+  if(getOption("piggyback.verbose", default = TRUE)) httr::warn_for_status(resp)
 
   invisible(resp)
+
 #  gh::gh(paste0(
 #         "https://api.github.com/repos/", owner, "/",
 #         repo, "/", "releases/assets/", id),

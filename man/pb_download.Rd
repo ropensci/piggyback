@@ -13,7 +13,7 @@ pb_download(
   ignore = "manifest.json",
   use_timestamps = TRUE,
   show_progress = TRUE,
-  .token = get_token()
+  .token = gh::gh_token()
 )
 }
 \arguments{

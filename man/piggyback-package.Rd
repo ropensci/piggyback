@@ -17,13 +17,6 @@ works equally well with public or private repositories.  Data can be uploaded
 and downloaded programmatically from scripts. No authentication is required to
 download data from public repositories.
 }
-\details{
-It has two main modes or workflows:
-\itemize{
-\item \code{\link[=pb_upload]{pb_upload()}} / \code{\link[=pb_download]{pb_download()}}:  Upload and download individual files to/from
-the desired release of the specified repository
-}
-}
 \seealso{
 Useful links:
 \itemize{
@@ -40,6 +33,7 @@ Other contributors:
   \item Mark Padgham (\href{https://orcid.org/0000-0003-2172-5265}{ORCID}) [contributor]
   \item Jeffrey O Hanson (\href{https://orcid.org/0000-0002-4716-6134}{ORCID}) [contributor]
   \item Kevin Kuo (\href{https://orcid.org/0000-0001-7803-7901}{ORCID}) [contributor]
+  \item Tan Ho (\href{https://orcid.org/0000-0001-8388-5155}{ORCID}) [contributor]
 }
 
 }

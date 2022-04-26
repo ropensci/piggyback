@@ -8,7 +8,7 @@ pb_delete(
   file = NULL,
   repo = guess_repo(),
   tag = "latest",
-  .token = get_token()
+  .token = gh::gh_token()
 )
 }
 \arguments{
@@ -36,7 +36,7 @@ readr::write_tsv(mtcars, "mtcars.tsv.gz")
 ## Upload
 pb_upload("mtcars.tsv.gz",
           repo = "cboettig/piggyback-tests",
-           overwrite = TRUE)
+          overwrite = TRUE)
 pb_delete("mtcars.tsv.gz",
           repo = "cboettig/piggyback-tests",
           tag = "v0.0.1")

@@ -1,4 +1,3 @@
-
 #' Get the download url of a given file
 #'
 #' Returns the URL download for a public file. This can be useful when writing
@@ -17,13 +16,21 @@
 pb_download_url <- function(file = NULL,
                             repo = guess_repo(),
                             tag = "latest",
-                            .token = get_token()) {
+                            .token = gh::gh_token()) {
   df <- pb_info(repo, tag, .token)
-  if (is.null(file)) {
-    return(df$browser_download_url)
-  } else if (file %in% df$file_name) {
-    return(df[file == df$file_name, "browser_download_url"])
-  } else {
-    stop(paste("file", file, "not found in release", tag, "for repo", repo))
+
+  if(is.null(file)) return(df$browser_download_url)
+
+  if(any(!file %in% df$file_name)) {
+
+    missing <- file[!file %in% df$file_name]
+
+    cli::cli_warn("file {.val {missing}} not found in release {.val {tag}} for repo {.val {repo}}")
+
+    file <- file[file %in% df$file_name]
   }
+
+  if(length(file) == 0) return(cli::cli_abort("No download URLs to return."))
+
+  return(df[df$file_name %in% file,"browser_download_url"])
 }

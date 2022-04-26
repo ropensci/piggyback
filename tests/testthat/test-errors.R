@@ -23,9 +23,6 @@ test_that(
   }
 )
 
-
-
-
 test_that(
   "Attempt overwrite on upload when overwrite is FALSE", {
     skip_on_cran()
@@ -39,7 +36,7 @@ test_that(
         overwrite = FALSE,
         show_progress = FALSE
       ),
-      "Skipping upload of iris.tsv.gz as file exists"
+      "Skipping upload .+ as file exists"
     )
     unlink("iris.tsv.gz")
   }
@@ -59,7 +56,7 @@ test_that(
         use_timestamps = FALSE,
         show_progress = FALSE
       ),
-      "not-a-file does not exist"
+      "file .+ does not exist"
     )
 
   }
@@ -91,8 +88,6 @@ test_that(
     ## Note: in interactive use this will prompt instead
     skip_if(interactive())
 
-
-
     path <- file.path(tmp, "iris.tsv.gz")
     readr::write_tsv(datasets::iris,
                      path)
@@ -104,7 +99,7 @@ test_that(
         overwrite = TRUE,
         show_progress = FALSE
       ),
-      "No release with tag not-a-tag exists"
+      "Release .* not found"
     )
 
 
@@ -150,13 +145,13 @@ test_that(
 
     skip_on_cran()
 
-    expect_message(
+    expect_warning(
       pb_delete(
         repo = "cboettig/piggyback-tests",
         file = "mtcars8.tsv.gz",
         tag = "v0.0.1"
       ),
-      "not found on GitHub"
+      "No file deletions performed"
     )
   }
 )
@@ -182,13 +177,11 @@ test_that(
 
 test_that("download url error", {
   skip_on_cran()
-
-
-  expect_error(
-  x <- pb_download_url("not-a-file",
-    repo = "cboettig/piggyback-tests",
-    tag = "v0.0.1",
-    .token = piggyback:::get_token()
-  ), "not-a-file")
+  expect_warning(
+    expect_error(
+      pb_download_url("not-a-file", repo = "cboettig/piggyback-tests", tag = "v0.0.1", .token = gh::gh_token()),
+      "No download URLs to return"),
+    "file .+ not found in release"
+  )
 })
 

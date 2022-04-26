@@ -12,7 +12,7 @@ pb_new_release(
   body = "Data release",
   draft = FALSE,
   prerelease = FALSE,
-  .token = get_token()
+  .token = gh::gh_token()
 )
 }
 \arguments{
