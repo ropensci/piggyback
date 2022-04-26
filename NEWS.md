@@ -11,6 +11,7 @@
 * `pb_upload()` is now the only function that offers (interactively) to create a new release if release is not found. If noninteractive, user must run `pb_new_release()` manually prior to uploading. 
 * CLI messaging now consistently uses `{cli}` package and no longer uses clisymbols or crayon - this is to align with the imports from the `{gh}` package.
 * Documentation updated.
+* Add options("piggyback.verbose") TRUE/FALSE to control verbosity/messaging levels.
 
 # piggyback 0.1.1
 

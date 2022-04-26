@@ -12,7 +12,7 @@
 #'  only overwriting those files which are older.
 #' @param use_timestamps DEPRECATED.
 #' @param show_progress logical, show a progress bar be shown for uploading?
-#' Defaults to `TRUE`.
+#' Defaults to `TRUE` - can also set globally with options("piggyback.verbose")
 #' @param .token GitHub authentication token, see `[gh::gh_token()]`
 #' @param dir directory relative to which file names should be based, defaults to NULL for current working directory.
 #' @examples
@@ -30,7 +30,7 @@ pb_upload <- function(file,
                       name = NULL,
                       overwrite = "use_timestamps",
                       use_timestamps = NULL,
-                      show_progress = TRUE,
+                      show_progress = getOption("piggyback.verbose", default = TRUE),
                       .token = gh::gh_token(),
                       dir = NULL) {
 
@@ -86,7 +86,7 @@ pb_upload_file <- function(file,
                            name = NULL,
                            overwrite = "use_timestamps",
                            use_timestamps = NULL,
-                           show_progress = TRUE,
+                           show_progress = getOption("piggyback.verbose", default = TRUE),
                            .token = gh::gh_token(),
                            dir = NULL) {
 
@@ -122,9 +122,7 @@ pb_upload_file <- function(file,
   )
 
   progress <- httr::progress("up")
-  if (!show_progress) {
-    progress <- NULL
-  }
+  if (!show_progress) progress <- NULL
 
   if (is.null(name)) {
     ## name is name on GitHub, technically need not be name of local file
@@ -162,7 +160,7 @@ pb_upload_file <- function(file,
     }
   }
 
-  if (!is.null(progress)) cli::cli_alert_info("Uploading {.file {name}} ...")
+  if (show_progress) cli::cli_alert_info("Uploading {.file {name}} ...")
 
   r <- httr::POST(sub("\\{.+$", "", df$upload_url[[1]]),
                   query = list(name = name),
@@ -172,7 +170,7 @@ pb_upload_file <- function(file,
 
   cat("\n")
 
-  if(getOption("piggyback.verbose", default = TRUE)) httr::warn_for_status(r)
+  if(show_progress) httr::warn_for_status(r)
 
   ## Release info changed, so break cache
   try({memoise::forget(pb_info)})

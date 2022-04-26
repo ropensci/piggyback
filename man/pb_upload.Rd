@@ -11,7 +11,7 @@ pb_upload(
   name = NULL,
   overwrite = "use_timestamps",
   use_timestamps = NULL,
-  show_progress = TRUE,
+  show_progress = getOption("piggyback.verbose", default = TRUE),
   .token = gh::gh_token(),
   dir = NULL
 )
@@ -34,7 +34,7 @@ only overwriting those files which are older.}
 \item{use_timestamps}{DEPRECATED.}
 
 \item{show_progress}{logical, show a progress bar be shown for uploading?
-Defaults to \code{TRUE}.}
+Defaults to \code{TRUE} - can also set globally with options("piggyback.verbose")}
 
 \item{.token}{GitHub authentication token, see \verb{[gh::gh_token()]}}
 

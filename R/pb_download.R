@@ -32,7 +32,7 @@ pb_download <- function(file = NULL,
                         overwrite = TRUE,
                         ignore = "manifest.json",
                         use_timestamps = TRUE,
-                        show_progress = TRUE,
+                        show_progress = getOption("piggyback.verbose", default = TRUE),
                         .token = gh::gh_token()) {
 
   progress <- httr::progress("down")
@@ -78,6 +78,7 @@ pb_download <- function(file = NULL,
 
     if (dim(df)[[1]] < 1) {
       cli::cli_alert_info("All local files already up-to-date!")
+      return(invisible(NULL))
     }
   }
 
@@ -89,7 +90,7 @@ pb_download <- function(file = NULL,
                       overwrite = overwrite,
                       progress = progress
     ))
-  invisible(resp)
+  return(invisible(resp))
 }
 
 ## gh() fails on this, so we do with httr. See https://github.com/r-lib/gh/issues/57
