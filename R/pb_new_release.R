@@ -72,6 +72,6 @@ pb_new_release <- function(repo = guess_repo(),
   })
 
   release <- httr::content(resp)
-  cli::cli_alert_success()
+  cli::cli_alert_success("Created new release {.val {name}}.")
   invisible(release)
 }
