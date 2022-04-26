@@ -10,9 +10,7 @@
 #' @param ignore a list of files to ignore (if downloading "all" because
 #'  `file=NULL`).
 #' @inheritParams pb_upload
-#' @importFrom httr GET add_headers write_disk
-#' @importFrom gh gh gh_token
-#' @importFrom fs dir_create
+#'
 #' @export
 #' @examples \dontrun{
 #'  ## Download a specific file.
@@ -36,11 +34,10 @@ pb_download <- function(file = NULL,
                         use_timestamps = TRUE,
                         show_progress = TRUE,
                         .token = gh::gh_token()) {
-  progress <- httr::progress("down")
-  if (!show_progress) {
-    progress <- NULL
-  }
 
+  progress <- httr::progress("down")
+
+  if (!show_progress) progress <- NULL
 
   df <- pb_info(repo, tag, .token)
 
@@ -88,7 +85,7 @@ pb_download <- function(file = NULL,
     gh_download_asset(df$owner[[1]],
                       df$repo[[1]],
                       id = df$id[i],
-                      destfile = dest[i],
+                      destfile = df$dest[i],
                       overwrite = overwrite,
                       progress = progress
     ))
