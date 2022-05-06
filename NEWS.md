@@ -1,3 +1,7 @@
+# piggyback (development version)
+
+* fix bug in `pb_upload()` for uploading to a release with no assets (0.1.2.9001)
+
 # piggyback 0.1.2
 
 * update intro vignette to remove all mentions of `pb_track()`, `pb_push()`, and `pb_pull()` which were removed as of version 0.0.0.9900
