@@ -91,6 +91,7 @@ pb_upload_file <- function(file,
                            dir = NULL) {
 
   file_path <- do.call(file.path, compact(list(dir,file)))
+
   ## Uses NULL as default dir, drops it with compact, then
   ## does the file.path call with what's left
   ##
@@ -162,7 +163,10 @@ pb_upload_file <- function(file,
 
   if (show_progress) cli::cli_alert_info("Uploading {.file {name}} ...")
 
-  r <- httr::POST(sub("\\{.+$", "", df$upload_url[[1]]),
+  releases <- pb_releases(repo = repo)
+  upload_url <- releases$upload_url[releases$tag_name == tag]
+
+  r <- httr::POST(sub("\\{.+$", "", upload_url),
                   query = list(name = name),
                   httr::add_headers(Authorization = paste("token", .token)),
                   body = httr::upload_file(file_path),
