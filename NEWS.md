@@ -1,6 +1,7 @@
-# piggyback (development version)
+# piggyback 0.1.3
 
-* fix bug in `pb_upload()` for uploading to a release with no assets (0.1.2.9001)
+* fix bug in `pb_upload()` for uploading to a release with no assets [#67]
+* avoid implicit dependency on `tibble` [#70]
 
 # piggyback 0.1.2
 
