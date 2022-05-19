@@ -43,7 +43,7 @@ parse_repo <- function(repo){
 guess_repo <- function(path = ".") {
 
   exists <- requireNamespace("gert", quietly = TRUE)
-  if(!exists) stop(paste(
+  if (!exists) stop(paste(
     "Install package 'gert' to let piggyback discover the",
     "current repo, or provide your repo name explicitly"))
 
@@ -66,7 +66,7 @@ guess_repo <- function(path = ".") {
     remotes_names
   }
 
-  addr <- remotes[remotes[["name"]] == remote, "url"][["url"]]
+  addr <- remotes$url[remotes$name == remote]
 
   out <- gsub(".*[:|/]([^/]+/[^/]+)(?:\\.git$)?", "\\1", addr)
   gsub("\\.git$", "", out)
