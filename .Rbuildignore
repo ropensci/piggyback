@@ -27,3 +27,4 @@ mtcars.tsv.gz$
 ^\.github$
 ^pkgdown$
 
+^CRAN-SUBMISSION$
