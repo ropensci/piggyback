@@ -1,3 +1,7 @@
+# piggyback (development version)
+
+* The progress bar argument `show_progress` in `pb_upload()` and `pb_download()` now defaults to `interactive()` [#72]
+
 # piggyback 0.1.3
 
 * fix bug in `pb_upload()` for uploading to a release with no assets [#67]
