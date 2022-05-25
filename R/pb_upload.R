@@ -12,7 +12,7 @@
 #'  only overwriting those files which are older.
 #' @param use_timestamps DEPRECATED.
 #' @param show_progress logical, show a progress bar be shown for uploading?
-#' Defaults to `TRUE` - can also set globally with options("piggyback.verbose")
+#' Defaults to `[interactive()]` - can also set globally with options("piggyback.verbose")
 #' @param .token GitHub authentication token, see `[gh::gh_token()]`
 #' @param dir directory relative to which file names should be based, defaults to NULL for current working directory.
 #' @examples
@@ -30,7 +30,7 @@ pb_upload <- function(file,
                       name = NULL,
                       overwrite = "use_timestamps",
                       use_timestamps = NULL,
-                      show_progress = getOption("piggyback.verbose", default = TRUE),
+                      show_progress = getOption("piggyback.verbose", default = interactive()),
                       .token = gh::gh_token(),
                       dir = NULL) {
 
@@ -86,7 +86,7 @@ pb_upload_file <- function(file,
                            name = NULL,
                            overwrite = "use_timestamps",
                            use_timestamps = NULL,
-                           show_progress = getOption("piggyback.verbose", default = TRUE),
+                           show_progress = getOption("piggyback.verbose", default = interactive()),
                            .token = gh::gh_token(),
                            dir = NULL) {
 
