@@ -1,3 +1,7 @@
+# piggyback (development version)
+
+* Change default of `options("piggyback.verbose")` to interactive() to reduce progress bars in batch mode. [#72]
+
 # piggyback 0.1.3
 
 * fix bug in `pb_upload()` for uploading to a release with no assets [#67]
