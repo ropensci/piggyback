@@ -32,7 +32,7 @@ pb_download <- function(file = NULL,
                         overwrite = TRUE,
                         ignore = "manifest.json",
                         use_timestamps = TRUE,
-                        show_progress = getOption("piggyback.verbose", default = TRUE),
+                        show_progress = getOption("piggyback.verbose", default = interactive()),
                         .token = gh::gh_token()) {
 
   progress <- httr::progress("down")
