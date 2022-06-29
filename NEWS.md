@@ -1,6 +1,7 @@
 # piggyback (development version)
 
 * The progress bar argument `show_progress` in `pb_upload()` and `pb_download()` now defaults to `interactive()` [#72]
+* Fix bug in `pb_download()` for downloading without a `gh::gh_token()` (mostly on Windows?) [#77]
 
 # piggyback 0.1.3
 
