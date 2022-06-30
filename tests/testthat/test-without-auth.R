@@ -74,7 +74,8 @@ test_that(
     )
 
     expect_true(file.exists(file.path(tmp, "iris.tsv.gz")))
-    expect_equivalent(datasets::iris[[2]], iris[[2]])
+    pb_iris <- read.delim(file.path(tmp, "iris.tsv.gz"))
+    expect_equivalent(datasets::iris[[2]], pb_iris[[2]])
 
     unlink(file.path(tmp, "iris.tsv.gz"))
   }
