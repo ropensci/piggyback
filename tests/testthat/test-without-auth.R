@@ -2,6 +2,11 @@ context("Without Authentication")
 
 tmp <- tempdir()
 
+testthat::with_mock(
+  `gh::gh_token` = function(...) return(""),
+  {
+
+
 ## Even though authentication is not required for these tests,
 ## they do call the GH API and are subject to tight rate-limiting
 ## when no Token is available.  It is preferable / advisable to have
@@ -115,3 +120,5 @@ test_that("we can get all download urls", {
   expect_is(x, "character")
   expect_gt(length(x), 1)
 })
+
+  })
