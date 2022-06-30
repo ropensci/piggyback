@@ -116,6 +116,8 @@ gh_download_asset <- function(owner,
     )
   }
 
+  auth_token <- if(.token != "") httr::add_headers(paste("token",.token))
+
   resp <- httr::GET(
     paste0(
       "https://",
@@ -123,7 +125,7 @@ gh_download_asset <- function(owner,
       repo, "/", "releases/assets/", id
     ),
     httr::add_headers(Accept = "application/octet-stream"),
-    httr::add_headers(Authorization = paste("token",.token)),
+    auth_token,
     httr::write_disk(destfile, overwrite = overwrite),
     progress
   )
@@ -134,6 +136,7 @@ gh_download_asset <- function(owner,
     resp <- httr::GET(
       resp$url,
       httr::add_headers(Accept = "application/octet-stream"),
+      auth_token,
       httr::write_disk(destfile, overwrite = T),
       progress
     )
