@@ -1,5 +1,5 @@
 Package: piggyback
-Version: 0.1.3.9001
+Version: 0.1.3.9002
 Title: Managing Larger Data on a GitHub Repository
 Description: Because larger (> 50 MB) data files cannot easily be committed to git,
   a different approach is required to manage data associated with an analysis in a 
