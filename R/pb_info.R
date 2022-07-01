@@ -22,16 +22,19 @@ pb_releases <- function(repo = guess_repo(),
   r <- parse_repo(repo)
 
   # get release ids
-  releases <- maybe(
-    expr = gh::gh("/repos/:owner/:repo/releases",
-                  owner = r[[1]],
-                  repo = r[[2]],
-                  .limit = Inf,
-                  .token = .token),
-    otherwise = cli::cli_abort(
-      c("!"="Cannot access release data for repo {.val {repo}}.",
-        "Check that you have provided a {.code .token} and that the repo is correctly specified.")
-    )
+  releases <- tryCatch(
+    gh::gh("/repos/:owner/:repo/releases",
+           owner = r[[1]],
+           repo = r[[2]],
+           .limit = Inf,
+           .token = .token),
+    error = function(cnd){
+      cli::cli_abort(
+        c("!"="Cannot access release data for repo {.val {repo}}.",
+          "Check that you have provided a {.code .token} and that the repo is correctly specified.",
+          cnd$message)
+      )
+    }
   )
 
   if(length(releases) == 0) {
