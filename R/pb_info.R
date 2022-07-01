@@ -20,7 +20,6 @@ pb_releases <- function(repo = guess_repo(),
                         verbose = getOption("piggyback.verbose", default = TRUE)){
 
   r <- parse_repo(repo)
-
   # get release ids
   releases <- tryCatch(
     gh::gh("/repos/:owner/:repo/releases",
@@ -29,10 +28,13 @@ pb_releases <- function(repo = guess_repo(),
            .limit = Inf,
            .token = .token),
     error = function(cnd){
+
       cli::cli_abort(
         c("!"="Cannot access release data for repo {.val {repo}}.",
           "Check that you have provided a {.code .token} and that the repo is correctly specified.",
-          cnd$message)
+          unlist(strsplit(cnd$message,"\\n"))
+          )
+
       )
     }
   )
