@@ -116,7 +116,9 @@ gh_download_asset <- function(owner,
     )
   }
 
-  auth_token <- if(.token != "") httr::add_headers(paste("token",.token))
+  auth_token <- if(!is.null(.token) && .token != "") {
+    httr::add_headers(Authorization = paste("token",.token))
+  }
 
   resp <- httr::GET(
     paste0(

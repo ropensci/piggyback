@@ -2,6 +2,7 @@
 
 * The progress bar argument `show_progress` in `pb_upload()` and `pb_download()` now defaults to `interactive()` [#72]
 * Fix bug in `pb_download()` for downloading without a `gh::gh_token()` (mostly on Windows?) [#77]
+* Fix bug introduced by above bugfix - missed Authorization in header
 
 # piggyback 0.1.3
 
