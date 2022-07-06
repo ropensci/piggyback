@@ -28,12 +28,16 @@ Useful links:
 \author{
 \strong{Maintainer}: Carl Boettiger \email{cboettig@gmail.com} (\href{https://orcid.org/0000-0002-1642-628X}{ORCID}) [copyright holder]
 
+Authors:
+\itemize{
+  \item Tan Ho (\href{https://orcid.org/0000-0001-8388-5155}{ORCID})
+}
+
 Other contributors:
 \itemize{
   \item Mark Padgham (\href{https://orcid.org/0000-0003-2172-5265}{ORCID}) [contributor]
   \item Jeffrey O Hanson (\href{https://orcid.org/0000-0002-4716-6134}{ORCID}) [contributor]
   \item Kevin Kuo (\href{https://orcid.org/0000-0001-7803-7901}{ORCID}) [contributor]
-  \item Tan Ho (\href{https://orcid.org/0000-0001-8388-5155}{ORCID}) [contributor]
 }
 
 }
