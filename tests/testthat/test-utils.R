@@ -11,20 +11,13 @@ test_that("guess_repo works",{
   skip_if_offline("api.github.com")
   skip_if_not_installed("usethis")
 
-  temp_dir <- tempdir(check = TRUE)
+  repo_path <- file.path(tempdir(check = TRUE),"piggyback-tests")
+  fs::dir_create(repo_path)
 
-  usethis::create_from_github(
-    repo_spec = "cboettig/piggyback-tests",
-    destdir = temp_dir,
-    fork = FALSE,
-    rstudio = FALSE,
-    open = FALSE,
-    protocol = "https"
-  )
+  gert::git_clone(url = "https://github.com/cboettig/piggyback-tests",
+                  path = repo_path)
 
-  repo_path <- file.path(temp_dir,"piggyback-tests")
   on.exit(unlink(repo_path, recursive = TRUE))
-
   expect_equal(
     guess_repo(repo_path),
     "cboettig/piggyback-tests"

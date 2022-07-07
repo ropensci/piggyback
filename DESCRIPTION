@@ -47,9 +47,9 @@ Suggests:
     readr,
     covr,
     testthat,
-    datasets,
     knitr,
     rmarkdown,
+    gert,
     usethis,
     magrittr
 VignetteBuilder: knitr
