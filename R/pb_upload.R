@@ -42,7 +42,7 @@ pb_upload <- function(file,
 
   releases <- pb_releases(repo, .token)
 
-  if(tag != "latest" && !tag %in% releases$tag_name && !rlang::is_interactive()) {
+  if(tag != "latest" && !tag %in% releases$tag_name && !interactive()) {
     cli::cli_abort("Release {.val {tag}} not found in {.val {repo}}. No upload performed.")
   }
 
