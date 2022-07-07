@@ -50,7 +50,7 @@ Suggests:
     knitr,
     rmarkdown,
     gert,
-    usethis,
+    withr,
     magrittr
 VignetteBuilder: knitr
 RoxygenNote: 7.1.2

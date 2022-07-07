@@ -1,4 +1,3 @@
-*.tsv.gz
 *.tif
 *.zip
 manifest.json
@@ -10,8 +9,6 @@ manifest.json
 inst/doc
 *.csv
 *.RData
-*.tsv
-*.gz
 *.xz
 *.bz2
 data/*

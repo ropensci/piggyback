@@ -30,9 +30,7 @@ jobs:
           - {os: ubuntu-latest,   r: 'oldrel-1'}
     env:
       RSPM: ${{ matrix.config.rspm }}
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      IS_GHA: 'true'
+      TAN_GH_TOKEN: ${{ secrets.TAN_GH_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
 
     steps:

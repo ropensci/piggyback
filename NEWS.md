@@ -7,7 +7,7 @@
 * `pb_release_delete()` introduced to delete existing releases. [#81]
 * `pb_new_release()` renamed to `pb_release_create()` to sync with the new delete function. 
 * Fix offer to create new release in `pb_upload()` - also switch to using `rlang::is_interactive()` to maybe one day test this.
-*
+* Tests rewritten to primarily use GHA and write to/from the ropensci/piggyback repo.
 
 # piggyback 0.1.3
 
