@@ -42,7 +42,7 @@ pb_upload <- function(file,
 
   releases <- pb_releases(repo, .token)
 
-  if(tag != "latest" && !tag %in% releases$tag_name && !interactive()) {
+  if(tag != "latest" && !tag %in% releases$tag_name && !rlang::is_interactive()) {
     cli::cli_abort("Release {.val {tag}} not found in {.val {repo}}. No upload performed.")
   }
 
@@ -54,8 +54,8 @@ pb_upload <- function(file,
       title = glue::glue("Would you like to create a new release now?")
     )
 
-    if(run == "No") return(invisible(NULL))
-    if(run == "Yes") pb_new_release(repo = repo, tag = tag, .token = .token)
+    if(run == 2) return(invisible(NULL))
+    if(run == 1) pb_new_release(repo = repo, tag = tag, .token = .token)
   }
 
   ## start fresh
@@ -99,7 +99,7 @@ pb_upload_file <- function(file,
   ## return "./C:/Users/Tan" which is not desired.
 
   if (!file.exists(file_path)) {
-    cli::cli_warn("file {.file {file_path}} does not exist.")
+    cli::cli_warn("File {.file {file_path}} does not exist.")
     return(NULL)
   }
 
