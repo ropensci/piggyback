@@ -2,8 +2,7 @@
 #'
 #' NOTE: you must first create a release if one does not already exists.
 #' @param file path to file to be uploaded
-#' @param repo Repository name in format "owner/repo". Will guess the current
-#' repo if not specified.
+#' @param repo Repository name in format "owner/repo". Defaults to `guess_repo()`.
 #' @param tag  tag for the GitHub release to which this data should be attached.
 #' @param name name for uploaded file. If not provided will use the basename of
 #' `file` (i.e. filename without directory)

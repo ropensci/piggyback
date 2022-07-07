@@ -7,8 +7,7 @@
 pb_list(repo = guess_repo(), tag = NULL, .token = gh::gh_token())
 }
 \arguments{
-\item{repo}{Repository name in format "owner/repo". Will guess the current
-repo if not specified.}
+\item{repo}{Repository name in format "owner/repo". Defaults to \code{guess_repo()}.}
 
 \item{tag}{which release tag(s) do we want information for? If \code{NULL} (default),
 will return a table for all available release tags.}
