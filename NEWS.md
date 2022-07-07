@@ -4,6 +4,8 @@
 * Fix bug in `pb_download()` for downloading without a `gh::gh_token()` (mostly on Windows?) [#77]
 * Fix bug introduced by above bugfix - missed Authorization in header
 * `guess_repo()` now uses `gh::gh_tree_remote()` rather than gert - this eliminates the gert dependency. [#80]
+* `pb_release_delete()` introduced to delete existing releases. [#81]
+* `pb_new_release()` renamed to `pb_release_create()` to sync with the new delete function. 
 
 # piggyback 0.1.3
 

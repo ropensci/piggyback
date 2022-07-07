@@ -24,8 +24,7 @@ all assets attached to the release will be downloaded.}
 Can be a directory or a list of filenames the same length as \code{file}
 vector. Any directories in the path provided must already exist.}
 
-\item{repo}{Repository name in format "owner/repo". Will guess the current
-repo if not specified.}
+\item{repo}{Repository name in format "owner/repo". Defaults to \code{guess_repo()}.}
 
 \item{tag}{tag for the GitHub release to which this data should be attached.}
 

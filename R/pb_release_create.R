@@ -15,12 +15,14 @@
 #' a draft (unpublished) release.
 #' @param prerelease default `FALSE`. Set to `TRUE` to
 #' identify the release as a pre-release.
-#' @inheritParams pb_upload
+#' @param .token GitHub authentication token, see `[gh::gh_token()]`
+#' @family release_management
+#' @aliases pb_new_release
 #' @export
 #' @examples \dontrun{
-#' pb_new_release("cboettig/piggyback-tests", "v0.0.5")
+#' pb_release_create("cboettig/piggyback-tests", "v0.0.5")
 #' }
-pb_new_release <- function(repo = guess_repo(),
+pb_release_create <- function(repo = guess_repo(),
                            tag,
                            commit = NULL,
                            name = tag,
@@ -75,3 +77,6 @@ pb_new_release <- function(repo = guess_repo(),
   cli::cli_alert_success("Created new release {.val {name}}.")
   invisible(release)
 }
+
+#' @export
+pb_new_release <- pb_release_create
