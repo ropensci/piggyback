@@ -13,13 +13,16 @@ test_that("guess_repo works",{
 
   temp_dir <- tempdir(check = TRUE)
 
-  usethis::create_from_github(
-    repo_spec = "cboettig/piggyback-tests",
-    destdir = temp_dir,
-    fork = FALSE,
-    rstudio = FALSE,
-    open = FALSE,
-    protocol = "https"
+  with_mock(
+    "gh::gh_whoami" = function(...) NULL,
+    usethis::create_from_github(
+      repo_spec = "cboettig/piggyback-tests",
+      destdir = temp_dir,
+      fork = FALSE,
+      rstudio = FALSE,
+      open = FALSE,
+      protocol = "https"
+    )
   )
 
   repo_path <- file.path(temp_dir,"piggyback-tests")
