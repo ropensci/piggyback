@@ -120,8 +120,9 @@ gh_download_asset <- function(owner,
     httr::add_headers(Authorization = paste("token",.token))
   }
 
-  resp <- httr::GET(
-    paste0(
+  resp <- httr::RETRY(
+    verb = "GET",
+    url = paste0(
       "https://",
       "api.github.com/repos/", owner, "/",
       repo, "/", "releases/assets/", id
@@ -135,11 +136,12 @@ gh_download_asset <- function(owner,
   # Try to use the redirection URL instead in case of "bad request"
   # See https://gist.github.com/josh-padnick/fdae42c07e648c798fc27dec2367da21
   if (resp$status_code == 400) {
-    resp <- httr::GET(
-      resp$url,
+    resp <- httr::RETRY(
+      verb = "GET",
+      url = resp$url,
       httr::add_headers(Accept = "application/octet-stream"),
       auth_token,
-      httr::write_disk(destfile, overwrite = T),
+      httr::write_disk(destfile, overwrite = TRUE),
       progress
     )
   }
