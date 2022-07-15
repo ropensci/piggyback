@@ -1,30 +1,27 @@
 context("Download assets without authentication")
 tmp <- tempdir(check = TRUE)
 
-testthat::with_mock(
-  `gh::gh_token` = function(...) return(""),
-  {
-    test_that(
-      "we can download a requested file from the requested release", {
-        skip_if_offline("api.github.com")
+test_that(
+  "we can download a requested file from the requested release", {
+    skip_if_offline("api.github.com")
 
-        pb_download(
-          file = "iris.tsv.gz",
-          repo = "cboettig/piggyback-tests",
-          tag = "v0.0.1",
-          dest = tmp,
-          show_progress = FALSE,
-          overwrite = TRUE
-        )
-
-        expect_true(file.exists(file.path(tmp, "iris.tsv.gz")))
-        pb_iris_2 <- read.delim(file.path(tmp, "iris.tsv.gz"))
-        expect_equivalent(datasets::iris[[2]], pb_iris_2[[2]])
-
-        unlink(file.path(tmp, "iris.tsv.gz"))
-      }
+    pb_download(
+      file = "iris.tsv.gz",
+      repo = "cboettig/piggyback-tests",
+      tag = "v0.0.1",
+      dest = tmp,
+      show_progress = FALSE,
+      overwrite = TRUE,
+      .token = ""
     )
-  })
+
+    expect_true(file.exists(file.path(tmp, "iris.tsv.gz")))
+    pb_iris_2 <- read.delim(file.path(tmp, "iris.tsv.gz"))
+    expect_equivalent(datasets::iris[[2]], pb_iris_2[[2]])
+
+    unlink(file.path(tmp, "iris.tsv.gz"))
+  }
+)
 
 context("Download assets with default auth")
 
@@ -36,7 +33,8 @@ test_that(
       dest = tempdir(),
       tag = "v0.0.1",
       ignore = c("manifest.json", "big_data_file.csv"),
-      show_progress = FALSE
+      show_progress = FALSE,
+      .token = Sys.getenv("GITHUB_TOKEN")
     )
 
     expect_true(file.exists(file.path(tmp, "iris.tsv.gz")))
@@ -57,7 +55,8 @@ test_that(
       tag = "v0.0.1",
       dest = tmp,
       show_progress = FALSE,
-      overwrite = TRUE
+      overwrite = TRUE,
+      .token = Sys.getenv("GITHUB_TOKEN")
     )
 
     expect_true(file.exists(file.path(tmp, "iris.tsv.gz")))
@@ -74,7 +73,7 @@ test_that("we can get all download urls", {
   x <- pb_download_url(
     repo = "cboettig/piggyback-tests",
     tag = "v0.0.1",
-    .token = gh::gh_token()
+    .token = Sys.getenv("GITHUB_TOKEN")
   )
   expect_is(x, "character")
   expect_gt(length(x), 1)
@@ -88,11 +87,9 @@ test_that("we can get one download url", {
     file = "iris.tsv.gz",
     repo = "cboettig/piggyback-tests",
     tag = "v0.0.1",
-    .token = gh::gh_token()
+    .token = Sys.getenv("GITHUB_TOKEN")
   )
   expect_is(x, "character")
   expect_true(length(x) == 1)
   expect_true(grepl(pattern = "^http", x = x[1]))
 })
-
-context("Download assets from private repos (?)")

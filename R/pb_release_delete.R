@@ -43,7 +43,7 @@ pb_release_delete <- function(repo = guess_repo(), tag, .token = gh::gh_token())
         "See returned error body for more details."
       )
     )
-    return(httr::content(resp))
+    return(resp)
   }
 
   try({
@@ -53,5 +53,5 @@ pb_release_delete <- function(repo = guess_repo(), tag, .token = gh::gh_token())
 
   cli::cli_alert_success("Deleted release {.val {tag}} from {.val {repo}}.")
 
-  invisible(httr::content(resp))
+  invisible(resp)
 }

@@ -9,7 +9,7 @@ test_that("compact works",{
 
 test_that("guess_repo works",{
   skip_if_offline("api.github.com")
-  skip_if_not_installed("usethis")
+  skip_if_not_installed("gert")
 
   repo_path <- file.path(tempdir(check = TRUE),"piggyback-tests")
   fs::dir_create(repo_path)

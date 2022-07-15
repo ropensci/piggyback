@@ -5,11 +5,9 @@
 #' - delete files from the release
 #' - delete the release
 
-
 skippy <- function(auth = FALSE){
   skip_if_offline("api.github.com")
-  if(auth) skip_if(Sys.getenv("TAN_GH_TOKEN") == "",
-                   message = "env variable TAN_GH_TOKEN not found")
+  if(auth) skip_if(Sys.getenv("TAN_GH_TOKEN") == "", message = "env variable TAN_GH_TOKEN not found")
   # ideally skip if not able to write to the repo. unsure how to check at the moment.
 }
 
@@ -21,7 +19,9 @@ test_release_tag <- paste("test",
                           paste(sample(c(letters,0:9),5),collapse = ""),
                           sep = "_")
 
-upload_files <- system.file(c("iris_upload.tsv.gz","mtcars_upload.tsv.gz"), package = "piggyback")
+upload_files <- system.file(c("iris_upload.tsv.gz", "mtcars_upload.tsv.gz"),
+                            package = "piggyback",
+                            mustWork = TRUE)
 
 token <- Sys.getenv("TAN_GH_TOKEN")
 
@@ -44,11 +44,11 @@ test_that("We can create a new release",{
 test_that("Error if we try to create an existing release",{
   skippy(TRUE)
 
-
   expect_condition(
     pb_release_create(repo = test_repo, tag = test_release_tag, .token = token),
     "Failed to create"
   )
+
 })
 
 context("File upload")
@@ -212,6 +212,27 @@ test_that("can delete release",{
   "Deleted release"
   )
 
-  rels <- pb_releases(test_repo)
-  expect_true(!test_release_tag %in% rels$tag_name)
+  expect_equivalent(httr::status_code(x), 204)
 })
+
+# context("Private repo download")
+#
+# test_that("can download private repo file",{
+#   skippy(TRUE)
+#
+#   pb_download(
+#     file = "iris_example.csv",
+#     repo = "tanho63/piggyback-private",
+#     tag = "v1.0.0",
+#     dest = tempdir(),
+#     .token = token
+#     )
+#
+#   x <- read.csv(file.path(tempdir(),"iris_example.csv"))
+#
+#   expect_equal(
+#     nrow(x),
+#     150
+#   )
+#
+# })

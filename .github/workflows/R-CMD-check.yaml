@@ -48,7 +48,11 @@ jobs:
         with:
           extra-packages: any::rcmdcheck
           needs: check
+        env:
+          piggyback_cache_duration: 0
 
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
+          check-dir: '"check"'
+
