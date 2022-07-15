@@ -8,15 +8,14 @@
 
 skippy <- function(auth = FALSE){
   skip_if_offline("api.github.com")
-  if(auth) skip_if(Sys.getenv("GITHUB_TOKEN") == "")
-  if(auth) skip_if_not(Sys.getenv("IS_GHA") == "true")
-  # ideally skip if not able to write to the repo. unsure how to check.
-
+  if(auth) skip_if(Sys.getenv("TAN_GH_TOKEN") == "",
+                   message = "env variable TAN_GH_TOKEN not found")
+  # ideally skip if not able to write to the repo. unsure how to check at the moment.
 }
 
-test_repo <- "ropensci/piggyback"
+# test_repo <- "ropensci/piggyback"
 
-# test_repo <- "tanho63/tanho63"
+test_repo <- "tanho63/tanho63"
 
 test_release_tag <- paste("test",
                           format(Sys.Date(),"%Y%m%d"),
@@ -25,13 +24,15 @@ test_release_tag <- paste("test",
 
 upload_files <- system.file(c("iris_upload.tsv.gz","mtcars_upload.tsv.gz"), package = "piggyback")
 
+token <- Sys.getenv("TAN_GH_TOKEN")
+
 context("Release creation")
 
 test_that("We can create a new release",{
   skippy(TRUE)
 
   expect_message({
-    x <- pb_release_create(repo = test_repo, tag = test_release_tag)
+    x <- pb_release_create(repo = test_repo, tag = test_release_tag, .token = token)
   },
   "Created new release"
   )
@@ -46,7 +47,7 @@ test_that("Error if we try to create an existing release",{
 
 
   expect_condition(
-    pb_release_create(repo = test_repo, tag = test_release_tag),
+    pb_release_create(repo = test_repo, tag = test_release_tag, .token = token),
     "Failed to create"
   )
 })
@@ -62,7 +63,8 @@ test_that("We can upload data", {
     file = upload_files,
     tag = test_release_tag,
     overwrite = TRUE,
-    show_progress = FALSE
+    show_progress = FALSE,
+    .token = token
   )
 
   expect_type(out,"list")
@@ -79,7 +81,8 @@ test_that("use_timestamps behaviour of upload overwrite works",{
         file = upload_files,
         repo = test_repo,
         tag = test_release_tag,
-        overwrite = "use_timestamps"
+        overwrite = "use_timestamps",
+        .token = token
       )
     }),
     "more recent version of"
@@ -96,7 +99,8 @@ test_that("not overwriting existing files if overwrite = FALSE",{
         file = upload_files,
         repo = test_repo,
         tag = test_release_tag,
-        overwrite = FALSE)
+        overwrite = FALSE,
+        .token = token)
     }),
     "Skipping upload"
   )
@@ -129,7 +133,8 @@ test_that("cannot upload nonexistent file", {
       file = "mtcars.csv.asdf",
       tag = test_release_tag,
       overwrite = TRUE,
-      show_progress = FALSE
+      show_progress = FALSE,
+      .token = token
     ),
     "File .+ does not exist"
   )
@@ -145,7 +150,8 @@ test_that("cannot upload to nonexistent release", {
       file = upload_files,
       tag = "mytag",
       overwrite = TRUE,
-      show_progress = FALSE
+      show_progress = FALSE,
+      .token = token
     ),
     "Release .* not found"
   )
@@ -163,7 +169,10 @@ test_that("can delete files from release",{
 
   withr::with_options(list(piggyback.verbose = TRUE),{
     expect_message(
-      pb_delete(basename(upload_files)[[1]], test_repo, test_release_tag),
+      pb_delete(file = basename(upload_files)[[1]],
+                repo =  test_repo,
+                tag =  test_release_tag,
+                .token = token),
       "Deleted"
     )
   })
@@ -176,11 +185,17 @@ test_that("warn if file to delete is not found",{
 
   withr::with_options(list(piggyback.verbose = TRUE),{
     expect_warning(
-      pb_delete(basename(upload_files), test_repo, test_release_tag),
+      pb_delete(file = basename(upload_files),
+                repo = test_repo,
+                tag = test_release_tag,
+                .token = token),
       "not found")
 
     expect_warning(
-      pb_delete(basename(upload_files), test_repo, test_release_tag),
+      pb_delete(file = basename(upload_files),
+                repo = test_repo,
+                tag = test_release_tag,
+                .token = token),
       "No file deletions")
   })
 })
@@ -191,7 +206,9 @@ test_that("can delete release",{
   skippy(TRUE)
 
   expect_message({
-    x <- pb_release_delete(test_repo, test_release_tag)
+    x <- pb_release_delete(repo = test_repo,
+                           tag =  test_release_tag,
+                           .token = token)
   },
   "Deleted release"
   )
