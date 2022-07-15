@@ -8,8 +8,7 @@
 
 skippy <- function(auth = FALSE){
   skip_if_offline("api.github.com")
-  if(auth) skip_if(Sys.getenv("TAN_GH_TOKEN") == "",
-                   message = "env variable TAN_GH_TOKEN not found")
+  if(auth) skip_if(Sys.getenv("TAN_GH_TOKEN") == "", message = "env variable TAN_GH_TOKEN not found")
   # ideally skip if not able to write to the repo. unsure how to check at the moment.
 }
 
@@ -214,4 +213,23 @@ test_that("can delete release",{
 
   rels <- pb_releases(test_repo)
   expect_true(!test_release_tag %in% rels$tag_name)
+})
+
+context("Private repo download")
+
+test_that("can download private repo file",{
+  skippy(TRUE)
+  pb_download(
+    file = "text.txt",
+    repo = "tanho63/piggyback-private",
+    tag = "v1.0.0",
+    dest = tempdir(check = TRUE),
+    .token = token
+    )
+
+  expect_equal(
+    readLines(file.path(tempdir(),"text.txt")),
+    "20220715"
+  )
+
 })

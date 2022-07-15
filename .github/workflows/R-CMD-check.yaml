@@ -48,7 +48,11 @@ jobs:
         with:
           extra-packages: any::rcmdcheck
           needs: check
+        env:
+          TAN_GH_TOKEN: ${{ secrets.TAN_GH_TOKEN }}
 
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
+          check-dir: '"check"'
+
