@@ -23,7 +23,8 @@ pb_release_delete <- function(repo = guess_repo(), tag, .token = gh::gh_token())
   release_id <- releases$release_id[releases$tag_name == tag]
   r <- parse_repo(repo)
 
-  resp <- httr::DELETE(
+  resp <- httr::RETRY(
+    verb = "DELETE",
     glue::glue(
       "https://api.github.com/repos/{owner}/{repo}/releases/{release_id}",
       owner = r[1],
