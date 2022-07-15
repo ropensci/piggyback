@@ -14,8 +14,7 @@ skippy <- function(auth = FALSE){
 }
 
 # test_repo <- "ropensci/piggyback"
-
-test_repo <- "tanho63/tanho63"
+test_repo <- "tanho63/piggyback"
 
 test_release_tag <- paste("test",
                           format(Sys.Date(),"%Y%m%d"),
