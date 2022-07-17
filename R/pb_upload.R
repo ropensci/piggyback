@@ -111,14 +111,14 @@ pb_upload_file <- function(file,
   ## Code has been partially refactored now so that user just
   ## sets `overwrite` and we handle the twisted logic internally here:
   use_timestamps <- switch (as.character(overwrite),
-    "TRUE" = FALSE,
-    "FALSE" = FALSE,
-    "use_timestamps" = TRUE
+                            "TRUE" = FALSE,
+                            "FALSE" = FALSE,
+                            "use_timestamps" = TRUE
   )
   overwrite <- switch (as.character(overwrite),
-    "TRUE" = TRUE,
-    "FALSE" = FALSE,
-    "use_timestamps" = TRUE
+                       "TRUE" = TRUE,
+                       "FALSE" = FALSE,
+                       "use_timestamps" = TRUE
   )
 
   progress <- httr::progress("up")
@@ -165,11 +165,15 @@ pb_upload_file <- function(file,
   releases <- pb_releases(repo = repo)
   upload_url <- releases$upload_url[releases$tag_name == tag]
 
-  r <- httr::POST(sub("\\{.+$", "", upload_url),
-                  query = list(name = name),
-                  httr::add_headers(Authorization = paste("token", .token)),
-                  body = httr::upload_file(file_path),
-                  progress)
+  r <- httr::RETRY(
+    verb = "POST",
+    url = sub("\\{.+$", "", upload_url),
+    query = list(name = name),
+    httr::add_headers(Authorization = paste("token", .token)),
+    body = httr::upload_file(file_path),
+    progress,
+    terminate_on = c(400, 401, 403, 404, 422)
+  )
 
   cat("\n")
 

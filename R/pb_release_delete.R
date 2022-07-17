@@ -31,7 +31,8 @@ pb_release_delete <- function(repo = guess_repo(), tag, .token = gh::gh_token())
       repo = r[2],
       release_id = release_id
     ),
-    httr::add_headers(Authorization = paste("token",.token))
+    httr::add_headers(Authorization = paste("token",.token)),
+    terminate_on = c(400, 401, 403, 404, 422)
   )
 
   if(httr::http_error(resp)){
@@ -52,7 +53,8 @@ pb_release_delete <- function(repo = guess_repo(), tag, .token = gh::gh_token())
       repo = r[2],
       tag = tag
     ),
-    httr::add_headers(Authorization = paste("token",.token))
+    httr::add_headers(Authorization = paste("token",.token)),
+    terminate_on = c(400, 401, 403, 404, 422)
   )
 
   if(httr::http_error(resp2)){
