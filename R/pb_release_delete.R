@@ -17,7 +17,7 @@ pb_release_delete <- function(repo = guess_repo(), tag, .token = gh::gh_token())
     length(repo)   == 1 && is.character(repo),
     length(tag)    == 1 && is.character(tag),
     tag %in% releases$tag_name,
-    length(.token) == 1 && is.character(.token)
+    length(.token) == 1 && is.character(.token) && nchar(.token) > 0
   )
 
   release_id <- releases$release_id[releases$tag_name == tag]
@@ -31,9 +31,7 @@ pb_release_delete <- function(repo = guess_repo(), tag, .token = gh::gh_token())
       repo = r[2],
       release_id = release_id
     ),
-    httr::add_headers(
-      Authorization = paste("token",.token)
-    )
+    httr::add_headers(Authorization = paste("token",.token))
   )
 
   if(httr::http_error(resp)){
@@ -45,6 +43,27 @@ pb_release_delete <- function(repo = guess_repo(), tag, .token = gh::gh_token())
       )
     )
     return(resp)
+  }
+  resp2 <- httr::RETRY(
+    verb = "DELETE",
+    glue::glue(
+      "https://api.github.com/repos/{owner}/{repo}/git/refs/tags/{tag}",
+      owner = r[1],
+      repo = r[2],
+      tag = tag
+    ),
+    httr::add_headers(Authorization = paste("token",.token))
+  )
+
+  if(httr::http_error(resp2)){
+    cli::cli_abort(
+      c(
+        "!" = "HTTP error {.val {httr::status_code(resp2)}}:
+        Could not delete git reference named {.val {tag}} in {.val {repo}}",
+        "See returned error body for more details."
+      )
+    )
+    return(resp2)
   }
 
   try({
