@@ -19,8 +19,7 @@ pb_upload(
 \arguments{
 \item{file}{path to file to be uploaded}
 
-\item{repo}{Repository name in format "owner/repo". Will guess the current
-repo if not specified.}
+\item{repo}{Repository name in format "owner/repo". Defaults to \code{guess_repo()}.}
 
 \item{tag}{tag for the GitHub release to which this data should be attached.}
 

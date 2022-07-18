@@ -4,6 +4,12 @@
 * Fix bug in `pb_download()` for downloading without a `gh::gh_token()` (mostly on Windows?) [#77]
 * Fix bug introduced by above bugfix - missed Authorization in header
 * `guess_repo()` now uses `gh::gh_tree_remote()` rather than gert - this eliminates the gert dependency. [#80]
+* `pb_release_delete()` introduced to delete existing releases. [#81]
+* `pb_new_release()` renamed to `pb_release_create()` to sync with the new delete function. 
+* Fix offer to create new release in `pb_upload()` - also switch to using `rlang::is_interactive()` to maybe one day test this.
+* Tests rewritten to primarily use GHA and write to/from the ropensci/piggyback repo.
+* Added `httr::RETRY()` behaviour to `pb_download()`.
+
 
 # piggyback 0.1.3
 

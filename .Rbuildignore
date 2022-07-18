@@ -22,8 +22,6 @@
 ^codemeta\.json$
 ^docs$
 ^dev$
-^.*\.gz$
-mtcars.tsv.gz$
 ^\.github$
 ^pkgdown$
 

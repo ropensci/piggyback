@@ -3,24 +3,6 @@
 #' @noRd
 compact <- function (l) Filter(Negate(is.null), l)
 
-#' trycatch/try wrapper
-#' @keywords internal
-#' @noRd
-maybe <- function(expr, otherwise, quiet = TRUE) {
-  if (missing(otherwise)) {
-    try(expr, silent = quiet)
-  } else {
-    tryCatch(expr,
-             error = function(e) {
-               if (!quiet) {
-                 message("Error: ", e$message)
-               }
-               otherwise
-             }
-    )
-  }
-}
-
 #' Parses repository spec and errors if it fails
 #' @keywords internal
 #' @noRd
