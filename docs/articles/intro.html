@@ -26,7 +26,7 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -52,7 +52,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -72,7 +72,7 @@
 <li>
   <a href="https://github.com/ropensci/piggyback/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -83,27 +83,27 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Piggyback Data atop your GitHub Repository!</h1>
                         <h4 data-toc-skip class="author">Carl Boettiger</h4>
-            
+
             <h4 data-toc-skip class="date">2022-02-09</h4>
-      
+
       <small class="dont-index">Source: <a href="https://github.com/ropensci/piggyback/blob/HEAD/vignettes/intro.Rmd" class="external-link"><code>vignettes/intro.Rmd</code></a></small>
       <div class="hidden name"><code>intro.Rmd</code></div>
 
     </div>
 
-    
-    
+
+
 <div class="section level1">
 <h1 id="why-piggyback">Why <code>piggyback</code>?<a class="anchor" aria-label="anchor" href="#why-piggyback"></a>
 </h1>
-<p><code>piggyback</code> grew out of the needs of students both in my classroom and in my research group, who frequently need to work with data files somewhat larger than one can conveniently manage by committing directly to GitHub. As we frequently want to share and run code that depends on &gt;50MB data files on each of our own machines, on continuous integration (i.e. <a href="https://travis-ci.org" class="external-link">travis</a>), and on larger computational servers, data sharing quickly becomes a bottleneck.</p>
+<p><code>piggyback</code> grew out of the needs of students both in my classroom and in my research group, who frequently need to work with data files somewhat larger than one can conveniently manage by committing directly to GitHub. As we frequently want to share and run code that depends on &gt;50MB data files on each of our own machines, on continuous integration, and on larger computational servers, data sharing quickly becomes a bottleneck.</p>
 <p><a href="https://docs.github.com/en/github/managing-large-files/distributing-large-binaries" class="external-link">GitHub allows</a> repositories to attach files of up to 2 GB each to releases as a way to distribute large files associated with the project source code. There is no limit on the number of files or bandwidth to deliver them.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -133,7 +133,7 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/piggyback" class="external-link">piggyback</a></span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pb_download.html">pb_download</a></span><span class="op">(</span><span class="st">"iris2.tsv.gz"</span>, 
+<code class="sourceCode R"><span class="fu"><a href="../reference/pb_download.html">pb_download</a></span><span class="op">(</span><span class="st">"iris2.tsv.gz"</span>,
             repo <span class="op">=</span> <span class="st">"cboettig/piggyback-tests"</span>,
             tag <span class="op">=</span> <span class="st">"v0.0.1"</span>,
             dest <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -147,8 +147,8 @@
 <p><code><a href="../reference/pb_download.html">pb_download()</a></code> will skip the download of any file that already exists locally if the timestamp on the local copy is more recent than the timestamp on the GitHub copy. <code><a href="../reference/pb_download.html">pb_download()</a></code> also includes arguments to control the timestamp behavior, progress bar, whether existing files should be overwritten, or if any particular files should not be downloaded. See function documentation for details.</p>
 <p>Sometimes it is preferable to have a URL from which the data can be read in directly, rather than downloading the data to a local file. For example, such a URL can be embedded directly into another R script, avoiding any dependence on <code>piggyback</code> (provided the repository is already public.) To get a list of URLs rather than actually downloading the files, use <code><a href="../reference/pb_download_url.html">pb_download_url()</a></code>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pb_download_url.html">pb_download_url</a></span><span class="op">(</span><span class="st">"data/mtcars.tsv.gz"</span>, 
-                repo <span class="op">=</span> <span class="st">"cboettig/piggyback-tests"</span>,  
+<code class="sourceCode R"><span class="fu"><a href="../reference/pb_download_url.html">pb_download_url</a></span><span class="op">(</span><span class="st">"data/mtcars.tsv.gz"</span>,
+                repo <span class="op">=</span> <span class="st">"cboettig/piggyback-tests"</span>,
                 tag <span class="op">=</span> <span class="st">"v0.0.1"</span><span class="op">)</span> </code></pre></div>
 </div>
 <div class="section level2">
@@ -163,8 +163,8 @@
 <span class="co">## Pro tip: compress your tabular data to save space &amp; speed upload/downloads</span>
 <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_tsv</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"mtcars.tsv.gz"</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/pb_upload.html">pb_upload</a></span><span class="op">(</span><span class="st">"mtcars.tsv.gz"</span>, 
-          repo <span class="op">=</span> <span class="st">"cboettig/piggyback-tests"</span>, 
+<span class="fu"><a href="../reference/pb_upload.html">pb_upload</a></span><span class="op">(</span><span class="st">"mtcars.tsv.gz"</span>,
+          repo <span class="op">=</span> <span class="st">"cboettig/piggyback-tests"</span>,
           tag <span class="op">=</span> <span class="st">"v0.0.1"</span><span class="op">)</span></code></pre></div>
 <p>Like <code><a href="../reference/pb_download.html">pb_download()</a></code>, <code><a href="../reference/pb_upload.html">pb_upload()</a></code> will overwrite any file of the same name already attached to the release file by default, unless the timestamp the previously uploaded version is more recent. You can toggle these settings with <code>overwrite=FALSE</code> and <code>use_timestamps=FALSE</code>.</p>
 </div>
@@ -173,12 +173,12 @@
 </h2>
 <p>List all files currently piggybacking on a given release. Omit the <code>tag</code> to see files on all releases.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pb_list.html">pb_list</a></span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"cboettig/piggyback-tests"</span>, 
+<code class="sourceCode R"><span class="fu"><a href="../reference/pb_list.html">pb_list</a></span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"cboettig/piggyback-tests"</span>,
         tag <span class="op">=</span> <span class="st">"v0.0.1"</span><span class="op">)</span></code></pre></div>
 <p>Delete a file from a release:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pb_delete.html">pb_delete</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"mtcars.tsv.gz"</span>, 
-          repo <span class="op">=</span> <span class="st">"cboettig/piggyback-tests"</span>, 
+<code class="sourceCode R"><span class="fu"><a href="../reference/pb_delete.html">pb_delete</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"mtcars.tsv.gz"</span>,
+          repo <span class="op">=</span> <span class="st">"cboettig/piggyback-tests"</span>,
           tag <span class="op">=</span> <span class="st">"v0.0.1"</span><span class="op">)</span></code></pre></div>
 <p>Note that this is irreversible unless you have a copy of the data elsewhere.</p>
 </div>
@@ -190,11 +190,11 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span>
 
 <span class="co">## upload a folder of data</span>
-<span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="st">"data"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+<span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="st">"data"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/pb_upload.html">pb_upload</a></span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"cboettig/piggyback-tests"</span>, tag <span class="op">=</span> <span class="st">"v0.0.1"</span><span class="op">)</span>
 
 <span class="co">## upload certain file extensions</span>
-<span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"*.tsv.gz"</span>, <span class="st">"*.tif"</span>, <span class="st">"*.zip"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+<span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"*.tsv.gz"</span>, <span class="st">"*.tif"</span>, <span class="st">"*.zip"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/pb_upload.html">pb_upload</a></span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"cboettig/piggyback-tests"</span>, tag <span class="op">=</span> <span class="st">"v0.0.1"</span><span class="op">)</span></code></pre></div>
 <p>Similarly, you can download all current data assets of the latest or specified release by using <code><a href="../reference/pb_download.html">pb_download()</a></code> with no arguments.</p>
 </div>
@@ -247,10 +247,10 @@
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>
