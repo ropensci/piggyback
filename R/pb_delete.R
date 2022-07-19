@@ -52,6 +52,8 @@ pb_delete <- function(file = NULL,
     )
   })
 
+  try({memoise::forget(pb_info)})
+
   if(getOption("piggyback.verbose", default = TRUE)) cli::cli_alert_info("Deleted {.val {file}} from {.val {tag}} release on {.val {repo}}")
 
   return(invisible(TRUE))

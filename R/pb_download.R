@@ -32,7 +32,7 @@ pb_download <- function(file = NULL,
                         overwrite = TRUE,
                         ignore = "manifest.json",
                         use_timestamps = TRUE,
-                        show_progress = getOption("piggyback.verbose", default = TRUE),
+                        show_progress = getOption("piggyback.verbose", default = interactive()),
                         .token = gh::gh_token()) {
 
   progress <- httr::progress("down")
@@ -116,14 +116,19 @@ gh_download_asset <- function(owner,
     )
   }
 
-  resp <- httr::GET(
-    paste0(
+  auth_token <- if(!is.null(.token) && .token != "") {
+    httr::add_headers(Authorization = paste("token",.token))
+  }
+
+  resp <- httr::RETRY(
+    verb = "GET",
+    url = paste0(
       "https://",
       "api.github.com/repos/", owner, "/",
       repo, "/", "releases/assets/", id
     ),
     httr::add_headers(Accept = "application/octet-stream"),
-    httr::add_headers(Authorization = paste("token",.token)),
+    auth_token,
     httr::write_disk(destfile, overwrite = overwrite),
     progress
   )
@@ -131,10 +136,12 @@ gh_download_asset <- function(owner,
   # Try to use the redirection URL instead in case of "bad request"
   # See https://gist.github.com/josh-padnick/fdae42c07e648c798fc27dec2367da21
   if (resp$status_code == 400) {
-    resp <- httr::GET(
-      resp$url,
+    resp <- httr::RETRY(
+      verb = "GET",
+      url = resp$url,
       httr::add_headers(Accept = "application/octet-stream"),
-      httr::write_disk(destfile, overwrite = T),
+      auth_token,
+      httr::write_disk(destfile, overwrite = TRUE),
       progress
     )
   }

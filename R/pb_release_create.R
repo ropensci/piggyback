@@ -15,12 +15,14 @@
 #' a draft (unpublished) release.
 #' @param prerelease default `FALSE`. Set to `TRUE` to
 #' identify the release as a pre-release.
-#' @inheritParams pb_upload
+#' @param .token GitHub authentication token, see `[gh::gh_token()]`
+#' @family release_management
+#' @aliases pb_new_release
 #' @export
 #' @examples \dontrun{
-#' pb_new_release("cboettig/piggyback-tests", "v0.0.5")
+#' pb_release_create("cboettig/piggyback-tests", "v0.0.5")
 #' }
-pb_new_release <- function(repo = guess_repo(),
+pb_release_create <- function(repo = guess_repo(),
                            tag,
                            commit = NULL,
                            name = tag,
@@ -33,7 +35,7 @@ pb_new_release <- function(repo = guess_repo(),
 
   # if no releases exist, pb_releases returns a dataframe of releases
   if(nrow(releases) > 0 && tag %in% releases$tag_name){
-    cli::cli_abort("Release tag {.val {tag}} already exists!")
+    cli::cli_abort("Failed to create release: {.val {tag}} already exists!")
   }
 
   r <- parse_repo(repo)
@@ -51,10 +53,12 @@ pb_new_release <- function(repo = guess_repo(),
   # gh("/repos/:owner/:repo/releases", owner = r[[1]], repo = r[[2]],
   #  .method = "POST", body = toJSON(payload,auto_unbox = TRUE), encode="json")
 
-  resp <- httr::POST(
-    glue::glue("https://api.github.com/repos/{r[[1]]}/{r[[2]]}/releases"),
+  resp <- httr::RETRY(
+    verb = "POST",
+    url = glue::glue("https://api.github.com/repos/{r[[1]]}/{r[[2]]}/releases"),
     httr::add_headers(Authorization = paste("token",.token)),
-    body = jsonlite::toJSON(payload, auto_unbox = TRUE)
+    body = jsonlite::toJSON(payload, auto_unbox = TRUE),
+    terminate_on = c(400, 401, 403, 404, 422)
   )
 
   if(httr::http_error(resp)) {
@@ -75,3 +79,6 @@ pb_new_release <- function(repo = guess_repo(),
   cli::cli_alert_success("Created new release {.val {name}}.")
   invisible(release)
 }
+
+#' @export
+pb_new_release <- pb_release_create

@@ -1,67 +1,64 @@
-context("Error Handling")
+# context("Error Handling")
+#
+# Sys.setenv(piggyback_cache_duration="1e-6")
+# tmp <- tempdir()
 
-Sys.setenv(piggyback_cache_duration="1e-6")
-tmp <- tempdir()
+# test_that(
+#   "Attempt upload without authentication", {
+#
+#     readr::write_tsv(datasets::iris, "iris3.tsv.gz")
+#     expect_error(
+#       out <- pb_upload(
+#         repo = "cboettig/piggyback-tests",
+#         file = "iris3.tsv.gz",
+#         tag = "v0.0.1",
+#         overwrite = TRUE,
+#         .token = "not_valid_token",
+#         show_progress = FALSE
+#       ),
+#       ".token"
+#     )
+#     unlink("iris.tsv.gz")
+#   }
+# )
 
-test_that(
-  "Attempt upload without authentication", {
-
-
-    readr::write_tsv(datasets::iris, "iris3.tsv.gz")
-    expect_error(
-      out <- pb_upload(
-        repo = "cboettig/piggyback-tests",
-        file = "iris3.tsv.gz",
-        tag = "v0.0.1",
-        overwrite = TRUE,
-        .token = "not_valid_token",
-        show_progress = FALSE
-      ),
-      ".token"
-    )
-    unlink("iris.tsv.gz")
-  }
-)
-
-test_that(
-  "Attempt overwrite on upload when overwrite is FALSE", {
-    skip_on_cran()
-
-    data <- readr::write_tsv(datasets::iris, "iris.tsv.gz")
-    expect_warning(
-      out <- pb_upload(
-        repo = "cboettig/piggyback-tests",
-        file = "iris.tsv.gz",
-        tag = "v0.0.1",
-        overwrite = FALSE,
-        show_progress = FALSE
-      ),
-      "Skipping upload .+ as file exists"
-    )
-    unlink("iris.tsv.gz")
-  }
-)
-
-
-
-test_that(
-  "Attempt upload non-existent file", {
-    skip_on_cran()
-
-    expect_warning(
-      out <- pb_upload(
-        repo = "cboettig/piggyback-tests",
-        file = "not-a-file",
-        tag = "v0.0.1",
-        use_timestamps = FALSE,
-        show_progress = FALSE
-      ),
-      "file .+ does not exist"
-    )
-
-  }
-)
-
+# test_that(
+#   "Attempt overwrite on upload when overwrite is FALSE", {
+#     skip_on_cran()
+#
+#     data <- readr::write_tsv(datasets::iris, "iris.tsv.gz")
+#     expect_warning(
+#       out <- pb_upload(
+#         repo = "cboettig/piggyback-tests",
+#         file = "iris.tsv.gz",
+#         tag = "v0.0.1",
+#         overwrite = FALSE,
+#         show_progress = FALSE
+#       ),
+#       "Skipping upload .+ as file exists"
+#     )
+#     unlink("iris.tsv.gz")
+#   }
+# )
+#
+# test_that(
+#   "Attempt upload non-existent file", {
+#     skip_on_cran()
+#
+#     expect_warning(
+#       out <- pb_upload(
+#         repo = "cboettig/piggyback-tests",
+#         file = "not-a-file",
+#         tag = "v0.0.1",
+#         use_timestamps = FALSE,
+#         show_progress = FALSE
+#       ),
+#       "file .+ does not exist"
+#     )
+#
+#   }
+# )
+#
 
 test_that(
   "Attempt download non-existent file", {
@@ -101,7 +98,6 @@ test_that(
       ),
       "Release .* not found"
     )
-
 
     unlink(path)
   }

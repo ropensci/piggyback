@@ -1,0 +1,18 @@
+reference:
+- title: Upload/Download Files
+  desc: Functions for working with files
+  contents:
+  - "pb_list"
+  - "pb_download"
+  - "pb_download_url"
+  - "pb_upload"
+  - "pb_delete"
+- title: Create/Delete Releases
+  desc: Functions for working with releases
+  contents:
+  - "pb_releases"
+  - "pb_release_create"
+  - "pb_release_delete"
+- title: Misc
+  contents:
+  - "piggyback-package"

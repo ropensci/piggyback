@@ -2,8 +2,7 @@
 #'
 #' NOTE: you must first create a release if one does not already exists.
 #' @param file path to file to be uploaded
-#' @param repo Repository name in format "owner/repo". Will guess the current
-#' repo if not specified.
+#' @param repo Repository name in format "owner/repo". Defaults to `guess_repo()`.
 #' @param tag  tag for the GitHub release to which this data should be attached.
 #' @param name name for uploaded file. If not provided will use the basename of
 #' `file` (i.e. filename without directory)
@@ -12,7 +11,7 @@
 #'  only overwriting those files which are older.
 #' @param use_timestamps DEPRECATED.
 #' @param show_progress logical, show a progress bar be shown for uploading?
-#' Defaults to `TRUE` - can also set globally with options("piggyback.verbose")
+#' Defaults to `[interactive()]` - can also set globally with options("piggyback.verbose")
 #' @param .token GitHub authentication token, see `[gh::gh_token()]`
 #' @param dir directory relative to which file names should be based, defaults to NULL for current working directory.
 #' @examples
@@ -30,7 +29,7 @@ pb_upload <- function(file,
                       name = NULL,
                       overwrite = "use_timestamps",
                       use_timestamps = NULL,
-                      show_progress = getOption("piggyback.verbose", default = TRUE),
+                      show_progress = getOption("piggyback.verbose", default = interactive()),
                       .token = gh::gh_token(),
                       dir = NULL) {
 
@@ -55,8 +54,8 @@ pb_upload <- function(file,
       title = glue::glue("Would you like to create a new release now?")
     )
 
-    if(run == "No") return(invisible(NULL))
-    if(run == "Yes") pb_new_release(repo = repo, tag = tag, .token = .token)
+    if(run == 2) return(invisible(NULL))
+    if(run == 1) pb_new_release(repo = repo, tag = tag, .token = .token)
   }
 
   ## start fresh
@@ -86,11 +85,12 @@ pb_upload_file <- function(file,
                            name = NULL,
                            overwrite = "use_timestamps",
                            use_timestamps = NULL,
-                           show_progress = getOption("piggyback.verbose", default = TRUE),
+                           show_progress = getOption("piggyback.verbose", default = interactive()),
                            .token = gh::gh_token(),
                            dir = NULL) {
 
   file_path <- do.call(file.path, compact(list(dir,file)))
+
   ## Uses NULL as default dir, drops it with compact, then
   ## does the file.path call with what's left
   ##
@@ -99,7 +99,7 @@ pb_upload_file <- function(file,
   ## return "./C:/Users/Tan" which is not desired.
 
   if (!file.exists(file_path)) {
-    cli::cli_warn("file {.file {file_path}} does not exist.")
+    cli::cli_warn("File {.file {file_path}} does not exist.")
     return(NULL)
   }
 
@@ -111,14 +111,14 @@ pb_upload_file <- function(file,
   ## Code has been partially refactored now so that user just
   ## sets `overwrite` and we handle the twisted logic internally here:
   use_timestamps <- switch (as.character(overwrite),
-    "TRUE" = FALSE,
-    "FALSE" = FALSE,
-    "use_timestamps" = TRUE
+                            "TRUE" = FALSE,
+                            "FALSE" = FALSE,
+                            "use_timestamps" = TRUE
   )
   overwrite <- switch (as.character(overwrite),
-    "TRUE" = TRUE,
-    "FALSE" = FALSE,
-    "use_timestamps" = TRUE
+                       "TRUE" = TRUE,
+                       "FALSE" = FALSE,
+                       "use_timestamps" = TRUE
   )
 
   progress <- httr::progress("up")
@@ -162,11 +162,18 @@ pb_upload_file <- function(file,
 
   if (show_progress) cli::cli_alert_info("Uploading {.file {name}} ...")
 
-  r <- httr::POST(sub("\\{.+$", "", df$upload_url[[1]]),
-                  query = list(name = name),
-                  httr::add_headers(Authorization = paste("token", .token)),
-                  body = httr::upload_file(file_path),
-                  progress)
+  releases <- pb_releases(repo = repo)
+  upload_url <- releases$upload_url[releases$tag_name == tag]
+
+  r <- httr::RETRY(
+    verb = "POST",
+    url = sub("\\{.+$", "", upload_url),
+    query = list(name = name),
+    httr::add_headers(Authorization = paste("token", .token)),
+    body = httr::upload_file(file_path),
+    progress,
+    terminate_on = c(400, 401, 403, 404, 422)
+  )
 
   cat("\n")
 

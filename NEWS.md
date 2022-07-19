@@ -1,3 +1,21 @@
+# piggyback (development version)
+
+* The progress bar argument `show_progress` in `pb_upload()` and `pb_download()` now defaults to `interactive()` [#72]
+* Fix bug in `pb_download()` for downloading without a `gh::gh_token()` (mostly on Windows?) [#77]
+* Fix bug introduced by above bugfix - missed Authorization in header
+* `guess_repo()` now uses `gh::gh_tree_remote()` rather than gert - this eliminates the gert dependency. [#80]
+* `pb_release_delete()` introduced to delete existing releases. [#81]
+* `pb_new_release()` renamed to `pb_release_create()` to sync with the new delete function. 
+* Fix offer to create new release in `pb_upload()` - also switch to using `rlang::is_interactive()` to maybe one day test this.
+* Tests rewritten to primarily use GHA and write to/from the ropensci/piggyback repo.
+* Added `httr::RETRY()` behaviour to `pb_download()`.
+
+
+# piggyback 0.1.3
+
+* fix bug in `pb_upload()` for uploading to a release with no assets [#67]
+* avoid implicit dependency on `tibble` [#70]
+
 # piggyback 0.1.2
 
 * update intro vignette to remove all mentions of `pb_track()`, `pb_push()`, and `pb_pull()` which were removed as of version 0.0.0.9900

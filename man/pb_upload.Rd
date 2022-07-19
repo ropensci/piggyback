@@ -11,7 +11,7 @@ pb_upload(
   name = NULL,
   overwrite = "use_timestamps",
   use_timestamps = NULL,
-  show_progress = getOption("piggyback.verbose", default = TRUE),
+  show_progress = getOption("piggyback.verbose", default = interactive()),
   .token = gh::gh_token(),
   dir = NULL
 )
@@ -19,8 +19,7 @@ pb_upload(
 \arguments{
 \item{file}{path to file to be uploaded}
 
-\item{repo}{Repository name in format "owner/repo". Will guess the current
-repo if not specified.}
+\item{repo}{Repository name in format "owner/repo". Defaults to \code{guess_repo()}.}
 
 \item{tag}{tag for the GitHub release to which this data should be attached.}
 
@@ -34,7 +33,7 @@ only overwriting those files which are older.}
 \item{use_timestamps}{DEPRECATED.}
 
 \item{show_progress}{logical, show a progress bar be shown for uploading?
-Defaults to \code{TRUE} - can also set globally with options("piggyback.verbose")}
+Defaults to \verb{[interactive()]} - can also set globally with options("piggyback.verbose")}
 
 \item{.token}{GitHub authentication token, see \verb{[gh::gh_token()]}}
 
