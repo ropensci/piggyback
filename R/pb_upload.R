@@ -42,11 +42,18 @@ pb_upload <- function(file,
 
   releases <- pb_releases(repo, .token)
 
-  if(tag != "latest" && !tag %in% releases$tag_name && !interactive()) {
+  if(tag == "latest" && length(releases$tag_name) > 0 && !"latest" %in% releases$tag_name) {
+    if(getOption("piggyback.verbose", default = interactive())){
+      cli::cli_alert_info("Uploading to latest release: {.val {releases$tag_name[[1]]}}.")
+    }
+    tag <- releases$tag_name[[1]]
+  }
+
+  if(!tag %in% releases$tag_name && !interactive()) {
     cli::cli_abort("Release {.val {tag}} not found in {.val {repo}}. No upload performed.")
   }
 
-  if(tag != "latest" && !tag %in% releases$tag_name) {
+  if(!tag %in% releases$tag_name) {
     cli::cli_alert_warning("Release {.val {tag}} not found in {.val {repo}}.")
 
     run <- utils::menu(
