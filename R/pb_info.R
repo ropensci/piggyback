@@ -138,7 +138,7 @@ pb_info <- function(repo = guess_repo(),
   }
 
   # if tag is latest, set tag to first tag present in releases
-  if(!is.null(tag) && length(tag) == 1 && tag == "latest") tag <- releases$tag_name[[1]]
+  if(length(tag)==1 && tag == "latest" && !"latest" %in% releases$tag_name) tag <- releases$tag_name[[1]]
 
   # if tag is present, filter the releases to search to just the tags requested
   if(!is.null(tag)) releases <- releases[releases$tag_name %in% tag,]
