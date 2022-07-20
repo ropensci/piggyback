@@ -1,3 +1,9 @@
+# piggyback (development version)
+
+* Fix bug in `pb_upload()` to correctly resolve `"latest"` tag - if there is no release tag actually named "latest" it will use the first release from `pb_releases()`.  [#75] 
+* Make `pb_download()` and `pb_info()` also resolve `"latest"` similarly: if there is no release tag named "latest", use first release from `pb_releases()`
+
+
 # piggyback 0.1.4
 
 * The progress bar argument `show_progress` in `pb_upload()` and `pb_download()` now defaults to `interactive()` [#72]

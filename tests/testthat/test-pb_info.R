@@ -32,6 +32,22 @@ test_that(
 )
 
 test_that(
+  "using 'latest' will find files of the most recent release",{
+
+    skip_if_offline("api.github.com")
+
+    x <- pb_list(
+      repo = "cboettig/piggyback-tests",
+      tag = "latest",
+      .token = Sys.getenv("GITHUB_TOKEN")
+    )
+
+    expect_equivalent(unique(x$tag), "v3")
+    expect_equivalent(nrow(x), 2)
+  }
+)
+
+test_that(
   "we can list releases with default auth", {
     skip_if_offline("api.github.com")
 
@@ -44,3 +60,4 @@ test_that(
     expect_true("v0.0.1" %in% x$tag_name)
   }
 )
+
