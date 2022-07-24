@@ -93,3 +93,37 @@ test_that("we can get one download url", {
   expect_true(length(x) == 1)
   expect_true(grepl(pattern = "^http", x = x[1]))
 })
+
+test_that("Missing files are reported in download and download_url", {
+  skip_if_offline("api.github.com")
+
+  expect_warning({
+
+    expect_error({
+      x <- pb_download_url(
+        file = "iris.csv.gz",
+        repo = "cboettig/piggyback-tests",
+        tag = "v0.0.1",
+        .token = Sys.getenv("GITHUB_TOKEN")
+      )
+    },
+    "No download URLs"
+    )
+  },
+  "not found"
+  )
+
+  expect_warning({
+
+      x <- pb_download(
+        file = "iris.csv.gz",
+        repo = "cboettig/piggyback-tests",
+        dest = tmp,
+        tag = "v0.0.1",
+        .token = Sys.getenv("GITHUB_TOKEN")
+      )
+    },
+    "not found"
+    )
+
+})
