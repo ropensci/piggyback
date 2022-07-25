@@ -2,6 +2,8 @@
 
 * Fix bug in `pb_upload()` to correctly resolve `"latest"` tag - if there is no release tag actually named "latest" it will use the first release from `pb_releases()`.  [#75] 
 * Make `pb_download()` and `pb_info()` also resolve `"latest"` similarly: if there is no release tag named "latest", use first release from `pb_releases()`
+* Updated test coverage to use GHA
+* Fixed error handling for `pb_list()` for no release. 
 
 
 # piggyback 0.1.4

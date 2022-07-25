@@ -61,3 +61,24 @@ test_that(
   }
 )
 
+test_that(
+  "repos with no releases are handled correctly", {
+    skip_if_offline("api.github.com")
+
+    expect_warning(
+    x <- pb_releases(
+      repo = "tanho63/tanho63",
+      .token = Sys.getenv("GITHUB_TOKEN")
+    ),
+    "No GitHub releases"
+    )
+
+    expect_equivalent(nrow(x), 0)
+
+    x <- pb_list(
+      repo = "tanho63/tanho63",
+      .token = Sys.getenv("GITHUB_TOKEN")
+    )
+  }
+)
+
