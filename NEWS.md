@@ -4,6 +4,7 @@
 * Make `pb_download()` and `pb_info()` also resolve `"latest"` similarly: if there is no release tag named "latest", use first release from `pb_releases()`
 * Updated test coverage to use GHA
 * Fixed error handling for `pb_list()` for no release. 
+* `pb_list()` now respects the option `"piggyback.verbose"`
 * Fix download token handling [#88]
 
 

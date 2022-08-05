@@ -81,7 +81,8 @@ get_release_assets <- function(releases, r, .token) {
                 repo = r[[2]],
                 release_id = releases$release_id[[i]],
                 .limit = Inf,
-                .token = .token)
+                .token = .token,
+                .progress = getOption("piggyback.verbose", default = interactive()))
     if(length(a) == 0) next
     if (!identical(a[[1]], "")) {
       # convert list to dataframe and store in asset list
