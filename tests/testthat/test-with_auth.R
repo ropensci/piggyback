@@ -169,7 +169,7 @@ test_that("pb_upload finds latest release",{
     list(piggyback.verbose = TRUE),
     {
 
-      expect_warning(
+      suppressWarnings(
         expect_message(
           pb_upload(
             repo = test_repo,
@@ -242,23 +242,23 @@ test_that("can delete release",{
 
 context("Private repo download")
 test_that("can download private repo file",{
-  #   skippy(TRUE)
-  #
-  #   pb_download(
-  #     file = "iris_example.csv",
-  #     repo = "tanho63/piggyback-private",
-  #     tag = "iris",
-  #     dest = tempdir(),
-  #     .token = Sys.getenv("TAN_GH_TOKEN")
-  #     )
-  #
-  #   x <- read.csv(file.path(tempdir(),"iris_example.csv"))
-  #
-  #   warning(paste(readLines(file.path(tempdir(),"iris_example.csv")), collapse = "\n"))
-  #
-  #   expect_equal(
-  #     nrow(x),
-  #     150
-  #   )
+  skippy(TRUE)
+
+  pb_download(
+    file = "iris_example.csv",
+    repo = "tanho63/piggyback-private",
+    tag = "iris",
+    dest = tempdir(),
+    .token = Sys.getenv("TAN_GH_TOKEN")
+  )
+
+  x <- read.csv(file.path(tempdir(),"iris_example.csv"))
+
+  # warning(paste(readLines(file.path(tempdir(),"iris_example.csv")), collapse = "\n"))
+
+  expect_equal(
+    nrow(x),
+    150
+  )
 
 })

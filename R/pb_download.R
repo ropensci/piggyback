@@ -88,6 +88,7 @@ pb_download <- function(file = NULL,
                       id = df$id[i],
                       destfile = df$dest[i],
                       overwrite = overwrite,
+                      .token = .token,
                       progress = progress
     ))
   return(invisible(resp))
