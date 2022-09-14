@@ -182,8 +182,6 @@ pb_upload_file <- function(file,
     terminate_on = c(400, 401, 403, 404, 422)
   )
 
-  cat("\n")
-
   if(show_progress) httr::warn_for_status(r)
 
   ## Release info changed, so break cache
