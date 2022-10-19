@@ -35,7 +35,8 @@ pb_release_create <- function(repo = guess_repo(),
 
   # if no releases exist, pb_releases returns a dataframe of releases
   if(nrow(releases) > 0 && tag %in% releases$tag_name){
-    cli::cli_abort("Failed to create release: {.val {tag}} already exists!")
+    cli::cli_warn("Failed to create release: {.val {tag}} already exists!")
+    return(invisible(releases[tag %in% releases$tag_name,]))
   }
 
   r <- parse_repo(repo)
@@ -77,7 +78,7 @@ pb_release_create <- function(repo = guess_repo(),
 
   release <- httr::content(resp)
   cli::cli_alert_success("Created new release {.val {name}}.")
-  invisible(release)
+  return(invisible(release))
 }
 
 #' @export

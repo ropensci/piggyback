@@ -7,6 +7,7 @@
 * `pb_list()` now respects the option `"piggyback.verbose"`
 * Fix download token handling [#88]
 * `pb_upload()` no longer prints out extra newlines [#93]
+* `pb_new_release()` now warns and exits early instead of failing if a release already exists. [#95]
 
 
 # piggyback 0.1.4
