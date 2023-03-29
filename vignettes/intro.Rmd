@@ -73,7 +73,7 @@ pb_download("iris2.tsv.gz",
             dest = tempdir())
 ```
 
-**Note**: Whenever you are working from a location inside a git repository corresponding to your GitHub repo, you can simply omit the `repo` argument and it will be detected automatically. Likewise, if you omit the release `tag`, `the`pb_download` will simply pull data from most recent release (`latest`).  Third, you can omit `tempdir()` if you are using an RStudio Project (`.Rproj` file) in your repository, and then the download location will be relative to Project root.  `tempdir()` is used throughout the examples only to meet CRAN policies and is unlikely to be the choice you actually want here.  
+**Note**: Whenever you are working from a location inside a git repository corresponding to your GitHub repo, you can simply omit the `repo` argument and it will be detected automatically. Likewise, if you omit the release `tag`, the `pb_download` will simply pull data from most recent release (`latest`).  Third, you can omit `tempdir()` if you are using an RStudio Project (`.Rproj` file) in your repository, and then the download location will be relative to Project root.  `tempdir()` is used throughout the examples only to meet CRAN policies and is unlikely to be the choice you actually want here.  
 
 
 Lastly, simply omit the file name to download all assets connected with a given release.  
