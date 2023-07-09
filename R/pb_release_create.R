@@ -71,10 +71,7 @@ pb_release_create <- function(repo = guess_repo(),
   }
 
   ## Release info changed, so break caches
-  try({
-    memoise::forget(pb_info)
-    memoise::forget(pb_releases)
-  })
+  .pb_cache_clear()
 
   release <- httr::content(resp)
   cli::cli_alert_success("Created new release {.val {name}}.")

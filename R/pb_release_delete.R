@@ -1,4 +1,4 @@
-#' Create a new release on GitHub repo
+#' Delete release from GitHub repo
 #'
 #' @param repo Repository name in format "owner/repo". Defaults to `guess_repo()`.
 #' @param tag tag name to delete. Must be one of those found in `pb_releases()$tag_name`.
@@ -68,10 +68,7 @@ pb_release_delete <- function(repo = guess_repo(), tag, .token = gh::gh_token())
     return(resp2)
   }
 
-  try({
-    memoise::forget(pb_releases)
-    memoise::forget(pb_info)
-  })
+  .pb_cache_clear()
 
   cli::cli_alert_success("Deleted release {.val {tag}} from {.val {repo}}.")
 
