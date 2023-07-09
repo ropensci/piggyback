@@ -44,7 +44,7 @@ test_that("We can create a new release",{
 test_that("Error if we try to create an existing release",{
   skippy(TRUE)
 
-  expect_condition(
+  expect_warning(
     pb_release_create(repo = test_repo, tag = test_release_tag, .token = token),
     "Failed to create"
   )
