@@ -9,7 +9,7 @@
 #' @keywords internal
 .pb_cache_clear <- function(){
   # the ones memoised in zzz.R
-  memoised_functions <- c("pb_info", "pb_releases")
+  memoised_functions <- c(pb_info, pb_releases)
   try(lapply(memoised_functions, memoise::forget), silent = TRUE)
   invisible(TRUE)
 }
