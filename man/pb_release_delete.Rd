@@ -2,7 +2,7 @@
 % Please edit documentation in R/pb_release_delete.R
 \name{pb_release_delete}
 \alias{pb_release_delete}
-\title{Create a new release on GitHub repo}
+\title{Delete release from GitHub repo}
 \usage{
 pb_release_delete(repo = guess_repo(), tag, .token = gh::gh_token())
 }
@@ -14,7 +14,7 @@ pb_release_delete(repo = guess_repo(), tag, .token = gh::gh_token())
 \item{.token}{GitHub authentication token, see \verb{[gh::gh_token()]}}
 }
 \description{
-Create a new release on GitHub repo
+Delete release from GitHub repo
 }
 \examples{
 \dontrun{

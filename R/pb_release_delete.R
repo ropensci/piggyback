@@ -1,4 +1,4 @@
-#' Create a new release on GitHub repo
+#' Delete release from GitHub repo
 #'
 #' @param repo Repository name in format "owner/repo". Defaults to `guess_repo()`.
 #' @param tag tag name to delete. Must be one of those found in `pb_releases()$tag_name`.
