@@ -68,10 +68,7 @@ pb_release_delete <- function(repo = guess_repo(), tag, .token = gh::gh_token())
     return(resp2)
   }
 
-  try({
-    memoise::forget(pb_releases)
-    memoise::forget(pb_info)
-  })
+  .pb_cache_clear()
 
   cli::cli_alert_success("Deleted release {.val {tag}} from {.val {repo}}.")
 

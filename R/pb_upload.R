@@ -67,7 +67,7 @@ pb_upload <- function(file,
   }
 
   ## start fresh
-  memoise::forget(pb_info)
+  .pb_cache_clear()
 
   out <- lapply(file, function(f)
     pb_upload_file(
@@ -83,7 +83,7 @@ pb_upload <- function(file,
     ))
 
   ## break cache when done
-  memoise::forget(pb_info)
+  .pb_cache_clear()
   invisible(out)
 }
 
@@ -185,7 +185,7 @@ pb_upload_file <- function(file,
 
   if(show_progress) httr::warn_for_status(r)
 
-  ## Release info changed, so break cache
-  try({memoise::forget(pb_info)})
+  # Release info changed, so break cache
+  .pb_cache_clear()
   invisible(r)
 }
