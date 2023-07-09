@@ -40,7 +40,7 @@ pb_upload <- function(file,
     length(repo) == 1
   )
 
-  releases <- pb_releases(repo, .token)
+  releases <- pb_releases(repo = repo,.token = .token)
 
   if(tag == "latest" && length(releases$tag_name) > 0 && !"latest" %in% releases$tag_name) {
     if(getOption("piggyback.verbose", default = interactive())){
@@ -62,7 +62,7 @@ pb_upload <- function(file,
     )
 
     if(run == 2) return(invisible(NULL))
-    if(run == 1) pb_new_release(repo = repo, tag = tag, .token = .token)
+    if(run == 1) pb_release_create(repo = repo, tag = tag, .token = .token)
   }
 
   ## start fresh
@@ -137,7 +137,7 @@ pb_upload_file <- function(file,
   }
 
   ## memoised for piggyback_cache_duration
-  df <- pb_info(repo, tag, .token)
+  df <- pb_info(repo = repo, tag = tag, .token = .token)
 
   i <- which(df$file_name == name)
 
@@ -169,7 +169,7 @@ pb_upload_file <- function(file,
 
   if (show_progress) cli::cli_alert_info("Uploading {.file {name}} ...")
 
-  releases <- pb_releases(repo = repo)
+  releases <- pb_releases(repo = repo, .token = .token)
   upload_url <- releases$upload_url[releases$tag_name == tag]
 
   r <- httr::RETRY(
