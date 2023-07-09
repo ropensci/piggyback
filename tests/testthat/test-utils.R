@@ -15,6 +15,7 @@ test_that("guess_repo works",{
   fs::dir_create(repo_path)
 
   gert::git_clone(url = "https://github.com/cboettig/piggyback-tests",
+                  password = gh::gh_token(),
                   path = repo_path)
 
   on.exit(unlink(repo_path, recursive = TRUE))

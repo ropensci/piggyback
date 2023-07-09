@@ -23,7 +23,7 @@ test_that(
     x <- pb_list(
       repo = "cboettig/piggyback-tests",
       tag = "v0.0.1",
-      .token = Sys.getenv("GITHUB_TOKEN")
+      .token = gh::gh_token()
     )
 
     expect_true(nrow(x) > 1)
@@ -39,7 +39,7 @@ test_that(
     x <- pb_list(
       repo = "cboettig/piggyback-tests",
       tag = "latest",
-      .token = Sys.getenv("GITHUB_TOKEN")
+      .token = gh::gh_token()
     )
 
     expect_equivalent(unique(x$tag), "v3")
@@ -53,7 +53,7 @@ test_that(
 
     x <- pb_releases(
       repo = "cboettig/piggyback-tests",
-      .token = Sys.getenv("GITHUB_TOKEN")
+      .token = gh::gh_token()
     )
 
     expect_true(nrow(x) > 1)
@@ -68,17 +68,11 @@ test_that(
     expect_warning(
     x <- pb_releases(
       repo = "tanho63/tanho63",
-      .token = Sys.getenv("GITHUB_TOKEN")
+      .token = gh::gh_token()
     ),
     "No GitHub releases"
     )
-
     expect_equivalent(nrow(x), 0)
-
-    x <- pb_list(
-      repo = "tanho63/tanho63",
-      .token = Sys.getenv("GITHUB_TOKEN")
-    )
   }
 )
 

@@ -34,7 +34,7 @@ test_that(
       tag = "v0.0.1",
       ignore = c("manifest.json", "big_data_file.csv"),
       show_progress = FALSE,
-      .token = Sys.getenv("GITHUB_TOKEN")
+      .token = gh::gh_token()
     )
 
     expect_true(file.exists(file.path(tmp, "iris.tsv.gz")))
@@ -56,7 +56,7 @@ test_that(
       dest = tmp,
       show_progress = FALSE,
       overwrite = TRUE,
-      .token = Sys.getenv("GITHUB_TOKEN")
+      .token = gh::gh_token()
     )
 
     expect_true(file.exists(file.path(tmp, "iris.tsv.gz")))
@@ -73,7 +73,7 @@ test_that("we can get all download urls", {
   x <- pb_download_url(
     repo = "cboettig/piggyback-tests",
     tag = "v0.0.1",
-    .token = Sys.getenv("GITHUB_TOKEN")
+    .token = gh::gh_token()
   )
   expect_is(x, "character")
   expect_gt(length(x), 1)
@@ -87,7 +87,7 @@ test_that("we can get one download url", {
     file = "iris.tsv.gz",
     repo = "cboettig/piggyback-tests",
     tag = "v0.0.1",
-    .token = Sys.getenv("GITHUB_TOKEN")
+    .token = gh::gh_token()
   )
   expect_is(x, "character")
   expect_true(length(x) == 1)
@@ -104,7 +104,7 @@ test_that("Missing files are reported in download and download_url", {
         file = "iris.csv.gz",
         repo = "cboettig/piggyback-tests",
         tag = "v0.0.1",
-        .token = Sys.getenv("GITHUB_TOKEN")
+        .token = gh::gh_token()
       )
     },
     "No download URLs"
@@ -120,7 +120,7 @@ test_that("Missing files are reported in download and download_url", {
         repo = "cboettig/piggyback-tests",
         dest = tmp,
         tag = "v0.0.1",
-        .token = Sys.getenv("GITHUB_TOKEN")
+        .token = gh::gh_token()
       )
     },
     "not found"
