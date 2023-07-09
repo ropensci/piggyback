@@ -1,14 +1,23 @@
 # piggyback (development version)
 
-* Fix bug in `pb_upload()` to correctly resolve `"latest"` tag - if there is no release tag actually named "latest" it will use the first release from `pb_releases()`.  [#75] 
-* Make `pb_download()` and `pb_info()` also resolve `"latest"` similarly: if there is no release tag named "latest", use first release from `pb_releases()`
+* Fix bug in `pb_upload()` to correctly resolve `"latest"` tag - if there is no release 
+tag actually named "latest" it will use the first release from `pb_releases()`. [#75] 
+* Make `pb_download()` and `pb_info()` also resolve `"latest"` similarly: if there 
+is no release tag named "latest", use first release from `pb_releases()`
 * Updated test coverage to use GHA
 * Fixed error handling for `pb_list()` for no release. 
 * `pb_list()` now respects the option `"piggyback.verbose"`
 * Fix download token handling [#88]
 * `pb_upload()` no longer prints out extra newlines [#93]
-* `pb_new_release()` now warns and exits early instead of failing if a release already exists. [#95]
+* `pb_new_release()` now warns and exits early instead of failing if a release 
+already exists. [#95]
 * Fixup test issues [#100]
+* `pb_upload` adds a two-second sleep after user creates release [#101]
+  * This is because it takes a few seconds for the GitHub API to register that 
+  the new release has been created
+* Adds `piggyback.cache` R option to avoid memoising altogether
+* Adds `.pb_cache_clear()` function to empty the cache more consistently 
+(internally and externally)
 
 
 # piggyback 0.1.4
