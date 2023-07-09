@@ -63,6 +63,7 @@ pb_upload <- function(file,
 
     if(run == 2) return(invisible(NULL))
     if(run == 1) pb_release_create(repo = repo, tag = tag, .token = .token)
+    Sys.sleep(2)
   }
 
   ## start fresh
