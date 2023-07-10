@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 [![lifecycle](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![R-CMD-check](https://github.com/ropensci/piggyback/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/piggyback/actions)
-[![Coverage status](https://codecov.io/gh/ropensci/piggyback/branch/master/graph/badge.svg)](https://codecov.io/github/ropensci/piggyback?branch=master)
+[![Coverage status](https://codecov.io/gh/ropensci/piggyback/branch/master/graph/badge.svg)](https://app.codecov.io/github/ropensci/piggyback?branch=master)
 [![CRAN status](https://www.r-pkg.org/badges/version/piggyback)](https://cran.r-project.org/package=piggyback)
 [![Peer Review Status](https://badges.ropensci.org/220_status.svg)](https://github.com/ropensci/software-review/issues/220)
 [![DOI](https://zenodo.org/badge/132979724.svg)](https://zenodo.org/badge/latestdoi/132979724)
@@ -77,7 +77,7 @@ pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback-tests")
 
 ## Git LFS and other alternatives
 
-`piggyback` acts like a poor soul's [Git LFS](https://git-lfs.github.com/). Git LFS is not only expensive, it also [breaks GitHub's collaborative model](https://angryfrenchman.org/github-s-large-file-storage-is-no-panacea-for-open-source-quite-the-opposite-12c0e16a9a91) -- basically if someone wants to submit a PR with a simple edit to your docs, they cannot fork your repository since that would otherwise count against your Git LFS storage.   Unlike Git LFS, `piggyback` doesn't take over your standard `git` client, it just perches comfortably on the shoulders of your existing GitHub API.  Data can be versioned by `piggyback`, but relative to `git LFS` versioning is less strict: uploads can be set as a new version or allowed to overwrite previously uploaded data.  
+`piggyback` acts like a poor soul's [Git LFS](https://git-lfs.com/). Git LFS is not only expensive, it also [breaks GitHub's collaborative model](https://angryfrenchman.org/github-s-large-file-storage-is-no-panacea-for-open-source-quite-the-opposite-12c0e16a9a91) -- basically if someone wants to submit a PR with a simple edit to your docs, they cannot fork your repository since that would otherwise count against your Git LFS storage.   Unlike Git LFS, `piggyback` doesn't take over your standard `git` client, it just perches comfortably on the shoulders of your existing GitHub API.  Data can be versioned by `piggyback`, but relative to `git LFS` versioning is less strict: uploads can be set as a new version or allowed to overwrite previously uploaded data.  
 
 ## But what will GitHub think of this?
 

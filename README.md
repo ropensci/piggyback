@@ -8,7 +8,7 @@
 [![lifecycle](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![R-CMD-check](https://github.com/ropensci/piggyback/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/piggyback/actions)
 [![Coverage
-status](https://codecov.io/gh/ropensci/piggyback/branch/master/graph/badge.svg)](https://codecov.io/github/ropensci/piggyback?branch=master)
+status](https://codecov.io/gh/ropensci/piggyback/branch/master/graph/badge.svg)](https://app.codecov.io/github/ropensci/piggyback?branch=master)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/piggyback)](https://cran.r-project.org/package=piggyback)
 [![Peer Review
@@ -83,7 +83,7 @@ pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback-tests")
 ## Git LFS and other alternatives
 
 `piggyback` acts like a poor soul’s [Git
-LFS](https://git-lfs.github.com/). Git LFS is not only expensive, it
+LFS](https://git-lfs.com/). Git LFS is not only expensive, it
 also [breaks GitHub’s collaborative
 model](https://angryfrenchman.org/github-s-large-file-storage-is-no-panacea-for-open-source-quite-the-opposite-12c0e16a9a91)
 – basically if someone wants to submit a PR with a simple edit to your
