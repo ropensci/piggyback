@@ -1,4 +1,4 @@
-# piggyback (development version)
+# piggyback 0.1.5
 
 * Fix bug in `pb_upload()` to correctly resolve `"latest"` tag - if there is no release 
 tag actually named "latest" it will use the first release from `pb_releases()`. [#75] 
