@@ -51,8 +51,8 @@ guess_repo <- function(path = ".") {
 #' @keywords internal
 #' @noRd
 .as_datetime <- function(x) {
-  origin <- structure(0, class = c("POSIXct", "POSIXt"), tzone = "UTC")
-  as.POSIXct(x, origin = origin, tz = "UTC")
+  origin <- structure(0.0, class = c("POSIXct", "POSIXt"), tzone = "UTC")
+  as.POSIXct(x, origin = origin, tz = "UTC", format = "%Y-%m-%dT%H:%M:%SZ")
 }
 
 #' date utils
