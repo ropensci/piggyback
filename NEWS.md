@@ -1,3 +1,7 @@
+# piggyback (development version)
+
+* Fix bug in pb_releases to allow for draft releases to appear [#105]
+
 # piggyback 0.1.5
 
 * Fix bug in `pb_upload()` to correctly resolve `"latest"` tag - if there is no release 

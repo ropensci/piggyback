@@ -62,6 +62,20 @@ test_that(
 )
 
 test_that(
+  "draft releases are shown", {
+    skip_if_offline("api.github.com")
+
+    x <- pb_releases(
+      repo = "tanho63/piggyback-tests",
+      .token = gh::gh_token()
+    )
+
+    expect_true(nrow(x) > 1)
+    expect_true(sum(x$draft) >= 0)
+  }
+)
+
+test_that(
   "repos with no releases are handled correctly", {
     skip_if_offline("api.github.com")
 

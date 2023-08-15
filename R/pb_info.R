@@ -49,16 +49,16 @@ pb_releases <- function(repo = guess_repo(),
   }
 
   out <- data.frame(
-    release_name = vapply(releases, `[[`, character(1),"name"),
-    release_id = vapply(releases, `[[`, integer(1),"id"),
-    release_body = vapply(releases, `[[`, character(1),"body"),
-    tag_name = vapply(releases, `[[`, character(1),"tag_name"),
-    draft = vapply(releases, `[[`, logical(1),"draft"),
-    created_at = vapply(releases, `[[`, character(1),"created_at"),
-    published_at = vapply(releases, `[[`, character(1),"published_at"),
-    html_url = vapply(releases, `[[`, character(1),"html_url"),
-    upload_url = vapply(releases, `[[`,character(1),"upload_url"),
-    n_assets = vapply(releases, function(x) length(x[["assets"]]), integer(1))
+    release_name = .extract_chr(releases, "name"),
+    release_id = .extract_int(releases, "id"),
+    release_body = .extract_chr(releases, "body"),
+    tag_name = .extract_chr(releases, "tag_name"),
+    draft = .extract_lgl(releases, "draft"),
+    created_at = .extract_chr(releases, "created_at"),
+    published_at = .extract_chr(releases, "published_at"),
+    html_url = .extract_chr(releases, "html_url"),
+    upload_url = .extract_chr(releases, "upload_url"),
+    n_assets = .map_int(releases, function(x) length(x[["assets"]]))
   )
 
   return(out)
@@ -76,27 +76,29 @@ get_release_assets <- function(releases, r, .token) {
 
   # fetch asset meta-data individually for each release, see #19
   for (i in seq_along(releases$tag_name)) {
-    a <- gh::gh(endpoint = "/repos/:owner/:repo/releases/:release_id/assets",
-                owner = r[[1]],
-                repo = r[[2]],
-                release_id = releases$release_id[[i]],
-                .limit = Inf,
-                .token = .token,
-                .progress = getOption("piggyback.verbose", default = interactive()))
+    a <- gh::gh(
+      endpoint = "/repos/:owner/:repo/releases/:release_id/assets",
+      owner = r[[1]],
+      repo = r[[2]],
+      release_id = releases$release_id[[i]],
+      .limit = Inf,
+      .token = .token,
+      .progress = getOption("piggyback.verbose", default = interactive())
+    )
     if(length(a) == 0) next
     if (!identical(a[[1]], "")) {
       # convert list to dataframe and store in asset list
       a_df <- data.frame(
-        file_name = vapply(a, `[[`, character(1), "name"),
-        size = vapply(a, `[[`, integer(1), "size"),
-        timestamp = lubridate::as_datetime(vapply(a, `[[`, character(1), "updated_at")),
+        file_name = .extract_chr(a, "name"),
+        size = .extract_int(a, "size"),
+        timestamp = .as_datetime(.extract_chr(a, "updated_at")),
         tag = releases$tag_name[i],
         owner = r[[1]],
         repo = r[[2]],
         upload_url = releases$upload_url[i],
-        browser_download_url = vapply(a, `[[`, character(1L), "browser_download_url"),
-        id = vapply(a, `[[`, integer(1L), "id"),
-        state = vapply(a, `[[`, character(1L), "state"),
+        browser_download_url = .extract_chr(a, "browser_download_url"),
+        id = .extract_int(a, "id"),
+        state = .extract_chr(a, "state"),
         stringsAsFactors = FALSE
       )
 
@@ -105,7 +107,7 @@ get_release_assets <- function(releases, r, .token) {
   }
 
   # convert list of asset dataframes to single dataframe
-  release_assets <- do.call(rbind,asset_list)
+  release_assets <- do.call(rbind, asset_list)
 
   # return result
   return(release_assets)
@@ -126,7 +128,7 @@ pb_info <- function(repo = guess_repo(),
       data.frame(
         file_name = "",
         size = 0L,
-        timestamp = lubridate::as_datetime(0),
+        timestamp = .as_datetime(0),
         tag = "",
         owner = r[[1]],
         repo = r[[2]],
@@ -139,7 +141,7 @@ pb_info <- function(repo = guess_repo(),
   }
 
   # if tag is latest, set tag to first tag present in releases
-  if(length(tag)==1 && tag == "latest" && !"latest" %in% releases$tag_name) tag <- releases$tag_name[[1]]
+  if(identical(tag, "latest") && !"latest" %in% releases$tag_name) tag <- releases$tag_name[[1]]
 
   # if tag is present, filter the releases to search to just the tags requested
   if(!is.null(tag)) releases <- releases[releases$tag_name %in% tag,]
