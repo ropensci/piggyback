@@ -49,21 +49,12 @@ pb_upload <- function(file,
     tag <- releases$tag_name[[1]]
   }
 
-  if(!tag %in% releases$tag_name && !interactive()) {
-    cli::cli_abort("Release {.val {tag}} not found in {.val {repo}}. No upload performed.")
-  }
-
   if(!tag %in% releases$tag_name) {
-    cli::cli_alert_warning("Release {.val {tag}} not found in {.val {repo}}.")
-
-    run <- utils::menu(
-      choices = c("Yes", "No"),
-      title = glue::glue("Would you like to create a new release now?")
+    cli::cli_abort(
+      c("x" = "Could not find {.val {tag}} in {.code pb_releases('{repo}')}!",
+        "i" = "To create a new release, use {.run pb_release_create('{repo}', '{tag}')}",
+        "*"= "No upload was performed.")
     )
-
-    if(run == 2) return(invisible(NULL))
-    if(run == 1) pb_release_create(repo = repo, tag = tag, .token = .token)
-    Sys.sleep(2)
   }
 
   ## start fresh

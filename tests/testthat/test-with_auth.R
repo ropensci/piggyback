@@ -152,13 +152,8 @@ test_that("cannot upload to nonexistent release", {
       show_progress = FALSE,
       .token = token
     ),
-    "Release .* not found"
+    "Could not find .* in.*pb_releases"
   )
-})
-
-test_that("pb_upload offering to create release if missing",{
-  # would ideally test with rlang::with_interactive() etc
-  # but not sure how to trigger menu in test. ¯\_(ツ)_/¯
 })
 
 test_that("pb_upload finds latest release",{
