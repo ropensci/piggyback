@@ -13,3 +13,5 @@ inst/doc
 *.bz2
 data/*
 .DS_Store
+CRAN_SUBMISSION
+CRAN_RELEASE
