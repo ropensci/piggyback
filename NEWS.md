@@ -3,6 +3,9 @@
 * Fix bug in `pb_releases()` to allow for draft releases to appear [#105]
 * `pb_upload()` no longer offers to create a release if interactive - it now 
 provides the code to create the release in the error body.
+* `pb_download()` now tries to uses browser download URLs (i.e. `pb_download_url()`) 
+before trying API download URLs. This should reduce/eliminate effect of API rate
+limits for pb_download. [#109]
 
 # piggyback 0.1.5
 
