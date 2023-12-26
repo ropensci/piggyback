@@ -40,7 +40,8 @@ Imports:
     httr,
     jsonlite,
     fs,
-    memoise
+    memoise,
+    rlang
 Suggests:
     spelling,
     readr,
