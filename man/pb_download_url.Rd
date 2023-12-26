@@ -12,14 +12,15 @@ pb_download_url(
 )
 }
 \arguments{
-\item{file}{name or vector of names of files to be downloaded. If \code{NULL},
+\item{file}{character: vector of names of files to be downloaded. If \code{NULL},
 all assets attached to the release will be downloaded.}
 
-\item{repo}{Repository name in format "owner/repo". Defaults to \code{guess_repo()}.}
+\item{repo}{string: GH repository name in format "owner/repo". Default \code{guess_repo()}
+tries to guess based on current working directory's git repository}
 
-\item{tag}{tag for the GitHub release to which this data should be attached.}
+\item{tag}{string: tag for the GH release, defaults to "latest"}
 
-\item{.token}{GitHub authentication token, see \verb{[gh::gh_token()]}}
+\item{.token}{GitHub authentication token, see \code{\link[gh:gh_token]{gh::gh_token()}}}
 }
 \value{
 the URL to download a file
