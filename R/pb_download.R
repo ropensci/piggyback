@@ -6,7 +6,7 @@
 #' vector of destination filepaths the same length as `file`.
 #' Any directories in the path provided must already exist.
 #' @param overwrite boolean: should any local files of the same name be overwritten? default `TRUE`
-#' @param ignore a list of files to ignore (if downloading "all" via `file=NULL`).
+#' @param ignore character: vector of files to ignore (used if downloading "all" via `file=NULL`)
 #' @inheritParams pb_upload
 #'
 #' @export
