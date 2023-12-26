@@ -12,18 +12,20 @@
 #' @inheritParams pb_upload
 #'
 #' @export
-#' @examples \dontrun{
-#'  ## Download a specific file.
-#'  ## (dest can be omitted when run inside and R project)
-#'  piggyback::pb_download("iris.tsv.gz",
-#'                         repo = "cboettig/piggyback-tests",
-#'                         dest = tempdir())
-#' }
-#' \dontrun{
-#'  ## Download all files
-#'  piggyback::pb_download(repo = "cboettig/piggyback-tests",
-#'                         dest = tempdir())
-#'
+#' @examples \donttest{
+#'  try({ # this try block is to avoid errors on CRAN, not needed for normal use
+#'    ## Download a specific file.
+#'    ## (if dest is omitted, will write to current directory)
+#'    dest <- tempdir()
+#'    piggyback::pb_download("iris.tsv.gz",
+#'                           repo = "cboettig/piggyback-tests",
+#'                           dest = dest)
+#'    list.files(dest)
+#'    ## Download all files
+#'    piggyback::pb_download(repo = "cboettig/piggyback-tests",
+#'                           dest = dest)
+#'    list.files(dest)
+#'  })
 #' }
 pb_download <- function(file = NULL,
                         dest = ".",
