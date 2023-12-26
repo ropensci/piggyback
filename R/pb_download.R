@@ -1,14 +1,12 @@
 #' Download data from an existing release
 #'
-#' @param file name or vector of names of files to be downloaded. If `NULL`,
+#' @param file character: vector of names of files to be downloaded. If `NULL`,
 #' all assets attached to the release will be downloaded.
-#' @param dest name of vector of names of where file should be downloaded.
-#' Can be a directory or a list of filenames the same length as `file`
-#' vector. Any directories in the path provided must already exist.
-#' @param overwrite Should any local files of the same name be overwritten?
-#'  default `TRUE`.
-#' @param ignore a list of files to ignore (if downloading "all" because
-#'  `file=NULL`).
+#' @param dest character: path to destination directory (if length one) or
+#' vector of destination filepaths the same length as `file`.
+#' Any directories in the path provided must already exist.
+#' @param overwrite boolean: should any local files of the same name be overwritten? default `TRUE`
+#' @param ignore a list of files to ignore (if downloading "all" via `file=NULL`).
 #' @inheritParams pb_upload
 #'
 #' @export
@@ -36,9 +34,12 @@ pb_download <- function(file = NULL,
                         use_timestamps = TRUE,
                         show_progress = getOption("piggyback.verbose", default = interactive()),
                         .token = gh::gh_token()) {
+  stopifnot(
+    # length of dest should be either be one (dest directory) or same length as provided files
+    is.character(dest) && (length(dest) == 1 || length(dest) == length(file))
+  )
 
   progress <- httr::progress("down")
-
   if (!show_progress) progress <- NULL
 
   df <- pb_info(repo, tag, .token)
@@ -46,31 +47,31 @@ pb_download <- function(file = NULL,
   ## drop failed upload states from list
   df <- df[df$state != "starter",]
 
+  # if file is provided, filter pb_info to only those files
   if (!is.null(file)) {
-    i <- which(df$file_name %in% file)
-    if (length(i) < 1) {
-      cli::cli_warn("file(s) {.file {file}} not found in repo {.val {repo}}")
+    df <- df[which(df$file_name %in% file),]
+    missing_files <- setdiff(file, df$file_name)
+    if (length(missing_files) > 0) {
+      cli::cli_warn("file(s) {.file {missing_files}} not found in repo {.val {repo}}")
     }
-
-    df <- df[i, ]
-  } else {
-    i <- which(df$file_name %in% ignore)
-    if (length(i) >= 1) {
-      df <- df[-i, ]
-    }
-    file <- df$file_name
   }
 
+  # if file is not provided, filter out ignored files from df
+  if (is.null(file) && length(ignore) > 0) {
+    df <- df[-which(df$file_name %in% ignore),]
+  }
 
-  ## if dest paths are not provided, we will write all files to dest dir
+  # If dest == 1 we assume it is a destination directory and write all files
+  # to this directory. Otherwise, if the length of dest is not the same as
+  # files to download we will raise an error.
+  #
   # User is responsible for making sure dest dir exists!
   if (length(dest) == 1) {
-    i <- which(df$file_name %in% file)
-    dest <- file.path(dest, df$file_name[i])
+    dest <- .map_chr(df$file_name, function(file_name) file.path(dest,file_name))
   }
-  # dest should now be of length df
-  df$dest <- dest
 
+  # Set dest for each file
+  df$dest <- dest
 
   if (use_timestamps) {
     local_timestamp <- fs::file_info(dest)$modification_time
@@ -78,7 +79,7 @@ pb_download <- function(file = NULL,
     update[is.na(update)] <- TRUE # we'll download if missing locally
     df <- df[update, ]
 
-    if (dim(df)[[1]] < 1) {
+    if (nrow(df) < 1) {
       cli::cli_alert_info("All local files already up-to-date!")
       return(invisible(NULL))
     }
@@ -108,6 +109,7 @@ gh_download_asset <- function(download_url,
                               overwrite = TRUE,
                               .token = gh::gh_token(),
                               progress = httr::progress("down")) {
+
   if (fs::file_exists(destfile) && !overwrite) {
     cli::cli_warn(
       c("!"="{.val {destfile}} already exists, skipping download.",
