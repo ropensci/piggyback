@@ -83,23 +83,26 @@ pb_download <- function(file = NULL,
   }
 
   resp <- lapply(seq_along(df$id), function(i)
-    gh_download_asset(df$owner[[1]],
-                      df$repo[[1]],
-                      id = df$id[i],
-                      destfile = df$dest[i],
-                      overwrite = overwrite,
-                      .token = .token,
-                      progress = progress
+    gh_download_asset(
+      download_url = df$browser_download_url[i],
+      destfile = df$dest[i],
+      owner = df$owner[1],
+      repo = df$repo[1],
+      id = df$id[i],
+      overwrite = overwrite,
+      .token = .token,
+      progress = progress
     ))
   return(invisible(resp))
 }
 
 ## gh() fails on this, so we do with httr. See https://github.com/r-lib/gh/issues/57
 ## Consider option to suppress progress bar?
-gh_download_asset <- function(owner,
+gh_download_asset <- function(download_url,
+                              destfile,
+                              owner,
                               repo,
                               id,
-                              destfile,
                               overwrite = TRUE,
                               .token = gh::gh_token(),
                               progress = httr::progress("down")) {
@@ -118,46 +121,51 @@ gh_download_asset <- function(owner,
   }
 
   auth_token <- if(!is.null(.token) && .token != "") {
-    httr::add_headers(Authorization = paste("token",.token))
+    httr::add_headers(Authorization = paste("token", .token))
   }
 
+  # Attempt download via browser download URL to avoid ratelimiting
   resp <- httr::RETRY(
     verb = "GET",
-    url = paste0(
-      "https://",
-      "api.github.com/repos/", owner, "/",
-      repo, "/", "releases/assets/", id
-    ),
+    url = download_url,
     httr::add_headers(Accept = "application/octet-stream"),
     auth_token,
     httr::write_disk(destfile, overwrite = overwrite),
     progress
   )
 
-  # Try to use the redirection URL instead in case of "bad request"
-  # See https://gist.github.com/josh-padnick/fdae42c07e648c798fc27dec2367da21
-  if (resp$status_code == 400) {
+  # Fall back to api.github.com download if browser url returns http error
+  if (httr::http_error(resp)){
     resp <- httr::RETRY(
       verb = "GET",
-      url = resp$url,
+      url = paste0(
+        "https://",
+        "api.github.com/repos/", owner, "/",
+        repo, "/", "releases/assets/", id
+      ),
       httr::add_headers(Accept = "application/octet-stream"),
       auth_token,
-      httr::write_disk(destfile, overwrite = TRUE),
+      httr::write_disk(destfile, overwrite = overwrite),
       progress
     )
+
+    # Try to use the redirection URL instead in case of "bad request"
+    # See https://gist.github.com/josh-padnick/fdae42c07e648c798fc27dec2367da21
+    if (resp$status_code == 400) {
+      resp <- httr::RETRY(
+        verb = "GET",
+        url = resp$url,
+        httr::add_headers(Accept = "application/octet-stream"),
+        auth_token,
+        httr::write_disk(destfile, overwrite = overwrite),
+        progress
+      )
+    }
   }
 
-  # handle error cases? resp not found
+
+  # warn if response not found
   if(getOption("piggyback.verbose", default = TRUE)) httr::warn_for_status(resp)
 
   invisible(resp)
-
-#  gh::gh(paste0(
-#         "https://api.github.com/repos/", owner, "/",
-#         repo, "/", "releases/assets/", id),
-#         .send_headers = c("Accept" = "application/octet-stream"),
-#         .token = .token,
-#         .destfile = destfile)
-#
-
 }
