@@ -49,14 +49,23 @@ Download data from an existing release
    ## Download a specific file.
    ## (if dest is omitted, will write to current directory)
    dest <- tempdir()
-   piggyback::pb_download("iris.tsv.gz",
-                          repo = "cboettig/piggyback-tests",
-                          dest = dest)
+   piggyback::pb_download(
+     "iris.tsv.gz",
+     repo = "cboettig/piggyback-tests",
+     tag = "v0.0.1",
+     dest = dest
+   )
    list.files(dest)
    ## Download all files
-   piggyback::pb_download(repo = "cboettig/piggyback-tests",
-                          dest = dest)
+   piggyback::pb_download(
+     repo = "cboettig/piggyback-tests",
+     tag = "v0.0.1",
+     dest = dest
+   )
    list.files(dest)
  })
+ \dontshow{
+ unlink(list.files(dest, full.names = TRUE))
+ }
 }
 }

@@ -15,15 +15,24 @@
 #'    ## Download a specific file.
 #'    ## (if dest is omitted, will write to current directory)
 #'    dest <- tempdir()
-#'    piggyback::pb_download("iris.tsv.gz",
-#'                           repo = "cboettig/piggyback-tests",
-#'                           dest = dest)
+#'    piggyback::pb_download(
+#'      "iris.tsv.gz",
+#'      repo = "cboettig/piggyback-tests",
+#'      tag = "v0.0.1",
+#'      dest = dest
+#'    )
 #'    list.files(dest)
 #'    ## Download all files
-#'    piggyback::pb_download(repo = "cboettig/piggyback-tests",
-#'                           dest = dest)
+#'    piggyback::pb_download(
+#'      repo = "cboettig/piggyback-tests",
+#'      tag = "v0.0.1",
+#'      dest = dest
+#'    )
 #'    list.files(dest)
 #'  })
+#'  \dontshow{
+#'    try(unlink(list.files(dest, full.names = TRUE)))
+#'  }
 #' }
 pb_download <- function(file = NULL,
                         dest = ".",
@@ -58,7 +67,7 @@ pb_download <- function(file = NULL,
 
   # if file is not provided, filter out ignored files from df
   if (is.null(file) && length(ignore) > 0) {
-    df <- df[-which(df$file_name %in% ignore),]
+    df <- df[!df$file_name %in% ignore,]
   }
 
   # If dest == 1 we assume it is a destination directory and write all files
