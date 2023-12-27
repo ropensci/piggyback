@@ -43,9 +43,8 @@ Imports:
     memoise,
     rlang
 Suggests:
+    arrow,
     spelling,
-    duckdbfs,
-    duckdb,
     readr,
     covr,
     testthat,
