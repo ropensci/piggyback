@@ -122,7 +122,7 @@ library(dplyr)
 library(glue)
 library(tictoc)
 ```
-First, initailize duckdb and install/load `httpfs` (short for http file system)
+First, initialize duckdb and install/load `httpfs` (short for http file system)
 ```{r}
 conn <- DBI::dbConnect(duckdb::duckdb())
 DBI::dbExecute(conn, "INSTALL 'httpfs'; LOAD 'httpfs';")
