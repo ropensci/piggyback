@@ -43,10 +43,10 @@ pb_upload <- function(file,
   releases <- pb_releases(repo = repo,.token = .token)
 
   if(tag == "latest" && length(releases$tag_name) > 0 && !"latest" %in% releases$tag_name) {
+    tag <- releases$tag_name[releases$latest]
     if(getOption("piggyback.verbose", default = interactive())){
-      cli::cli_alert_info("Uploading to latest release: {.val {releases$tag_name[[1]]}}.")
+      cli::cli_alert_info("Uploading to latest release: {.val {tag}}.")
     }
-    tag <- releases$tag_name[[1]]
   }
 
   if(!tag %in% releases$tag_name) {
@@ -79,8 +79,8 @@ pb_upload <- function(file,
 }
 
 pb_upload_file <- function(file,
-                           repo = guess_repo(),
-                           tag = "latest",
+                           repo,
+                           tag,
                            name = NULL,
                            overwrite = "use_timestamps",
                            use_timestamps = NULL,
