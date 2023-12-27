@@ -52,7 +52,7 @@ test_that("Error if we try to create an existing release",{
 })
 
 context("pb_write")
-test_that("pb_read can write file from memory to release", {
+test_that("pb_write can write file from memory to release", {
   skippy(TRUE)
   skip_if_offline("api.github.com")
 
@@ -67,7 +67,7 @@ test_that("pb_read can write file from memory to release", {
   expect_equal(out[[1]][["status_code"]], 201)
 })
 
-test_that("pb_read can autodetect different file formats",{
+test_that("pb_write can autodetect different file formats",{
   out <- pb_write(
     x = mtcars,
     file = "mtcars.csv",
