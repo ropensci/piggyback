@@ -165,7 +165,7 @@ query <- glue::glue_sql(
 )
 
 DBI::dbGetQuery(conn = conn, query)
-#> # A tibble: 288 × 5
+#> # A data.frame: 288 × 5
 #>    season posteam play_type n_plays epa_per_play
 #>     <int> <chr>   <chr>       <dbl>        <dbl>
 #>  1   2023 ARI     pass          539      -0.231 
@@ -209,6 +209,21 @@ pbp |>
     desc(season), posteam, desc(n_plays)
   ) |> 
   dplyr::collect()
+#> # A tibble: 288 × 5
+#>    season posteam play_type n_plays epa_per_play
+#>     <int> <chr>   <chr>       <dbl>        <dbl>
+#>  1   2023 ARI     pass          539      -0.231 
+#>  2   2023 ARI     run           391       0.0351
+#>  3   2023 ARI     no_play        48       0.191 
+#>  4   2023 ATL     pass          499      -0.0738
+#>  5   2023 ATL     run           465      -0.103 
+#>  6   2023 ATL     no_play        31       0.298 
+#>  7   2023 BAL     pass          480       0.0436
+#>  8   2023 BAL     run           475       0.0689
+#>  9   2023 BAL     no_play        45       0.246 
+#> 10   2023 BUF     pass          532       0.140 
+#> # ℹ 278 more rows
+#> # ℹ Use `print(n = ...)` to see more rows
 tictoc::toc()
 #> 3.491 sec elapsed
 ```
