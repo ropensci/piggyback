@@ -51,7 +51,7 @@ pb_releases <- function(repo = guess_repo(),
   latest_release <- gh::gh(
     "/repos/:owner/:repo/releases/latest",
     owner = r[[1]],
-    repo = r[[1]],
+    repo = r[[2]],
     .token = .token
   ) |>
     getElement("tag_name")
