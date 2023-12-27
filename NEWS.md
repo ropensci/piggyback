@@ -3,6 +3,7 @@
 * Fix bug in `pb_releases()` to allow for draft releases to appear [#105]
 * `pb_upload()` no longer offers to create a release if interactive - it now 
 provides the code to create the release in the error body.
+* `"latest"` release now aligns with GitHub's "latest" release definition [#113]
 
 # piggyback 0.1.5
 
