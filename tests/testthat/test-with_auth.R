@@ -4,11 +4,11 @@
 #' - upload files to the release
 #' - delete files from the release
 #' - delete the release
-
-skippy <- function(auth = FALSE){
+skippy <- function(use_auth = Sys.getenv("PIGGYBACK_USE_AUTH_TESTS", unset = FALSE)){
+  if (!identical(toupper(use_auth), "TRUE")) skip("envvar PIGGYBACK_USE_AUTH_TESTS is not TRUE")
   skip_if_offline("api.github.com")
-  if(auth) skip_if(Sys.getenv("TAN_GH_TOKEN") == "", message = "env variable TAN_GH_TOKEN not found")
-  # ideally skip if not able to write to the repo. unsure how to check at the moment.
+  token_check <- .check_test_token()
+  skip_if(!all(token_check), names(token_check)[!token_check])
 }
 
 # test_repo <- "ropensci/piggyback"

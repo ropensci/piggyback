@@ -48,12 +48,21 @@ pb_releases <- function(repo = guess_repo(),
     return(invisible(data.frame()))
   }
 
+  latest_release <- gh::gh(
+    "/repos/:owner/:repo/releases/latest",
+    owner = r[[1]],
+    repo = r[[2]],
+    .token = .token
+  ) |>
+    getElement("tag_name")
+
   out <- data.frame(
     release_name = .extract_chr(releases, "name"),
     release_id = .extract_int(releases, "id"),
     release_body = .extract_chr(releases, "body"),
     tag_name = .extract_chr(releases, "tag_name"),
     draft = .extract_lgl(releases, "draft"),
+    latest = .extract_chr(releases, "tag_name") %in% latest_release,
     created_at = .extract_chr(releases, "created_at"),
     published_at = .extract_chr(releases, "published_at"),
     html_url = .extract_chr(releases, "html_url"),
@@ -140,8 +149,11 @@ pb_info <- function(repo = guess_repo(),
       ))
   }
 
-  # if tag is latest, set tag to first tag present in releases
-  if(identical(tag, "latest") && !"latest" %in% releases$tag_name) tag <- releases$tag_name[[1]]
+  # if tag is "latest" (and no tag is literally named "latest"), set tag to
+  # GitHub's idea of latest release tag
+  if(identical(tag, "latest") && !"latest" %in% releases$tag_name) {
+    tag <- releases$tag_name[releases$latest]
+  }
 
   # if tag is present, filter the releases to search to just the tags requested
   if(!is.null(tag)) releases <- releases[releases$tag_name %in% tag,]

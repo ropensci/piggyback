@@ -16,11 +16,12 @@ pb_delete(
 when argument is omitted), function will delete all attachments to the release.
 delete}
 
-\item{repo}{Repository name in format "owner/repo". Defaults to \code{guess_repo()}.}
+\item{repo}{string: GH repository name in format "owner/repo". Default \code{guess_repo()}
+tries to guess based on current working directory's git repository}
 
-\item{tag}{tag for the GitHub release to which this data should be attached.}
+\item{tag}{string: tag for the GH release, defaults to "latest"}
 
-\item{.token}{GitHub authentication token, see \verb{[gh::gh_token()]}}
+\item{.token}{GitHub authentication token, see \code{\link[gh:gh_token]{gh::gh_token()}}}
 }
 \value{
 \code{TRUE} (invisibly) if a file is found and deleted.

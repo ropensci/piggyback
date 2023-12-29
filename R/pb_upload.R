@@ -1,19 +1,23 @@
 #' Upload data to an existing release
 #'
 #' NOTE: you must first create a release if one does not already exists.
-#' @param file path to file to be uploaded
-#' @param repo Repository name in format "owner/repo". Defaults to `guess_repo()`.
-#' @param tag  tag for the GitHub release to which this data should be attached.
-#' @param name name for uploaded file. If not provided will use the basename of
+#'
+#' @param file string: path to file to be uploaded
+#' @param repo string: GH repository name in format "owner/repo". Default `guess_repo()`
+#' tries to guess based on current working directory's git repository
+#' @param tag  string: tag for the GH release, defaults to "latest"
+#' @param name string: name for uploaded file. If not provided will use the basename of
 #' `file` (i.e. filename without directory)
-#' @param overwrite overwrite any existing file with the same name already
-#'  attached to the on release? Default behavior is based on timestamps,
-#'  only overwriting those files which are older.
-#' @param use_timestamps DEPRECATED.
+#' @param overwrite choice: overwrite any existing file with the same name already
+#'  attached to the on release? Options are "use_timestamps", TRUE, or FALSE:
+#'  default "use_timestamps" will only overwrite files where the release timestamp
+#'  is newer than the local file.
 #' @param show_progress logical, show a progress bar be shown for uploading?
-#' Defaults to `[interactive()]` - can also set globally with options("piggyback.verbose")
-#' @param .token GitHub authentication token, see `[gh::gh_token()]`
-#' @param dir directory relative to which file names should be based, defaults to NULL for current working directory.
+#' Defaults to [interactive()] - can also set globally with options("piggyback.verbose")
+#' @param .token GitHub authentication token, see [gh::gh_token()]
+#' @param dir directory relative to which file names should be based,
+#' defaults to NULL for current working directory.
+#' @param use_timestamps DEPRECATED.
 #' @examples
 #' \dontrun{
 #' # Needs your real token to run
@@ -43,10 +47,10 @@ pb_upload <- function(file,
   releases <- pb_releases(repo = repo,.token = .token)
 
   if(tag == "latest" && length(releases$tag_name) > 0 && !"latest" %in% releases$tag_name) {
+    tag <- releases$tag_name[releases$latest]
     if(getOption("piggyback.verbose", default = interactive())){
-      cli::cli_alert_info("Uploading to latest release: {.val {releases$tag_name[[1]]}}.")
+      cli::cli_alert_info("Uploading to latest release: {.val {tag}}.")
     }
-    tag <- releases$tag_name[[1]]
   }
 
   if(!tag %in% releases$tag_name) {
@@ -79,8 +83,8 @@ pb_upload <- function(file,
 }
 
 pb_upload_file <- function(file,
-                           repo = guess_repo(),
-                           tag = "latest",
+                           repo,
+                           tag,
                            name = NULL,
                            overwrite = "use_timestamps",
                            use_timestamps = NULL,
