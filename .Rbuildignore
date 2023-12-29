@@ -14,6 +14,7 @@
 ^\.manifest\.json$
 ^data/.*$
 ^\.Renviron$
+^\.Renviron-example$
 ^appveyor\.yml$
 ^CODE_OF_CONDUCT\.md$
 ^onboarding-submission\.md$
