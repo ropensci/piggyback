@@ -45,6 +45,6 @@ if (interactive()) {
   #> ℹ Uploading to latest release: "v0.0.2".
   #> ℹ Uploading mtcars.rds ...
   #> |===============================================================| 100\%
-})
+}
 }
 }

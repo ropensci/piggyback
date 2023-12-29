@@ -22,8 +22,8 @@
 #'   #> ℹ Uploading to latest release: "v0.0.2".
 #'   #> ℹ Uploading mtcars.rds ...
 #'   #> |===============================================================| 100%
-#' })
 #' }
+#'}
 pb_write <- function(x,
                      file,
                      repo = guess_repo(),
