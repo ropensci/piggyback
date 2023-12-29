@@ -48,11 +48,10 @@ more efficient and bigger-than-RAM workflows. This is sometimes referred to as
 
 ## nflverse play by play
 
-This vignette shows some examples of using `arrow` and `duckdb` for querying
-larger datasets, using example data from the [`nflverse`](https://github.com/nflverse) 
-project for NFL football analytics. 
-(Consult the nflverse's [nflreadr](https://nflreadr.nflverse.com) package if 
-looking to work with NFL data beyond this example)
+This vignette shows some examples of using `duckdb` for querying larger datasets, 
+using example data from the [`nflverse`](https://github.com/nflverse) project 
+for NFL football analytics. (Consult the nflverse's [nflreadr](https://nflreadr.nflverse.com) 
+package if looking to work with NFL data beyond this example)
 
 The [nflverse/nflverse-data](https://github.com/nflverse/nflverse-data/releases)
 data repository is organized into one release for a specific dataframe and typically
