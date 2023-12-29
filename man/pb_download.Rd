@@ -45,7 +45,7 @@ Download data from an existing release
 }
 \examples{
 \donttest{
- try({ # this try block is to avoid errors on CRAN, not needed for normal use
+\dontshow{try(\{}
    ## Download a specific file.
    ## (if dest is omitted, will write to current directory)
    dest <- tempdir()
@@ -63,8 +63,8 @@ Download data from an existing release
      dest = dest
    )
    list.files(dest)
- })
- \dontshow{
+\dontshow{\})}
+\dontshow{
    try(unlink(list.files(dest, full.names = TRUE)))
  }
 }

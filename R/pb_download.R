@@ -11,7 +11,7 @@
 #'
 #' @export
 #' @examples \donttest{
-#'  try({ # this try block is to avoid errors on CRAN, not needed for normal use
+#' \dontshow{try(\{}
 #'    ## Download a specific file.
 #'    ## (if dest is omitted, will write to current directory)
 #'    dest <- tempdir()
@@ -29,8 +29,8 @@
 #'      dest = dest
 #'    )
 #'    list.files(dest)
-#'  })
-#'  \dontshow{
+#' \dontshow{\})}
+#' \dontshow{
 #'    try(unlink(list.files(dest, full.names = TRUE)))
 #'  }
 #' }
@@ -96,11 +96,9 @@ pb_download <- function(file = NULL,
 
   resp <- lapply(seq_along(df$id), function(i)
     gh_download_asset(
-      download_url = df$browser_download_url[i],
+      browser_download_url = df$browser_download_url[i],
+      api_download_url = df$api_download_url[i],
       destfile = df$dest[i],
-      owner = df$owner[1],
-      repo = df$repo[1],
-      id = df$id[i],
       overwrite = overwrite,
       .token = .token,
       progress = progress
@@ -110,11 +108,9 @@ pb_download <- function(file = NULL,
 
 ## gh() fails on this, so we do with httr. See https://github.com/r-lib/gh/issues/57
 ## Consider option to suppress progress bar?
-gh_download_asset <- function(download_url,
+gh_download_asset <- function(browser_download_url,
                               destfile,
-                              owner,
-                              repo,
-                              id,
+                              api_download_url,
                               overwrite = TRUE,
                               .token = gh::gh_token(),
                               progress = httr::progress("down")) {
@@ -140,7 +136,7 @@ gh_download_asset <- function(download_url,
   # Attempt download via browser download URL to avoid ratelimiting
   resp <- httr::RETRY(
     verb = "GET",
-    url = download_url,
+    url = browser_download_url,
     httr::add_headers(Accept = "application/octet-stream"),
     auth_token,
     httr::write_disk(destfile, overwrite = overwrite),
@@ -151,11 +147,7 @@ gh_download_asset <- function(download_url,
   if (httr::http_error(resp)){
     resp <- httr::RETRY(
       verb = "GET",
-      url = paste0(
-        "https://",
-        "api.github.com/repos/", owner, "/",
-        repo, "/", "releases/assets/", id
-      ),
+      url = api_download_url,
       httr::add_headers(Accept = "application/octet-stream"),
       auth_token,
       httr::write_disk(destfile, overwrite = overwrite),

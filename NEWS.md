@@ -7,6 +7,7 @@ provides the code to create the release in the error body.
 before trying API download URLs. This should reduce/eliminate effect of API rate
 limits for pb_download. [#109]
 * `"latest"` release now aligns with GitHub's "latest" release definition [#113]
+* `pb_download_url()` now can return choice of "browser" or "api" download URLs [#116]
 
 # piggyback 0.1.5
 
