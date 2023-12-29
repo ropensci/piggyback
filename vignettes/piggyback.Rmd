@@ -121,18 +121,20 @@ without additional arguments to pull in any data associated with a project on a
 GitHub repo that is too large to commit to git directly. 
 
 Notice that above, `iris2.tsv.gz` was not downloaded. `pb_download()` will skip 
-downloading of any file that already exists locally, if the timestamp on the local copy is more recent than the timestamp on the GitHub copy.  Use the `overwrite` parameter to control this behaviour.
+downloading of any file that already exists locally, if the timestamp on the local 
+copy is more recent than the timestamp on the GitHub copy.  Use the `overwrite` 
+parameter to control this behaviour.
 
-`pb_download()` also includes arguments to control the progress bar or if any particular 
-files should not be downloaded.  
+`pb_download()` also includes arguments to control the progress bar or if any 
+particular files should not be downloaded.
 
-### Download URLs
+### Public Download URLs
 
 Sometimes it is preferable to have a URL from which the data can be read in directly, 
 rather than downloading the data to a local file.  For example, such a URL can be 
 embedded directly into another R script, avoiding any dependence on `piggyback` 
-(provided the repository is already public.)  To get a list of URLs rather than 
-actually downloading the files, use `pb_download_url()`:
+(provided the repository is already public.)  To get a list of public download URLs 
+rather than actually downloading the files, use `pb_download_url()`:
 
 ```r
 pb_download_url(repo = "cboettig/piggyback-tests",  
@@ -144,6 +146,10 @@ pb_download_url(repo = "cboettig/piggyback-tests",
 [3] "https://github.com/cboettig/piggyback-tests/releases/download/v0.0.1/iris.tsv.xz"    
 [4] "https://github.com/cboettig/piggyback-tests/releases/download/v0.0.1/iris2.tsv.gz" 
 ```
+
+Note that these will not work if authentication is required to download them
+
+## Reading data
 
 ## Uploading data
 
