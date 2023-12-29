@@ -106,6 +106,9 @@ get_release_assets <- function(releases, r, .token) {
         repo = r[[2]],
         upload_url = releases$upload_url[i],
         browser_download_url = .extract_chr(a, "browser_download_url"),
+        api_download_url = glue::glue(
+          "https://api.github.com/repos/{r[[1]]}/{r[[2]]}/releases/assets/{.extract_int(a, 'id')}"
+        ),
         id = .extract_int(a, "id"),
         state = .extract_chr(a, "state"),
         stringsAsFactors = FALSE
@@ -143,6 +146,7 @@ pb_info <- function(repo = guess_repo(),
         repo = r[[2]],
         upload_url = "",
         browser_download_url = "",
+        api_download_url = "",
         id = "",
         state = "",
         stringsAsFactors = FALSE

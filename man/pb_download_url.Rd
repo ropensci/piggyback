@@ -8,6 +8,7 @@ pb_download_url(
   file = NULL,
   repo = guess_repo(),
   tag = "latest",
+  url_type = c("browser", "api"),
   .token = gh::gh_token()
 )
 }
@@ -20,22 +21,30 @@ tries to guess based on current working directory's git repository}
 
 \item{tag}{string: tag for the GH release, defaults to "latest"}
 
+\item{url_type}{choice: one of "browser" or "api" - default "browser" is a
+web-facing URL that is not subject to API ratelimits but does not work for
+private repositories. "api" URLs work for private repos, but require a GitHub
+token passed in an Authorization header (see examples)}
+
 \item{.token}{GitHub authentication token, see \code{\link[gh:gh_token]{gh::gh_token()}}}
 }
 \value{
 the URL to download a file
 }
 \description{
-Returns the URL download for a public file. This can be useful when writing
-scripts that may want to download the file directly without introducing any
-dependency on \code{piggyback} or authentication steps.
+Returns the URL download for a given file. This can be useful when using
+functions that are able to accept URLs.
 }
 \examples{
-\dontrun{
+\donttest{
+\dontshow{try(\{}
 
-pb_download_url("iris.tsv.xz",
-                repo = "cboettig/piggyback-tests",
-                tag = "v0.0.1")
+# returns browser url by default
+pb_download_url("iris.tsv.xz", repo = "cboettig/piggyback-tests", tag = "v0.0.1")
 
+# can return api url if desired
+pb_download_url("iris.tsv.xz", repo = "cboettig/piggyback-tests", tag = "v0.0.1", url_type = "api")
+
+\dontshow{\})}
 }
 }
