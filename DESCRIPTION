@@ -44,6 +44,8 @@ Imports:
     rlang
 Suggests:
     spelling,
+    duckdbfs,
+    duckdb,
     readr,
     covr,
     testthat,

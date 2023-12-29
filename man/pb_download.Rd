@@ -65,7 +65,7 @@ Download data from an existing release
    list.files(dest)
  })
  \dontshow{
- unlink(list.files(dest, full.names = TRUE))
+   try(unlink(list.files(dest, full.names = TRUE)))
  }
 }
 }

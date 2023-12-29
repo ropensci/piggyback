@@ -17,107 +17,108 @@ Status](https://badges.ropensci.org/220_status.svg)](https://github.com/ropensci
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.00971/status.svg)](https://doi.org/10.21105/joss.00971)
 <!-- badges: end -->
 
-Because larger (&gt; 50 MB) data files cannot easily be committed to
-git, a different approach is required to manage data associated with an
-analysis in a GitHub repository. This package provides a simple
-work-around by allowing larger ([up to 2 GB per
-file](https://docs.github.com/en/github/managing-large-files/distributing-large-binaries))
-data files to piggyback on a repository as assets attached to individual
-GitHub releases. These files are not handled by git in any way, but
-instead are uploaded, downloaded, or edited directly by calls through
-the GitHub API. These data files can be versioned manually by creating
-different releases. This approach works equally well with public or
-private repositories. Data can be uploaded and downloaded
-programmatically from scripts. No authentication is required to download
-data from public repositories.
+`{piggyback}` provides an R interface for storing files as GitHub
+release assets, which is a convenient way for large/binary data files to
+*piggyback* onto public and private GitHub repositories. This package
+includes functions for file downloads, uploads, and managing releases,
+which then are passed to the GitHub API.
+
+No authentication is required to download data from public repositories.
 
 ## Installation
 
-Install from CRAN via
+Install from CRAN via:
 
 ``` r
 install.packages("piggyback")
 ```
 
 You can install the development version from
-[GitHub](https://github.com/ropensci/piggyback) with:
+[GitHub](https://github.com/ropensci/piggyback) with either r-universe
+or with remotes:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("ropensci/piggyback")
+install.packages("piggyback", repos = c('https://ropensci.r-universe.dev', getOption("repos")))
+# install.packages("remotes")
+remotes::install_github("ropensci/piggyback")
 ```
 
-## Quickstart
+## Usage
 
-See the [piggyback
-vignette](https://docs.ropensci.org/piggyback/articles/intro.html) for
-details on authentication and additional package functionality.
+See [getting started
+vignette](https://docs.ropensci.org/piggyback/articles/intro.html) for a
+more comprehensive introduction.
 
-Piggyback can download data attached to a release on any repository:
+Download data attached to a GitHub release:
 
 ``` r
 library(piggyback)
-pb_download("iris.tsv.gz", repo = "cboettig/piggyback-tests", dest = tempdir())
-#> Warning in pb_download("iris.tsv.gz", repo = "cboettig/piggyback-tests", :
-#> file(s) iris.tsv.gz not found in repo cboettig/piggyback-tests
+pb_download("iris2.tsv.gz", 
+            repo = "cboettig/piggyback-tests",
+            tag = "v0.0.1",
+            dest = tempdir())
+#> ℹ Downloading "iris2.tsv.gz"...
+#> |======================================================| 100%
+fs::dir_tree(tempdir())
+#> /tmp/RtmpWxJSZj
+#> └── iris2.tsv.gz
 ```
 
 Downloading from private repos or uploading to any repo requires
-authentication, so be sure to set a `GITHUB_TOKEN` (or `GITHUB_PAT`)
-environmental variable, or include the `.token` argument. Omit the file
-name to download all attached objects. Omit the repository name to
-default to the current repository. See [introductory
-vignette](https://docs.ropensci.org/piggyback/articles/intro.html) or
-function documentation for details.
+authentication, specifically a GitHub Personal Access Token (PAT). This
+can be stored as a
+[gh::gh_token()](https://usethis.r-lib.org/articles/git-credentials.html#get-a-personal-access-token-pat)
+or a GITHUB_PAT environment variable - for more information, see the
+vignette notes on
+[authentication](https://docs.ropensci.org/piggyback/articles/piggyback.html#authentication).
 
-We can also upload data to any existing release (defaults to `latest`):
+We can also upload data to a release. Start by creating a release:
 
 ``` r
-## We'll need some example data first.
-## Pro tip: compress your tabular data to save space & speed upload/downloads
-readr::write_tsv(mtcars, "mtcars.tsv.gz")
-
-pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback-tests")
+pb_release_create(repo = "cboettig/piggyback-tests", tag = "v0.0.2")
+#> ✔ Created new release "v0.0.2".
 ```
 
-## Git LFS and other alternatives
+then upload to it:
 
-`piggyback` acts like a poor soul’s [Git
-LFS](https://git-lfs.com/). Git LFS is not only expensive, it
-also [breaks GitHub’s collaborative
-model](https://angryfrenchman.org/github-s-large-file-storage-is-no-panacea-for-open-source-quite-the-opposite-12c0e16a9a91)
-– basically if someone wants to submit a PR with a simple edit to your
-docs, they cannot fork your repository since that would otherwise count
-against your Git LFS storage. Unlike Git LFS, `piggyback` doesn’t take
-over your standard `git` client, it just perches comfortably on the
-shoulders of your existing GitHub API. Data can be versioned by
-`piggyback`, but relative to `git LFS` versioning is less strict:
-uploads can be set as a new version or allowed to overwrite previously
-uploaded data.
+``` r
+readr::write_tsv(mtcars, "mtcars.tsv.gz")
+pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback-tests")
+#> ℹ Uploading to latest release: "v0.0.2".
+#> ℹ Uploading mtcars.tsv.gz ...
+#> |===================================================| 100%
+```
 
-## But what will GitHub think of this?
+For improved performance, we can also use piggyback files with [cloud
+native](https://docs.ropensci.org/piggyback/articles/cloud_native.html)
+workflows to query data without downloading it first.
 
-[GitHub
-documentation](https://docs.github.com/en/github/managing-large-files/distributing-large-binaries)
-at the time of writing endorses the use of attachments to releases as a
-solution for distributing large files as part of your project:
+## Motivations
 
-![](man/figures/github-policy.png)
+A brief video overview presented as part of Tan Ho’s [RStudioConf2022
+talk](https://www.youtube.com/watch?v=wzcz4xNGeTI&t=655s):
 
-Of course, it will be up to GitHub to decide if this use of release
-attachments is acceptable in the long term.
+<https://github.com/ropensci/piggyback/assets/38083823/a1dff640-1bba-4c06-bad2-feda34f47387>
 
-<!--
- When GitHub first came online, it was questioned whether committing binary objects and data to GitHub was acceptable or an abuse of a *source code* repository.  GitHub has since clearly embraced a inclusive notion of "repository" for containing far more than pure source.  I believe attaching data that is essential to replicating an analysis and within the 2 GB file limits enforced by GitHub to be in the same spirit of this inclusive notion, but GitHub may decide otherwise. 
- -->
+`piggyback` allows you to store data alongside your repository as
+release assets, which helps you:
 
-Also see our [vignette comparing
-alternatives](https://docs.ropensci.org/piggyback/articles/alternatives.html).
+- store files larger than 50MB
+- bypass the 2GB GitHub repo size limit <!-- 
+  original URL:
+  https://angryfrenchman.org/github-s-large-file-storage-is-no-panacea-for-open-source-quite-the-opposite-12c0e16a9a91 
+  -->
+- avoid the [downsides](https://archive.is/3D16r) of Git LFS
+- version data flexibly (by creating/uploading to a new release)
+- work with public and private repositories, **for free**
 
-------------------------------------------------------------------------
+For more about motivations, see this discussion of
+[alternatives](https://docs.ropensci.org/piggyback/articles/alternatives.html).
+
+## Contributing
 
 Please note that this project is released with a [Contributor Code of
 Conduct](https://ropensci.org/code-of-conduct/). By participating in
 this project you agree to abide by its terms.
 
-[![ropensci\_footer](https://ropensci.org/public_images/ropensci_footer.png)](https://ropensci.org)
+[![ropensci_footer](https://ropensci.org/public_images/ropensci_footer.png)](https://ropensci.org)

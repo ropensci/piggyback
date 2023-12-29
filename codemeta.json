@@ -7,13 +7,13 @@
   "codeRepository": "https://github.com/ropensci/piggyback",
   "issueTracker": "https://github.com/ropensci/piggyback/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.1.9002",
+  "version": "0.1.5.9003",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.1.0 (2021-05-18)",
+  "runtimePlatform": "R version 4.3.2 (2023-10-31)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -27,6 +27,12 @@
       "familyName": "Boettiger",
       "email": "cboettig@gmail.com",
       "@id": "https://orcid.org/0000-0002-1642-628X"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Tan",
+      "familyName": "Ho",
+      "@id": "https://orcid.org/0000-0001-8388-5155"
     }
   ],
   "contributor": [
@@ -47,12 +53,6 @@
       "givenName": "Kevin",
       "familyName": "Kuo",
       "@id": "https://orcid.org/0000-0001-7803-7901"
-    },
-    {
-      "@type": "Person",
-      "givenName": "Tan",
-      "familyName": "Ho",
-      "@id": "https://orcid.org/0000-0001-8388-5155"
     }
   ],
   "copyrightHolder": [
@@ -124,23 +124,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "gert",
-      "name": "gert",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=gert"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "datasets",
-      "name": "datasets"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "knitr",
       "name": "knitr",
       "provider": {
@@ -165,15 +148,27 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "usethis",
-      "name": "usethis",
+      "identifier": "gert",
+      "name": "gert",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=usethis"
+      "sameAs": "https://CRAN.R-project.org/package=gert"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "withr",
+      "name": "withr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=withr"
     },
     {
       "@type": "SoftwareApplication",
@@ -263,18 +258,6 @@
     },
     "7": {
       "@type": "SoftwareApplication",
-      "identifier": "lubridate",
-      "name": "lubridate",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=lubridate"
-    },
-    "8": {
-      "@type": "SoftwareApplication",
       "identifier": "memoise",
       "name": "memoise",
       "provider": {
@@ -285,7 +268,19 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=memoise"
     },
+    "8": {
+      "@type": "SoftwareApplication",
+      "identifier": "rlang",
+      "name": "rlang",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rlang"
+    },
     "SystemRequirements": null
   },
-  "fileSize": "357.526KB"
+  "fileSize": "380.757KB"
 }
