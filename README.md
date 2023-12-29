@@ -65,6 +65,8 @@ fs::dir_tree(tempdir())
 ```
 
 Downloading from private repos or uploading to any repo requires
+authentication, specifically a \[gh::gh_token()\] or a GITHUB_PAT
+environment variable - for more information, see the vignette notes on
 [authentication](https://docs.ropensci.org/piggyback/articles/piggyback.html#authentication).
 
 We can also upload data to a release. Start by creating a release:
@@ -89,7 +91,7 @@ pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback-tests")
 A brief video overview presented as part of Tan Ho’s [RStudioConf2022
 talk](https://www.youtube.com/watch?v=wzcz4xNGeTI&t=655s):
 
-https://github.com/ropensci/piggyback/assets/38083823/4f58aeb5-3292-48b5-95a3-954304c06592
+<https://github.com/ropensci/piggyback/assets/38083823/a1dff640-1bba-4c06-bad2-feda34f47387>
 
 `piggyback` allows you to store data alongside your repository as
 release assets, which helps you:
