@@ -85,6 +85,10 @@ pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback-tests")
 #> |===================================================| 100%
 ```
 
+For improved performance, we can also use piggyback files with 
+[cloud native](https://docs.ropensci.org/piggyback/articles/cloud_native.html)
+workflows to query data without downloading it first. 
+
 ## Motivations
 
 A brief video overview presented as part of Tan Ho's [RStudioConf2022 talk](https://www.youtube.com/watch?v=wzcz4xNGeTI&t=655s):

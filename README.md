@@ -65,8 +65,11 @@ fs::dir_tree(tempdir())
 ```
 
 Downloading from private repos or uploading to any repo requires
-authentication, specifically a \[gh::gh_token()\] or a GITHUB_PAT
-environment variable - for more information, see the vignette notes on
+authentication, specifically a GitHub Personal Access Token (PAT). This
+can be stored as a
+[gh::gh_token()](https://usethis.r-lib.org/articles/git-credentials.html#get-a-personal-access-token-pat)
+or a GITHUB_PAT environment variable - for more information, see the
+vignette notes on
 [authentication](https://docs.ropensci.org/piggyback/articles/piggyback.html#authentication).
 
 We can also upload data to a release. Start by creating a release:
@@ -85,6 +88,10 @@ pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback-tests")
 #> ℹ Uploading mtcars.tsv.gz ...
 #> |===================================================| 100%
 ```
+
+For improved performance, we can also use piggyback files with [cloud
+native](https://docs.ropensci.org/piggyback/articles/cloud_native.html)
+workflows to query data without downloading it first.
 
 ## Motivations
 
