@@ -1,0 +1,2 @@
+# for usage in tests/testthat/with_auth.R
+TAN_GH_TOKEN=github_pat_[\w{22}]_[\w{59}]

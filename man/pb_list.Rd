@@ -7,12 +7,13 @@
 pb_list(repo = guess_repo(), tag = NULL, .token = gh::gh_token())
 }
 \arguments{
-\item{repo}{Repository name in format "owner/repo". Defaults to \code{guess_repo()}.}
+\item{repo}{string: GH repository name in format "owner/repo". Default \code{guess_repo()}
+tries to guess based on current working directory's git repository}
 
 \item{tag}{which release tag(s) do we want information for? If \code{NULL} (default),
 will return a table for all available release tags.}
 
-\item{.token}{GitHub authentication token, see \verb{[gh::gh_token()]}}
+\item{.token}{GitHub authentication token, see \code{\link[gh:gh_token]{gh::gh_token()}}}
 }
 \value{
 a data.frame of release asset names, release tag, timestamp, owner, and repo.

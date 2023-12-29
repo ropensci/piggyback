@@ -114,7 +114,6 @@ test_that("Missing files are reported in download and download_url", {
   )
 
   expect_warning({
-
       x <- pb_download(
         file = "iris.csv.gz",
         repo = "cboettig/piggyback-tests",

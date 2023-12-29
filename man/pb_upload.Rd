@@ -17,27 +17,30 @@ pb_upload(
 )
 }
 \arguments{
-\item{file}{path to file to be uploaded}
+\item{file}{string: path to file to be uploaded}
 
-\item{repo}{Repository name in format "owner/repo". Defaults to \code{guess_repo()}.}
+\item{repo}{string: GH repository name in format "owner/repo". Default \code{guess_repo()}
+tries to guess based on current working directory's git repository}
 
-\item{tag}{tag for the GitHub release to which this data should be attached.}
+\item{tag}{string: tag for the GH release, defaults to "latest"}
 
-\item{name}{name for uploaded file. If not provided will use the basename of
+\item{name}{string: name for uploaded file. If not provided will use the basename of
 \code{file} (i.e. filename without directory)}
 
-\item{overwrite}{overwrite any existing file with the same name already
-attached to the on release? Default behavior is based on timestamps,
-only overwriting those files which are older.}
+\item{overwrite}{choice: overwrite any existing file with the same name already
+attached to the on release? Options are "use_timestamps", TRUE, or FALSE:
+default "use_timestamps" will only overwrite files where the release timestamp
+is newer than the local file.}
 
 \item{use_timestamps}{DEPRECATED.}
 
 \item{show_progress}{logical, show a progress bar be shown for uploading?
-Defaults to \verb{[interactive()]} - can also set globally with options("piggyback.verbose")}
+Defaults to \code{\link[=interactive]{interactive()}} - can also set globally with options("piggyback.verbose")}
 
-\item{.token}{GitHub authentication token, see \verb{[gh::gh_token()]}}
+\item{.token}{GitHub authentication token, see \code{\link[gh:gh_token]{gh::gh_token()}}}
 
-\item{dir}{directory relative to which file names should be based, defaults to NULL for current working directory.}
+\item{dir}{directory relative to which file names should be based,
+defaults to NULL for current working directory.}
 }
 \description{
 NOTE: you must first create a release if one does not already exists.
