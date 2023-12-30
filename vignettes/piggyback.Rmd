@@ -166,11 +166,111 @@ matter, and have some vignettes with examples:
 - [cloud native workflows](https://docs.ropensci.org/piggyback/articles/cloud_native.html)
 - disk native workflows
 
+### Reading files
+
+`pb_read()` is a wrapper on the first pattern - it downloads the file to a temp
+file, then reads that file into memory, then deletes the temporary file. It
+works for both public and private repositories, handling authentication under
+the hood:
+
+```{r}
+pb_read("mtcars.rds", repo = "tanho63/piggyback-private")
+#> # A data.frame: 32 × 11
+#>     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
+#>   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#> 1  21       6   160   110  3.9   2.62  16.5     0     1     4     4
+#> 2  21       6   160   110  3.9   2.88  17.0     0     1     4     4
+#> 3  22.8     4   108    93  3.85  2.32  18.6     1     1     4     1
+#> 4  21.4     6   258   110  3.08  3.22  19.4     1     0     3     1
+#> 5  18.7     8   360   175  3.15  3.44  17.0     0     0     3     2
+#> # ℹ 27 more rows
+#> # ℹ 1 more variable: carb <dbl>
+pb_read("mtcars.parquet", repo = "tanho63/piggyback-private")
+#> # A data.frame: 32 × 11
+#>     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
+#>   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#> 1  21       6   160   110  3.9   2.62  16.5     0     1     4     4
+#> 2  21       6   160   110  3.9   2.88  17.0     0     1     4     4
+#> 3  22.8     4   108    93  3.85  2.32  18.6     1     1     4     1
+#> 4  21.4     6   258   110  3.08  3.22  19.4     1     0     3     1
+#> 5  18.7     8   360   175  3.15  3.44  17.0     0     0     3     2
+#> # ℹ 27 more rows
+#> # ℹ 1 more variable: carb <dbl>
+```
+
+By default, `pb_read` is programmed to use the following `read_function` for the 
+corresponding file extensions:
+
+- ".csv", ".csv.gz", ".csv.xz" are read with `utils::read.csv()`
+- ".tsv", ".tsv.gz", ".tsv.xz" are read with `utils::read.delim()`
+- ".rds" is read with `readRDS()`
+- ".json" is read with `jsonlite::fromJSON()`
+- ".parquet" is read with `arrow::read_parquet()`
+- ".txt" is read with `readLines()`
+
+If a file extension is not on this list, `pb_read` will raise an error and ask
+you to provide a `read_function` - you can also use this parameter to override
+the default `read_function` yourself:
+
+```{r}
+pb_read(
+  file = "play_by_play_2023.qs", 
+  repo = "nflverse/nflverse-data",
+  tag = "pbp",
+  read_function = qs::qread
+)
+#> # A tibble: 42,251 × 372
+#>   play_id game_id        old_game_id home_team away_team season_type  week posteam
+#>     <dbl> <chr>          <chr>       <chr>     <chr>     <chr>       <int> <chr>  
+#> 1       1 2023_01_ARI_W… 2023091007  WAS       ARI       REG             1 NA     
+#> 2      39 2023_01_ARI_W… 2023091007  WAS       ARI       REG             1 WAS    
+#> 3      55 2023_01_ARI_W… 2023091007  WAS       ARI       REG             1 WAS    
+#> 4      77 2023_01_ARI_W… 2023091007  WAS       ARI       REG             1 WAS    
+#> 5     102 2023_01_ARI_W… 2023091007  WAS       ARI       REG             1 WAS    
+#> # ℹ 42,246 more rows
+#> # ℹ 364 more variables: posteam_type <chr>, defteam <chr>, side_of_field <chr>,
+#> #   yardline_100 <dbl>, game_date <chr>, quarter_seconds_remaining <dbl>,
+#> #   half_seconds_remaining <dbl>, game_seconds_remaining <dbl>, game_half <chr>,
+#> #   quarter_end <dbl>, drive <dbl>, sp <dbl>, qtr <dbl>, down <dbl>,
+#> #   goal_to_go <dbl>, time <chr>, yrdln <chr>, ydstogo <dbl>, ydsnet <dbl>,
+#> #   desc <chr>, play_type <chr>, yards_gained <dbl>, shotgun <dbl>, …
+```
+
+Any `read_function` can be provided so long as it accepts the filename as the
+first argument, and you can pass any additional parameters via `...`:
+
+```{r}
+pb_read(
+  file = "play_by_play_2023.csv", 
+  n_max = 10,
+  repo = "nflverse/nflverse-data",
+  tag = "pbp",
+  read_function = readr::read_csv
+)
+#> # A tibble: 10 × 372
+#>   play_id game_id        old_game_id home_team away_team season_type  week posteam
+#>     <dbl> <chr>          <chr>       <chr>     <chr>     <chr>       <int> <chr>  
+#> 1       1 2023_01_ARI_W… 2023091007  WAS       ARI       REG             1 NA     
+#> 2      39 2023_01_ARI_W… 2023091007  WAS       ARI       REG             1 WAS    
+#> 3      55 2023_01_ARI_W… 2023091007  WAS       ARI       REG             1 WAS    
+#> 4      77 2023_01_ARI_W… 2023091007  WAS       ARI       REG             1 WAS    
+#> 5     102 2023_01_ARI_W… 2023091007  WAS       ARI       REG             1 WAS    
+#> # ℹ 5 more rows
+#> # ℹ 364 more variables: posteam_type <chr>, defteam <chr>, side_of_field <chr>,
+#> #   yardline_100 <dbl>, game_date <chr>, quarter_seconds_remaining <dbl>,
+#> #   half_seconds_remaining <dbl>, game_seconds_remaining <dbl>, game_half <chr>,
+#> #   quarter_end <dbl>, drive <dbl>, sp <dbl>, qtr <dbl>, down <dbl>,
+#> #   goal_to_go <dbl>, time <chr>, yrdln <chr>, ydstogo <dbl>, ydsnet <dbl>,
+#> #   desc <chr>, play_type <chr>, yards_gained <dbl>, shotgun <dbl>, …
+```
+
 ### Reading from URLs
 
-Many read functions accept URLs, including `read.csv()`, `arrow::read_parquet()`,
-`readr::read_csv()`, `data.table::fread()`, and `jsonlite::fromJSON()`, so reading
-in one file can be done efficiently by passing along the output of `pb_download_url()`
+More efficiently, many read functions accept URLs, including `read.csv()`,
+`arrow::read_parquet()`, `readr::read_csv()`, `data.table::fread()`, and 
+`jsonlite::fromJSON()`, so reading in one file can be done by passing along the 
+output of `pb_download_url()`:
+
 ```{r}
 pb_download_url("mtcars.csv", repo = "tanho63/piggyback-tests", tag = "v0.0.2") %>%
   read.csv()
@@ -187,7 +287,8 @@ pb_download_url("mtcars.csv", repo = "tanho63/piggyback-tests", tag = "v0.0.2") 
 #> # ℹ Use `print(n = ...)` to see more rows
 ```
 
-Some functions also accept connections when wrapped by `url()`, e.g. for `readRDS()`:
+Some functions also accept URLs when converted into a connection by wrapping it 
+in `url()`, e.g. for `readRDS()`:
 ```{r}
 pb_url <- pb_download_url("mtcars.rds", repo = "tanho63/piggyback-tests", tag = "v0.0.2") %>%
   url()
@@ -207,8 +308,8 @@ close(pb_url)
 Note that using `url()` requires that we close the connection after reading it, 
 or else we will receive warnings about leaving open connections.
 
-We can also use this `url()` approach to pass along authentication for private 
-repositories, e.g.
+This `url()` approach allows us to pass along authentication for private repos, 
+e.g.
 ```{r}
 pb_url <- pb_download_url("mtcars.rds", repo = "tanho63/piggyback-private", url_type = "api") %>%
   url(
@@ -230,6 +331,9 @@ readRDS(pb_url)
 #> # ℹ Use `print(n = ...)` to see more rows
 close(pb_url)
 ```
+
+Note that `arrow` does not accept a `url()` connection at this time, so you should
+default to `pb_read()` for private repositories instead.
 
 ## Uploading data
 
