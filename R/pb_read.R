@@ -28,10 +28,10 @@
 #' })
 #' }
 pb_read <- function(file,
+                    ...,
                     repo = guess_repo(),
                     tag = "latest",
                     read_function = guess_read_function(file),
-                    ...,
                     .token = gh::gh_token()) {
   stopifnot(
     is.character(file) && length(file) == 1,

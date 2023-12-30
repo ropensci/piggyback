@@ -6,15 +6,17 @@
 \usage{
 pb_read(
   file,
+  ...,
   repo = guess_repo(),
   tag = "latest",
   read_function = guess_read_function(file),
-  ...,
   .token = gh::gh_token()
 )
 }
 \arguments{
 \item{file}{string: file name}
+
+\item{...}{additional arguments passed to \code{read_function} after file}
 
 \item{repo}{string: GH repository name in format "owner/repo". Default
 \code{guess_repo()} tries to guess based on current working directory's git repo}
@@ -26,8 +28,6 @@ passed as the first argument and any additional arguments are subsequently
 passed in via \code{...}. Default \code{guess_read_function(file)} will check the file
 extension and try to find an appropriate read function if the extension is one
 of rds, csv, tsv, parquet, txt, or json, and will abort if not found.}
-
-\item{...}{additional arguments passed to \code{read_function} after file}
 
 \item{.token}{GitHub authentication token, see \code{\link[gh:gh_token]{gh::gh_token()}}}
 }

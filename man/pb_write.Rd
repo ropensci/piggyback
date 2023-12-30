@@ -7,10 +7,10 @@
 pb_write(
   x,
   file,
+  ...,
   repo = guess_repo(),
   tag = "latest",
   write_function = guess_write_function(file),
-  ...,
   .token = gh::gh_token()
 )
 }
@@ -18,6 +18,8 @@ pb_write(
 \item{x}{object: memory object to save to piggyback}
 
 \item{file}{string: file name}
+
+\item{...}{additional arguments passed to \code{write_function}}
 
 \item{repo}{string: GH repository name in format "owner/repo". Default
 \code{guess_repo()} tries to guess based on current working directory's git repo}
@@ -30,8 +32,6 @@ and any additional arguments are subsequently passed in via \code{...}. Default
 \code{guess_write_function(file)} will check the file extension and try to find an
 appropriate write function if the extension is one of rds, csv, tsv, parquet,
 txt, or json, and will abort if not found.}
-
-\item{...}{additional arguments passed to \code{write_function}}
 
 \item{.token}{GitHub authentication token, see \code{\link[gh:gh_token]{gh::gh_token()}}}
 }

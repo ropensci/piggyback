@@ -5,6 +5,7 @@
 #'
 #' @param x object: memory object to save to piggyback
 #' @param file string: file name
+#' @param ... additional arguments passed to `write_function`
 #' @param repo string: GH repository name in format "owner/repo". Default
 #' `guess_repo()` tries to guess based on current working directory's git repo
 #' @param tag  string: tag for the GH release, defaults to "latest"
@@ -14,7 +15,6 @@
 #' `guess_write_function(file)` will check the file extension and try to find an
 #' appropriate write function if the extension is one of rds, csv, tsv, parquet,
 #' txt, or json, and will abort if not found.
-#' @param ... additional arguments passed to `write_function`
 #' @param .token GitHub authentication token, see [gh::gh_token()]
 #'
 #' @export
@@ -31,10 +31,10 @@
 #'}
 pb_write <- function(x,
                      file,
+                     ...,
                      repo = guess_repo(),
                      tag = "latest",
                      write_function = guess_write_function(file),
-                     ...,
                      .token = gh::gh_token()) {
   stopifnot(
     is.character(file) && length(file) == 1,
