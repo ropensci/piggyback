@@ -21,10 +21,13 @@ pb_read(
 
 \item{tag}{string: tag for the GH release, defaults to "latest"}
 
-\item{read_function}{function: specifies how to read in the data. Default
-tries to guess a function based on file extension (csv, rds, parquet, txt, json)}
+\item{read_function}{function: used to read in the data, where the file is
+passed as the first argument and any additional arguments are subsequently
+passed in via \code{...}. Default \code{guess_read_function(file)} will check the file
+extension and try to find an appropriate read function if the extension is one
+of rds, csv, tsv, parquet, txt, or json, and will abort if not found.}
 
-\item{...}{additional arguments passed to \code{read_function}}
+\item{...}{additional arguments passed to \code{read_function} after file}
 
 \item{.token}{GitHub authentication token, see \code{\link[gh:gh_token]{gh::gh_token()}}}
 }
@@ -35,7 +38,7 @@ Result of reading in the file in question.
 A convenience wrapper around writing an object to a temporary file and then
 uploading to a specified repo/release. This convenience comes at a cost to
 performance efficiency, since it first downloads the data to disk and then
-reads the data from disk into memory. See \code{vignette("duckdb_arrow")} for
+reads the data from disk into memory. See \code{vignette("cloud_native")} for
 alternative ways to bypass this flow and work with the data directly.
 }
 \examples{
@@ -45,3 +48,10 @@ try({ # try block is to avoid CRAN issues and is not required in ordinary usage
 })
 }
 }
+\seealso{
+Other pb_rw: 
+\code{\link{guess_read_function}()},
+\code{\link{guess_write_function}()},
+\code{\link{pb_write}()}
+}
+\concept{pb_rw}

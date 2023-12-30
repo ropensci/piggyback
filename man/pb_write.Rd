@@ -24,8 +24,12 @@ pb_write(
 
 \item{tag}{string: tag for the GH release, defaults to "latest"}
 
-\item{write_function}{function: specifies how to read in the data. Default
-tries to guess a function based on file extension (csv, rds, txt, parquet, json)}
+\item{write_function}{function: used to write an R object to file, where the
+object is passed as the first argument, the filename as the second argument,
+and any additional arguments are subsequently passed in via \code{...}. Default
+\code{guess_write_function(file)} will check the file extension and try to find an
+appropriate write function if the extension is one of rds, csv, tsv, parquet,
+txt, or json, and will abort if not found.}
 
 \item{...}{additional arguments passed to \code{write_function}}
 
@@ -40,11 +44,18 @@ uploading to a specified repo/release.
 }
 \examples{
 \donttest{
-if (interactive()) {
+\dontshow{if (interactive()) \{}
   pb_write(mtcars, "mtcars.rds", repo = "tanho63/piggyback-tests")
   #> ℹ Uploading to latest release: "v0.0.2".
   #> ℹ Uploading mtcars.rds ...
   #> |===============================================================| 100\%
+\dontshow{\}}
 }
 }
+\seealso{
+Other pb_rw: 
+\code{\link{guess_read_function}()},
+\code{\link{guess_write_function}()},
+\code{\link{pb_read}()}
 }
+\concept{pb_rw}
