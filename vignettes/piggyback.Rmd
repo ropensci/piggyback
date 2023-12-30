@@ -333,27 +333,28 @@ close(pb_url)
 ```
 
 Note that `arrow` does not accept a `url()` connection at this time, so you should
-default to `pb_read()` for private repositories instead.
+default to `pb_read()` if using private repositories. 
+<!-- update if we implement pb_read_url? -->
 
 ## Uploading data
 
-If your GitHub repository doesn't have any 
-[releases](https://docs.github.com/en/github/administering-a-repository/managing-releases-in-a-repository) 
-yet, `piggyback` will help you quickly create one.  Create new releases to manage 
-multiple versions of a given data file, or to organize sets of files. 
-
-While you can create releases as often as you like, making a new release is not 
-necessary each time you upload a file.  If maintaining old versions of the data 
-is not useful, you can stick with a single release and upload all of your data 
-there.  
+`piggyback` uploads data to GitHub releases. If your repository doesn't have a
+release yet, `piggyback` will prompt you to create one - you can create a release
+with:
 
 ```{r}
 pb_release_create(repo = "cboettig/piggyback-tests", tag = "v0.0.2")
 #> ✔ Created new release "v0.0.2".
 ```
 
-Once we have at least one release available, we are ready to upload.  By default, 
-`pb_upload` will attach data to the latest release.  
+Create new releases to manage multiple versions of a given data file, or to 
+organize sets of files under a common topic. While you can create releases as 
+often as you like, making a new release is not necessary each time you upload a 
+file.  If maintaining old versions of the data is not useful, you can stick with 
+a single release and upload all of your data there.  
+
+Once we have at least one release available, we are ready to upload files.  By 
+default, `pb_upload` will attach data to the latest release.  
 
 ```{r}
 ## We'll need some example data first.
@@ -371,14 +372,9 @@ attached to the release file by default, unless the timestamp of the previously
 uploaded version is more recent.  You can toggle these settings with the `overwrite`
 parameter.
 
-### Multiple files
-
-You can pass in a vector of file paths with something like `list.files()` to the 
-`file` argument of `pb_upload()` in order to upload multiple files. Some common patterns: 
-
+`pb_upload` also accepts a vector of multiple files to upload:
 ```{r}
 library(magrittr)
-
 ## upload a folder of data
 list.files("data") %>% 
   pb_upload(repo = "cboettig/piggyback-tests", tag = "v0.0.1")
@@ -387,8 +383,40 @@ list.files("data") %>%
 list.files(pattern = c("*.tsv.gz", "*.tif", "*.zip")) %>% 
   pb_upload(repo = "cboettig/piggyback-tests", tag = "v0.0.1")
 ```
-Similarly, you can download all current data assets of the latest or specified 
-release by using `pb_download()` with no arguments.
+
+### Write R object directly to release
+
+`pb_write` wraps the above process, essentially allowing you to upload directly
+to a release by providing an object, filename, and repo/tag:
+
+```{r}
+pb_write(mtcars, "mtcars.rds", repo = "cboettig/piggyback-tests")
+#> ℹ Uploading to latest release: "v0.0.2".
+#> ℹ Uploading mtcars.rds ...
+#>   |===================================================| 100%
+```
+
+Similar to `pb_read`, `pb_write` has some pre-programmed `write_functions` for 
+the following file extensions:
+- ".csv", ".csv.gz", ".csv.xz" are written with `utils::write.csv()`
+- ".tsv", ".tsv.gz", ".tsv.xz" are written with `utils::write.csv(x, filename, sep = '\t')`
+- ".rds" is written with `saveRDS()`
+- ".json" is written with `jsonlite::write_json()`
+- ".parquet" is written with `arrow::write_parquet()`
+- ".txt" is written with `writeLines()`
+
+and you can pass custom functions with the `write_function` parameter:
+```{r}
+pb_write(
+  x = mtcars, 
+  file = "mtcars.csv.gz", 
+  repo = "cboettig/piggyback-tests", 
+  write_function = data.table::fwrite
+)
+#> ℹ Uploading to latest release: "v0.0.2".
+#> ℹ Uploading mtcars.csv.gz ...
+#>   |===================================================| 100%
+```
 
 ## Deleting Files
 
@@ -422,17 +450,17 @@ To reduce GitHub API calls, piggyback caches `pb_releases` and `pb_list` with a
 timeout of 10 minutes by default.  This avoids repeating identical requests to 
 update its internal record of the repository data (releases, assets, timestamps, etc) 
 during programmatic use.  You can increase or decrease this delay by setting the 
-environment variable in seconds, e.g. `Sys.setenv("piggyback_cache_duration" = 10)` 
-for a longer delay or `Sys.setenv("piggyback_cache_duration" = 0)` to disable caching, 
+environment variable in seconds, e.g. `Sys.setenv("piggyback_cache_duration" = 3600)` 
+for a longer cache or `Sys.setenv("piggyback_cache_duration" = 0)` to disable caching, 
 and then restarting R.
 
 ## Valid file names
 
-GitHub assets attached to a release do not support file paths, and will convert 
-most special characters (`#`, `%`, etc) to `.` or throw an error (e.g. for file 
-names containing `$`, `@`, `/`). `piggyback` will default to using the base name of 
-the file only (i.e. will only use `"mtcars.csv"` if provided a file path like 
-`"data/mtcars.csv"`)
+GitHub assets attached to a release do not support file paths, and will sometimes
+convert most special characters (`#`, `%`, etc) to `.` or throw an error (e.g. 
+for file names containing `$`, `@`, `/`). `piggyback` will default to using the 
+`basename()` of the file only (i.e. will only use `"mtcars.csv"` if provided a 
+file path like `"data/mtcars.csv"`)
 
 ## A Note on GitHub Releases vs Data Archiving
 
