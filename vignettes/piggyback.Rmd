@@ -114,7 +114,7 @@ fs::dir_tree(tempdir())
 `pb_download()` also includes arguments to control the progress bar or if any 
 particular files should not be downloaded.
 
-## Download URLs
+### Download URLs
 
 Sometimes it is preferable to have a URL from which the data can be read in directly.
 These URL can then be passed into another R function, which can be more elegant 
