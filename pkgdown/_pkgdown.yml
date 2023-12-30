@@ -7,6 +7,8 @@ reference:
   - "pb_download_url"
   - "pb_upload"
   - "pb_delete"
+  - "pb_read"
+  - "pb_write"
 - title: Create/Delete Releases
   desc: Functions for working with releases
   contents:

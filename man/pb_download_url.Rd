@@ -39,11 +39,34 @@ functions that are able to accept URLs.
 \donttest{
 \dontshow{try(\{}
 
-# returns browser url by default
-pb_download_url("iris.tsv.xz", repo = "cboettig/piggyback-tests", tag = "v0.0.1")
+# returns browser url by default (and all files if none are specified)
+browser_url <- pb_download_url(
+  repo = "tanho63/piggyback-tests",
+  tag = "v0.0.2"
+  )
+print(browser_url)
+utils::read.csv(browser_url[[1]])
 
 # can return api url if desired
-pb_download_url("iris.tsv.xz", repo = "cboettig/piggyback-tests", tag = "v0.0.1", url_type = "api")
+api_url <- pb_download_url(
+  "mtcars.csv",
+  repo = "tanho63/piggyback-tests",
+  tag = "v0.0.2"
+  )
+print(api_url)
+
+# for public repositories, this will still work
+utils::read.csv(api_url)
+
+# for private repos, can use httr or curl to fetch and then pass into read function
+gh_pat <- Sys.getenv("GITHUB_PAT")
+
+if(!identical(gh_pat, "")){
+  resp <- httr::GET(api_url, httr::add_headers(Authorization = paste("Bearer", gh_pat)))
+  utils::read.csv(text = httr::content(resp, as = "text"))
+}
+
+# or use pb_read which bundles some of this for you
 
 \dontshow{\})}
 }

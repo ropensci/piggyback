@@ -70,7 +70,7 @@ pb_download_url <- function(file = NULL,
     file <- file[file %in% df$file_name]
   }
 
-  if(length(file) == 0) return(cli::cli_abort("No download URLs to return."))
+  if(length(file) == 0) return(cli::cli_abort("No download URLs found"))
 
   switch(
     url_type,

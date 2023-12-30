@@ -126,3 +126,46 @@ test_that("Missing files are reported in download and download_url", {
     )
 
 })
+
+context("pb_read")
+test_that("pb_read can read a file from release directly into memory", {
+  skip_if_offline("api.github.com")
+
+  test_tsv <- pb_read(
+    file = "iris.tsv.gz",
+    repo = "cboettig/piggyback-tests",
+    tag = "v0.0.1",
+    .token = gh::gh_token()
+  )
+
+  expect_equivalent(datasets::iris[[2]], test_tsv[[2]])
+})
+
+test_that("pb_read can autodetect different file formats",{
+  test_rds <- pb_read(
+    file = "mtcars.rds",
+    repo = "tanho63/piggyback-tests",
+    tag = "v0.0.2"
+  )
+
+  expect_equal(nrow(mtcars), nrow(test_rds))
+
+  skip_if_not_installed("arrow")
+  test_parquet <- pb_read(
+    file = "mtcars.parquet",
+    repo = "tanho63/piggyback-tests",
+    tag = "v0.0.2"
+  )
+  expect_equal(nrow(mtcars), nrow(test_parquet))
+})
+
+test_that("pb_read can accept a custom read_function",{
+  skip_if_not_installed("readr")
+  test_parquet <- pb_read(
+    file = "mtcars.csv",
+    repo = "tanho63/piggyback-tests",
+    tag = "v0.0.2",
+    read_function = readr::read_csv
+  )
+  expect_equal(nrow(mtcars), nrow(test_parquet))
+})

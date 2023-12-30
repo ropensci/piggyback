@@ -51,6 +51,60 @@ test_that("Error if we try to create an existing release",{
 
 })
 
+context("pb_write")
+test_that("pb_write can write file from memory to release", {
+  skippy(TRUE)
+  skip_if_offline("api.github.com")
+
+  out <- pb_write(
+    x = mtcars,
+    file = "mtcars.rds",
+    repo = test_repo,
+    tag = test_release_tag,
+    .token = token
+  )
+  expect_type(out,"list")
+  expect_equal(out[[1]][["status_code"]], 201)
+})
+
+test_that("pb_write can autodetect different file formats",{
+  out <- pb_write(
+    x = mtcars,
+    file = "mtcars.csv",
+    repo = test_repo,
+    tag = test_release_tag,
+    .token = token
+  )
+
+  expect_type(out,"list")
+  expect_equal(out[[1]][["status_code"]], 201)
+
+  skip_if_not_installed("arrow")
+  out <- pb_write(
+    x = mtcars,
+    file = "mtcars.parquet",
+    repo = test_repo,
+    tag = test_release_tag,
+    .token = token
+  )
+  expect_type(out,"list")
+  expect_equal(out[[1]][["status_code"]], 201)
+})
+
+test_that("pb_write can accept a custom write_function",{
+  skip_if_not_installed("readr")
+  out <- pb_write(
+    x = mtcars,
+    file = "mtcars.csv.gz",
+    repo = test_repo,
+    tag = test_release_tag,
+    .token = token,
+    write_function = readr::write_csv
+  )
+  expect_type(out,"list")
+  expect_equal(out[[1]][["status_code"]], 201)
+})
+
 context("File upload")
 
 test_that("We can upload data", {
@@ -186,6 +240,8 @@ context("File delete")
 test_that("can delete files from release",{
   skippy(TRUE)
 
+  count_start <- nrow(pb_info(test_repo, test_release_tag))
+
   withr::with_options(list(piggyback.verbose = TRUE),{
     expect_message(
       pb_delete(file = basename(upload_files)[[1]],
@@ -196,7 +252,8 @@ test_that("can delete files from release",{
     )
   })
 
-  expect_equal(nrow(pb_info(test_repo, test_release_tag)), 1)
+  count_end <- nrow(pb_info(test_repo, test_release_tag))
+  expect_equal(count_start - 1, count_end)
 })
 
 test_that("warn if file to delete is not found",{
@@ -249,11 +306,21 @@ test_that("can download private repo file",{
 
   x <- read.csv(file.path(tempdir(),"iris_example.csv"))
 
-  # warning(paste(readLines(file.path(tempdir(),"iris_example.csv")), collapse = "\n"))
-
   expect_equal(
     nrow(x),
     150
   )
+})
 
+test_that("can read private repo files",{
+  skippy(TRUE)
+
+  x <- pb_read(
+    file = "iris_example.csv",
+    repo = "tanho63/piggyback-private",
+    tag = "iris",
+    .token = Sys.getenv("TAN_GH_TOKEN")
+  )
+
+  expect_equal(nrow(x), 150)
 })

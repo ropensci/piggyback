@@ -17,8 +17,8 @@ Status](https://badges.ropensci.org/220_status.svg)](https://github.com/ropensci
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.00971/status.svg)](https://doi.org/10.21105/joss.00971)
 <!-- badges: end -->
 
-`{piggyback}` provides an R interface for storing files as GitHub
-release assets, which is a convenient way for large/binary data files to
+`piggyback` provides an R interface for storing files as GitHub release
+assets, which is a convenient way for large/binary data files to
 *piggyback* onto public and private GitHub repositories. This package
 includes functions for file downloads, uploads, and managing releases,
 which then are passed to the GitHub API.

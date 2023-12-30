@@ -15,3 +15,4 @@ data/*
 .DS_Store
 CRAN_SUBMISSION
 CRAN_RELEASE
+docs/*
