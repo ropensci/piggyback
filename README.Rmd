@@ -7,7 +7,7 @@ output: github_document
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  eval = TRUE,
+  eval = FALSE,
   collapse = TRUE,
   message = FALSE,
   comment = "#>",
@@ -29,7 +29,7 @@ knitr::opts_chunk$set(
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.00971/status.svg)](https://doi.org/10.21105/joss.00971)
   <!-- badges: end -->
 
-`{piggyback}` provides an R interface for storing files as GitHub release assets, 
+`piggyback` provides an R interface for storing files as GitHub release assets,
 which is a convenient way for large/binary data files to _piggyback_ onto public 
 and private GitHub repositories. This package includes functions for file downloads,
 uploads, and managing releases, which then are passed to the GitHub API. 
@@ -117,8 +117,7 @@ Please note that this project is released with a
 [Contributor Code of Conduct](https://ropensci.org/code-of-conduct/).
 By participating in this project you agree to abide by its terms.
 
-```{r include=FALSE}
-unlink("*.gz")
+```{r eval=TRUE, include=FALSE}
 codemeta::write_codemeta()
 ```
 

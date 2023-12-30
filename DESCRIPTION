@@ -2,9 +2,9 @@ Package: piggyback
 Version: 0.1.5.9004
 Title: Managing Larger Data on a GitHub Repository
 Description: Helps store files as GitHub release assets, which is a convenient 
-way for large/binary data files to piggyback onto public and private GitHub 
-repositories. Includes functions for file downloads, uploads, and managing 
-releases via the GitHub API.
+  way for large/binary data files to piggyback onto public and private GitHub 
+  repositories. Includes functions for file downloads, uploads, and managing 
+  releases via the GitHub API.
 Authors@R: c(person("Carl", "Boettiger", 
                     email = "cboettig@gmail.com", 
                     role = c("aut", "cre", "cph"),

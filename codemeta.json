@@ -2,12 +2,12 @@
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "piggyback",
-  "description": "Because larger (> 50 MB) data files cannot easily be committed to git, a different approach is required to manage data associated with an analysis in a GitHub repository. This package provides a simple work-around by allowing larger (up to 2 GB) data files to piggyback on a repository as assets attached to individual GitHub releases. These files are not handled by git in any way, but instead are uploaded, downloaded, or edited directly by calls through the GitHub API. These data files can be versioned manually by creating different releases. This approach works equally well with public or private repositories. Data can be uploaded and downloaded programmatically from scripts. No authentication is required to download data from public repositories.",
+  "description": "Helps store files as GitHub release assets, which is a convenient way for large/binary data files to piggyback onto public and private GitHub repositories. Includes functions for file downloads, uploads, and managing releases via the GitHub API.",
   "name": "piggyback: Managing Larger Data on a GitHub Repository",
   "codeRepository": "https://github.com/ropensci/piggyback",
   "issueTracker": "https://github.com/ropensci/piggyback/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.5.9003",
+  "version": "0.1.5.9004",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -74,6 +74,18 @@
     }
   ],
   "softwareSuggestions": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "arrow",
+      "name": "arrow",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=arrow"
+    },
     {
       "@type": "SoftwareApplication",
       "identifier": "spelling",
@@ -282,5 +294,5 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "380.757KB"
+  "fileSize": "397.705KB"
 }
