@@ -1,8 +1,0 @@
-pandoc: 2.11.4
-pkgdown: 2.0.1
-pkgdown_sha: ~
-articles:
-  alternatives: alternatives.html
-  intro: intro.html
-last_built: 2022-02-09T19:01Z
-
