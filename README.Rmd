@@ -38,12 +38,12 @@ No authentication is required to download data from public repositories.
 
 ## Installation
 Install from CRAN via:
-```r
+```{r}
 install.packages("piggyback")
 ```
 You can install the development version from [GitHub](https://github.com/ropensci/piggyback)
 with either r-universe or with remotes:
-```r
+```{r}
 install.packages("piggyback", repos = c('https://ropensci.r-universe.dev', getOption("repos")))
 # install.packages("remotes")
 remotes::install_github("ropensci/piggyback")
@@ -53,7 +53,7 @@ See [getting started vignette](https://docs.ropensci.org/piggyback/articles/intr
 for a more comprehensive introduction.
 
 Download data attached to a GitHub release:
-```r
+```{r}
 library(piggyback)
 pb_download("iris2.tsv.gz", 
             repo = "cboettig/piggyback-tests",
@@ -72,12 +72,12 @@ or a GITHUB_PAT environment variable - for more information, see the vignette no
 [authentication](https://docs.ropensci.org/piggyback/articles/piggyback.html#authentication).
 
 We can also upload data to a release. Start by creating a release:
-```r
+```{r}
 pb_release_create(repo = "cboettig/piggyback-tests", tag = "v0.0.2")
 #> ✔ Created new release "v0.0.2".
 ```
 then upload to it:
-```r
+```{r}
 readr::write_tsv(mtcars, "mtcars.tsv.gz")
 pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback-tests")
 #> ℹ Uploading to latest release: "v0.0.2".

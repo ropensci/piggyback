@@ -36,47 +36,45 @@ number of files or bandwidth to deliver them.
 ## Authentication
 
 No authentication is required to download data from *public* GitHub repositories 
-using `piggyback`. Nevertheless, `piggyback` recommends setting a token when 
-possible to avoid rate limits. To upload data to any repository, or to download 
-data from *private* repositories, you will need to authenticate first. 
+using `piggyback`. Nevertheless, we recommends setting a token when possible to 
+avoid rate limits. To upload data to any repository, or to download data from 
+*private* repositories, you will need to authenticate first. 
 
-`piggyback` uses the same GitHub Personal Access Token (PAT) that devtools, usethis, and
-friends use (`gh::gh_token()`). The current best practice for managing your GitHub
-credentials is detailed in this [usethis vignette](https://usethis.r-lib.org/articles/git-credentials.html).
+`piggyback` uses the same GitHub Personal Access Token (PAT) that devtools, 
+usethis, and friends use (`gh::gh_token()`). The current best practice for 
+managing your GitHub credentials is detailed in this 
+[usethis vignette](https://usethis.r-lib.org/articles/git-credentials.html).
 
 You can also add the token as an environment variable, which may be useful in 
 situations where you use piggyback non-interactively (i.e.scheduled/automated scripts). 
 Here are the relevant steps:
 
 - Create a [GitHub Token](https://github.com/settings/tokens/new?scopes=repo,gist&description=PIGGYBACK_PAT)
-- Add the environment variable. You can do this:
-  - via project-specific Renviron: `usethis::edit_r_environ("project")`. You should
-  then add the Renviron to your gitignore via `usethis::use_git_ignore(".Renviron")`. 
-  **Avoid committing your GITHUB_PAT to the repository for security reasons!**
-  - via `Sys.setenv(GITHUB_PAT = "{your token}")` in your console for oneoff usage.
-  Avoid adding this line to your R scripts -- remember, the goal here is to avoid 
-  writing your private token in any file that might be shared, even privately.
+
+- Add the environment variable:
+  - via project-specific Renviron: 
+    - `usethis::use_git_ignore(".Renviron")` - update your gitignore to prevent 
+    accidentally committing your token to GitHub
+    - `usethis::edit_r_environ("project")` to open the Renviron file, and then 
+    add your token, e.g. `GITHUB_PAT=ghp_a1b2c3d4e5f6g7`
+  - via `Sys.setenv(GITHUB_PAT = "ghp_a1b2c3d4e5f6g7")` in your console for oneoff 
+  usage. Avoid adding this line to your R scripts -- remember, the goal here is 
+  to avoid writing your private token in any file that might be shared, even 
+  privately.
 
 ## Downloading data
 
 Download a file from a release:
-```r
-library(piggyback)
+```{r}
 pb_download("iris2.tsv.gz", 
             repo = "cboettig/piggyback-tests",
             tag = "v0.0.1",
             dest = tempdir())
-```
-```
-ℹ Downloading "iris2.tsv.gz"...
-  |======================================================| 100%
-```
-```r
+#> ℹ Downloading "iris2.tsv.gz"...
+#>   |======================================================| 100%
 fs::dir_tree(tempdir())
-```
-```
-/tmp/RtmpWxJSZj
-└── iris2.tsv.gz
+#> /tmp/RtmpWxJSZj
+#> └── iris2.tsv.gz
 ```
 
 **Tips:**
@@ -90,30 +88,23 @@ from most recent release (`latest`).
 in your repository: download locations will be relative to Project root.  
 `tempdir()` is used throughout the examples only to meet CRAN policies and is 
 unlikely to be the choice you actually want here.  
-
 4. Omit the file name to download all assets connected with a given release.  
-```r
+```{r}
 pb_download(repo = "cboettig/piggyback-tests",
             tag = "v0.0.1",
             dest = tempdir())
-```
-```
-ℹ Downloading "diamonds.tsv.gz"...
-  |======================================================| 100%
-ℹ Downloading "iris.tsv.gz"...
-  |======================================================| 100%
-ℹ Downloading "iris.tsv.xz"...
-  |======================================================| 100%
-```
-```r
+#> ℹ Downloading "diamonds.tsv.gz"...
+#>   |======================================================| 100%
+#> ℹ Downloading "iris.tsv.gz"...
+#>   |======================================================| 100%
+#> ℹ Downloading "iris.tsv.xz"...
+#>   |======================================================| 100%
 fs::dir_tree(tempdir())
-```
-```
-/tmp/RtmpWxJSZj
-├── diamonds.tsv.gz
-├── iris.tsv.gz
-├── iris.tsv.xz
-└── iris2.tsv.gz
+#> /tmp/RtmpWxJSZj
+#> ├── diamonds.tsv.gz
+#> ├── iris.tsv.gz
+#> ├── iris.tsv.xz
+#> └── iris2.tsv.gz
 ```
 
 These defaults mean that in most cases, it is sufficient to simply call `pb_download()` 
@@ -136,15 +127,13 @@ embedded directly into another R script, avoiding any dependence on `piggyback`
 (provided the repository is already public.)  To get a list of public download URLs 
 rather than actually downloading the files, use `pb_download_url()`:
 
-```r
+```{r}
 pb_download_url(repo = "cboettig/piggyback-tests",  
                 tag = "v0.0.1")
-```
-```
-[1] "https://github.com/cboettig/piggyback-tests/releases/download/v0.0.1/diamonds.tsv.gz"
-[2] "https://github.com/cboettig/piggyback-tests/releases/download/v0.0.1/iris.tsv.gz"    
-[3] "https://github.com/cboettig/piggyback-tests/releases/download/v0.0.1/iris.tsv.xz"    
-[4] "https://github.com/cboettig/piggyback-tests/releases/download/v0.0.1/iris2.tsv.gz" 
+#> [1] "https://github.com/cboettig/piggyback-tests/releases/download/v0.0.1/diamonds.tsv.gz"
+#> [2] "https://github.com/cboettig/piggyback-tests/releases/download/v0.0.1/iris.tsv.gz"    
+#> [3] "https://github.com/cboettig/piggyback-tests/releases/download/v0.0.1/iris.tsv.xz"    
+#> [4] "https://github.com/cboettig/piggyback-tests/releases/download/v0.0.1/iris2.tsv.gz" 
 ```
 
 Note that these will not work if authentication is required to download them
@@ -163,28 +152,23 @@ necessary each time you upload a file.  If maintaining old versions of the data
 is not useful, you can stick with a single release and upload all of your data 
 there.  
 
-```r
+```{r}
 pb_release_create(repo = "cboettig/piggyback-tests", tag = "v0.0.2")
-```
-```
-✔ Created new release "v0.0.2".
+#> ✔ Created new release "v0.0.2".
 ```
 
 Once we have at least one release available, we are ready to upload.  By default, 
 `pb_upload` will attach data to the latest release.  
 
-```r
+```{r}
 ## We'll need some example data first.
 ## Pro tip: compress your tabular data to save space & speed upload/downloads
 readr::write_tsv(mtcars, "mtcars.tsv.gz")
 
-pb_upload("mtcars.tsv.gz", 
-          repo = "cboettig/piggyback-tests")
-```
-```
-ℹ Uploading to latest release: "v0.0.2".
-ℹ Uploading mtcars.tsv.gz ...
-  |===================================================| 100%
+pb_upload("mtcars.tsv.gz", repo = "cboettig/piggyback-tests")
+#> ℹ Uploading to latest release: "v0.0.2".
+#> ℹ Uploading mtcars.tsv.gz ...
+#>   |===================================================| 100%
 ```
 
 Like `pb_download()`, `pb_upload()` will overwrite any file of the same name already 
@@ -196,7 +180,7 @@ parameter.
 
 You can pass in a vector of file paths with something like `list.files()` to the `file` argument of `pb_upload()` in order to upload multiple files. Some common patterns: 
 
-```r
+```{r}
 library(magrittr)
 
 ## upload a folder of data
@@ -215,13 +199,11 @@ release by using `pb_download()` with no arguments.
 
 Delete a file from a release:
 
-```r
+```{r}
 pb_delete(file = "mtcars.tsv.gz", 
           repo = "cboettig/piggyback-tests", 
           tag = "v0.0.1")
-```
-```
-ℹ Deleted "mtcars.tsv.gz" from "v0.0.1" release on "cboettig/piggyback-tests"
+> ℹ Deleted "mtcars.tsv.gz" from "v0.0.1" release on "cboettig/piggyback-tests"
 ```
 Note that this is irreversible unless you have a copy of the data elsewhere. 
 
@@ -230,16 +212,14 @@ Note that this is irreversible unless you have a copy of the data elsewhere.
 List all files currently piggybacking on a given release.  Omit `tag` to see 
 files on all releases.  
 
-```r
+```{r}
 pb_list(repo = "cboettig/piggyback-tests", 
         tag = "v0.0.1")
-```
-```
-        file_name   size           timestamp    tag    owner            repo
-1 diamonds.tsv.gz 571664 2021-09-07 23:38:31 v0.0.1 cboettig piggyback-tests
-2     iris.tsv.gz    846 2021-08-05 20:00:09 v0.0.1 cboettig piggyback-tests
-3     iris.tsv.xz    848 2020-03-07 06:18:32 v0.0.1 cboettig piggyback-tests
-4    iris2.tsv.gz    846 2018-10-05 17:04:33 v0.0.1 cboettig piggyback-tests
+#>         file_name   size           timestamp    tag    owner            repo
+#> 1 diamonds.tsv.gz 571664 2021-09-07 23:38:31 v0.0.1 cboettig piggyback-tests
+#> 2     iris.tsv.gz    846 2021-08-05 20:00:09 v0.0.1 cboettig piggyback-tests
+#> 3     iris.tsv.xz    848 2020-03-07 06:18:32 v0.0.1 cboettig piggyback-tests
+#> 4    iris2.tsv.gz    846 2018-10-05 17:04:33 v0.0.1 cboettig piggyback-tests
 ```
 
 ## Caching
