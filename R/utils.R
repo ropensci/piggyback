@@ -61,3 +61,14 @@ guess_repo <- function(path = ".") {
 .as_date <- function(x) {
   as.Date(x, tz = "UTC")
 }
+
+#' GitHub API URL
+#'
+#' Reads environment variable GITHUB_API_URL to determine base URL of API. Same
+#' as gh package. Defaults to `https://api.github.com`.
+#'
+#' @seealso <https://gh.r-lib.org/#environment-variables>
+#' @return string: API base url
+.gh_api_url <- function(){
+  Sys.getenv("GITHUB_API_URL", unset = "https://api.github.com")
+}
