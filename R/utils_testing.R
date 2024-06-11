@@ -13,9 +13,6 @@
 #' - tanho63/piggyback-tests
 #' - tanho63/piggyback-private (a private repository)
 #'
-#' @param test_token github token, typically stored at TAN_GH_TOKEN
-#' @param test_repos repos used in testing
-#'
 #' @keywords internal
 #' @return named vector of TRUE or FALSE as to whether the token is configured
 #' and can access the test repos.

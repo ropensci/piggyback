@@ -6,11 +6,6 @@
 \usage{
 .check_test_token()
 }
-\arguments{
-\item{test_token}{github token, typically stored at TAN_GH_TOKEN}
-
-\item{test_repos}{repos used in testing}
-}
 \value{
 named vector of TRUE or FALSE as to whether the token is configured
 and can access the test repos.
