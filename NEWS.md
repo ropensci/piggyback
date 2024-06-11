@@ -10,6 +10,7 @@ limits for pb_download. [#109]
 * `pb_download_url()` now can return choice of "browser" or "api" download URLs [#116]
 * Add new functions `pb_read()` and `pb_write()` as convenience wrappers around
 pattern of downloading to `tempfile()` and then reading into memory. [#97]
+* Support customizing GitHub base URL via GITHUB_API_URL environment variable, which should help support GH Enterprise [#122] 
 
 # piggyback 0.1.5
 
