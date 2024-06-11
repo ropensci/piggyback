@@ -34,7 +34,7 @@
     test_repos,
     function(repo) {
       r <- httr::GET(
-        paste0("https://api.github.com/repos/",repo),
+        paste0(.gh_api_url(),"/repos/",repo),
         httr::add_headers(Authorization = paste("token", test_token))
       )
 

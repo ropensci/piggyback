@@ -56,7 +56,7 @@ pb_release_create <- function(repo = guess_repo(),
 
   resp <- httr::RETRY(
     verb = "POST",
-    url = glue::glue("https://api.github.com/repos/{r[[1]]}/{r[[2]]}/releases"),
+    url = glue::glue("{.gh_api_url()}/repos/{r[[1]]}/{r[[2]]}/releases"),
     httr::add_headers(Authorization = paste("token",.token)),
     body = jsonlite::toJSON(payload, auto_unbox = TRUE),
     terminate_on = c(400, 401, 403, 404, 422)

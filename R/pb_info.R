@@ -107,7 +107,7 @@ get_release_assets <- function(releases, r, .token) {
         upload_url = releases$upload_url[i],
         browser_download_url = .extract_chr(a, "browser_download_url"),
         api_download_url = glue::glue(
-          "https://api.github.com/repos/{r[[1]]}/{r[[2]]}/releases/assets/{.extract_int(a, 'id')}"
+          "{.gh_api_url()}/repos/{r[[1]]}/{r[[2]]}/releases/assets/{.extract_int(a, 'id')}"
         ),
         id = .extract_int(a, "id"),
         state = .extract_chr(a, "state"),
