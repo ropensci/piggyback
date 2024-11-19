@@ -46,7 +46,7 @@ remotes::install_github("ropensci/piggyback")
 ## Usage
 
 See [getting started
-vignette](https://docs.ropensci.org/piggyback/articles/intro.html) for a
+vignette](https://docs.ropensci.org/piggyback/articles/piggyback.html) for a
 more comprehensive introduction.
 
 Download data attached to a GitHub release:
