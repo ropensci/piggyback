@@ -51,7 +51,7 @@ jobs:
         env:
           piggyback_cache_duration: 0
 
-      - run: Rscript -e 'paste("TAN_GH_TOKEN length", Sys.getenv("TAN_GH_TOKEN") |> nchar()) |> print()'
+      - run: Rscript -e 'paste("gh::gh_token() length", gh::gh_token() |> nchar()) |> print()'
 
       - uses: r-lib/actions/check-r-package@v2
         with:
