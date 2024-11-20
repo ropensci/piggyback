@@ -51,6 +51,8 @@ jobs:
         env:
           piggyback_cache_duration: 0
 
+      - run: Rscript -e 'paste("TAN_GH_TOKEN length", Sys.getenv("TAN_GH_TOKEN") |> nchar()) |> print()'
+
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
