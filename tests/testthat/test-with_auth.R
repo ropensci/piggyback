@@ -4,8 +4,9 @@
 #' - upload files to the release
 #' - delete files from the release
 #' - delete the release
-skippy <- function(use_auth = Sys.getenv("PIGGYBACK_USE_AUTH_TESTS", unset = FALSE)){
+skippy <- function(use_auth = Sys.getenv("PIGGYBACK_USE_AUTH_TESTS", unset = FALSE)) {
   if (!identical(toupper(use_auth), "TRUE")) skip("envvar PIGGYBACK_USE_AUTH_TESTS is not TRUE")
+  if (!identical(Sys.getenv("MY_UNIVERSE",""), "")) skip("skip tests when run on r-universe testing")
   skip_if_offline("api.github.com")
   token_check <- .check_test_token()
   skip_if(!all(token_check), names(token_check)[!token_check])
