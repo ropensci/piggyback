@@ -12,6 +12,8 @@ skippy <- function(use_auth = Sys.getenv("PIGGYBACK_USE_AUTH_TESTS", unset = FAL
   skip_if(!all(token_check), names(token_check)[!token_check])
 }
 
+skippy()
+
 # test_repo <- "ropensci/piggyback"
 test_repo <- "tanho63/piggyback"
 
@@ -28,9 +30,7 @@ token <- Sys.getenv("TAN_GH_TOKEN")
 
 context("Release creation")
 
-test_that("We can create a new release",{
-  skippy(TRUE)
-
+test_that("We can create a new release", {
   expect_message({
     x <- pb_release_create(repo = test_repo, tag = test_release_tag, .token = token)
   },
@@ -43,18 +43,14 @@ test_that("We can create a new release",{
 })
 
 test_that("Error if we try to create an existing release",{
-  skippy(TRUE)
-
   expect_warning(
     pb_release_create(repo = test_repo, tag = test_release_tag, .token = token),
     "Failed to create"
   )
-
 })
 
 context("pb_write")
 test_that("pb_write can write file from memory to release", {
-  skippy(TRUE)
   skip_if_offline("api.github.com")
 
   out <- pb_write(
@@ -109,9 +105,6 @@ test_that("pb_write can accept a custom write_function",{
 context("File upload")
 
 test_that("We can upload data", {
-
-  skippy(TRUE)
-
   out <- pb_upload(
     repo = test_repo,
     file = upload_files,
@@ -126,7 +119,6 @@ test_that("We can upload data", {
 })
 
 test_that("use_timestamps behaviour of upload overwrite works",{
-  skippy(TRUE)
   Sys.sleep(3)
   expect_warning(
     withr::with_options(list(piggyback.verbose = TRUE),{
@@ -141,12 +133,9 @@ test_that("use_timestamps behaviour of upload overwrite works",{
     }),
     "more recent version of"
   )
-
 })
 
 test_that("not overwriting existing files if overwrite = FALSE",{
-  skippy(TRUE)
-
   expect_warning(
     withr::with_options(list(piggyback.verbose = TRUE),{
       out <- pb_upload(
@@ -161,9 +150,6 @@ test_that("not overwriting existing files if overwrite = FALSE",{
 })
 
 test_that("cannot upload with invalid token", {
-
-  skippy(TRUE)
-
   expect_error(
     pb_upload(
       repo = test_repo,
@@ -178,9 +164,6 @@ test_that("cannot upload with invalid token", {
 })
 
 test_that("cannot upload nonexistent file", {
-
-  skippy(TRUE)
-
   expect_warning(
     pb_upload(
       repo = test_repo,
@@ -195,9 +178,6 @@ test_that("cannot upload nonexistent file", {
 })
 
 test_that("cannot upload to nonexistent release", {
-
-  skippy(TRUE)
-
   expect_error(
     pb_upload(
       repo = test_repo,
@@ -212,9 +192,6 @@ test_that("cannot upload to nonexistent release", {
 })
 
 test_that("pb_upload finds latest release",{
-
-  skippy(TRUE)
-
   withr::with_options(
     list(piggyback.verbose = TRUE),
     {
@@ -239,8 +216,6 @@ test_that("pb_upload finds latest release",{
 context("File delete")
 
 test_that("can delete files from release",{
-  skippy(TRUE)
-
   count_start <- nrow(pb_info(test_repo, test_release_tag))
 
   withr::with_options(list(piggyback.verbose = TRUE),{
@@ -258,8 +233,6 @@ test_that("can delete files from release",{
 })
 
 test_that("warn if file to delete is not found",{
-  skippy(TRUE)
-
   withr::with_options(list(piggyback.verbose = TRUE),{
     expect_warning(
       pb_delete(file = basename(upload_files),
@@ -280,8 +253,6 @@ test_that("warn if file to delete is not found",{
 context("Release delete")
 
 test_that("can delete release",{
-  skippy(TRUE)
-
   expect_message({
     x <- pb_release_delete(repo = test_repo,
                            tag =  test_release_tag,
@@ -295,8 +266,6 @@ test_that("can delete release",{
 
 context("Private repo download")
 test_that("can download private repo file",{
-  skippy(TRUE)
-
   pb_download(
     file = "iris_example.csv",
     repo = "tanho63/piggyback-private",
@@ -314,8 +283,6 @@ test_that("can download private repo file",{
 })
 
 test_that("can read private repo files",{
-  skippy(TRUE)
-
   x <- pb_read(
     file = "iris_example.csv",
     repo = "tanho63/piggyback-private",
