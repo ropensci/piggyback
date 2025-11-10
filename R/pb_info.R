@@ -68,7 +68,8 @@ pb_releases <- function(repo = guess_repo(),
     html_url = .extract_chr(releases, "html_url"),
     upload_url = .extract_chr(releases, "upload_url"),
     n_assets = .map_int(releases, function(x) length(x[["assets"]]))
-  )
+  ) |>
+    unique()
 
   return(out)
 }
