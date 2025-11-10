@@ -27,6 +27,8 @@ BugReports: https://github.com/ropensci/piggyback/issues
 License: GPL-3
 Encoding: UTF-8
 ByteCompile: true
+Depends:
+    R (>= 4.1.0)
 Imports:
     cli,
     glue,
